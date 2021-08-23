@@ -1,0 +1,24 @@
+// Variables
+@import './variables/sizes';
+@import './variables/variables.typographies';
+@import './variables/variables.palette';
+
+// Function
+@import './functions/get-color';
+
+// Mixins
+@import './mixins/component';
+@import './mixins/get-font';
+@import './mixins/placeholder';
+@import './mixins/transition';
+@import './mixins/shadow';
+
+// Helpers
+@import './helpers/reset';
+
+// UI
+@import './ui/text';
+
+@mixin ui-components() {
+  @include ui-text-component;
+}

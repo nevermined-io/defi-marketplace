@@ -1,0 +1,16 @@
+$typo---titillium: (
+  name: ('Titillium Web', sans-serif),
+  variants: (
+    regular: 400,
+    normal: 400,
+    bold: 600,
+  )
+) !default;
+
+
+$typos: (
+  default: $typo---titillium,
+  monospace: $typo---titillium,
+  text: $typo---titillium,
+  heading: $typo---titillium,
+) !default;

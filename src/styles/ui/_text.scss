@@ -1,0 +1,120 @@
+
+// $ui-text---padding: $size---padding !default;
+$ui-text---color: gc(text) !default;
+$ui-text--heading---color: gc(sM) !default;
+
+
+@mixin ui-text($type: false, $line-height: true, $no-color: false) {
+  @if ($type == h4-caps) {
+    $type: h4;
+    text-transform: uppercase;
+  }
+  @if ($type == caps) {
+    $type: regular;
+    text-transform: uppercase;
+  }
+  @if ($type == small-caps) {
+    $type: small;
+    text-transform: uppercase;
+  }
+
+  @if ($no-color == false) {
+    @if ($type == h1 or $type == h2 or $type == h3 or $type == h4) {
+      color: $ui-text--heading---color;
+    } @else {
+      color: $ui-text---color;
+    }
+  }
+
+  @if ($type) {
+    @if ($type == h1) {
+      @include get-font(heading);
+      
+      font-size: 80px;
+      text-transform: uppercase;
+      letter-spacing: -0.03px;
+      
+      @if ($line-height) {
+        line-height: 90px;
+      }
+    } @else if ($type == h2) {
+      @include get-font(heading);
+      
+      font-size: 48px;
+      text-transform: uppercase;
+      letter-spacing: -0.03px;
+      
+      @if ($line-height) {
+        line-height: 48px;
+      }
+    } @else if ($type == h3) {
+      @include get-font(heading);
+      
+      font-size: 32px;
+      text-transform: uppercase;
+      letter-spacing: -0.04px;
+      
+      @if ($line-height) {
+        line-height: 48px;
+      }
+    } @else if ($type == h4) {
+      @include get-font(heading);
+      
+      font-size: 28px;
+      letter-spacing: -0.04px;
+      
+      @if ($line-height) {
+        line-height: 42px;
+      }
+    } @else if ($type == regular) {
+      @include get-font(text);
+      
+      font-size: 18px;
+      
+      @if ($line-height) {
+        line-height: 32px;
+      }
+    } @else if ($type == small) {
+      @include get-font(text);
+      
+      font-size: 14px;
+      
+      @if ($line-height) {
+        line-height: 16px;
+      }
+    } @else if ($type == link) {
+      @include get-font(text);
+      
+      font-size: 16px;
+      
+      @if ($line-height) {
+        line-height: 24px;
+      }
+    } @else {
+      @warn('[ui-text] - Font type "' + $type + '" not found');
+    }
+  }
+}
+
+@mixin ui-text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin ui-text-component() {
+  .text {
+    @include ui-text(regular);
+
+    &--h1      { @include ui-text(h1); }
+    &--h2      { @include ui-text(h2); }
+    &--h3      { @include ui-text(h3); }
+    &--h4      { @include ui-text(h4); }
+    &--h4-caps { @include ui-text(h4-caps); }
+
+    &--caps       { @include ui-text(caps); }
+    &--small      { @include ui-text(small); }
+    &--small-caps { @include ui-text(small-caps); }
+    &--link       { @include ui-text(link); }
+  }
+}
