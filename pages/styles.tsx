@@ -2,29 +2,40 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 
+import { UiText, UiButton } from 'ui'
+
+console.log(UiText)
+
 const Home: NextPage = () => {
   return (
-    <div>
+    <>
       <Head>
         <title>Nevermined DeFi Marketplace - Styles</title>
         <meta name="description" content="Nevermined DeFi Marketplace" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <div className="text text--h1">H1 Heading</div>
-        <div className="text text--h2">H2 Heading</div>
-        <div className="text text--h3">H3 Heading</div>
-        <div className="text text--h4">H4 Heading</div>
-        <div className="text text--h4-caps">H4 (caps) Heading</div>
+      <div>
+        <UiText wrapper="h1" type="h1">H1 Heading</UiText>
+        <UiText wrapper="h2" type="h2">H2 Heading</UiText>
+        <UiText wrapper="h3" type="h3">H3 Heading</UiText>
+        <UiText wrapper="h4" type="h4">H4 Heading</UiText>
+        <UiText wrapper="h4" type="h4-caps">H4 (caps) Heading</UiText>
 
-        <div className="text">Text - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</div>
-        <div className="text text--caps">Text (caps) - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</div>
-        <div className="text text--small">Small - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</div>
-        <div className="text text--small-caps">Small (caps) - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</div>
-        <div className="text text--link">Link - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</div>
-      </main>
-    </div>
+        <UiText block>Text - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
+        <UiText block type="caps">Text (caps) - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
+        <UiText block type="small">Small - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
+        <UiText block type="small-caps">Small (caps) - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
+        <UiText block type="link">Link - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
+        <UiText block type="link-bold">Link - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
+      </div>
+      <br/><br/>
+      <div>
+        <UiButton>
+          Connect wallet
+        </UiButton>
+      </div>
+    </>
   )
 }
 

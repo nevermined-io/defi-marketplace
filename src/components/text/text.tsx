@@ -5,7 +5,7 @@ import styles from './text.module.scss'
 interface TextProps<W extends keyof JSX.IntrinsicElements> {
   wrapper?: W
   block?: boolean
-  type?: 'h1' | 'h2' | 'h3' | 'h4' | 'h4-caps' | 'caps' | 'small' | 'small-caps' | 'link'
+  type?: 'h1' | 'h2' | 'h3' | 'h4' | 'h4-caps' | 'caps' | 'small' | 'small-caps' | 'link' | 'link-bold'
   variants?: (undefined)[]
 }
 

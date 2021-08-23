@@ -17,6 +17,10 @@ $ui-text--heading---color: gc(sM) !default;
     $type: small;
     text-transform: uppercase;
   }
+  @if ($type == link-bold) {
+    $type: link;
+    @include get-font(text, bold);
+  }
 
   @if ($no-color == false) {
     @if ($type == h1 or $type == h2 or $type == h3 or $type == h4) {
@@ -116,5 +120,6 @@ $ui-text--heading---color: gc(sM) !default;
     &--small      { @include ui-text(small); }
     &--small-caps { @include ui-text(small-caps); }
     &--link       { @include ui-text(link); }
+    &--link-bold  { @include ui-text(link-bold); }
   }
 }

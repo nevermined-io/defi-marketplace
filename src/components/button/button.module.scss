@@ -1,0 +1,18 @@
+@import '../../styles/index';
+
+.button {
+  @include component;
+  @include transition(fast);
+  @include ui-text(link-bold, $line-height: false);
+
+  height: 40px;
+  padding: 0 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-text: center;
+  border-radius: 0;
+  border: 0;
+  background: linear-gradient(92.67deg, gc(pM) 0%, gc(sM) 100%);
+  text-transform: uppercase;
+}
