@@ -1,6 +1,7 @@
 @import '../../styles/index';
 
 $layout---padding: $size---padding !default;
+$layout--container---width: $size---container !default;
 
 .layout {
   @include component;
@@ -14,6 +15,13 @@ $layout---padding: $size---padding !default;
   &--grid > * {
     flex: 1;
   }
+
+  &--container {
+    max-width: $layout--container---width + ($size---padding * 4);
+    padding: 0 ($layout---padding * 2);
+    margin: auto;
+  }
+
   &--end {justify-content: flex-end;}
   &--start {justify-content: flex-start;}
   &--center {justify-content: center;}

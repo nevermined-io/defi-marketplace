@@ -3,7 +3,7 @@ import { BEM, modList, extendClassName } from 'ui'
 import styles from './layout.module.scss'
 
 interface LayoutProps {
-  type?: 'sides' | 'grid'
+  type?: 'sides' | 'grid' | 'container'
   align?: 'center' | 'start' | 'end' | string
 }
 

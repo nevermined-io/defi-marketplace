@@ -11,7 +11,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background: gc(bg);
+  background: gc(bg) url(/assets/background-blur.svg) no-repeat 180px 50%;
 }
 
 a {

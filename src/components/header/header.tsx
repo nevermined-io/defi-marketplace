@@ -16,13 +16,15 @@ export function UiHeaderLink({href, children}: HeaderLinkProps) {
   const active = router.pathname === href;
   return (
     <Link href={href}>
-      <UiText
-        className={b('link', {active})}
-        type="link-caps"
-        variants={active ? [] : ['highlight']}>
+      <span>
+        <UiText
+          className={b('link', {active})}
+          type="link-caps"
+          variants={active ? [] : ['highlight']}>
 
-        {children}
-      </UiText>
+          {children}
+        </UiText>
+      </span>
     </Link>
   )
 }
