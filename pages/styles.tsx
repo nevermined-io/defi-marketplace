@@ -3,8 +3,6 @@ import Image from 'next/image'
 
 import { UiHeader, UiText, UiButton, UiHeaderLink } from 'ui'
 
-console.log(UiText)
-
 const Styles: NextPage = () => {
   return (
     <>

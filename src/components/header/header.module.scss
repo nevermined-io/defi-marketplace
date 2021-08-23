@@ -14,9 +14,14 @@ $header---height: $size---header !default;
   }
   &__link {
     margin-right: 20px;
+    cursor: pointer;
 
     &:last-child {
       margin-right: 30px;
+    }
+
+    &--active {
+      pointer-events: none;
     }
   }
 }

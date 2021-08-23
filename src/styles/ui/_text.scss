@@ -131,5 +131,18 @@ $ui-text--highlight---color: gc(sM) !default;
     &--highlight {
       color: $ui-text--highlight---color;
     }
+
+    // Clear styles
+    &--clear {
+      font: inherit;
+      color: inherit;
+      line-height: inherit;
+      text-transform: inherit;
+
+      &-font { font: initial; }
+      &-color { color: initial; }
+      &-line-height { line-height: initial; }
+      &-text-transform { text-transform: initial; }
+    }
   }
 }

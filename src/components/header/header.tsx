@@ -13,12 +13,13 @@ interface HeaderLinkProps {
 
 export function UiHeaderLink({href, children}: HeaderLinkProps) {
   const router = useRouter();
+  const active = router.pathname === href;
   return (
     <Link href={href}>
       <UiText
-        className={b('link')}
+        className={b('link', {active})}
         type="link-caps"
-        variants={router.pathname !== href ? ['highlight'] : []}>
+        variants={active ? [] : ['highlight']}>
 
         {children}
       </UiText>
