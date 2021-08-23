@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
 import Image from 'next/image'
 
 import { UiHeader, UiText, UiButton, UiHeaderLink } from 'ui'
@@ -9,12 +8,6 @@ console.log(UiText)
 const Styles: NextPage = () => {
   return (
     <>
-      <Head>
-        <title>Nevermined DeFi Marketplace - Styles</title>
-        <meta name="description" content="Nevermined DeFi Marketplace" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <UiHeader>
         <UiHeaderLink href="/">Link A</UiHeaderLink>
         <UiHeaderLink href="/styles">Link B</UiHeaderLink>
