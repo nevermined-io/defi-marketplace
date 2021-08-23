@@ -1,0 +1,30 @@
+@import '../../styles/index';
+
+.wallet {
+  &__block {
+    @include get-font(text);
+
+    background: gc(gM);
+    height: 34px;
+    padding: 0 12px;
+    display: inline-flex;
+    margin-left: 4px;
+    justify-content: center;
+    align-items: center;
+    color: gc(gL);
+
+    &--network {
+      color: gc(pL);
+    }
+  }
+  &__logged {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 2px solid gc(gM);
+    box-sizing: border-box;
+    background: gc(success);
+    box-shadow: 0 0 0 1px gc(success);
+    margin-right: 6px;
+  }
+}

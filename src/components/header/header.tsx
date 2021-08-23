@@ -1,6 +1,6 @@
 import React, { Props } from "react"
 import { useRouter } from "next/router";
-import { BEM, UiDivider, UiLayout, UiButton, UiText } from "ui"
+import { BEM, UiDivider, UiLayout, UiButton, UiText, XuiWallet } from "ui"
 import Link from "next/link"
 import styles from './header.module.scss'
 
@@ -35,6 +35,7 @@ interface HeaderProps {
 }
 
 export function UiHeader({logoHref, children}: HeaderProps) {
+
   return (
     <header className={b()}>
       <UiLayout align="middle" className={b('content')}>
@@ -46,9 +47,7 @@ export function UiHeader({logoHref, children}: HeaderProps) {
 
         <UiLayout>{children}</UiLayout>
 
-        <UiButton>
-          Connect wallet
-        </UiButton>
+        <XuiWallet/>
       </UiLayout>
     </header>
   )

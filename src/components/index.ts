@@ -1,5 +1,7 @@
 export * from './components-utils'
 
+export * from './+wallet/wallet'
+
 export * from './button/button'
 export * from './divider/divider'
 export * from './header/header'

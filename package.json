@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@nevermined-io/nevermined-sdk-js": "^0.13.4",
     "next": "11.1.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "web3": "^1.5.2"
   },
   "devDependencies": {
     "@types/react": "17.0.19",
