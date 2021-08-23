@@ -1,0 +1,50 @@
+@import '../../styles/index';
+
+$divider---size: $size---padding !default;
+
+@mixin divider-width($size) {
+  max-width: $size;
+  min-width: $size;
+}
+@mixin divider-height($size) {
+  max-height: $size;
+  min-height: $size;
+}
+
+.divider {
+  @include component;
+  @include divider-height($divider---size);
+
+  &--s { @include divider-height($divider---size * 0.5); }
+  &--l { @include divider-height($divider---size * 1.5); }
+  &--xl { @include divider-height($divider---size * 2.5); }
+  &--xxl { @include divider-height($divider---size * 5); }
+
+  &--vertical {
+    @include divider-height(0);
+    @include divider-width($divider---size);
+  }
+
+  &--vertical#{&}--s { @include divider-width($divider---size * 0.5); }
+  &--vertical#{&}--l { @include divider-width($divider---size * 1.5); }
+  &--vertical#{&}--xl { @include divider-width($divider---size * 2.5); }
+  &--vertical#{&}--xxl { @include divider-width($divider---size * 5); }
+
+  &--flex {
+    @include divider-height(initial);
+    @include divider-width(initial);
+
+    flex: 1;
+  }
+
+  &--line {
+    @include divider-height(initial);
+    @include divider-width(initial);
+
+    border-bottom: 1px solid gc(border);
+  }
+  &--line#{&}--vertical {
+    border-bottom: 0;
+    border-right: 1px solid gc(border);
+  }
+}

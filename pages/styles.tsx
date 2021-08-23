@@ -2,11 +2,11 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 
-import { UiText, UiButton } from 'ui'
+import { UiHeader, UiText, UiButton, UiHeaderLink } from 'ui'
 
 console.log(UiText)
 
-const Home: NextPage = () => {
+const Styles: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,6 +14,11 @@ const Home: NextPage = () => {
         <meta name="description" content="Nevermined DeFi Marketplace" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <UiHeader>
+        <UiHeaderLink href="/">Link A</UiHeaderLink>
+        <UiHeaderLink href="/styles">Link B</UiHeaderLink>
+      </UiHeader>
 
       <div>
         <UiText wrapper="h1" type="h1">H1 Heading</UiText>
@@ -28,6 +33,7 @@ const Home: NextPage = () => {
         <UiText block type="small-caps">Small (caps) - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
         <UiText block type="link">Link - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
         <UiText block type="link-bold">Link - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
+        <UiText block type="link-caps">Link - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
       </div>
       <br/><br/>
       <div>
@@ -39,4 +45,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Styles

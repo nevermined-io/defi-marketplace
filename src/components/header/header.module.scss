@@ -1,0 +1,22 @@
+@import '../../styles/index';
+
+$header---height: $size---header !default;
+
+.header {
+  padding: 0 32px;
+
+  &__content {
+    height: $header---height;
+    margin: auto;
+  }
+  &__logo {
+    cursor: pointer;
+  }
+  &__link {
+    margin-right: 20px;
+
+    &:last-child {
+      margin-right: 30px;
+    }
+  }
+}

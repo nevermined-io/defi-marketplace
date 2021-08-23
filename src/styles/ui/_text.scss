@@ -2,6 +2,7 @@
 // $ui-text---padding: $size---padding !default;
 $ui-text---color: gc(text) !default;
 $ui-text--heading---color: gc(sM) !default;
+$ui-text--highlight---color: gc(sM) !default;
 
 
 @mixin ui-text($type: false, $line-height: true, $no-color: false) {
@@ -20,6 +21,10 @@ $ui-text--heading---color: gc(sM) !default;
   @if ($type == link-bold) {
     $type: link;
     @include get-font(text, bold);
+  }
+  @if ($type == link-caps) {
+    $type: link;
+    text-transform: uppercase;
   }
 
   @if ($no-color == false) {
@@ -121,5 +126,10 @@ $ui-text--heading---color: gc(sM) !default;
     &--small-caps { @include ui-text(small-caps); }
     &--link       { @include ui-text(link); }
     &--link-bold  { @include ui-text(link-bold); }
+    &--link-caps  { @include ui-text(link-caps); }
+
+    &--highlight {
+      color: $ui-text--highlight---color;
+    }
   }
 }

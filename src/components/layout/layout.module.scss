@@ -1,0 +1,21 @@
+@import '../../styles/index';
+
+$layout---padding: $size---padding !default;
+
+.layout {
+  @include component;
+
+  display: flex;
+
+  &--sides {
+    justify-content: space-between;
+    align-items: center;
+  }
+  &--grid > * {
+    flex: 1;
+  }
+  &--end {justify-content: flex-end;}
+  &--start {justify-content: flex-start;}
+  &--center {justify-content: center;}
+  &--middle {align-items: center;}
+}
