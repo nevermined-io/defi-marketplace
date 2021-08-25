@@ -1,0 +1,21 @@
+@import '../../styles/index';
+
+
+.icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    fill: var(--ui-icon-fill);
+    width: var(--ui-icon-size);
+    height: var(--ui-icon-size);
+
+    * {
+      fill: var(--ui-icon-fill);
+    }
+  }
+
+  &--primary { color: gc(pL); }
+  &--secondary { color: gc(sM); }
+}
