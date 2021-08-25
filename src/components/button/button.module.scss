@@ -15,4 +15,12 @@
   border: 0;
   background: linear-gradient(92.67deg, gc(pM) 0%, gc(sM) 100%);
   text-transform: uppercase;
+
+  &--secondary {
+    background: gc(gD);
+  }
+
+  &--error {
+    background: gc(error);
+  }
 }

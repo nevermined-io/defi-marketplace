@@ -1,0 +1,25 @@
+@import '../../../styles/index';
+
+.buy-asset-popup {
+  color: gc(gD);
+
+  &__text {
+    color: gc(gD) !important;
+
+    &--content {
+      max-width: 340px;
+      margin: auto;
+    }
+  }
+  &__button {
+    flex: 1;
+  }
+  &__icon {
+    &--error {
+      color: gc(error)
+    }
+    &--success {
+      color: gc(success)
+    }
+  }
+}

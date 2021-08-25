@@ -1,6 +1,6 @@
 import React, { Props } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
-import { BEM, UiLayout, UiText, UiDivider, UiIcon, XuiTokenName, XuiTokenPrice } from 'ui'
+import { BEM, UiLayout, UiText, UiDivider, UiIcon, XuiTokenName, XuiTokenPrice, XuiBuyAsset } from 'ui'
 import { toDate } from '../shared'
 import styles from './assets-list.module.scss'
 
@@ -33,7 +33,9 @@ export function AssetsList({assets}: AssetsListProps) {
                 <UiText variants={['detail']}><XuiTokenName/></UiText>
               </UiText>
             </UiLayout>
-            <UiIcon icon="download" color="primary" size="l"/>
+            <XuiBuyAsset asset={asset}>
+              <UiIcon icon="download" color="primary" size="l"/>
+            </XuiBuyAsset>
           </UiLayout>
         ))
       }

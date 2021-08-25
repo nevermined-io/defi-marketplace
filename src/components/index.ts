@@ -1,12 +1,15 @@
 export * from './components-utils'
 
-export * from './+wallet/wallet'
+export * from './+buy-asset/buy-asset'
 export * from './+token-name/token-name'
 export * from './+token-price/token-price'
+export * from './+wallet/wallet'
 
 export * from './button/button'
+export * from './circle-progress/circle-progress'
 export * from './divider/divider'
 export * from './header/header'
 export * from './icon/icon'
 export * from './layout/layout'
+export * from './popup/popup'
 export * from './text/text'
