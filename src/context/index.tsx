@@ -1,4 +1,7 @@
 import React from 'react'
+import Web3 from 'web3'
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+
 import { MarketProviderState } from './MarketProvider'
 
 export const User = React.createContext({
@@ -7,8 +10,8 @@ export const User = React.createContext({
     isWeb3Capable: false,
     isLoading: false,
     account: '',
-    web3: {},
-    sdk: {},
+    web3: {} as Web3,
+    sdk: {} as Nevermined,
     balance: {
         eth: 0,
         nevermined: 0

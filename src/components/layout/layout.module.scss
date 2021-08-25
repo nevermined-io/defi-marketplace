@@ -20,6 +20,7 @@ $layout--container---width: $size---container !default;
     max-width: $layout--container---width + ($size---padding * 4);
     padding: 0 ($layout---padding * 2);
     margin: auto;
+    display: block;
   }
 
   &--end {justify-content: flex-end;}

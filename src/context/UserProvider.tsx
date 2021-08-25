@@ -156,11 +156,10 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
 
     private fetchTokenSymbol = async (): Promise<void> => {
         const { sdk } = this.state
-        const tokenSymbol = 'AUTO'
-        // let tokenSymbol = 'Unknown'
-        // if (sdk.keeper) {
-        //     tokenSymbol = await sdk.token.getSymbol()
-        // }
+        let tokenSymbol = 'Unknown'
+        if (sdk.keeper) {
+            tokenSymbol = await sdk.token.getSymbol()
+        }
         tokenSymbol !== this.state.tokenSymbol && this.setState({ tokenSymbol })
     }
 

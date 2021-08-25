@@ -3,6 +3,7 @@
 $ui-text---color: gc(text) !default;
 $ui-text--heading---color: gc(sM) !default;
 $ui-text--highlight---color: gc(sM) !default;
+$ui-text--detail---color: gc(gL) !default;
 
 
 @mixin ui-text($type: false, $line-height: true, $no-color: false) {
@@ -130,6 +131,10 @@ $ui-text--highlight---color: gc(sM) !default;
 
     &--highlight {
       color: $ui-text--highlight---color;
+    }
+
+    &--detail {
+      color: $ui-text--detail---color;
     }
 
     // Clear styles
