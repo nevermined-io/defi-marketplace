@@ -2,6 +2,7 @@ export * from './components-utils'
 
 export * from './+wallet/wallet'
 export * from './+token-name/token-name'
+export * from './+token-price/token-price'
 
 export * from './button/button'
 export * from './divider/divider'
