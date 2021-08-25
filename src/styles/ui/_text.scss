@@ -3,6 +3,7 @@
 $ui-text---color: gc(text) !default;
 $ui-text--heading---color: gc(sM) !default;
 $ui-text--highlight---color: gc(sM) !default;
+$ui-text--secondary---color: gc(sL) !default;
 $ui-text--detail---color: gc(gL) !default;
 
 
@@ -131,6 +132,10 @@ $ui-text--detail---color: gc(gL) !default;
 
     &--highlight {
       color: $ui-text--highlight---color;
+    }
+
+    &--secondary {
+      color: $ui-text--secondary---color;
     }
 
     &--detail {

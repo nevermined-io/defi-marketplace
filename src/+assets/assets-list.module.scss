@@ -1,0 +1,25 @@
+@import '../../src/styles/index';
+
+.assets-list {
+  margin-top: 40px;
+
+  &__asset {
+    height: 74px;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 0 20px;
+    border: 2px solid gc(gM);
+
+    &-date {
+      margin: 0px 20px;
+      padding-top: 8px;
+    }
+  }
+  &__info {
+    margin-right: 48px;
+
+    &-icon {
+      margin-right: 8px;
+    }
+  }
+}

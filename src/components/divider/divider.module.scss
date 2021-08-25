@@ -36,15 +36,4 @@ $divider---size: $size---padding !default;
 
     flex: 1;
   }
-
-  &--line {
-    @include divider-height(initial);
-    @include divider-width(initial);
-
-    border-bottom: 1px solid gc(border);
-  }
-  &--line#{&}--vertical {
-    border-bottom: 0;
-    border-right: 1px solid gc(border);
-  }
 }

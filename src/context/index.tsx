@@ -27,7 +27,8 @@ export const User = React.createContext({
         /* empty */
     },
     message: '',
-    tokenSymbol: ''
+    tokenSymbol: '',
+    tokenDecimals: 18
 })
 
 export const Market = React.createContext<MarketProviderState>({

@@ -1,3 +1,3 @@
-import { AssetsList } from '/src/+assets/list'
+import { List } from '/src/+assets/list'
 
-export default AssetsList
+export default List

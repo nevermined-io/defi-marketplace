@@ -116,6 +116,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         logoutBurnerWallet: (): Promise<any> => this.logoutBurnerWallet(),
         message: 'Connecting to Autonomies...',
         tokenSymbol: '',
+        tokenDecimals: 18,
     }
 
     private accountsInterval: any = null
