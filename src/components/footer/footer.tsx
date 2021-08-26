@@ -15,7 +15,7 @@ export function UiFooter(props: FooterProps) {
   return (
     <footer className={b()}>
       <UiDivider type="l"/>
-      <UiLayout type="sides" align="middle" className={b('content')}>
+      <UiLayout type="sides" align="center" className={b('content')}>
         <UiLayout>
           <a href="https://www.nevermined.io/" target="_blank" rel="noopener noreferrer">
             <Image width="39" height="24" className={b('logo')} src="/assets/nevermined.svg"/>
@@ -40,7 +40,7 @@ export function UiFooter(props: FooterProps) {
         </UiLayout>
       </UiLayout>
       <UiDivider type="xxl"/>
-      <UiLayout type="sides" align="middle" className={b('content', ['secondary'])}>
+      <UiLayout type="sides" align="center" className={b('content', ['secondary'])}>
         <UiText type="small" variants={['detail']}>
           Nevermined DeFi Marketplace {new Date().getUTCFullYear()} • All rights reserved
         </UiText>

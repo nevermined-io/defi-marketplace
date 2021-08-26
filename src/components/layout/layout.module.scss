@@ -23,8 +23,11 @@ $layout--container---width: $size---container !default;
     display: block;
   }
 
-  &--end {justify-content: flex-end;}
-  &--start {justify-content: flex-start;}
-  &--center {justify-content: center;}
-  &--middle {align-items: center;}
+  &--justify-end {justify-content: flex-end;}
+  &--justify-start {justify-content: flex-start;}
+  &--justify-center {justify-content: center;}
+
+  &--align-end {align-items: flex-end;}
+  &--align-start {align-items: flex-start;}
+  &--align-center {align-items: center;}
 }

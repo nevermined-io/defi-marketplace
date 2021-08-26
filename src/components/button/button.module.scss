@@ -23,4 +23,8 @@
   &--error {
     background: gc(error);
   }
+
+  &--cover {
+    width: 100%;
+  }
 }

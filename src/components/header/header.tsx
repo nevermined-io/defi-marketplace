@@ -40,7 +40,7 @@ export function UiHeader({logoHref, children}: HeaderProps) {
 
   return (
     <header className={b()}>
-      <UiLayout align="middle" className={b('content')}>
+      <UiLayout align="center" className={b('content')}>
         <Link href={logoHref || '/'}>
           <span>
             <Image width="39" height="24" className={b('logo')} src="/assets/nevermined.svg"/>

@@ -130,6 +130,10 @@ $ui-text--detail---color: gc(gL) !default;
     &--link-bold  { @include ui-text(link-bold); }
     &--link-caps  { @include ui-text(link-caps); }
 
+    &--bold {
+      @include get-font(text, bold);
+    }
+
     &--highlight {
       color: $ui-text--highlight---color;
     }

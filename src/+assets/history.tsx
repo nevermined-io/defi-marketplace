@@ -6,7 +6,6 @@ import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { User } from '../context'
 import { AssetsList } from './assets-list'
 
-
 import { UiText, UiLayout } from 'ui'
 
 export const History: NextPage = () => {

@@ -1,0 +1,17 @@
+@import '../../src/styles/index';
+
+.details {
+  &__content {
+    flex: 1;
+  }
+  &__side-box {
+    background: gc(gM);
+    padding: 24px;
+    width: 290px;
+    margin-top: 63px;
+  }
+  &__attr {
+    width: 72px;
+    display: inline-block;
+  }
+}

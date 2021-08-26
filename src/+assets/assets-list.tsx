@@ -1,5 +1,7 @@
 import React, { Props } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
+import Link from "next/link"
+
 import { BEM, UiLayout, UiText, UiDivider, UiIcon, XuiTokenName, XuiTokenPrice, XuiBuyAsset } from 'ui'
 import { toDate } from '../shared'
 import styles from './assets-list.module.scss'
@@ -16,9 +18,14 @@ export function AssetsList({assets}: AssetsListProps) {
         .map(asset => ({asset, metadata: asset.findServiceByType('metadata').attributes}))
         .map(({asset, metadata}) => (
           <UiLayout key={asset.id} className={b('asset')}>
-            <UiText className={b('asset-title')} wrapper="h4" type="h4">{metadata.main.name}</UiText>
+            <Link href={`/asset/${asset.id}`}>
+              <UiText className={b('asset-title')} wrapper="h4" type="h4">{metadata.main.name}</UiText>
+            </Link>
             <UiText className={b('asset-date')} type="small" variants={['detail']}>
               {toDate(metadata.main.dateCreated).replace(/\//g, '.')}
+            </UiText>
+            <UiText className={b('asset-date')} type="small" variants={['detail']}>
+              {asset.id}
             </UiText>
             <UiDivider flex/>
             <UiLayout className={b('info')}>
