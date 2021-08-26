@@ -1,0 +1,16 @@
+@import '../../styles/index';
+
+
+.footer {
+  padding: $size---padding;
+  padding-bottom: 0;
+
+  &__content {
+    border-top: 1px solid gc(gM);
+    padding: $size---padding;
+
+    &--secondary {
+      border-top-color: gc(gD);
+    }
+  }
+}
