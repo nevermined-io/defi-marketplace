@@ -21,7 +21,7 @@ function App({ Component, pageProps }: AppProps) {
 
         <div>
           <UiHeader>
-            <UiHeaderLink href="/list">List</UiHeaderLink>
+            <UiHeaderLink href="/history">History</UiHeaderLink>
             <UiHeaderLink href="/styles">DEV - Styles</UiHeaderLink>
           </UiHeader>
 

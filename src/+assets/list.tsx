@@ -13,7 +13,7 @@ import styles from './list.module.scss'
 export const List: NextPage = () => {
   const [assets, setAssets] = useState<DDO[]>([])
   const {sdk} = useContext(User)
-
+ 
   useEffect(() => {
     if (!sdk.assets) {
       return
