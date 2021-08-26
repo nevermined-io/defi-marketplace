@@ -1,4 +1,4 @@
-import React, { Props } from 'react'
+import React, { Props, ForwardedRef } from 'react'
 import { BEM, modList, extendClassName } from 'ui'
 import styles from './text.module.scss'
 
@@ -12,7 +12,10 @@ interface TextProps<W extends keyof JSX.IntrinsicElements> {
 
 const b = BEM('text', styles)
 
-export function UiText<W extends keyof JSX.IntrinsicElements = 'div'>(props: TextProps<W> & Omit<JSX.IntrinsicElements[W], 'style'> & Props<any>) {
+export const UiText = React.forwardRef(function<W extends keyof JSX.IntrinsicElements = 'div'>(
+  props: TextProps<W> & Omit<JSX.IntrinsicElements[W], 'style'> & Props<any>,
+  ref: ForwardedRef<JSX.IntrinsicElements[W]>,
+) {
   const {wrapper, type, block, variants = [], children, clear = []} = props
   const cleanProps = {...props, clear: undefined, type: undefined, block: undefined, variants: undefined, wrapper: undefined}
 
@@ -24,8 +27,8 @@ export function UiText<W extends keyof JSX.IntrinsicElements = 'div'>(props: Tex
   }
 
   return (
-    <Wrapper {...cleanProps} className={extendClassName(props, b(modifiers))}>
+    <Wrapper ref={ref} {...cleanProps} className={extendClassName(props, b(modifiers))}>
       {children}
     </Wrapper>
   )
-}
+})
