@@ -18,7 +18,6 @@ export const List: NextPage = () => {
     if (!sdk.assets) {
       return
     }
-    console.log(sdk)
     const query = {
       offset: 12,
       page: 1,

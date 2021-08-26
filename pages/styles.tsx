@@ -17,7 +17,9 @@ const Styles: NextPage = () => {
         <UiText wrapper="h3" type="h3">H3 Heading</UiText>
         <UiText wrapper="h4" type="h4">H4 Heading</UiText>
         <UiText wrapper="h4" type="h4-caps">H4 (caps) Heading</UiText>
-
+        <br/>
+        <br/>
+        <br/>
         <UiText block>Text - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
         <UiText block type="caps">Text (caps) - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
         <UiText block type="small">Small - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
@@ -25,6 +27,12 @@ const Styles: NextPage = () => {
         <UiText block type="link">Link - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
         <UiText block type="link-bold">Link - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
         <UiText block type="link-caps">Link - Adipisicing anim in aliquip nisi in ullamco fugiat incididunt quis dolore pariatur laborum.</UiText>
+        <br/>
+        <br/>
+        <br/>
+        <UiText block type="link" variants={['highlight']}>Variants - Highlight</UiText>
+        <UiText block type="link" variants={['detail']}>Variants - Detail</UiText>
+        <UiText block type="link" variants={['secondary']}>Variants - Secondary</UiText>
       </div>
       <br/><br/>
       <div>

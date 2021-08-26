@@ -2,6 +2,8 @@ import React, { Props } from "react"
 import { useRouter } from "next/router";
 import { BEM, UiDivider, UiLayout, UiButton, UiText, XuiWallet } from "ui"
 import Link from "next/link"
+import Image from "next/image"
+
 import styles from './header.module.scss'
 
 const b = BEM('header', styles)
@@ -40,7 +42,9 @@ export function UiHeader({logoHref, children}: HeaderProps) {
     <header className={b()}>
       <UiLayout align="middle" className={b('content')}>
         <Link href={logoHref || '/'}>
-          <img className={b('logo')} src="/assets/nevermined.svg"/>
+          <span>
+            <Image width="39" height="24" className={b('logo')} src="/assets/nevermined.svg"/>
+          </span>
         </Link>
 
         <UiDivider flex/>
