@@ -20,7 +20,7 @@ export function UiHeaderLink({href, children}: HeaderLinkProps) {
     <Link href={href}>
       <span>
         <UiText
-          className={b('link', {active})}
+          className={`pointer ${b('link', {active})}`}
           type="link-caps"
           variants={active ? [] : ['highlight']}>
 

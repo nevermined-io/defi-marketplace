@@ -27,11 +27,11 @@ export function UiFooter(props: FooterProps) {
         </UiLayout>
         <UiLayout>
           <Link href="/about">
-            <UiText type="link-caps" variants={['detail']}>About</UiText>
+            <UiText className="pointer" type="link-caps" variants={['detail']}>About</UiText>
           </Link>
           <UiDivider vertical type="l"/>
           <Link href="/status">
-            <UiText type="link-caps" variants={['detail']}>Status</UiText>
+            <UiText className="pointer" type="link-caps" variants={['detail']}>Status</UiText>
           </Link>
           <UiDivider vertical type="l"/>
           <a href="https://discord.gg/uyCT8ZmJNj" target="_blank" rel="noopener noreferrer">

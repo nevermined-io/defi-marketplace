@@ -19,14 +19,14 @@ export function AssetsList({assets}: AssetsListProps) {
         .map(({asset, metadata}) => (
           <UiLayout key={asset.id} className={b('asset')}>
             <Link href={`/asset/${asset.id}`}>
-              <UiText className={b('asset-title')} wrapper="h4" type="h4">{metadata.main.name}</UiText>
+              <UiText className={`pointer ${b('asset-title')}`} wrapper="h4" type="h4">{metadata.main.name}</UiText>
             </Link>
             <UiText className={b('asset-date')} type="small" variants={['detail']}>
               {toDate(metadata.main.dateCreated).replace(/\//g, '.')}
             </UiText>
-            <UiText className={b('asset-date')} type="small" variants={['detail']}>
+{/*            <UiText className={b('asset-date')} type="small" variants={['detail']}>
               {asset.id}
-            </UiText>
+            </UiText>*/}
             <UiDivider flex/>
             <UiLayout className={b('info')}>
               <UiIcon className={b('info-icon')} icon="folder" color="secondary"/>
