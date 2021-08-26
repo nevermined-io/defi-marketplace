@@ -16,9 +16,21 @@ body {
 }
 
 body {
-  background: gc(bg) url('/assets/background-blur.svg') no-repeat 50% 0;
   min-height: 100vh;
-  background-blend-mode: color;
+
+  @supports (background-blend-mode: lighten) {
+    background-color: gc(bg);
+    background-image: url('/assets/bg-blur.jpg'), url('/assets/bg-footer.jpg');
+    background-position: 50% -180px, 100% 100%;
+    background-repeat: no-repeat;
+    background-size: 1800px, min(1800px, 100%);
+    background-blend-mode: lighten;
+  }
+}
+#__next {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 a {
