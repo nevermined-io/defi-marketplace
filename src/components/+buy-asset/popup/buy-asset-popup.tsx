@@ -36,7 +36,7 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
 
     promise.subscribe(step => setStep(step))
     promise
-      .then(() => setTimeout(() => setView(2), 1000))
+      .then(() => setTimeout(() => setView(2), 2000))
       .catch(error => setError(error.message))
   }, [])
 

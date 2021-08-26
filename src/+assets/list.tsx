@@ -46,7 +46,7 @@ export const List: NextPage = () => {
 
       <UiLayout type="container">
         <UiLayout>
-          <UiText type="h3" wrapper="h2">Browse DeFi Projects</UiText>
+          <UiText type="h3" wrapper="h2">Browse DeFi Reports</UiText>
         </UiLayout>
 
         <AssetsList assets={assets}/>
