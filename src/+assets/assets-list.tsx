@@ -24,9 +24,6 @@ export function AssetsList({assets}: AssetsListProps) {
             <UiText className={b('asset-date')} type="small" variants={['detail']}>
               {toDate(metadata.main.dateCreated).replace(/\//g, '.')}
             </UiText>
-{/*            <UiText className={b('asset-date')} type="small" variants={['detail']}>
-              {asset.id}
-            </UiText>*/}
             <UiDivider flex/>
             <UiLayout className={b('info')}>
               <UiIcon className={b('info-icon')} icon="folder" color="secondary"/>
