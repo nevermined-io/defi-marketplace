@@ -36,7 +36,7 @@ export function XuiAssetsQuery({content, query, pageSize = 12}: AssetsQueryProps
         setAssets(results)
         setTotalPages(totalPages)
       })
-  }, [sdk, page])
+  }, [sdk, page, JSON.stringify(query)])
 
   return (
     <>

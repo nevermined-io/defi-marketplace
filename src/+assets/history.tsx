@@ -1,29 +1,26 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext, useState, useCallback } from 'react'
 import type { NextPage } from 'next'
 import Image from 'next/image'
-import { DDO } from '@nevermined-io/nevermined-sdk-js'
 
 import { User } from '../context'
 import { AssetsList } from './assets-list'
 
-import { UiText, UiLayout } from 'ui'
+import { UiText, UiLayout, XuiAssetsQuery } from 'ui'
 
 export const History: NextPage = () => {
-  const [assets, setAssets] = useState<DDO[]>([])
+  const [assets, setAssets] = useState<string[]>([])
   const {sdk, account} = useContext(User)
 
   useEffect(() => {
     if (!sdk.assets) {
       return
     }
-    // TODO: consumerAssets to get consumer assets 
+    // TODO: use consumerAssets to get consumer assets 
     sdk.assets.ownerAssets(account)
-      .then(async dids => {
-        setAssets(await Promise.all(
-          dids.map(did => sdk.assets.resolve(did))
-        ))
-      })
+      .then(setAssets)
   }, [sdk])
+
+  const renderAssets = useCallback(assets => (<AssetsList assets={assets}/>), [])
 
   return (
     <>
@@ -33,7 +30,9 @@ export const History: NextPage = () => {
           <UiText type="h3" wrapper="h2">Browse DeFi Reports</UiText>
         </UiLayout>
 
-        <AssetsList assets={assets}/>
+        <XuiAssetsQuery
+          query={{did: assets}}
+          content={renderAssets}/>
       </UiLayout>
     </>
   )
