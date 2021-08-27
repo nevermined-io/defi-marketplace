@@ -55,7 +55,7 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
         <UiDivider/>
         <UiText block className={b('text', ['content'])}>{error}</UiText>
         <UiDivider type="l"/>
-        <UiButton className={b('button')} error onClick={cleanError}>Return</UiButton>
+        <UiButton className={b('button')} type="error" onClick={cleanError}>Return</UiButton>
       </>
     )
 
@@ -67,7 +67,7 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
         <UiLayout>
           <UiButton className={b('button')} onClick={start}>Yes</UiButton>
           <UiDivider vertical/>
-          <UiButton className={b('button')} secondary onClick={close}>Cancel</UiButton>
+          <UiButton className={b('button')} type="secondary" onClick={close}>Cancel</UiButton>
         </UiLayout>
       </>
     )
@@ -96,7 +96,7 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
         <UiLayout>
           <UiButton className={b('button')} onClick={close}>Complete</UiButton>
           <UiDivider vertical/>
-          <UiButton className={b('button')} secondary onClick={close}>Download</UiButton>
+          <UiButton className={b('button')} type="secondary" onClick={close}>Download</UiButton>
         </UiLayout>
       </>
     )
