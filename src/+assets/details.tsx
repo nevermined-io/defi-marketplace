@@ -48,7 +48,7 @@ export const AssetDetails: NextPage = () => {
           <UiDivider vertical/>
           <div>
             <UiText block className={b('side-box')}>
-              <UiText className={b('attr')} type="caps">Autor:</UiText> {metadata.main.author}
+              <UiText className={b('attr')} type="caps">Author:</UiText> {metadata.main.author}
               <br/>
               <UiText className={b('attr')} type="caps">Date:</UiText> {toDate(metadata.main.dateCreated)}
             </UiText>
