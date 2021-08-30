@@ -2,7 +2,7 @@ import React, { ReactNode, Props, useContext, useState, useEffect } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { SearchQuery  } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 
-import { BEM, modList, extendClassName, UiButton, UiIcon, UiLayout, UiDivider } from 'ui'
+import { BEM, modList, extendClassName, UiButton, UiIcon, UiLayout, UiDivider, UiText } from 'ui'
 import { User } from '../../context'
 import styles from './assets-query.module.scss'
 
@@ -45,11 +45,13 @@ export function XuiAssetsQuery({content, query, pageSize = 12}: AssetsQueryProps
       {totalPages > 1 && (
         <>
           <UiDivider type="l"/>
-          <UiLayout justify="center">
+          <UiLayout justify="center" align="center">
             <UiButton square type="alt" disabled={page === 1} onClick={() => setPage(page - 1)}>
               <UiIcon icon="arrowLeft"/>
             </UiButton>
-            <UiDivider type="xl" vertical/>
+            <UiDivider vertical/>
+            <UiText variants={['detail', 'bold']}>{page} / {totalPages}</UiText>
+            <UiDivider vertical/>
             <UiButton square type="alt" disabled={page === totalPages} onClick={() => setPage(page + 1)}>
               <UiIcon icon="arrowRight"/>
             </UiButton>
