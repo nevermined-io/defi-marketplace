@@ -1,4 +1,4 @@
-import React, { ReactNode, Props, useContext, useState, useEffect } from 'react'
+import React, { ReactNode, Props, useContext, useState, useEffect, useCallback } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { SearchQuery  } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 
@@ -7,18 +7,29 @@ import { User } from '../../context'
 import styles from './assets-query.module.scss'
 
 interface AssetsQueryProps {
+  search?: 'onsite' | 'search-page'
   query?: SearchQuery['query']
   pageSize?: number
   content: (assets: DDO[]) => ReactNode | undefined;
 }
 
 const b = BEM('assets-query', styles)
-export function XuiAssetsQuery({content, query, pageSize = 12}: AssetsQueryProps) {
+export function XuiAssetsQuery({search, content, query: passQuery, pageSize = 12}: AssetsQueryProps) {
+  const {sdk} = useContext(User)
+
   const [assets, setAssets] = useState<DDO[]>([])
   const [totalPages, setTotalPages] = useState<number>(1)
   const [page, setPage] = useState<number>(1)
-  const {sdk} = useContext(User)
- 
+
+  // searchInputText is used to set searchText when click on search
+  const [searchInputText, setSearchInputText] = useState('')
+  const [searchText, setSearchText] = useState('')
+
+  const query = {
+    ...passQuery,
+    ...(!searchText ? {} : {text: [searchText]}),
+  }
+
   useEffect(() => {
     if (!sdk.assets) {
       return
@@ -38,8 +49,41 @@ export function XuiAssetsQuery({content, query, pageSize = 12}: AssetsQueryProps
       })
   }, [sdk, page, JSON.stringify(query)])
 
+  const inputChanges = useCallback((event: any) => {
+    setSearchInputText(event.target.value)
+  }, [])
+
+  const onSearch = useCallback(() => {
+    setSearchText(searchInputText)
+  }, [searchInputText])
+
+  const inputOnEnter = useCallback((event: any) => {
+    if (event.key === 'Enter')
+    onSearch()
+  }, [searchInputText])
+
   return (
     <>
+      {search && (
+        /* Move to components*/
+        <>
+          <UiDivider/>
+          <UiLayout>
+            <input
+              className={b('input')}
+              value={searchInputText}
+              onChange={inputChanges}
+              onKeyDown={inputOnEnter}
+              placeholder="Search..."
+            />
+            <div className={b('form-button')} onClick={onSearch}>
+              <UiIcon icon="search"/>
+            </div>
+          </UiLayout>
+          <UiDivider/>
+        </>
+      )}
+
       {content(assets)}
 
       {totalPages > 1 && (

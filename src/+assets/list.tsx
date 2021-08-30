@@ -30,6 +30,7 @@ export const List: NextPage = () => {
         </UiLayout>
 
         <XuiAssetsQuery
+          search="onsite"
           content={renderAssets}/>
       </UiLayout>
     </>

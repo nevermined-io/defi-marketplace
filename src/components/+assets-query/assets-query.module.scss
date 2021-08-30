@@ -1,5 +1,29 @@
 @import '../../styles/index';
 
+$assets-query__form---size: 64px !default;
+
 .assets-query {
-  
+  $fz: $assets-query__form---size;
+
+  &__input {
+    background: gc(gM);
+    border: 0;
+    flex: 1;
+    height: $fz;
+    padding: 0 20px;
+    color: gc(text);
+
+    @include placeholder {
+      color: gc(gL);
+    }
+  }
+  &__form-button {
+    height: $fz;
+    width: $fz;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: gc(sM);
+    cursor: pointer;
+  }
 }
