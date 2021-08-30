@@ -30,9 +30,11 @@ export const History: NextPage = () => {
           <UiText type="h3" wrapper="h2">Browse DeFi Reports</UiText>
         </UiLayout>
 
-        <XuiAssetsQuery
-          query={{did: assets}}
-          content={renderAssets}/>
+        {assets.length && (
+          <XuiAssetsQuery
+            query={{did: assets}}
+            content={renderAssets}/>
+        )}
       </UiLayout>
     </>
   )
