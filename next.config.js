@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
-const metadataUrl = process.env.REACT_APP_METADATA_URI || "http://metadata:5000"
-const gatewayUrl = process.env.REACT_APP_GATEWAY_URI || "http://localhost:8030"
+const metadataUrl = process.env.REACT_APP_METADATA_URI || "https://metadata.mumbai.nevermined.rocks"
+const gatewayUrl = process.env.REACT_APP_GATEWAY_URI || "https://gateway.mumbai.nevermined.rocks"
 const faucetUrl = process.env.REACT_APP_FAUCET_URI || "http://localhost:3001"
 
 module.exports = {
@@ -17,15 +17,15 @@ module.exports = {
     return [
       {
         source: '/api/metadata/:path*',
-        destination: `${metadataUrl}/:path*` // Proxy to Backend
+        destination: `${metadataUrl}/:path*`,
       },
       {
         source: '/api/gateway/:path*',
-        destination: `${gatewayUrl}/:path*` // Proxy to Backend
+        destination: `${gatewayUrl}/:path*`,
       },
       {
         source: '/api/faucet/:path*',
-        destination: `${faucetUrl}/:path*` // Proxy to Backend
+        destination: `${faucetUrl}/:path*`,
       },
     ]
   },
