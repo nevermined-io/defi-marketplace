@@ -37,7 +37,6 @@ interface HeaderProps {
 }
 
 export function UiHeader({logoHref, children}: HeaderProps) {
-
   return (
     <header className={b()}>
       <UiLayout align="center" className={b('content')}>
