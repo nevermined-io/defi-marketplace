@@ -12,7 +12,7 @@ const b = BEM('details', styles)
 
 export const AssetDetails: NextPage = () => {
   const {query: {did}} = useRouter()
-  const [asset, setAsset] = useState<DDO>()
+  const [asset, setAsset] = useState<DDO | false>()
   const {sdk, account} = useContext(User)
 
   useEffect(() => {
@@ -21,10 +21,15 @@ export const AssetDetails: NextPage = () => {
     }
     sdk.assets.resolve(String(did))
       .then(ddo => setAsset(ddo))
+      .catch(() => setAsset(false))
   }, [sdk])
 
   if (!asset) {
-    return null
+    return (
+      <UiLayout type="container">
+        <UiText alert>{asset === false ? 'Error loading the asset' : 'Loading...'}</UiText>
+      </UiLayout>
+    )
   }
 
   const metadata = asset.findServiceByType('metadata').attributes
@@ -68,7 +73,7 @@ export const AssetDetails: NextPage = () => {
 
             <UiDivider/>
 
-            <XuiBuyAsset asset={asset}>
+            <XuiBuyAsset search asset={asset}>
               <UiButton cover>Download</UiButton>
             </XuiBuyAsset>
           </div>
