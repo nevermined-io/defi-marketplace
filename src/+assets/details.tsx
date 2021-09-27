@@ -40,7 +40,7 @@ export const AssetDetails: NextPage = () => {
             <UiText type="h3" wrapper="h3" variants={['underline']}>Description</UiText>
 
             <UiDivider/>
-            <p>{metadata.additionalInformation.description}</p>
+            <p>{metadata.additionalInformation!.description}</p>
             <UiDivider type="l"/>
 
             {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
