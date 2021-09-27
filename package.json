@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@nevermined-io/nevermined-sdk-js": "^0.13.5",
+    "@nevermined-io/nevermined-sdk-js": "^0.13.12",
     "bn.js": "^5.2.0",
     "next": "11.1.0",
     "react": "17.0.2",
