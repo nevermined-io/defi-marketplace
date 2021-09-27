@@ -3,7 +3,7 @@ import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import Link from "next/link"
 
 import { BEM, UiLayout, UiText, UiDivider, UiIcon, XuiTokenName, XuiTokenPrice, XuiBuyAsset } from 'ui'
-import { toDate } from '../shared'
+import { toDate, getDefiInfo } from '../shared'
 import styles from './assets-list.module.scss'
 
 interface AssetsListProps {
@@ -16,7 +16,8 @@ export function AssetsList({assets}: AssetsListProps) {
     <div className={b()}>
       {assets
         .map(asset => ({asset, metadata: asset.findServiceByType('metadata').attributes}))
-        .map(({asset, metadata}) => (
+        .map(data => ({...data, defi: getDefiInfo(data.metadata)}))
+        .map(({asset, metadata, defi}) => (
           <UiLayout key={asset.id} className={b('asset')}>
             <Link href={`/asset/${asset.id}`}>
               <UiText className={`pointer ${b('asset-title')}`} wrapper="h4" type="h4">{metadata.main.name}</UiText>
@@ -25,10 +26,20 @@ export function AssetsList({assets}: AssetsListProps) {
               {toDate(metadata.main.dateCreated).replace(/\//g, '.')}
             </UiText>
             <UiDivider flex/>
-            <UiLayout className={b('info')}>
-              <UiIcon className={b('info-icon')} icon="folder" color="secondary"/>
-              <UiText variants={['secondary']}>{metadata.additionalInformation.categories[0]}</UiText>
-            </UiLayout>
+            {defi && (
+              <>
+                <UiLayout className={b('info')}>
+                  <UiIcon className={b('info-icon')} icon="folder" color="secondary"/>
+                  <UiText variants={['secondary']}>{defi.network}</UiText>
+                </UiLayout>
+                <UiLayout className={b('info')}>
+                  <UiIcon className={b('info-icon')} icon="folder" color="secondary"/>
+                  <UiText variants={['secondary']}>{defi.category}</UiText>
+                  <UiText variants={['detail']}>&nbsp;&ndash;&nbsp;</UiText>
+                  <UiText variants={['secondary']}>{defi.subcategory}</UiText>
+                </UiLayout>
+              </>
+            )}
             <UiLayout className={b('info')}>
               <UiIcon className={b('info-icon')} icon="tag" color="secondary"/>
               <UiText variants={['secondary']}>
