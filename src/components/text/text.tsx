@@ -8,6 +8,7 @@ interface TextProps<W extends keyof JSX.IntrinsicElements> {
   type?: 'h1' | 'h2' | 'h3' | 'h4' | 'h4-caps' | 'caps' | 'small' | 'small-caps' | 'link' | 'link-bold' | 'link-caps'
   clear?: ('font' | 'color' | 'line-height' | 'text-transform')[]
   variants?: ('heading' | 'highlight' | 'detail' | 'secondary' | 'underline' | 'bold')[]
+  alert?: boolean
 }
 
 const b = BEM('text', styles)
@@ -16,10 +17,17 @@ export const UiText = React.forwardRef(function<W extends keyof JSX.IntrinsicEle
   props: TextProps<W> & Omit<JSX.IntrinsicElements[W], 'style'> & Props<any>,
   ref: ForwardedRef<JSX.IntrinsicElements[W]>,
 ) {
-  const {wrapper, type, block, variants = [], children, clear = []} = props
-  const cleanProps = {...props, clear: undefined, type: undefined, block: undefined, variants: undefined, wrapper: undefined}
+  const {wrapper, type, block, variants = [], children, clear = [], alert = false} = props
+  const cleanProps = {
+    ...props,
+    clear: undefined, type: undefined, block: undefined, variants: undefined, wrapper: undefined, alert: undefined,
+  }
 
-  const Wrapper: any = wrapper || (block ? 'div' : 'span')
+  if (alert) {
+    variants.push('alert' as any)
+  }
+
+  const Wrapper: any = wrapper || ((block || alert) ? 'div' : 'span')
   const modifiers: any[] = [type, ...variants]
 
   if (clear.length) {
