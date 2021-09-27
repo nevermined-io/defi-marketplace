@@ -11,8 +11,8 @@ export function getDefiInfo({additionalInformation}: MetaData) {
   if (cats) {
     const contains = (list: string[]) => cats.find(cat => list.includes(cat))
     return {
-      category: contains(categories), 
-      subcategory: contains(subcategories), 
+      category: contains(categories),
+      subcategory: contains(subcategories),
       network: contains(networks),
     }
   }
