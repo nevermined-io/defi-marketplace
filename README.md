@@ -1,4 +1,9 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+[![banner](https://raw.githubusercontent.com/nevermined-io/assets/main/images/logo/banner_logo.png)](https://nevermined.io)
+
+# Nevermined Defi Marketplace
+
+> Defi assets Marketplace
+> [nevermined.io](https://nevermined.io)
 
 ## Getting Started
 
