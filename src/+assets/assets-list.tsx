@@ -12,7 +12,7 @@ interface AssetsListProps {
 
 const b = BEM('assets-list', styles)
 export function AssetsList({assets}: AssetsListProps) {
-  return ( 
+  return (
     <div className={b()}>
       {assets
         .map(asset => ({asset, metadata: asset.findServiceByType('metadata').attributes}))
@@ -26,17 +26,17 @@ export function AssetsList({assets}: AssetsListProps) {
               {toDate(metadata.main.dateCreated).replace(/\//g, '.')}
             </UiText>
             <UiDivider flex/>
-            {defi && (
+            {defi?.category && defi?.network && (
               <>
-                <UiLayout className={b('info')}>
-                  <UiIcon className={b('info-icon')} icon="folder" color="secondary"/>
-                  <UiText variants={['secondary']}>{defi.network}</UiText>
-                </UiLayout>
                 <UiLayout className={b('info')}>
                   <UiIcon className={b('info-icon')} icon="folder" color="secondary"/>
                   <UiText variants={['secondary']}>{defi.category}</UiText>
                   <UiText variants={['detail']}>&nbsp;&ndash;&nbsp;</UiText>
                   <UiText variants={['secondary']}>{defi.subcategory}</UiText>
+                </UiLayout>
+                <UiLayout className={b('info')}>
+                  <UiIcon className={b('info-icon')} icon="share" color="secondary"/>
+                  <UiText variants={['secondary']}>{defi.network}</UiText>
                 </UiLayout>
               </>
             )}
@@ -54,7 +54,7 @@ export function AssetsList({assets}: AssetsListProps) {
           </UiLayout>
         ))
       }
-      
+
     </div>
   )
 }

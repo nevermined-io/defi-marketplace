@@ -14,7 +14,8 @@ interface AssetsQueryProps {
 }
 
 const b = BEM('assets-query', styles)
-export function XuiAssetsQuery({search, content, query: passQuery, pageSize = 12}: AssetsQueryProps) {
+export function XuiAssetsQuery({search, content, query: passQuery = {}, pageSize = 12}: AssetsQueryProps) {
+  const categoryFilter = 'defi-datasets' // Must be defined on config
   const {sdk} = useContext(User)
 
   const [assets, setAssets] = useState<DDO[]>([])
@@ -25,9 +26,14 @@ export function XuiAssetsQuery({search, content, query: passQuery, pageSize = 12
   const [searchInputText, setSearchInputText] = useState('')
   const [searchText, setSearchText] = useState('')
 
+  const queryCat = passQuery.categories
   const query = {
     ...passQuery,
     ...(!searchText ? {} : {text: [searchText]}),
+    categories: [
+      categoryFilter,
+      ...(queryCat instanceof Array ? queryCat : queryCat ? [queryCat] : []),
+    ] as any as string[],
   }
 
   useEffect(() => {
