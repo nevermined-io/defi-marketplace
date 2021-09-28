@@ -26,7 +26,7 @@ const About: NextPage = () => {
         <UiText type="h3" wrapper="h3" variants={['underline']}>Description</UiText>
         <UiDivider/>
 
-        {lorem.split('\n').map(_ => (<UiText type="p">{_}</UiText>))}
+        {lorem.split('\n').map((_, i) => (<UiText key={i} type="p" block>{_}</UiText>))}
 
       </UiLayout>
     </>

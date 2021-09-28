@@ -9,7 +9,7 @@ import { PlatformVersions } from '@nevermined-io/nevermined-sdk-js'
 const b = BEM('details', styles)
 
 export const Status: NextPage = () => {
-  const { sdk } = useContext(User)
+  const {sdk} = useContext(User)
   const [versions, setVersions] = useState<PlatformVersions>()
 
   useEffect(() => {
@@ -23,10 +23,8 @@ export const Status: NextPage = () => {
   return (
     <>
       <UiLayout type="container">
-        <UiText wrapper="h1" type="h1" variants={['heading']}>Marketplace Status</UiText>
-        <UiLayout>
-          <UiText type="h3" wrapper="h3" variants={['underline']}>Components status</UiText>
-        </UiLayout>
+        <UiText block wrapper="h1" type="h1" variants={['heading']}>Marketplace Status</UiText>
+        <UiText block type="h3" wrapper="h3" variants={['underline']}>Components status</UiText>
         <UiText>{JSON.stringify(versions?.status!)}</UiText>
         <UiDivider/>
         <UiText>{JSON.stringify(versions?.gateway!)}</UiText>

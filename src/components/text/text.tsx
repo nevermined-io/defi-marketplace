@@ -23,9 +23,6 @@ export const UiText = React.forwardRef(function<W extends keyof JSX.IntrinsicEle
     clear: undefined, type: undefined, block: undefined, variants: undefined, wrapper: undefined, alert: undefined,
   }
 
-  if (alert) {
-    variants.push('alert' as any)
-  }
   if (type === 'p') {
     wrapper ??= 'p' as any
   }
@@ -33,6 +30,9 @@ export const UiText = React.forwardRef(function<W extends keyof JSX.IntrinsicEle
   const Wrapper: any = wrapper || ((block || alert) ? 'div' : 'span')
   const modifiers: any[] = [type, ...variants]
 
+  if (alert) {
+    modifiers.push('alert' as any)
+  }
   if (clear.length) {
     modifiers.push('clear', ...clear.map(_ => `clear-${_}`))
   }
