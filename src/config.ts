@@ -1,10 +1,4 @@
 //
-// marketplace-server connection
-//
-export const serviceUri =
-    process.env.REACT_APP_SERVICE_URI || 'http://localhost:4000'
-
-//
 // NEVERMINED REMOTE CONNECTIONS
 //
 export const metadataUri = "/api/metadata" // next redirections on next.config.js
