@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 
-const metadataUrl = process.env.REACT_APP_METADATA_URI || "https://metadata.mumbai.nevermined.rocks"
-const gatewayUrl = process.env.REACT_APP_GATEWAY_URI || "https://gateway.mumbai.nevermined.rocks"
-const faucetUrl = process.env.REACT_APP_FAUCET_URI || "http://localhost:3001"
+const metadataUrl = process.env.NEXT_PUBLIC_METADATA_URI || "https://metadata.mumbai.nevermined.rocks"
+const gatewayUrl = process.env.NEXT_PUBLIC_GATEWAY_URI || "https://gateway.mumbai.nevermined.rocks"
+const faucetUrl = process.env.NEXT_PUBLIC_FAUCET_URI || "http://localhost:3001"
 
 module.exports = {
   reactStrictMode: true,
