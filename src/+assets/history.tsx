@@ -4,6 +4,7 @@ import Image from 'next/image'
 
 import { User } from '../context'
 import { AssetsList } from './assets-list'
+import { graphService } from 'src/shared/services'
 
 import { UiText, UiLayout, XuiAssetsQuery } from 'ui'
 
@@ -15,8 +16,8 @@ export const History: NextPage = () => {
     if (!sdk.assets) {
       return
     }
-    // TODO: use consumerAssets to get consumer assets 
-    sdk.assets.ownerAssets(account)
+    // TODO: use consumerAssets to get consumer assets
+    graphService.getConsumerAssets(account)
       .then(setAssets)
   }, [sdk])
 
@@ -33,6 +34,7 @@ export const History: NextPage = () => {
         {!!assets.length && (
           <XuiAssetsQuery
             query={{did: assets}}
+            skipCategory
             content={renderAssets}/>
         )}
       </UiLayout>
