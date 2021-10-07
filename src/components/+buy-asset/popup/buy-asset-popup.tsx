@@ -25,7 +25,8 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
   const {sdk} = useContext(User)
   const [view, setView] = useState<0 | 1 | 2>(0)
   const [step, setStep] = useState<OrderProgressStep>(0)
-  const [error, setError] = useState<string | undefined>(undefined)
+  const [error, setError] = useState<{type: string, message: string} | undefined>(undefined)
+  const [agreementId, setAgreementId] = useState<string | undefined>(undefined)
   const maxStep = (Object.keys(OrderProgressStep).length / 2) - 1
 
   const start = useCallback(async () => {
@@ -36,8 +37,11 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
 
     promise.subscribe(step => setStep(step))
     promise
-      .then(() => setTimeout(() => setView(2), 2000))
-      .catch(error => setError(error.message))
+      .then(id => {
+        setAgreementId(id)
+        setTimeout(() => setView(2), 2000)
+      })
+      .catch(error => setError({type: 'Purchase', message: error.message}))
   }, [])
 
   const cleanError = useCallback(() => {
@@ -45,20 +49,30 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
     setView(0)
   }, [])
 
+  const download = useCallback(async () => {
+    if (!agreementId) {
+      return
+    }
+    sdk.assets.consume(agreementId, asset.id, (await sdk.accounts.list())[0])
+      .then(close)
+      .catch(async response =>
+        setError({type: 'Download', message: await response.text()})
+      )
+  }, [agreementId])
+
   if (error) {
     return (
       <>
         <UiDivider type="l"/>
         <UiIcon className={b('icon', ['error'])} icon="circleError" size="xxl"/>
         <UiDivider type="l"/>
-        <UiText block type="h3" className={b('text')}>Purchase failed!</UiText>
+        <UiText block type="h3" className={b('text')}>{error.type} failed!</UiText>
         <UiDivider/>
-        <UiText block className={b('text', ['content'])}>{error}</UiText>
+        <UiText block className={b('text', ['content'])}>{error.message}</UiText>
         <UiDivider type="l"/>
         <UiButton className={b('button')} type="error" onClick={cleanError}>Return</UiButton>
       </>
     )
-
   } else if (view === 0) {
     return (
       <>
@@ -96,11 +110,11 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
         <UiLayout>
           <UiButton className={b('button')} onClick={close}>Complete</UiButton>
           <UiDivider vertical/>
-          <UiButton className={b('button')} type="secondary" onClick={close}>Download</UiButton>
+          <UiButton className={b('button')} type="secondary" onClick={download}>Download</UiButton>
         </UiLayout>
       </>
     )
   } else {
-    return <span/>
+    return <></>
   }
 }
