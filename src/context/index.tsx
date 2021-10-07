@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Web3 from 'web3'
 import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
 
@@ -29,7 +29,7 @@ export const User = React.createContext({
     message: '',
     tokenSymbol: '',
     tokenDecimals: 18,
-    consumableAssets: [],
+    consumableAssets: [] as string[],
 })
 
 export const Market = React.createContext<MarketProviderState>({
@@ -38,3 +38,5 @@ export const Market = React.createContext<MarketProviderState>({
     network: '',
     networkMatch: false
 })
+
+export const useUserContext = () => useContext(User)

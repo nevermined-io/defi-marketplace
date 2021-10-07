@@ -24,7 +24,7 @@ export const History: NextPage = () => {
         {!!consumableAssets.length && (
           <XuiAssetsQuery
             query={{did: consumableAssets}}
-            skipCategory
+            skipDefi
             content={renderAssets}/>
         )}
       </UiLayout>

@@ -46,13 +46,17 @@ export function AssetsList({assets}: AssetsListProps) {
                 <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice>
                 {' '}
                 <UiText variants={['detail']}>
-                  <XuiTokenName address={getDdoTokenAddres(asset)}/>
+                  <XuiTokenName address={getDdoTokenAddres(asset) as string}/>
                 </UiText>
               </UiText>
             </UiLayout>
-            <XuiBuyAsset asset={asset}>
-              <UiIcon icon="download" color="primary" size="l"/>
-            </XuiBuyAsset>
+            <XuiBuyAsset
+              className={b('buy')}
+              asset={asset}
+              content={consumable => (consumable
+                ? <UiIcon icon="download" color="primary" size="l"/>
+                : <UiText className={b('buy-text')} type="link-bold" variants={['uppercase']}>Buy</UiText>
+              )}/>
           </UiLayout>
         ))
       }

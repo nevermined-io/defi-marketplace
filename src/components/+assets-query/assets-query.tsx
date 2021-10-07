@@ -11,12 +11,12 @@ interface AssetsQueryProps {
   query?: SearchQuery['query']
   pageSize?: number
   content: (assets: DDO[]) => ReactNode | undefined;
-  skipCategory?: boolean
+  skipDefi?: boolean
 }
 
 const b = BEM('assets-query', styles)
 export function XuiAssetsQuery(props: AssetsQueryProps) {
-  const {search, content, query: passQuery = {}, pageSize = 12, skipCategory} = props
+  const {search, content, query: passQuery = {}, pageSize = 12, skipDefi} = props
   const categoryFilter = 'defi-datasets' // Must be defined on config
   const {sdk} = useContext(User)
 
@@ -33,7 +33,7 @@ export function XuiAssetsQuery(props: AssetsQueryProps) {
     ...passQuery,
     ...(!searchText ? {} : {text: [searchText]}),
   }
-  if (!skipCategory) {
+  if (!skipDefi) {
     query.categories = [
       categoryFilter,
       ...(queryCat instanceof Array ? queryCat : queryCat ? [queryCat] : []),

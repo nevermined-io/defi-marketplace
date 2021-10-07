@@ -2,7 +2,7 @@ import React, { Props, HTMLAttributes, useState, useCallback, useContext, create
 import { DDO, OrderProgressStep } from '@nevermined-io/nevermined-sdk-js'
 
 import { BEM, UiText, UiDivider, UiLayout, UiButton, UiCircleProgress, UiIcon } from 'ui'
-import { User } from '../../../context'
+import { useUserContext } from 'src/context'
 
 import styles from './buy-asset-popup.module.scss'
 
@@ -22,7 +22,7 @@ const b = BEM('buy-asset-popup', styles)
 
 export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
   const {close, asset} = props
-  const {sdk} = useContext(User)
+  const {sdk} = useUserContext()
   const [view, setView] = useState<0 | 1 | 2>(0)
   const [step, setStep] = useState<OrderProgressStep>(0)
   const [error, setError] = useState<string | undefined>(undefined)

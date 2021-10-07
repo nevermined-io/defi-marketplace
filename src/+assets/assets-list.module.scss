@@ -22,4 +22,13 @@
       margin-right: 8px;
     }
   }
+  &__buy {
+    width: 34px;
+    text-align: center;
+
+    &-text {
+      color: gc(sM);
+      text-transform: uppercase;
+    }
+  }
 }
