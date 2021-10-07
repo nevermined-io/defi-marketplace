@@ -3,18 +3,18 @@ import { BEM, modList, extendClassName } from 'ui'
 import styles from './button.module.scss'
 
 interface ButtonProps {
-  type: 'secondary' | 'alt' | 'error'
+  type?: 'secondary' | 'alt' | 'error'
   cover?: boolean
   square?: boolean
 }
 
 const b = BEM('button', styles)
-export function UiButton(props: ButtonProps & ButtonHTMLAttributes<any> & Props<any>) {
+export function UiButton(props: ButtonProps & Omit<ButtonHTMLAttributes<any>, 'type'> & Props<any>) {
   const {children, type = false, cover = false, square = false} = props
   const cleanProps = {...props, type: undefined, cover: undefined, square: undefined}
 
   return (
-    <button type="button"  {...cleanProps} className={extendClassName(props, b({[type as any]: true, cover, square}))}>
+    <button type="button" {...cleanProps as any} className={extendClassName(props, b({[type as any]: true, cover, square}))}>
       {children}
     </button>
   )
