@@ -17,3 +17,14 @@ export function getDefiInfo({additionalInformation}: MetaData) {
     }
   }
 }
+
+export function getDdoTokenAddres(ddo: DDO) {
+  return ddo.findServiceByType('access')
+    ?.attributes
+    ?.serviceAgreementTemplate
+    ?.conditions
+    ?.find(({name}) => name === 'lockPayment')
+    ?.parameters
+    ?.find(({name}) => name === '_tokenAddress')
+    ?.value
+}
