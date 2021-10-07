@@ -6,6 +6,8 @@ import MarketProvider from './MarketProvider'
 import { MetamaskProvider } from './MetamaskProvider'
 import { BurnerWalletProvider } from './BurnerWalletProvider'
 
+import { graphService } from 'src/shared/services'
+
 import {
     metadataUri,
     gatewayUri,
@@ -35,7 +37,8 @@ const window = global.window || {} as any
 
 
 const POLL_ACCOUNTS = 1000 // every 1s
-const POLL_NETWORK = POLL_ACCOUNTS * 60 // every 1 min
+const POLL_ACCOUNT_CONSUMABLE_ASSETS = 30 * 1000 // every 30 s
+const POLL_NETWORK = 60 * 1000 // every 1 min
 const DEFAULT_WEB3 = new Web3(new Web3.providers.HttpProvider(nodeUri)) // default web3
 
 interface UserProviderState {
@@ -57,6 +60,7 @@ interface UserProviderState {
     logoutBurnerWallet(): Promise<any>
     message: string
     tokenSymbol: string
+    consumableAssets: string[]
 }
 
 export default class UserProvider extends PureComponent<{}, UserProviderState> {
@@ -117,10 +121,11 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         message: 'Connecting to Autonomies...',
         tokenSymbol: '',
         tokenDecimals: 18,
+        consumableAssets: [],
     }
 
     private accountsInterval: any = null
-
+    private accountConsumableAssetsInterval: any = null
     private networkInterval: any = null
 
     public async componentDidMount() {
@@ -132,6 +137,15 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
             this.accountsInterval = setInterval(
                 this.fetchAccounts,
                 POLL_ACCOUNTS
+            )
+        }
+    }
+
+    private initAccountConsumableAssetsPoll(): void {
+        if (!this.accountConsumableAssetsInterval) {
+            this.accountConsumableAssetsInterval = setInterval(
+                this.fetchAccountConsumableAssets,
+                POLL_ACCOUNT_CONSUMABLE_ASSETS
             )
         }
     }
@@ -169,8 +183,10 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         this.setState({ sdk, isLoading: false }, () => {
             this.initNetworkPoll()
             this.initAccountsPoll()
+            this.initAccountConsumableAssetsPoll()
             this.fetchNetwork()
             this.fetchAccounts()
+            this.fetchAccountConsumableAssets()
             this.fetchTokenSymbol()
         })
     }
@@ -237,10 +253,20 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
                     })
 
                     await this.fetchBalance(accounts[0])
+                    await this.fetchAccountConsumableAssets()
                 }
             } else {
                 !isLogged && this.setState({ isLogged: false, account: '' })
             }
+        }
+    }
+
+    private fetchAccountConsumableAssets = async () => {
+        const { sdk, isLogged, account } = this.state
+
+        if (isLogged && account) {
+          const consumableAssets = await graphService.getConsumerAssets(account)
+          this.setState({consumableAssets})
         }
     }
 

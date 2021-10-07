@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useCallback } from 'react'
+import React, { useContext, useCallback } from 'react'
 import type { NextPage } from 'next'
 import Image from 'next/image'
 
@@ -9,17 +9,7 @@ import { graphService } from 'src/shared/services'
 import { UiText, UiLayout, XuiAssetsQuery } from 'ui'
 
 export const History: NextPage = () => {
-  const [assets, setAssets] = useState<string[]>([])
-  const {sdk, account} = useContext(User)
-
-  useEffect(() => {
-    if (!sdk.assets) {
-      return
-    }
-    // TODO: use consumerAssets to get consumer assets
-    graphService.getConsumerAssets(account)
-      .then(setAssets)
-  }, [sdk])
+  const {sdk, account, consumableAssets} = useContext(User)
 
   const renderAssets = useCallback(assets => (<AssetsList assets={assets}/>), [])
 
@@ -31,9 +21,9 @@ export const History: NextPage = () => {
           <UiText type="h3" wrapper="h2">Browse DeFi Reports</UiText>
         </UiLayout>
 
-        {!!assets.length && (
+        {!!consumableAssets.length && (
           <XuiAssetsQuery
-            query={{did: assets}}
+            query={{did: consumableAssets}}
             skipCategory
             content={renderAssets}/>
         )}
