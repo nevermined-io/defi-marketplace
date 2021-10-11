@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 $shadow---offset: 2px !default;
 $shadow---elevations: (
   (0, 0),
@@ -12,7 +14,7 @@ $shadow---elevations: (
   $x: if($horizontal, $offset, 0);
   $y: if($horizontal, 0, $offset);
   $blur: nth(nth($shadow---elevations, $elevation), 1) * 1px;
-  $opacity: nth(nth($shadow---elevations, $elevation), 2) / 100;
+  $opacity: math.div(nth(nth($shadow---elevations, $elevation), 2), 100);
   $base-shadow: $x $y $blur gc(shadow, $opacity);
 
   @if ($border == false) {
