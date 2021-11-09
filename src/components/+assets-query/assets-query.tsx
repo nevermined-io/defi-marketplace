@@ -27,7 +27,7 @@ export function XuiAssetsQuery({ search, content, query: passQuery = {}, pageSiz
   const [searchText, setSearchText] = useState('')
 
   const queryCat = passQuery.categories
-  const textFilter = !searchText ? "" : { "match": { "service.attributes.main.name": searchText } }
+  const textFilter = { "query_string": { "query": `*${searchText}*`, "fields": ["service.attributes.main.name"] } }
   const datasetCategory = { "match": { "service.attributes.additionalInformation.categories": "defi-datasets" } }
   const mustArray = [textFilter, datasetCategory]
 
