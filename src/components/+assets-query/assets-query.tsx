@@ -2,9 +2,10 @@ import React, { ReactNode, Props, useContext, useState, useEffect, useCallback }
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { SearchQuery } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 
-import { BEM, modList, extendClassName, UiButton, UiIcon, UiLayout, UiDivider, UiText } from 'ui'
+import { BEM, modList, UiDropdown, UiButton, UiIcon, UiLayout, UiDivider, UiText } from 'ui'
 import { User } from '../../context'
 import styles from './assets-query.module.scss'
+import { XuiCategoryDropdown } from 'ui/+assets-query/category-dropdown/category-dropdown'
 
 interface AssetsQueryProps {
   search?: 'onsite' | 'search-page'
@@ -14,7 +15,8 @@ interface AssetsQueryProps {
 }
 
 const b = BEM('assets-query', styles)
-export function XuiAssetsQuery({ search, content, query: passQuery = {}, pageSize = 12 }: AssetsQueryProps) {
+
+export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryProps) {
   const categoryFilter = 'defi-datasets' // Must be defined on config
   const { sdk } = useContext(User)
 
@@ -22,13 +24,14 @@ export function XuiAssetsQuery({ search, content, query: passQuery = {}, pageSiz
   const [totalPages, setTotalPages] = useState<number>(1)
   const [page, setPage] = useState<number>(1)
 
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+
   // searchInputText is used to set searchText when click on search
   const [searchInputText, setSearchInputText] = useState('')
   const [searchText, setSearchText] = useState('')
 
-  const queryCat = passQuery.categories
   const textFilter = { "query_string": { "query": `*${searchText}*`, "fields": ["service.attributes.main.name"] } }
-  const datasetCategory = { "match": { "service.attributes.additionalInformation.categories": "defi-datasets" } }
+  const datasetCategory = { "match": { "service.attributes.additionalInformation.categories": selectedCategories.length === 0 ? "defi-datasets" : selectedCategories.join(', ') } }
   const mustArray = [textFilter, datasetCategory]
 
   const query = {
@@ -72,7 +75,7 @@ export function XuiAssetsQuery({ search, content, query: passQuery = {}, pageSiz
       {search && (
         /* Move to components*/
         <>
-          <UiDivider />
+          <UiDivider/>
           <UiLayout>
             <input
               className={b('input')}
@@ -81,11 +84,17 @@ export function XuiAssetsQuery({ search, content, query: passQuery = {}, pageSiz
               onKeyDown={inputOnEnter}
               placeholder="Search..."
             />
+            <UiDropdown>
+              <XuiCategoryDropdown
+                selectedCategories={selectedCategories}
+                setSelectedCategories={setSelectedCategories}
+              />
+            </UiDropdown>
             <div className={b('form-button')} onClick={onSearch}>
-              <UiIcon icon="search" />
+              <UiIcon icon="search"/>
             </div>
           </UiLayout>
-          <UiDivider />
+          <UiDivider/>
         </>
       )}
 
@@ -93,16 +102,16 @@ export function XuiAssetsQuery({ search, content, query: passQuery = {}, pageSiz
 
       {totalPages > 1 && (
         <>
-          <UiDivider type="l" />
+          <UiDivider type="l"/>
           <UiLayout justify="center" align="center">
             <UiButton square type="alt" disabled={page === 1} onClick={() => setPage(page - 1)}>
-              <UiIcon icon="arrowLeft" />
+              <UiIcon icon="arrowLeft"/>
             </UiButton>
-            <UiDivider vertical />
+            <UiDivider vertical/>
             <UiText variants={['detail', 'bold']}>{page} / {totalPages}</UiText>
-            <UiDivider vertical />
+            <UiDivider vertical/>
             <UiButton square type="alt" disabled={page === totalPages} onClick={() => setPage(page + 1)}>
-              <UiIcon icon="arrowRight" />
+              <UiIcon icon="arrowRight"/>
             </UiButton>
           </UiLayout>
         </>

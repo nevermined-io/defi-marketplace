@@ -2,6 +2,7 @@ export * from './components-utils'
 
 export * from './+assets-query/assets-query'
 export * from './+buy-asset/buy-asset'
+export * from './dropdown/dropdown'
 export * from './+token-name/token-name'
 export * from './+token-price/token-price'
 export * from './+wallet/wallet'

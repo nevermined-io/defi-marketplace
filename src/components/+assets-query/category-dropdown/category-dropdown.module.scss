@@ -1,0 +1,39 @@
+@import '../../../styles/index';
+
+.category-dropdown {
+  &__wrapper {
+    background: gc(bg);
+    border: 1px solid gc(gM);
+    display: grid;
+    padding: 15px;
+    width: 305px;
+
+    hr {
+      border-top: 1px solid gc(text);
+      border-bottom: 0 solid gc(text);
+      width: 100%;
+    }
+
+    li {
+      color: gc(gL);
+      cursor: pointer;
+      display: flex;
+      font-size: 18px;
+      justify-content: space-between;
+      margin: 15px 6px 10px 0;
+    }
+  }
+
+  &__item {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 9px 0 4px;
+  }
+
+  &__group {
+    font-weight: bold;
+    font-size: 18px;
+  }
+}
