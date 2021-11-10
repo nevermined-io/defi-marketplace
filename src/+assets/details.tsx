@@ -33,7 +33,7 @@ export const AssetDetails: NextPage = () => {
   }
 
   const metadata = asset.findServiceByType('metadata').attributes
-
+  
   const secondWord = "Type" 
   const formatCategories = (firstWord: string, word:string) => {
     switch(firstWord){
@@ -67,6 +67,7 @@ export const AssetDetails: NextPage = () => {
                   </div>
               })
             }
+            <UiDivider type="s"/>
             {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
           </div>
           <UiDivider vertical/>
@@ -85,7 +86,11 @@ export const AssetDetails: NextPage = () => {
               <UiText block>
                 <UiText className={b('attr')} type="caps" variants={['bold']}>Price:</UiText> <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice> <XuiTokenName/>
                 <br/>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>Size:</UiText> {'Unknown'}
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Files:</UiText> {metadata.main.files?.length}
+                <br/>
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Size:</UiText> {metadata.main.files?.map(item=> Number(item.contentLength)).reduce((acc,el)=> acc+el) + " bytes"} 
+                <br/>
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Type:</UiText> {metadata.main.files?.map(item=> item.contentType).reduce((acc,el)=> {return acc.includes(el) ? acc:acc.concat(` ${el}`)})} 
               </UiText>
               <UiDivider flex/>
             </UiLayout>
