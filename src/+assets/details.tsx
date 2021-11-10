@@ -10,6 +10,13 @@ import { toDate } from '../shared'
 
 const b = BEM('details', styles)
 
+enum Categories {
+  PROTOCOLTYPE = () => 'Protocol Type' || 'ProtocolType'
+  // EVENTTYPE = 'Event Type',
+  // BLOCKCHAIN = 'Blockchain',
+  // USERCASE = 'User Case',
+  // VERSION = 'Version',
+}
 export const AssetDetails: NextPage = () => {
   const {query: {did}} = useRouter()
   const [asset, setAsset] = useState<DDO | false>()
@@ -33,7 +40,19 @@ export const AssetDetails: NextPage = () => {
   }
 
   const metadata = asset.findServiceByType('metadata').attributes
+  console.log("metadata", metadata)
 
+  const secondWord = "Type"
+  const formatCategories = (firstWord: string, word:string) => {
+    switch(firstWord){
+      case "Event":
+        return "Event Type";
+      case "Protocol":
+        return "Protocol Type";
+      default:
+        return word
+    }
+  }
   return (
     <>
       <UiLayout type="container">
@@ -45,15 +64,23 @@ export const AssetDetails: NextPage = () => {
             <UiText type="h3" wrapper="h3" variants={['underline']}>Description</UiText>
 
             <UiDivider/>
-            <p>{metadata.additionalInformation!.description}</p>
+            {metadata.additionalInformation!.description}
             <UiDivider type="l"/>
-
+            {
+              metadata.additionalInformation!.categories?.filter(item=> item.substring(0, item.indexOf(":")+1).localeCompare("UserCase:",  undefined, { sensitivity: 'accent' })  && item.substring(0, item.indexOf(":")+1).localeCompare("Version:",  undefined, { sensitivity: 'accent' }) )
+              .map(item=> {
+                return  <div>
+                  <UiText className={b('content')} block={false} type="caps" variants={['secondary']} > {formatCategories(item.substring(0, item.indexOf(secondWord)), item.substring(0, item.indexOf(":")))}: </UiText> {item.substring(item.indexOf(":")+1)}
+                  <UiDivider  type="s"/>
+                  </div>
+              })
+            }
             {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
           </div>
           <UiDivider vertical/>
           <div>
             <UiText block className={b('side-box')}>
-              <UiText className={b('attr')} type="caps">Author:</UiText> {metadata.main.author}
+              <UiText className={b('attr')} type="caps" >Author:</UiText> {metadata.main.author}
               <br/>
               <UiText className={b('attr')} type="caps">Date:</UiText> {toDate(metadata.main.dateCreated)}
             </UiText>
