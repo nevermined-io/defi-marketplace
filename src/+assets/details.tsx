@@ -10,13 +10,6 @@ import { toDate } from '../shared'
 
 const b = BEM('details', styles)
 
-enum Categories {
-  PROTOCOLTYPE = () => 'Protocol Type' || 'ProtocolType'
-  // EVENTTYPE = 'Event Type',
-  // BLOCKCHAIN = 'Blockchain',
-  // USERCASE = 'User Case',
-  // VERSION = 'Version',
-}
 export const AssetDetails: NextPage = () => {
   const {query: {did}} = useRouter()
   const [asset, setAsset] = useState<DDO | false>()
@@ -40,9 +33,8 @@ export const AssetDetails: NextPage = () => {
   }
 
   const metadata = asset.findServiceByType('metadata').attributes
-  console.log("metadata", metadata)
 
-  const secondWord = "Type"
+  const secondWord = "Type" 
   const formatCategories = (firstWord: string, word:string) => {
     switch(firstWord){
       case "Event":
@@ -64,7 +56,7 @@ export const AssetDetails: NextPage = () => {
             <UiText type="h3" wrapper="h3" variants={['underline']}>Description</UiText>
 
             <UiDivider/>
-            {metadata.additionalInformation!.description}
+            <p>{metadata.additionalInformation!.description}</p>
             <UiDivider type="l"/>
             {
               metadata.additionalInformation!.categories?.filter(item=> item.substring(0, item.indexOf(":")+1).localeCompare("UserCase:",  undefined, { sensitivity: 'accent' })  && item.substring(0, item.indexOf(":")+1).localeCompare("Version:",  undefined, { sensitivity: 'accent' }) )
