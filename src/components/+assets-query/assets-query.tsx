@@ -6,6 +6,7 @@ import { BEM, modList, UiDropdown, UiButton, UiIcon, UiLayout, UiDivider, UiText
 import { User } from '../../context'
 import styles from './assets-query.module.scss'
 import { XuiCategoryDropdown } from 'ui/+assets-query/category-dropdown/category-dropdown'
+import { XuiFilterDropdown } from 'ui/+assets-query/filter-dropdown/filter-dropdown'
 
 interface AssetsQueryProps {
   search?: 'onsite' | 'search-page'
@@ -29,10 +30,22 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
   // searchInputText is used to set searchText when click on search
   const [searchInputText, setSearchInputText] = useState('')
   const [searchText, setSearchText] = useState('')
+  const [fromDate, setFromDate] = useState('')
+  const [toDate, setToDate] = useState('')
 
   const textFilter = { "query_string": { "query": `*${searchText}*`, "fields": ["service.attributes.main.name"] } }
   const datasetCategory = { "match": { "service.attributes.additionalInformation.categories": selectedCategories.length === 0 ? "defi-datasets" : selectedCategories.join(', ') } }
+  const dateFilter = fromDate !== '' && toDate !== '' && {
+    "range": {
+      "service.attributes.main.dateCreated": {
+        "time_zone": "+01:00",
+        "gte": fromDate,
+        "lte": toDate
+      }
+    }
+  }
   const mustArray = [textFilter, datasetCategory]
+  dateFilter && mustArray.push(dateFilter)
 
   const query = {
     "bool": { "must": mustArray }
@@ -84,10 +97,28 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
               onKeyDown={inputOnEnter}
               placeholder="Search..."
             />
-            <UiDropdown>
+            <UiDropdown
+              imgHeight="6px"
+              imgSrc="/assets/arrow.svg"
+              title="Category"
+              imgWidth="10px"
+            >
               <XuiCategoryDropdown
                 selectedCategories={selectedCategories}
                 setSelectedCategories={setSelectedCategories}
+              />
+            </UiDropdown>
+            <UiDropdown
+              imgHeight="10px"
+              imgSrc="/assets/filter.svg"
+              title="More filters"
+              imgWidth="10px"
+            >
+              <XuiFilterDropdown
+                setFromDate={setFromDate}
+                setToDate={setToDate}
+                fromDate={fromDate}
+                toDate={toDate}
               />
             </UiDropdown>
             <div className={b('form-button')} onClick={onSearch}>

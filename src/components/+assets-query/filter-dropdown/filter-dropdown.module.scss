@@ -1,0 +1,93 @@
+@import '../../../styles/index';
+$w: 20em;
+$h: 1em;
+
+.wrap {
+  display: grid;
+  grid-template-rows: max-content $h;
+  margin: 1em auto;
+  width: $w;
+  overflow: hidden; // in case <label> elements overflow
+  position: relative;
+}
+
+.sr-only {
+  position: absolute;
+  clip-path: inset(50%);
+}
+//
+//input[type='range'] {
+//  grid-column: 1;
+//  grid-row: 2;
+//}
+
+@mixin track() {
+  background: none; /* get rid of Firefox track background */
+  height: 100%;
+  width: 100%;
+}
+
+@mixin thumb() {
+  background: currentcolor;
+  border: none; /* get rid of Firefox thumb border */
+  border-radius: 0; /* get rid of Firefox corner rounding */
+  pointer-events: auto; /* catch clicks */
+  width: $h; height: $h;
+}
+
+.wrap {
+  /* same as before */
+  background: /* emulate track with wrapper background */
+    linear-gradient(0deg, #ccc $h, transparent 0);
+}
+
+.filter-dropdown {
+  &__wrapper {
+    background: gc(bg);
+    border: 1px solid gc(gM);
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    width: 400px;
+
+    input[type='range'] {
+      &::-webkit-slider-runnable-track,
+      &::-webkit-slider-thumb, & { -webkit-appearance: none; }
+
+      /* same as before */
+      background: none; /* get rid of white Chrome background */
+      color: #000;
+      font: inherit; /* fix too small font-size in both Chrome & Firefox */
+      margin: 0;
+      pointer-events: none; /* let clicks pass through */
+
+      &::-webkit-slider-runnable-track { @include track; }
+      &::-moz-range-track { @include track; }
+
+      &::-webkit-slider-thumb { @include thumb; }
+      &::-moz-range-thumb { @include thumb; }
+    }
+
+    span {
+      margin: 15px 15px  15px 0;
+    }
+
+    //input {
+    //  margin-left: 20px;
+    //}
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  &__date-pickers {
+    display: flex;
+  }
+
+  &__vertical-divider {
+    border-left: 1px solid gc(gL);
+    height: 50px;
+  }
+}
