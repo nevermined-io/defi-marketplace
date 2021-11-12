@@ -7,6 +7,7 @@ import { User } from '../../context'
 import styles from './assets-query.module.scss'
 import { XuiCategoryDropdown } from 'ui/+assets-query/category-dropdown/category-dropdown'
 import { XuiFilterDropdown } from 'ui/+assets-query/filter-dropdown/filter-dropdown'
+import { Loader } from 'ui/Loader/loader'
 
 interface AssetsQueryProps {
   search?: 'onsite' | 'search-page'
@@ -32,6 +33,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
   const [searchText, setSearchText] = useState('')
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
+  const [loading, setLoading] = useState<boolean>(false)
 
   const textFilter = { "query_string": { "query": `*${searchText}*`, "fields": ["service.attributes.main.name"] } }
   const datasetCategory = { "match": { "service.attributes.additionalInformation.categories": selectedCategories.length === 0 ? "defi-datasets" : selectedCategories.join(', ') } }
@@ -55,6 +57,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
     if (!sdk.assets) {
       return
     }
+    setLoading(true)
     sdk.assets
       .query({
         offset: pageSize,
@@ -65,6 +68,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
         }
       })
       .then(({ results, totalPages }) => {
+        setLoading(false)
         setAssets(results)
         setTotalPages(totalPages)
       })
@@ -85,6 +89,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
 
   return (
     <>
+      {loading && <Loader/>}
       {search && (
         /* Move to components*/
         <>

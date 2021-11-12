@@ -7,7 +7,6 @@ interface DropdownProps {
   imgHeight: string
   imgSrc: string
   imgWidth: string
-  onClickOutside: Function
   title: string
 }
 
