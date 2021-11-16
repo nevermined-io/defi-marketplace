@@ -26,6 +26,9 @@ export const User = React.createContext({
     loginBurnerWallet: () => {
         /* empty */
     },
+    switchToMumbai: () => {
+        /* empty */
+    },
     message: '',
     tokenSymbol: '',
     tokenDecimals: 18
