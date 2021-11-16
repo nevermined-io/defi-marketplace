@@ -45,4 +45,40 @@ export class MetamaskProvider {
     public getProvider(): any {
         return this.web3
     }
+
+    public async switchChain(): Promise<void> {
+        try {
+            if (window.ethereum) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: '0x13881' }],
+                    });
+                } catch (error) {
+                    error.code === 4902 ? await this.addMumbaiChain() : console.log(error)
+                }
+            } else {
+                alert('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
+            }
+
+
+        } catch (error) { console.log(error) }
+    }
+
+    public async addMumbaiChain(): Promise<void> {
+        try {
+            await window.ethereum.request({
+                method: 'wallet_addEthereumChain',
+                params: [
+                    {
+                        chainId: '0x13881',
+                        rpcUrl: 'https://matic-mumbai.chainstacklabs.com',
+                    },
+                ],
+            });
+        } catch (addError) {
+            console.error(addError);
+        }
+    }
+
 }
