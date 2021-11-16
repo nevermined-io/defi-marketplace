@@ -55,6 +55,7 @@ interface UserProviderState {
     loginMetamask(): Promise<any>
     loginBurnerWallet(): Promise<any>
     logoutBurnerWallet(): Promise<any>
+    switchToMumbai() : Promise<any>
     message: string
     tokenSymbol: string
 }
@@ -79,6 +80,22 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
     private loginMetamask = async () => {
         const metamaskProvider = new MetamaskProvider()
         await metamaskProvider.startLogin()
+        const web3 = metamaskProvider.getProvider()
+        this.setState(
+            {
+                isLogged: true,
+                isBurner: false,
+                web3
+            },
+            () => {
+                this.loadNevermined()
+            }
+        )
+    }
+   
+    private switchToMumbai = async () => {
+        const metamaskProvider = new MetamaskProvider()
+        await metamaskProvider.switchChain()
         const web3 = metamaskProvider.getProvider()
         this.setState(
             {
@@ -130,6 +147,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         loginMetamask: (): Promise<any> => this.loginMetamask(),
         loginBurnerWallet: (): Promise<any> => this.loginBurnerWallet(),
         logoutBurnerWallet: (): Promise<any> => this.logoutBurnerWallet(),
+        switchToMumbai: (): Promise<any> => this.switchToMumbai(),
         message: 'Connecting to Autonomies...',
         tokenSymbol: '',
         tokenDecimals: 18,
@@ -261,10 +279,14 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
     }
 
     private fetchBalance = async (account: Account) => {
-        const balance = await account.getBalance()
-        const { eth, nevermined } = balance
-        if (eth !== this.state.balance.eth || nevermined !== this.state.balance.nevermined) {
-            this.setState({ balance: { eth, nevermined } })
+        try {
+            const balance = await account.getBalance()
+            const { eth, nevermined } = balance
+            if (eth !== this.state.balance.eth || nevermined !== this.state.balance.nevermined) {
+                this.setState({ balance: { eth, nevermined } })
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 
