@@ -1,3 +1,5 @@
+import { correctNetworkId,correctNetworkURL } from '../config'
+import { imageConfigDefault } from 'next/dist/server/image-config'
 import Web3 from 'web3'
 
 export class MetamaskProvider {
@@ -52,10 +54,10 @@ export class MetamaskProvider {
                 try {
                     await window.ethereum.request({
                         method: 'wallet_switchEthereumChain',
-                        params: [{ chainId: '0x13881' }],
+                        params: [{ chainId: correctNetworkId }],
                     });
                 } catch (error) {
-                    error.code === 4902 ? await this.addMumbaiChain() : console.log(error)
+                    error.code === 4902 ? await this.addNetwork() : console.log(error)
                 }
             } else {
                 alert('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
@@ -65,14 +67,14 @@ export class MetamaskProvider {
         } catch (error) { console.log(error) }
     }
 
-    public async addMumbaiChain(): Promise<void> {
+    public async addNetwork(): Promise<void> {
         try {
             await window.ethereum.request({
                 method: 'wallet_addEthereumChain',
                 params: [
                     {
-                        chainId: '0x13881',
-                        rpcUrl: 'https://matic-mumbai.chainstacklabs.com',
+                        chainId: correctNetworkId,
+                        rpcUrl: correctNetworkURL,
                     },
                 ],
             });
