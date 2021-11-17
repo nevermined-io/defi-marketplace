@@ -9,7 +9,7 @@ interface WalletProps {
 const b = BEM('wallet', styles)
 
 export function XuiWallet(props: WalletProps) {
-  const { isLogged, account, network, loginMetamask, switchToMumbai } = React.useContext(User)
+  const { isLogged, account, network, loginMetamask, switchToCorrectNetwork } = React.useContext(User)
   const [connected, connect] = useState(false)
 
   const UiRef = createRef<UiPopupHandlers>()
@@ -21,7 +21,7 @@ export function XuiWallet(props: WalletProps) {
   }, [UiRef, network, connected]);
 
   const handleChangeNetwork = () => {
-    switchToMumbai()
+    switchToCorrectNetwork()
     connect(true)
   }
 

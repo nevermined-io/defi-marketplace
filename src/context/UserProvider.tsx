@@ -55,7 +55,7 @@ interface UserProviderState {
     loginMetamask(): Promise<any>
     loginBurnerWallet(): Promise<any>
     logoutBurnerWallet(): Promise<any>
-    switchToMumbai() : Promise<any>
+    switchToCorrectNetwork() : Promise<any>
     message: string
     tokenSymbol: string
 }
@@ -93,7 +93,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         )
     }
    
-    private switchToMumbai = async () => {
+    private switchToCorrectNetwork = async () => {
         const metamaskProvider = new MetamaskProvider()
         await metamaskProvider.switchChain()
         const web3 = metamaskProvider.getProvider()
@@ -147,7 +147,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         loginMetamask: (): Promise<any> => this.loginMetamask(),
         loginBurnerWallet: (): Promise<any> => this.loginBurnerWallet(),
         logoutBurnerWallet: (): Promise<any> => this.logoutBurnerWallet(),
-        switchToMumbai: (): Promise<any> => this.switchToMumbai(),
+        switchToCorrectNetwork: (): Promise<any> => this.switchToCorrectNetwork(),
         message: 'Connecting to Autonomies...',
         tokenSymbol: '',
         tokenDecimals: 18,

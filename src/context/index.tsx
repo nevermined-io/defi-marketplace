@@ -26,7 +26,7 @@ export const User = React.createContext({
     loginBurnerWallet: () => {
         /* empty */
     },
-    switchToMumbai: () => {
+    switchToCorrectNetwork: () => {
         /* empty */
     },
     message: '',
