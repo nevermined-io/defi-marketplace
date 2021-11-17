@@ -28,3 +28,7 @@ export const ipfsGatewayUri =
     process.env.NEXT_PUBLIC_IPFS_GATEWAY_URI || 'https://gateway.ipfs.io'
 export const ipfsNodeUri =
     process.env.NEXT_PUBLIC_IPFS_NODE_URI || 'https://ipfs.infura.io:5001'
+export const correctNetworkId =
+    process.env.CORRECT_NETWORK_ID || '0x13881'
+export const correctNetworkURL =
+    process.env.CORRECT_NETWORK_URL || 'https://matic-mumbai.chainstacklabs.com'
