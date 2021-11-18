@@ -3,7 +3,7 @@ import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import Link from "next/link"
 
 import { BEM, UiLayout, UiText, UiDivider, UiIcon, XuiTokenName, XuiTokenPrice, XuiBuyAsset } from 'ui'
-import { toDate, getDefiInfo, getDdoTokenAddres } from '../shared'
+import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
 import styles from './assets-list.module.scss'
 
 interface AssetsListProps {
@@ -46,7 +46,7 @@ export function AssetsList({assets}: AssetsListProps) {
                 <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice>
                 {' '}
                 <UiText variants={['detail']}>
-                  <XuiTokenName address={getDdoTokenAddres(asset)}/>
+                  <XuiTokenName address={getDdoTokenAddress(asset)}/>
                 </UiText>
               </UiText>
             </UiLayout>

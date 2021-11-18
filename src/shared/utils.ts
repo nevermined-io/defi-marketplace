@@ -21,7 +21,7 @@ export function getDefiInfo({ additionalInformation }: MetaData) {
   }
 }
 
-export function getDdoTokenAddres(ddo: DDO) {
+export function getDdoTokenAddress(ddo: DDO) {
   return ddo.findServiceByType('access')
     ?.attributes
     ?.serviceAgreementTemplate
