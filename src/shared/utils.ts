@@ -1,19 +1,22 @@
 import { DDO, MetaData } from '@nevermined-io/nevermined-sdk-js'
 
-import { categories, subcategories, networks } from './constants'
+import { categoryPrefix, subcategoryPrefix, networkPrefix } from './constants'
 
 export function toDate(date: string) {
   return new Date(date).toLocaleDateString('en-uk')
 }
 
-export function getDefiInfo({additionalInformation}: MetaData) {
+export function getDefiInfo({ additionalInformation }: MetaData) {
   const cats = additionalInformation?.categories
   if (cats) {
-    const contains = (list: string[]) => cats.find(cat => list.includes(cat))
+    const contains = (prefix: string) => {
+      const filtered = cats.filter(cat => cat.includes(prefix))
+      return filtered.length > 0 ? filtered[0].substring(filtered[0].indexOf(":") + 1) : ""
+    }
     return {
-      category: contains(categories),
-      subcategory: contains(subcategories),
-      network: contains(networks),
+      category: contains(categoryPrefix),
+      subcategory: contains(subcategoryPrefix),
+      network: contains(networkPrefix),
     }
   }
 }
@@ -23,8 +26,8 @@ export function getDdoTokenAddres(ddo: DDO) {
     ?.attributes
     ?.serviceAgreementTemplate
     ?.conditions
-    ?.find(({name}) => name === 'lockPayment')
+    ?.find(({ name }) => name === 'lockPayment')
     ?.parameters
-    ?.find(({name}) => name === '_tokenAddress')
+    ?.find(({ name }) => name === '_tokenAddress')
     ?.value
 }

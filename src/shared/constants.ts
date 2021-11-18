@@ -23,3 +23,8 @@ export enum Network {
   Fantom = 'Fantom',
 }
 export const networks = Object.keys(Network)
+
+export const categoryPrefix = 'ProtocolType'
+export const subcategoryPrefix = 'EventType'
+export const networkPrefix = 'Blockchain'
+
