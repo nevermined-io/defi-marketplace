@@ -1,13 +1,14 @@
-import React, { ReactNode, Props, useContext, useState, useEffect, useCallback } from 'react'
+import React, { ReactNode, useContext, useState, useEffect, useCallback } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { SearchQuery } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 
-import { BEM, modList, UiDropdown, UiButton, UiIcon, UiLayout, UiDivider, UiText } from 'ui'
+import { BEM, UiDropdown, UiButton, UiIcon, UiLayout, UiDivider, UiText } from 'ui'
 import { User } from '../../context'
 import styles from './assets-query.module.scss'
 import { XuiCategoryDropdown } from 'ui/+assets-query/category-dropdown/category-dropdown'
 import { XuiFilterDropdown } from 'ui/+assets-query/filter-dropdown/filter-dropdown'
 import { Loader } from 'ui/Loader/loader'
+import { getAttributes, getCategories, getVersion, sortBy, uniqByKeepLastReverse } from '../../shared'
 
 interface AssetsQueryProps {
   search?: 'onsite' | 'search-page'
@@ -68,8 +69,10 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
         }
       })
       .then(({ results, totalPages }) => {
+        const sortedResults = sortBy(results, (res: DDO) => getVersion(getCategories(getAttributes(res))))
+        const dedupedResults = uniqByKeepLastReverse(sortedResults, (res: DDO) => `${(getAttributes(res)).main.name}${(getAttributes(res)).main.dateCreated.split('T')[0]}`)
         setLoading(false)
-        setAssets(results)
+        setAssets(dedupedResults)
         setTotalPages(totalPages)
       })
   }, [sdk, page, JSON.stringify(query)])

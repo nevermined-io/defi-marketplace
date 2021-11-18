@@ -31,3 +31,28 @@ export function getDdoTokenAddres(ddo: DDO) {
     ?.find(({ name }) => name === '_tokenAddress')
     ?.value
 }
+
+
+export const uniqByKeepLastReverse = (list: any[], key: Function) => [
+  ...new Map(
+    list.map(x => [key(x), x])
+  ).values()
+].reverse()
+
+export const sortBy = (list: DDO[], key: Function) =>
+  list.sort((a: any, b: any) => key(a) + key(b))
+
+export const getAttributes = (ddo: DDO): MetaData =>
+  ddo.findServiceByType('metadata')
+    ?.attributes
+
+export const getCategories = (atts: MetaData): (string[] | undefined)=>
+  atts
+    ?.additionalInformation
+    ?.categories
+
+export const getVersion = (categories: string[] | undefined) =>
+  categories
+    ?.find(cat => cat.includes('Version') || /\d/.test(cat))
+    ?.split('.').pop()
+
