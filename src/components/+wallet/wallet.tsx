@@ -1,7 +1,7 @@
 import React, { Props, createRef, useEffect, useState } from 'react'
 import { BEM, modList, extendClassName, UiButton, UiPopup, UiPopupHandlers } from 'ui'
 import { User } from '../../context'
-import {correctNetworkName} from '../../config'
+import { correctNetworkName } from '../../config'
 import styles from './wallet.module.scss'
 
 interface WalletProps {
@@ -16,9 +16,9 @@ export function XuiWallet(props: WalletProps) {
   const UiRef = createRef<UiPopupHandlers>()
 
   useEffect(() => {
-    network && network !== correctNetworkName ?
-      UiRef.current?.open() : connected ?
-        UiRef.current?.close() : null
+    if (!network) { UiRef.current?.close() }
+    if (network !== correctNetworkName) { UiRef.current?.open() }
+    if (network === correctNetworkName || connected) { UiRef.current?.close() }
   }, [UiRef, network, connected]);
 
   const handleChangeNetwork = () => {
