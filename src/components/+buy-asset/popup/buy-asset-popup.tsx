@@ -32,11 +32,13 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
     setStep(0)
     setView(1)
 
-    const promise = sdk.assets.order(asset.id, 'access', (await sdk.accounts.list())[0])
+    const account = (await sdk.accounts.list())[0]
+    const promise = sdk.assets.order(asset.id, 'access', account)
 
     promise.subscribe(step => setStep(step))
     promise
-      .then(() => setTimeout(() => setView(2), 2000))
+      .then(async agreementId => {
+        await sdk.assets.consume(agreementId, asset.id, account)})
       .catch(error => setError(error.message))
   }, [])
 
