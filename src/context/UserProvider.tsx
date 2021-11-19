@@ -63,18 +63,13 @@ interface UserProviderState {
 export default class UserProvider extends PureComponent<{}, UserProviderState> {
     public componentDidUpdate() {
         window?.ethereum.on('accountsChanged', (accounts) => {
-            if (accounts && accounts.length > 0) {
-                this.setState({
-                    isLogged: true,
-                    account: accounts[0]
-                })
-            } else {
-                this.setState({
-                    isLogged: false,
-                    account: ''
-                })
-            }
+            this.fetchAccounts()
         })
+
+        window?.ethereum.on('chainChanged', async (accounts) => {
+            await this.fetchNetwork()
+        })
+
     }
 
     private loginMetamask = async () => {
