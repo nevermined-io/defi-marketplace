@@ -87,7 +87,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
             }
         )
     }
-   
+
     private switchToCorrectNetwork = async () => {
         const metamaskProvider = new MetamaskProvider()
         await metamaskProvider.switchChain()
@@ -145,7 +145,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         switchToCorrectNetwork: (): Promise<any> => this.switchToCorrectNetwork(),
         message: 'Connecting to Autonomies...',
         tokenSymbol: '',
-        tokenDecimals: 18,
+        tokenDecimals: 6,
     }
 
     private accountsInterval: any = null
