@@ -33,12 +33,6 @@ export function getDdoTokenAddress(ddo: DDO) {
 }
 
 
-export const uniqByKeepLastReverse = (list: any[], key: Function) => [
-  ...new Map(
-    list.map(x => [key(x), x])
-  ).values()
-].reverse()
-
 export const sortBy = (list: DDO[], key: Function) =>
   list.sort((a: any, b: any) => key(a) + key(b))
 
