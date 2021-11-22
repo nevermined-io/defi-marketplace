@@ -9,6 +9,7 @@ import { XuiCategoryDropdown } from 'ui/+assets-query/category-dropdown/category
 import { XuiFilterDropdown } from 'ui/+assets-query/filter-dropdown/filter-dropdown'
 import { Loader } from 'ui/Loader/loader'
 import { getAttributes, getCategories, getVersion, sortBy, uniqByKeepLastReverse } from '../../shared'
+import { subcategoryPrefix } from '../../shared/constants'
 
 interface AssetsQueryProps {
   search?: 'onsite' | 'search-page'
@@ -35,9 +36,10 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
   const [loading, setLoading] = useState<boolean>(false)
+  const selectedCategoriesEvent = selectedCategories.map(cat => `${subcategoryPrefix}:${cat}`)
 
   const textFilter = { "query_string": { "query": `*${searchText}*`, "fields": ["service.attributes.main.name"] } }
-  const datasetCategory = { "match": { "service.attributes.additionalInformation.categories": selectedCategories.length === 0 ? "defi-datasets" : selectedCategories.join(', ') } }
+  const datasetCategory = { "match": { "service.attributes.additionalInformation.categories": selectedCategoriesEvent.length === 0 ? "defi-datasets" : selectedCategoriesEvent.join(', ') } }
   const dateFilter = fromDate !== '' && toDate !== '' && {
     "range": {
       "service.attributes.main.dateCreated": {
@@ -49,6 +51,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
   }
   const mustArray = [textFilter, datasetCategory]
   dateFilter && mustArray.push(dateFilter)
+
 
   const query = {
     "bool": { "must": mustArray }
@@ -92,11 +95,11 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
 
   return (
     <>
-      {loading && <Loader/>}
+      {loading && <Loader />}
       {search && (
         /* Move to components*/
         <>
-          <UiDivider/>
+          <UiDivider />
           <UiLayout>
             <input
               className={b('input')}
@@ -130,10 +133,10 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
               />
             </UiDropdown>
             <div className={b('form-button')} onClick={onSearch}>
-              <UiIcon icon="search"/>
+              <UiIcon icon="search" />
             </div>
           </UiLayout>
-          <UiDivider/>
+          <UiDivider />
         </>
       )}
 
@@ -141,16 +144,16 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
 
       {totalPages > 1 && (
         <>
-          <UiDivider type="l"/>
+          <UiDivider type="l" />
           <UiLayout justify="center" align="center">
             <UiButton square type="alt" disabled={page === 1} onClick={() => setPage(page - 1)}>
-              <UiIcon icon="arrowLeft"/>
+              <UiIcon icon="arrowLeft" />
             </UiButton>
-            <UiDivider vertical/>
+            <UiDivider vertical />
             <UiText variants={['detail', 'bold']}>{page} / {totalPages}</UiText>
-            <UiDivider vertical/>
+            <UiDivider vertical />
             <UiButton square type="alt" disabled={page === totalPages} onClick={() => setPage(page + 1)}>
-              <UiIcon icon="arrowRight"/>
+              <UiIcon icon="arrowRight" />
             </UiButton>
           </UiLayout>
         </>
