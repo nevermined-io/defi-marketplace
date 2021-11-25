@@ -21,8 +21,8 @@ const stepMessages = {
 const b = BEM('buy-asset-popup', styles)
 
 export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
-  const {close, asset} = props
-  const {sdk} = useContext(User)
+  const { close, asset } = props
+  const { sdk } = useContext(User)
   const [view, setView] = useState<0 | 1 | 2>(0)
   const [step, setStep] = useState<OrderProgressStep>(0)
   const [error, setError] = useState<string | undefined>(undefined)
@@ -38,8 +38,9 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
     promise.subscribe(step => setStep(step))
     promise
       .then(async agreementId => {
-        await sdk.assets.consume(agreementId, asset.id, account)})
-      .catch(error => setError(error.message))
+        await sdk.assets.consume(agreementId, asset.id, account)
+      })
+      .catch(error => setError(error.code === 4001 ? "The transaction was canceled." : error.message))
   }, [])
 
   const cleanError = useCallback(() => {
@@ -50,13 +51,13 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
   if (error) {
     return (
       <>
-        <UiDivider type="l"/>
-        <UiIcon className={b('icon', ['error'])} icon="circleError" size="xxl"/>
-        <UiDivider type="l"/>
+        <UiDivider type="l" />
+        <UiIcon className={b('icon', ['error'])} icon="circleError" size="xxl" />
+        <UiDivider type="l" />
         <UiText block type="h3" className={b('text')}>Purchase failed!</UiText>
-        <UiDivider/>
+        <UiDivider />
         <UiText block className={b('text', ['content'])}>{error}</UiText>
-        <UiDivider type="l"/>
+        <UiDivider type="l" />
         <UiButton className={b('button')} type="error" onClick={cleanError}>Return</UiButton>
       </>
     )
@@ -64,11 +65,11 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
   } else if (view === 0) {
     return (
       <>
-        <UiText block type="h3" className={b('text')}>Do you really want to <br/> make this purchase?</UiText>
-        <UiDivider type="xl"/>
+        <UiText block type="h3" className={b('text')}>Do you really want to <br /> make this purchase?</UiText>
+        <UiDivider type="xl" />
         <UiLayout>
           <UiButton className={b('button')} onClick={start}>Yes</UiButton>
-          <UiDivider vertical/>
+          <UiDivider vertical />
           <UiButton className={b('button')} type="secondary" onClick={close}>Cancel</UiButton>
         </UiLayout>
       </>
@@ -76,33 +77,33 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
   } else if (view === 1) {
     return (
       <>
-        <UiText block type="h3" className={b('text')}>Transaction in <br/> progress...</UiText>
-        <UiDivider type="l"/>
-        <UiDivider/>
+        <UiText block type="h3" className={b('text')}>Transaction in <br /> progress...</UiText>
+        <UiDivider type="l" />
+        <UiDivider />
         <UiCircleProgress
           progress={step / maxStep}
-          content={stepMessages[step]}/>
-        <UiDivider/>
+          content={stepMessages[step]} />
+        <UiDivider />
       </>
     )
   } else if (view === 2) {
     return (
       <>
-        <UiDivider type="l"/>
-        <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl"/>
-        <UiDivider type="l"/>
+        <UiDivider type="l" />
+        <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
+        <UiDivider type="l" />
         <UiText block type="h3" className={b('text')}>Purchase Successful!</UiText>
-        <UiDivider/>
+        <UiDivider />
         <UiText block className={b('text', ['content'])}>You can now download your report anytime from your the history page you have here.</UiText>
-        <UiDivider type="l"/>
+        <UiDivider type="l" />
         <UiLayout>
           <UiButton className={b('button')} onClick={close}>Complete</UiButton>
-          <UiDivider vertical/>
+          <UiDivider vertical />
           <UiButton className={b('button')} type="secondary" onClick={close}>Download</UiButton>
         </UiLayout>
       </>
     )
   } else {
-    return <span/>
+    return <span />
   }
 }
