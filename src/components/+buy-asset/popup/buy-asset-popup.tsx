@@ -5,6 +5,7 @@ import { BEM, UiText, UiDivider, UiLayout, UiButton, UiCircleProgress, UiIcon } 
 import { User } from '../../../context'
 
 import styles from './buy-asset-popup.module.scss'
+import { MetamaskErrors } from '../../../shared/constants'
 
 interface BuyAssetPopupProps {
   asset: DDO
@@ -40,7 +41,7 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
       .then(async agreementId => {
         await sdk.assets.consume(agreementId, asset.id, account)
       })
-      .catch(error => setError(error.code === 4001 ? "The transaction was canceled." : error.message))
+      .catch(error => setError(error.code === 4001 ? MetamaskErrors[4001] : error.message))
   }, [])
 
   const cleanError = useCallback(() => {
