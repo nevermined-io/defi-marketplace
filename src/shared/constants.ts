@@ -28,3 +28,7 @@ export const categoryPrefix = 'ProtocolType'
 export const subcategoryPrefix = 'EventType'
 export const networkPrefix = 'Blockchain'
 
+export const MetamaskErrors = {
+  4001 : 'The transaction was canceled. Please, approve it to purchase the asset'
+}
+
