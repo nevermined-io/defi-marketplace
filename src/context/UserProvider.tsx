@@ -55,13 +55,17 @@ interface UserProviderState {
     loginMetamask(): Promise<any>
     loginBurnerWallet(): Promise<any>
     logoutBurnerWallet(): Promise<any>
-    switchToCorrectNetwork() : Promise<any>
+    switchToCorrectNetwork(): Promise<any>
     message: string
     tokenSymbol: string
 }
 
 export default class UserProvider extends PureComponent<{}, UserProviderState> {
     public componentDidUpdate() {
+        if (!window?.ethereum) {
+            return
+        }
+       
         window?.ethereum.on('accountsChanged', (accounts) => {
             this.fetchAccounts()
         })
@@ -153,6 +157,9 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
     private networkInterval: any = null
 
     public async componentDidMount() {
+        if (!window?.ethereum) {
+            return
+        }
         await this.bootstrap()
     }
 
@@ -262,7 +269,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
                     this.setState({
                         account,
                         isLogged: true,
-                        requestFromFaucet: async () => {}
+                        requestFromFaucet: async () => { }
                     })
 
                     await this.fetchBalance(accounts[0])
