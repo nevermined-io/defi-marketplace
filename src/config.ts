@@ -34,3 +34,7 @@ export const correctNetworkURL =
     process.env.CORRECT_NETWORK_URL || 'https://matic-mumbai.chainstacklabs.com'
 export const correctNetworkName =
     process.env.CORRECT_NETWORK_NAME || 'mumbai'
+export const correctNetworkTokenName =
+    process.env.CORRECT_NETWORK_TOKEN_NAME || 'MATIC'
+export const correctNetworkTokenSymbol =
+    process.env.CORRECT_NETWORK_TOKEN_SYMBOL || 'MATIC'

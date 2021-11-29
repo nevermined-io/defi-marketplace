@@ -1,5 +1,10 @@
-import { correctNetworkId,correctNetworkURL } from '../config'
+import { correctNetworkId, 
+    correctNetworkURL, 
+    correctNetworkTokenName,
+    correctNetworkName,
+    correctNetworkTokenSymbol } from '../config'
 import { imageConfigDefault } from 'next/dist/server/image-config'
+import { MetamaskErrorCodes, MetamaskCustomErrors } from '../shared/constants'
 import Web3 from 'web3'
 
 export class MetamaskProvider {
@@ -56,8 +61,8 @@ export class MetamaskProvider {
                         method: 'wallet_switchEthereumChain',
                         params: [{ chainId: correctNetworkId }],
                     });
-                } catch (error) {
-                    error.code === 4902 ? await this.addNetwork() : console.log(error)
+                } catch (error) { 
+                    error.code === MetamaskErrorCodes.CHAIN_NOT_ADDED ? await this.addNetwork() : console.log(error)
                 }
             } else {
                 alert('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
@@ -74,12 +79,18 @@ export class MetamaskProvider {
                 params: [
                     {
                         chainId: correctNetworkId,
-                        rpcUrl: correctNetworkURL,
+                        chainName: correctNetworkName,
+                        rpcUrls: [correctNetworkURL],
+                        nativeCurrency: {
+                            name: correctNetworkTokenName,
+                            symbol: correctNetworkTokenSymbol, 
+                            decimals: 18,
+                          }
                     },
                 ],
             });
         } catch (addError) {
-            console.error(addError);
+            console.error("error adding the network:", addError);
         }
     }
 

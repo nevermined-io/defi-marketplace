@@ -33,7 +33,9 @@ export const MetamaskCustomErrors = {
 }
 
 export enum MetamaskErrorCodes {
-  CANCELED = 4001
+  CANCELED = 4001,
+  CHAIN_NOT_ADDED = 4902,
+  UNRECOGNIZED_CHAIN_ID= -32603
 }
 
 
