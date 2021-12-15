@@ -1,0 +1,14 @@
+version: '3'
+services:
+  database:
+    image: 'mysql:8.0'
+    container_name: mysql
+    restart: always
+    volumes:
+      - './mysql_data:/var/lib/mysql'
+      - './data:/data'
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=defi-datasets
+    ports:
+      - '3306:3306'
