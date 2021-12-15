@@ -1,8 +1,9 @@
 import React, { Props } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import Link from "next/link"
+import { NuiTokenName, NuiTokenPrice } from '@nevermined-io/components-catalog'
 
-import { BEM, UiLayout, UiText, UiDivider, UiIcon, XuiTokenName, XuiTokenPrice, XuiBuyAsset } from 'ui'
+import { BEM, UiLayout, UiText, UiDivider, UiIcon, XuiBuyAsset } from 'ui'
 import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
 import styles from './assets-list.module.scss'
 
@@ -16,8 +17,8 @@ export function AssetsList({assets}: AssetsListProps) {
     <div className={b()}>
       {assets
         .map(asset => ({asset, metadata: asset.findServiceByType('metadata').attributes}))
-        .map(data => ({...data, defi: getDefiInfo(data.metadata)}))
-        .map(({asset, metadata, defi}) => (
+        .map(data => ({...data, defi: getDefiInfo(data.metadata), token: getDdoTokenAddress(data.asset)}))
+        .map(({asset, metadata, defi, token = ''}) => (
           <UiLayout key={asset.id} className={b('asset')}>
             <Link href={`/asset/${asset.id}`}>
               <UiText className={`pointer ${b('asset-title')}`} wrapper="h4" type="h4">{metadata.main.name}</UiText>
@@ -43,10 +44,10 @@ export function AssetsList({assets}: AssetsListProps) {
             <UiLayout className={b('info')}>
               <UiIcon className={b('info-icon')} icon="tag" color="secondary"/>
               <UiText variants={['secondary']}>
-                <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice>
+                <NuiTokenPrice address={token}>{metadata.main.price}</NuiTokenPrice>
                 {' '}
                 <UiText variants={['detail']}>
-                  <XuiTokenName address={getDdoTokenAddress(asset)}/>
+                  <NuiTokenName address={token}/>
                 </UiText>
               </UiText>
             </UiLayout>

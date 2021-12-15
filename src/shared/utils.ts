@@ -29,7 +29,7 @@ export function getDdoTokenAddress(ddo: DDO) {
     ?.find(({ name }) => name === 'lockPayment')
     ?.parameters
     ?.find(({ name }) => name === '_tokenAddress')
-    ?.value
+    ?.value as string | undefined
 }
 
 

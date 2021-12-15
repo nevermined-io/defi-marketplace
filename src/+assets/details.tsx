@@ -2,11 +2,12 @@ import React, { useEffect, useContext, useState } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
-import styles from './details.module.scss'
+import { NuiTokenName, NuiTokenPrice } from '@nevermined-io/components-catalog'
 
-import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiTokenName, XuiTokenPrice, XuiBuyAsset, UiButton } from 'ui'
+import styles from './details.module.scss'
+import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiBuyAsset, UiButton } from 'ui'
 import { User } from '../context'
-import { toDate } from '../shared'
+import { toDate, getDdoTokenAddress } from '../shared'
 
 const b = BEM('details', styles)
 
@@ -33,10 +34,11 @@ export const AssetDetails: NextPage = () => {
   }
 
   const metadata = asset.findServiceByType('metadata').attributes
-  
-  const secondWord = "Type" 
+  const tokenAddress = getDdoTokenAddress(asset)!
+
+  const secondWord = "Type"
   const formatCategories = (firstWord: string, word:string) => {
-    switch(firstWord){
+    switch (firstWord) {
       case "Event":
         return "Event Type";
       case "Protocol":
@@ -84,13 +86,18 @@ export const AssetDetails: NextPage = () => {
               <UiIcon color="secondary" icon="file" size="xl"/>
               <UiDivider vertical type="s"/>
               <UiText block>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>Price:</UiText> <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice> <XuiTokenName/>
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Price:</UiText>
+                <NuiTokenPrice address={tokenAddress}>{metadata.main.price}</NuiTokenPrice>
+                <NuiTokenName address={tokenAddress}/>
                 <br/>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>Files:</UiText> {metadata.main.files?.length}
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Files:</UiText>
+                {metadata.main.files?.length}
                 <br/>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>Size:</UiText> {metadata.main.files?.map(item=> Number(item.contentLength)).reduce((acc,el)=> acc+el) + " bytes"} 
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Size:</UiText>
+                {metadata.main.files?.map(item=> Number(item.contentLength)).reduce((acc,el)=> acc+el) + " bytes"}
                 <br/>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>Type:</UiText> {metadata.main.files?.map(item=> item.contentType).reduce((acc,el)=> {return acc.includes(el) ? acc:acc.concat(` ${el}`)})} 
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Type:</UiText>
+                {metadata.main.files?.map(item=> item.contentType).reduce((acc,el)=> {return acc.includes(el) ? acc:acc.concat(` ${el}`)})}
               </UiText>
               <UiDivider flex/>
             </UiLayout>
