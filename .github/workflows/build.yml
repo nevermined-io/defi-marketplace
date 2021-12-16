@@ -20,5 +20,6 @@ jobs:
       working-directory: ./client
       run: |
         npm i
+      working-directory: ./client
     - name: Run linters
       run: npm run lint
