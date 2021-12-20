@@ -20,7 +20,7 @@ const create = async (req: Request, res: Response) => {
     const savedDatasets = await saveDatasets(datasets)
     const bundle = await saveBundle(req.body.user, savedDatasets)
 
-    res.sendStatus(200).json({ "status": "OK" })
+    res.json({ "status": "OK" })
 
   } catch (error) {
     res.sendStatus(500).json(error.message)
