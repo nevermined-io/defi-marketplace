@@ -1,3 +1,3 @@
-import { List } from '/src/+assets/list'
+import { Landing } from '/src/+assets/landing'
 
-export default List
+export default Landing
