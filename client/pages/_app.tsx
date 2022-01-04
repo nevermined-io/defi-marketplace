@@ -14,13 +14,14 @@ function App({ Component, pageProps }: AppProps) {
     <UserProvider>
       <>
         <Head>
-          <title>Nevermined DeFi Marketplace - List</title>
+          <title>Nevermined DeFi Marketplace</title>
           <meta name="description" content="Nevermined DeFi Marketplace" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
         <div>
           <UiHeader>
+            <UiHeaderLink href="/list">Asset List</UiHeaderLink>
             <UiHeaderLink href="/history">History</UiHeaderLink>
             <UiHeaderLink href="/styles">DEV - Styles</UiHeaderLink>
           </UiHeader>
