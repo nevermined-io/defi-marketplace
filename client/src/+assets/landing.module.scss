@@ -1,0 +1,65 @@
+@import '../../src/styles/index';
+
+.landing {
+
+  &__bannerContainer {
+    padding: 100px 40px 0 0;
+    text-align: center;
+  }
+  
+  &__bannerText {
+    padding-top: 40px;
+  }
+
+  &__subTitleBannerText {
+  font-size: 32px;
+  line-height: 49px;
+  letter-spacing: -0.04em;
+  color: #FFFFFF;
+}
+
+&__sectionTitle {
+    font-size: 48px;
+    line-height: 48px;
+    letter-spacing: -0.03em;
+    font-weight: 250; // apply to all titles
+    text-transform: uppercase;
+    color: #67CEF9;
+    margin:  22px 44px;
+  }
+  
+  
+  &__sectionText {
+    max-width: 438px;
+    font-size: 18px;
+    line-height: 32px;
+    color: #A1AEB7;
+    margin:  22px 44px;
+  }
+  
+  &__sectionTextFeature {
+    font-size: 18px;
+    line-height: 32px;
+    color: #A1AEB7;
+    margin:  22px 44px;
+    text-align: center;
+  }
+  
+  
+  &__blurriedNumbers{
+  width: 117px;
+  height: 237px;
+  font-size: 206px;
+  z-index: 0;
+  filter: blur(11px);
+  }
+  
+  &__flexDirVertical {
+    flex-direction: column;
+  }
+
+
+
+
+
+}
