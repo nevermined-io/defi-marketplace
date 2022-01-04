@@ -14,15 +14,6 @@ export const List: NextPage = () => {
 
   return (
     <>
-      <div className={styles.bannerContainer}>
-        <Image src="/assets/nevermined-color.svg" width="115" height="70"/>
-        <UiText className={styles.bannerText} wrapper="h1" type="h1">
-          The Nevermined <br/>
-          <UiText clear={['text-transform']}>DeFi</UiText>
-          {' '}
-          Marketplace
-        </UiText>
-      </div>
 
       <UiLayout type="container">
         <UiLayout>
