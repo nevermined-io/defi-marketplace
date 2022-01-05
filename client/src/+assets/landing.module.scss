@@ -21,8 +21,6 @@ $default_margin: 22px 44px;
     margin: $default_margin
   }
 
-
-
   &__featureSectionText {
     margin: 0 88px 0 88px;
     text-align: center;
@@ -34,9 +32,5 @@ $default_margin: 22px 44px;
     font-size: 206px;
     z-index: 0;
     filter: blur(11px);
-  }
-
-  &__flexDirVertical {
-    flex-direction: column;
   }
 }

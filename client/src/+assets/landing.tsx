@@ -112,13 +112,13 @@ export const Landing: NextPage = () => {
 
         <div>
           <UiLayout type="sides"  >
-            <UiLayout type="grid" align="center" className={b("flexDirVertical")}>
+            <UiLayout type="grid" align="center" direction="column">
               <Image width="124" height="126" className={b('landingImage')} src="/assets/documents.svg" />
               <UiText className={b('bannerText')} variants={["secondary"]} wrapper="h3" type="h3">Publish & Purchase</UiText>
               <UiDivider />
               <UiText className={b('featureSectionText')} type="p" variants={["secondary", "detail"]}>Whether you’re  publishing DeFi data or purchasing it, our marketplace enables individuals and organizations to leverage value from tokenized data assets.</UiText>
             </UiLayout>
-            <UiLayout type="grid" align="center" className={b("flexDirVertical")} >
+            <UiLayout type="grid" align="center" direction="column"> 
               <Image width="124" height="126" className={b('landingImage')} src="/assets/analysis.svg" />
               <UiText className={b('bannerText')} variants={["secondary"]} wrapper="h3" type="h3">Analysis Ready Data</UiText>
               <UiDivider />
@@ -130,13 +130,13 @@ export const Landing: NextPage = () => {
           <UiDivider type="xxl" />
 
           <UiLayout type="sides" >
-            <UiLayout type="grid" align="center" className={b("flexDirVertical")} >
+            <UiLayout type="grid" align="center" direction="column"> 
               <Image width="124" height="126" className={b('landingImage')} src="/assets/filtering.svg" />
               <UiText className={b('bannerText')} variants={["secondary"]} wrapper="h3" type="h3">Precision Filtering & Search</UiText>
               <UiDivider />
               <UiText className={b('featureSectionText')} type="p" variants={["secondary", "detail"]}>Our practical search engine and filtering capabilities allow you to intuitively find the data sets you’re looking  and save them to your basket until you’re ready to check out.</UiText>
             </UiLayout>
-            <UiLayout type="grid" align="center" className={b("flexDirVertical")} >
+            <UiLayout type="grid" align="center" direction="column"> 
               <Image width="124" height="126" className={b('landingImage')} src="/assets/compatibility.svg" />
               <UiText className={b('bannerText')} variants={["secondary"]} wrapper="h3" type="h3">Crypto Wallet Compatibility</UiText>
               <UiDivider />

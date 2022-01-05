@@ -30,4 +30,6 @@ $layout--container---width: $size---container !default;
   &--align-end {align-items: flex-end;}
   &--align-start {align-items: flex-start;}
   &--align-center {align-items: center;}
+  &--flex-direction-column {flex-direction: column;}
+
 }
