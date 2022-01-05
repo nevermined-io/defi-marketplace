@@ -19,17 +19,17 @@ export const Landing: NextPage = () => {
     <>
       <div className={b('bannerContainer')}>
         <Image src="/assets/nevermined-color.svg" width="115" height="70" />
-        <UiText className={b('bannertext')} wrapper="h1" type="h1">
-          Discover, Distribute
-          <UiText clear={['text-transform']}> &<br />
-            {' '}
-            Download DeFi Data</UiText>
-
+        <UiText className={b('bannerText', ["padding"])} wrapper="h1" type="h1">
+          Discover, Distribute &<br />
+          {' '}
+          Download
+          <UiText clear={['text-transform']} > DeFi  </UiText>
+          Data
         </UiText>
-        <UiText className={b("subTitleBannerText")} wrapper="h1" type="h1">
+        <UiDivider type="s" />
+        <UiText className={b('bannerText')} variants={["heading", "secondary"]} wrapper="h3" type="h3">
           Say Goodbye to Unstructured Data
         </UiText>
-        <UiDivider />
         <UiButton onClick={redirectToList}>
           GO TO MARKETPLACE
         </UiButton>
@@ -39,19 +39,16 @@ export const Landing: NextPage = () => {
       {/* first section */}
       <UiLayout type="grid"  >
         <div>
-          {/* TODO maybe not use layout */}
           <UiLayout type="grid"  >
-
             <Image width="430" height="325" className={b('landingImage')} src="/assets/planetEclipse.svg" />
-            {/* <Image width="39" height="24" className={b('landingImage')} src="/assets/planetEclipse.png" /> */}
           </UiLayout>
         </div>
         <div>
           <UiLayout type="container" >
-            <UiText className={b("sectionTitle")} wrapper="h3" type="h3">
+            <UiText wrapper="h2" type="h2" className={b("defaultMargin")}>
               A Collaborative data Marketplace
             </UiText>
-            <UiText className={b('sectionText')}wrapper="h3" type="h3">
+            <UiText className={b('defaultMargin')} type="p" variants={["detail"]}>
               The Nevermined DeFi data marketplace bridges the gap between
               Decentralized Finance (DeFi) and data analytics.
               We aim to foster a collaborative ecosystem that
@@ -70,10 +67,12 @@ export const Landing: NextPage = () => {
       <UiLayout type="grid" >
         <div>
           <UiLayout type="container" >
-            <UiText className={b('sectionTitle')} clear={['text-transform']} wrapper="h3" type="h3">
-              Access key insights <br /> in defi &  web 3
+            <UiText wrapper="h2" type="h2" className={b("defaultMargin")}>
+              Access key insights <br /> in
+              <UiText clear={['text-transform']} > DeFi  </UiText>
+              & web 3
             </UiText>
-            <UiText className={b("sectionText")} wrapper="h3" type="h3">
+            <UiText className={b("defaultMargin")} type="p" variants={["detail"]}>
               Gain the advantage in your Defi analysis and investment models by
               obtaining data sets aggregated daily from leading protocols such as
               Ethereum and IPFS.* From DeFi lending and historical DEX events,
@@ -100,51 +99,48 @@ export const Landing: NextPage = () => {
         <div className={b("bannerContainer")}>
           <UiLayout className={b("bannerContainer")} type="container"   >
             {/* <UiLayout className="bannerContainer" type="container" justify="center" > */}
-            <UiText className={b("sectionTitle")} clear={['text-transform']} wrapper="h2" type="h2">
+            <UiText wrapper="h2" type="h2">
               FEATURES
             </UiText>
-            <UiText className={b("sectionTextFeature")} wrapper="h3" >
+            <UiDivider />
+            <UiText type="p" variants={["detail"]}>
               All the ways you can discover and navigate data on the Nevermined marketplace
             </UiText>
           </UiLayout>
         </div>
-        <UiDivider type="l" />
+        <UiDivider type="xxl" />
+
         <div>
           <UiLayout type="sides"  >
-            <UiLayout type="grid" className={b("flexDirVertical")}>
+            <UiLayout type="grid" align="center" className={b("flexDirVertical")}>
               <Image width="124" height="126" className={b('landingImage')} src="/assets/documents.svg" />
-              <div className={b("sectionTextFeature")} >
-                <UiText className={b("subTitleBannerText")} type="h4" variants={["heading", "highlight"]}>Publish & Purchase</UiText>
-                <UiDivider />
-                <UiText type="caps" variants={["secondary", "detail"]}>Whether you’re  publishing DeFi data or purchasing it, our marketplace enables individuals and organizations to leverage value from tokenized data assets.</UiText>
-              </div>
+              <UiText className={b('bannerText')} variants={["secondary"]} wrapper="h3" type="h3">Publish & Purchase</UiText>
+              <UiDivider />
+              <UiText className={b('featureSectionText')} type="p" variants={["secondary", "detail"]}>Whether you’re  publishing DeFi data or purchasing it, our marketplace enables individuals and organizations to leverage value from tokenized data assets.</UiText>
             </UiLayout>
-            <UiLayout type="grid" className={b("flexDirVertical")} >
+            <UiLayout type="grid" align="center" className={b("flexDirVertical")} >
               <Image width="124" height="126" className={b('landingImage')} src="/assets/analysis.svg" />
-              <div className={b("sectionTextFeature")} >
-                <UiText className={b("subTitleBannerText")} type="h4" variants={["heading", "highlight"]}>Analysis Ready Data</UiText>
-                <UiDivider />
-                <UiText type="caps" variants={["secondary", "detail"]}>We ensure that the data sets availiable on our platform are normalized for analtyical purposes, enabling usability regardless of proficiency in blockchain or DeFi.</UiText>
-              </div>
+              <UiText className={b('bannerText')} variants={["secondary"]} wrapper="h3" type="h3">Analysis Ready Data</UiText>
+              <UiDivider />
+
+              <UiText className={b('featureSectionText')} type="p" variants={["secondary", "detail"]}>We ensure that the data sets availiable on our platform are normalized for analtyical purposes, enabling usability regardless of proficiency in blockchain or DeFi.</UiText>
             </UiLayout>
           </UiLayout>
+
           <UiDivider type="xxl" />
+
           <UiLayout type="sides" >
-            <UiLayout type="grid" className={b("flexDirVertical")} >
+            <UiLayout type="grid" align="center" className={b("flexDirVertical")} >
               <Image width="124" height="126" className={b('landingImage')} src="/assets/filtering.svg" />
-              <div className={b("sectionTextFeature")} >
-                <UiText className={b("subTitleBannerText")} type="h4" variants={["heading", "highlight"]}>Precision Filtering & Search</UiText>
-                <UiDivider />
-                <UiText type="caps" variants={["secondary", "detail"]}>Our practical search engine and filtering capabilities allow you to intuitively find the data sets you’re looking  and save them to your basket until you’re ready to check out.</UiText>
-              </div>
+              <UiText className={b('bannerText')} variants={["secondary"]} wrapper="h3" type="h3">Precision Filtering & Search</UiText>
+              <UiDivider />
+              <UiText className={b('featureSectionText')} type="p" variants={["secondary", "detail"]}>Our practical search engine and filtering capabilities allow you to intuitively find the data sets you’re looking  and save them to your basket until you’re ready to check out.</UiText>
             </UiLayout>
-            <UiLayout type="grid" className={b("flexDirVertical")} >
+            <UiLayout type="grid" align="center" className={b("flexDirVertical")} >
               <Image width="124" height="126" className={b('landingImage')} src="/assets/compatibility.svg" />
-              <div className={b("sectionTextFeature")} >
-                <UiText className={b("subTitleBannerText")} type="h4" variants={["heading", "highlight"]}>Crypto Wallet Compatibility</UiText>
-                <UiDivider />
-                <UiText type="caps" variants={["secondary", "detail"]}>Nevermined easily integrates with Polygon and Metamask wallets in order to enable efficient user experience. Simply connect your wallet to purchase your data.</UiText>
-              </div>
+              <UiText className={b('bannerText')} variants={["secondary"]} wrapper="h3" type="h3">Crypto Wallet Compatibility</UiText>
+              <UiDivider />
+              <UiText className={b('featureSectionText')} type="p" variants={["secondary", "detail"]}>Nevermined easily integrates with Polygon and Metamask wallets in order to enable efficient user experience. Simply connect your wallet to purchase your data.</UiText>
             </UiLayout>
           </UiLayout>
         </div>
@@ -162,30 +158,31 @@ export const Landing: NextPage = () => {
         <div className={b("bannerContainer")}>
           <UiLayout className={b("bannerContainer")} type="container"   >
             {/* <UiLayout className="bannerContainer" type="container" justify="center" > */}
-            <UiText className={b("sectionTitleFeature")} clear={['text-transform']} wrapper="h2" type="h2">
+            <UiText wrapper="h2" type="h2">
               HOW IT WORKS
             </UiText>
-            <UiText className={b("sectionTextFeature")} wrapper="h3" >
+            <UiDivider type="l" />
+            <UiText wrapper="h3" variants={["detail"]}>
               Purchasing DeFi data through Nevermined’s open marketplace is as easy as 1,2,3...
             </UiText>
           </UiLayout>
-            <UiDivider type="xl"/>
+          <UiDivider type="xl" />
         </div>
         <UiLayout type="sides" >
           <UiLayout type="container"  >
-            {/* <UiText className={b("blurriedNumbers")} type="h1" variants={["highlight"]}>1</UiText> */}
             <div  >
-              {/* <Image width="40" height="40" className={b('landingImage')} src="/assets/search.svg" /> */}
               <UiIcon icon="search" color="primary" size="xl" />
               <UiText className={b("blurriedNumbers")} type="h1" variants={["highlight"]}>1</UiText>
+
               <UiDivider type="s" />
 
-
-              <UiText type="h4" variants={["highlight"]}>
+              <UiText type="h4" variants={["secondary"]}>
                 Search
               </UiText>
+
               <UiDivider type="s" />
-              <UiText type="small-caps" variants={["secondary", "detail"]}>
+
+              <UiText type="p" variants={["detail"]}>
                 Identify your desired product by using Nevermined’s filter functions to select  the data set you wish to purchase.
               </UiText>
             </div>
@@ -194,28 +191,26 @@ export const Landing: NextPage = () => {
             {/* <UiIcon icon="basket" color="primary" size="xl" /> */}
             <Image width="40" height="40" className={b('landingImage')} src="/assets/basket_icon.svg" />
             <UiText className={b("blurriedNumbers")} type="h1" variants={["highlight"]}>2</UiText>
-            <div>
-              <UiText type="h4" variants={["highlight"]}>
-                Shop
-              </UiText>
-              <UiDivider type="s" />
-              <UiText type="small-caps" variants={["secondary", "detail"]}>
-                Connect your wallet (Polygon or MetaMask) before adding the selected data sets to your basket.
-              </UiText>
-            </div>
+            <UiDivider type="s" />
+            <UiText type="h4" variants={["secondary"]}>
+              Shop
+            </UiText>
+            <UiDivider type="s" />
+            <UiText type="p" variants={["detail"]}>
+              Connect your wallet (Polygon or MetaMask) before adding the selected data sets to your basket.
+            </UiText>
           </UiLayout>
           <UiLayout type="container" >
             <UiIcon icon="download" color="primary" size="xl" />
             <UiText className={b("blurriedNumbers")} type="h1" variants={["highlight"]}>3</UiText>
-            <div>
-              <UiText type="h4" variants={["highlight"]}>
-                Download
-              </UiText>
-              <UiDivider type="s" />
-              <UiText type="small-caps" variants={["secondary", "detail"]}>
-                Head to the check out page to make payment and simply dowload your CSV files.
-              </UiText>
-            </div>
+            <UiDivider type="s" />
+            <UiText type="h4" variants={["secondary"]}>
+              Download
+            </UiText>
+            <UiDivider type="s" />
+            <UiText type="p" variants={["detail"]}>
+              Head to the check out page to make payment and simply dowload your CSV files.
+            </UiText>
           </UiLayout>
 
         </UiLayout>
@@ -223,7 +218,8 @@ export const Landing: NextPage = () => {
           <UiButton className={b("buttonFeatures")} onClick={redirectToList}>
             install Nevermined cli
           </UiButton>
-          <UiText className={b("sectionTextFeature")} wrapper="h3" >
+          <UiDivider type="s" />
+          <UiText type="p" variants={["secondary", "detail"]}>
             (If you don’t want to bother with our interface)
           </UiText>
         </div>
@@ -235,13 +231,12 @@ export const Landing: NextPage = () => {
         <div className={b("bannerContainer")}>
           <UiLayout className={b("bannerContainer")} type="container"   >
             {/* <UiLayout className="bannerContainer" type="container" justify="center" > */}
-            <UiText className={b("sectionTitleFeature")} clear={['text-transform']} wrapper="h2" type="h2">
+            <UiText wrapper="h2" type="h2">
               Partners
             </UiText>
             <UiDivider type="l" />
-            <UiLayout type="grid" justify="center">
+            <UiLayout type="grid" >
               <Image width="125" height="55" className={b('landingImage')} src="/assets/keyko_logo.svg" />
-              {/* <UiDivider  vertical={true} /> */}
               <Image width="125" height="55" className={b('landingImage')} src="/assets/filecoin_logo.svg" />
 
             </UiLayout>
