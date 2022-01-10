@@ -20,14 +20,8 @@ export const AssetDetails: NextPage = () => {
       return
     }
     sdk.assets.resolve(String(did))
-      .then(ddo => {
-        console.log(did)
-        setAsset(ddo)
-      })
-      .catch((e) => {
-        console.log(e)
-        setAsset(false)
-      })
+      .then(ddo =>  setAsset(ddo))
+      .catch(() => setAsset(false))
   }, [sdk])
 
   if (!asset) {
