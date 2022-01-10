@@ -20,8 +20,14 @@ export const AssetDetails: NextPage = () => {
       return
     }
     sdk.assets.resolve(String(did))
-      .then(ddo => setAsset(ddo))
-      .catch(() => setAsset(false))
+      .then(ddo => {
+        console.log(did)
+        setAsset(ddo)
+      })
+      .catch((e) => {
+        console.log(e)
+        setAsset(false)
+      })
   }, [sdk])
 
   if (!asset) {
@@ -33,8 +39,8 @@ export const AssetDetails: NextPage = () => {
   }
 
   const metadata = asset.findServiceByType('metadata').attributes
-  
-  const secondWord = "Type" 
+
+  const secondWord = "Type"
   const formatCategories = (firstWord: string, word:string) => {
     switch(firstWord){
       case "Event":
@@ -88,9 +94,9 @@ export const AssetDetails: NextPage = () => {
                 <br/>
                 <UiText className={b('attr')} type="caps" variants={['bold']}>Files:</UiText> {metadata.main.files?.length}
                 <br/>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>Size:</UiText> {metadata.main.files?.map(item=> Number(item.contentLength)).reduce((acc,el)=> acc+el) + " bytes"} 
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Size:</UiText> {metadata.main.files?.map(item=> Number(item.contentLength)).reduce((acc,el)=> acc+el) + " bytes"}
                 <br/>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>Type:</UiText> {metadata.main.files?.map(item=> item.contentType).reduce((acc,el)=> {return acc.includes(el) ? acc:acc.concat(` ${el}`)})} 
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Type:</UiText> {metadata.main.files?.map(item=> item.contentType).reduce((acc,el)=> {return acc.includes(el) ? acc:acc.concat(` ${el}`)})}
               </UiText>
               <UiDivider flex/>
             </UiLayout>
