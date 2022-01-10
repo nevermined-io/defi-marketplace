@@ -62,11 +62,11 @@ interface UserProviderState {
 
 export default class UserProvider extends PureComponent<{}, UserProviderState> {
     public componentDidUpdate() {
-        window?.ethereum.on('accountsChanged', (accounts) => {
+        window?.ethereum?.on('accountsChanged', (accounts) => {
             this.fetchAccounts()
         })
 
-        window?.ethereum.on('chainChanged', async (accounts) => {
+        window?.ethereum?.on('chainChanged', async (accounts) => {
             await this.fetchNetwork()
         })
 
