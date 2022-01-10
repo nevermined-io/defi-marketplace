@@ -1,12 +1,12 @@
 FROM node:12-alpine
 
 # Add package file
-COPY package*.json ./
+COPY package.json ./
 
 # Install deps
 RUN npm i
 
-# Copy source   
+# Copy source
 COPY src ./src
 COPY pages ./pages
 COPY public ./public
