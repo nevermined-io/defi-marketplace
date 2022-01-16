@@ -1,7 +1,54 @@
 @import '../../src/styles/index';
 
 .assets-list {
-  margin-top: 40px;
+  margin-top: 32px;
+
+  &__heading {
+    margin-bottom: 32px;
+  }
+  &__batch-select-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  &__batch-select {
+    background: gc(gM);
+    height: 34px;
+    width: 127px;
+    padding: 10px;
+    position: relative;
+  }
+  &__batch-select-inactive {
+    display: flex;
+    align-items: center;
+    background: gc(gM);
+    height: 34px;
+    padding: 8px;
+    width: 95px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  &__batch-checkbox {
+    /* For some reason the checkbox appears ~2px down if I don't set position to absolute. Feel free to investigate if
+    you have time. */
+    position: absolute;
+    cursor: pointer;
+  }
+  &__selected-count {
+    position: absolute;
+    left: 32px;
+    font-size: 14px;
+  }
+  &__batch-close {
+    position: absolute;
+    left: 107px;
+    top: 5px;
+    cursor: pointer;
+  }
+  &__basket-add {
+    color: gc(sM);
+    cursor: pointer;
+    margin-left: 16px;
+  }
 
   &__asset {
     height: 74px;
@@ -20,6 +67,13 @@
 
     &-icon {
       margin-right: 8px;
+    }
+  }
+  &__checkbox {
+    margin-right: 22px;
+
+    &--hidden {
+      display: none;
     }
   }
 }

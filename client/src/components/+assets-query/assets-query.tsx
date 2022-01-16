@@ -134,7 +134,6 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
               <UiIcon icon="search" />
             </div>
           </UiLayout>
-          <UiDivider />
         </>
       )}
 
