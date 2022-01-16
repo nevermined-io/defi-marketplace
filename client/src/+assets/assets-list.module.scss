@@ -13,7 +13,7 @@
   &__batch-select {
     background: gc(gM);
     height: 34px;
-    width: 127px;
+    width: 132px;
     padding: 10px;
     position: relative;
   }
@@ -37,10 +37,13 @@
     position: absolute;
     left: 32px;
     font-size: 14px;
+    b {
+      font-weight: bold;
+    }
   }
   &__batch-close {
     position: absolute;
-    left: 107px;
+    left: 113px;
     top: 5px;
     cursor: pointer;
   }
@@ -71,6 +74,7 @@
   }
   &__checkbox {
     margin-right: 22px;
+    cursor: pointer;
 
     &--hidden {
       display: none;

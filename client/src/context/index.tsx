@@ -31,7 +31,14 @@ export const User = React.createContext({
     },
     message: '',
     tokenSymbol: '',
-    tokenDecimals: 6
+    tokenDecimals: 6,
+    batchSelected: [] as string[],
+    addToBatchSelected: (dids: string[]) => {
+        /* empty */
+    },
+    removeFromBatchSelected: (dids: string[]) => {
+        /* empty */
+    },
 })
 
 export const Market = React.createContext<MarketProviderState>({
