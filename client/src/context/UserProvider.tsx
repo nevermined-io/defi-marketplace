@@ -58,6 +58,7 @@ interface UserProviderState {
     switchToCorrectNetwork() : Promise<any>
     message: string
     tokenSymbol: string
+    batchSelected: string[]
 }
 
 export default class UserProvider extends PureComponent<{}, UserProviderState> {
@@ -143,9 +144,12 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         loginBurnerWallet: (): Promise<any> => this.loginBurnerWallet(),
         logoutBurnerWallet: (): Promise<any> => this.logoutBurnerWallet(),
         switchToCorrectNetwork: (): Promise<any> => this.switchToCorrectNetwork(),
+        addToBatchSelected: (dids: string[]) => this.addToBatchSelected(dids),
+        removeFromBatchSelected: (dids: string[]) => this.removeFromBatchSelected(dids),
         message: 'Connecting to Autonomies...',
         tokenSymbol: '',
         tokenDecimals: 6,
+        batchSelected: [],
     }
 
     private accountsInterval: any = null
@@ -292,6 +296,21 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
             network = await sdk.keeper.getNetworkName()
         }
         network !== this.state.network && this.setState({ network })
+    }
+
+    public addToBatchSelected (dids: string[]): string[] {
+      this.setState(prevSate => ({
+        batchSelected: prevSate.batchSelected.concat(dids)
+      }))
+      return this.state.batchSelected
+    }
+
+    public removeFromBatchSelected (dids: string[]): string[] {
+      const didsSet = new Set(dids)
+      this.setState(prevState => ({
+        batchSelected: prevState.batchSelected.filter(did => !didsSet.has(did))
+      }))
+      return this.state.batchSelected
     }
 
     public render() {

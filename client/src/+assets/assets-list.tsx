@@ -1,10 +1,11 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useContext, useState } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import Link from "next/link"
 
 import { BEM, UiLayout, UiText, UiDivider, UiIcon, XuiTokenName, XuiTokenPrice, XuiBuyAsset } from 'ui'
 import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
 import styles from './assets-list.module.scss'
+import { User } from '../context'
 
 interface AssetsListProps {
   assets: DDO[]
@@ -12,6 +13,7 @@ interface AssetsListProps {
 
 const b = BEM('assets-list', styles)
 export function AssetsList({assets}: AssetsListProps) {
+  const { addToBatchSelected, batchSelected, removeFromBatchSelected } = useContext(User)
   const [batchActive, setBatchActive] = useState<boolean>(false)
 
   return (
@@ -21,8 +23,11 @@ export function AssetsList({assets}: AssetsListProps) {
           {batchActive ?
             <Fragment>
               <div className={b('batch-select')}>
-                <img className={b('batch-checkbox')} src={'assets/unchecked_box.svg'} width="14px" />
-                <div className={b('selected-count')}>Selected: 0</div>
+                {assets.map(asset => asset.id).every(asset => batchSelected.includes(asset)) ?
+                  <img onClick={() => removeFromBatchSelected(assets.map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/checked_box.svg'} width="14px" /> :
+                  <img onClick={() => addToBatchSelected(assets.filter(asset => !batchSelected.includes(asset.id)).map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/unchecked_box.svg'} width="14px" />
+                }
+                <div className={b('selected-count')}>Selected: <b>{batchSelected.length}</b></div>
                 <img
                   className={b('batch-close')}
                   onClick={() => setBatchActive(false)}
@@ -42,7 +47,10 @@ export function AssetsList({assets}: AssetsListProps) {
         .map(({asset, metadata, defi}) => (
           <UiLayout key={asset.id} className={b('asset')}>
             <div className={b(`${batchActive ? 'checkbox' : 'checkbox--hidden'}`)}>
-              <img src={'assets/unchecked_box.svg'} width="20px" />
+              {batchSelected.includes(asset.id) ?
+                <img onClick={() => removeFromBatchSelected([asset.id])} src={'assets/checked_box.svg'} width="20px" /> :
+                <img onClick={() => addToBatchSelected([asset.id])} src={'assets/unchecked_box.svg'} width="20px" />
+              }
             </div>
             <Link href={`/asset/${asset.id}`}>
               <UiText className={`pointer ${b('asset-title')}`} wrapper="h4" type="h4">{metadata.main.name}</UiText>
