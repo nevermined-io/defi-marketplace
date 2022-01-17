@@ -1,6 +1,6 @@
 @import '../../src/styles/index';
 
-.assets-list {
+.checkout {
   margin-top: 32px;
 
   &__heading {
@@ -44,13 +44,33 @@
   &__batch-close {
     position: absolute;
     left: 113px;
-    top: 11px;
+    top: 5px;
     cursor: pointer;
   }
   &__basket-add {
     color: gc(sM);
     cursor: pointer;
     margin-left: 16px;
+  }
+
+  &__purchases-wrapper {
+    display: block;
+  }
+  &__table-wrapper {
+    width: 769px;
+  }
+  &__order-summary {
+    margin: 0 70px;
+    height: 203px;
+    width: 485px;
+  }
+  &__items-selected {
+    color: gc(sM)
+  }
+  &__total-price {
+    display: flex;
+    align-items: center;
+    font-size: 26px;
   }
 
   &__asset {

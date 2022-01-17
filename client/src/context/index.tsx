@@ -1,6 +1,6 @@
 import React from 'react'
 import Web3 from 'web3'
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { DDO, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 
 import { MarketProviderState } from './MarketProvider'
 
@@ -39,6 +39,10 @@ export const User = React.createContext({
     removeFromBatchSelected: (dids: string[]) => {
         /* empty */
     },
+    assets: [] as DDO[],
+    setAssets: (assets: DDO[]) => {
+      /* empty */
+    }
 })
 
 export const Market = React.createContext<MarketProviderState>({
