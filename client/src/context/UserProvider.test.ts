@@ -1,11 +1,11 @@
 import { UserProvider } from './UserProvider'
 
 describe('UserProvider', () => {
-  describe('removeFromBatchSelected', () => {
-    it('removes dids from batchSelected', () => {
+  describe('removeFromBasket', () => {
+    it('removes dids from basket', () => {
       const userProvider = new UserProvider()
-      userProvider.addToBatchSelected(['did1', 'did2', 'did3', 'did4'])
-      const stillSelected = userProvider.removeFromBatchSelected(['did2', 'did4'])
+      userProvider.addToBasket(['did1', 'did2', 'did3', 'did4'])
+      const stillSelected = userProvider.removeFromBasket(['did2', 'did4'])
       expect(stillSelected).toEqual(['did1', 'did3'])
     })
   })

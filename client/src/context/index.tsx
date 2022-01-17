@@ -32,11 +32,11 @@ export const User = React.createContext({
     message: '',
     tokenSymbol: '',
     tokenDecimals: 6,
-    batchSelected: [] as string[],
-    addToBatchSelected: (dids: string[]) => {
+    basket: [] as string[],
+    addToBasket: (dids: string[]) => {
         /* empty */
     },
-    removeFromBatchSelected: (dids: string[]) => {
+    removeFromBasket: (dids: string[]) => {
         /* empty */
     },
     assets: [] as DDO[],

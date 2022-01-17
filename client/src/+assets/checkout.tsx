@@ -9,8 +9,8 @@ import styles from './checkout.module.scss'
 
 const b = BEM('checkout', styles)
 export const Checkout: NextPage = () => {
-  const { assets: contextAssets, batchSelected } = useContext(User)
-  const assets = contextAssets.filter(asset => batchSelected.includes(asset.id))
+  const { assets: contextAssets, basket } = useContext(User)
+  const assets = contextAssets.filter(asset => basket.includes(asset.id))
   return (
     <>
       <UiLayout justify="flex-start" type="container">
@@ -30,7 +30,7 @@ export const Checkout: NextPage = () => {
                 <div className={b('table-wrapper')}>
                   <UiLayout key={asset.id} className={b('asset')}>
                     <div className={b('checkbox')}>
-                      <img onClick={() => removeFromBatchSelected([asset.id])} src={'assets/close.svg'} width="20px" />
+                      <img onClick={() => removeFromBasket([asset.id])} src={'assets/close.svg'} width="20px" />
                     </div>
                     <Link href={`/asset/${asset.id}`}>
                       <UiText className={`pointer ${b('asset-title')}`} wrapper="h4" type="h4">{metadata.main.name}</UiText>
