@@ -4,7 +4,8 @@ import { Table } from 'sequelize-typescript'
 export interface IDataset {
   dataset_id: number,
   key: string,
-  source: string
+  source: string,
+  file_name: string
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -28,7 +29,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
       primaryKey: true,
     },
     key: DataTypes.STRING,
-    source: DataTypes.STRING
+    source: DataTypes.STRING,
+    file_name: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Datasets',

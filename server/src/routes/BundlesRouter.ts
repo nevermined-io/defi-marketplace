@@ -14,6 +14,7 @@ const create = async (req: Request, res: Response) => {
           dataset_id: uuidv4(),
           key: dataset.key,
           source: dataset.source,
+          file_name: dataset.file_name
         }
       }
     )
