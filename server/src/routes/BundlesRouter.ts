@@ -19,9 +19,14 @@ const create = async (req: Request, res: Response) => {
       }
     )
     const savedDatasets = await saveDatasets(datasets)
-    const bundle = await saveBundle(req.body.user, savedDatasets)
+    const bundleId = await saveBundle(req.body.user, savedDatasets)
 
-    res.json({ "status": "OK" })
+    res.json(
+      {
+        "status": "OK",
+        "bundle_id": bundleId
+      }
+    )
 
   } catch (error) {
     res.sendStatus(500).json(error.message)
