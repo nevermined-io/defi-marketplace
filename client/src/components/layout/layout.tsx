@@ -5,7 +5,7 @@ import styles from './layout.module.scss'
 interface LayoutProps {
   type?: 'sides' | 'grid' | 'container'
   align?: 'center' | 'start' | 'end' | string
-  justify?: 'center' | 'start' | 'end' | string
+  justify?: 'center' | 'start' | 'end' | 'space-between' | string
   direction?: 'row'| 'column'
 }
 

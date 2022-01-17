@@ -1,6 +1,7 @@
 import React, { Fragment, useContext, useState } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import Link from "next/link"
+import Router from 'next/router'
 
 import { BEM, UiLayout, UiText, UiDivider, UiIcon, XuiTokenName, XuiTokenPrice, XuiBuyAsset } from 'ui'
 import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
@@ -35,7 +36,7 @@ export function AssetsList({assets}: AssetsListProps) {
                   width="12px"
                 />
               </div>
-              <div className={b('basket-add')}>Add to basket</div>
+              <div className={b('basket-add')} onClick={() => Router.push('/checkout')}>Add to basket</div>
             </Fragment> :
             <div className={b('batch-select-inactive')} onClick={() => setBatchActive(true)}>Batch Select</div>
           }

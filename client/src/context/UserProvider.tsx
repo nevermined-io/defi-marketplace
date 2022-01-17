@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import Web3 from 'web3'
-import { Nevermined, Account } from '@nevermined-io/nevermined-sdk-js'
+import { Nevermined, Account, DDO } from '@nevermined-io/nevermined-sdk-js'
 import { User } from '.'
 import MarketProvider from './MarketProvider'
 import { MetamaskProvider } from './MetamaskProvider'
@@ -59,6 +59,7 @@ interface UserProviderState {
     message: string
     tokenSymbol: string
     batchSelected: string[]
+    assets: DDO[]
 }
 
 export default class UserProvider extends PureComponent<{}, UserProviderState> {
@@ -144,12 +145,15 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         loginBurnerWallet: (): Promise<any> => this.loginBurnerWallet(),
         logoutBurnerWallet: (): Promise<any> => this.logoutBurnerWallet(),
         switchToCorrectNetwork: (): Promise<any> => this.switchToCorrectNetwork(),
-        addToBatchSelected: (dids: string[]) => this.addToBatchSelected(dids),
-        removeFromBatchSelected: (dids: string[]) => this.removeFromBatchSelected(dids),
+
         message: 'Connecting to Autonomies...',
         tokenSymbol: '',
         tokenDecimals: 6,
         batchSelected: [],
+        addToBatchSelected: (dids: string[]) => this.addToBatchSelected(dids),
+        removeFromBatchSelected: (dids: string[]) => this.removeFromBatchSelected(dids),
+        assets: [],
+        setAssets: (assets: DDO[]) => this.setAssets(assets)
     }
 
     private accountsInterval: any = null
@@ -311,6 +315,10 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         batchSelected: prevState.batchSelected.filter(did => !didsSet.has(did))
       }))
       return this.state.batchSelected
+    }
+
+    public setAssets (assets: DDO[]) {
+      this.setState({ assets })
     }
 
     public render() {

@@ -22,9 +22,8 @@ const b = BEM('assets-query', styles)
 
 export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryProps) {
   const categoryFilter = 'defi-datasets' // Must be defined on config
-  const { sdk } = useContext(User)
+  const { assets, sdk, setAssets } = useContext(User)
 
-  const [assets, setAssets] = useState<DDO[]>([])
   const [totalPages, setTotalPages] = useState<number>(1)
   const [page, setPage] = useState<number>(1)
 
