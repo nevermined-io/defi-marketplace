@@ -14,7 +14,7 @@ interface AssetsListProps {
 
 const b = BEM('assets-list', styles)
 export function AssetsList({assets}: AssetsListProps) {
-  const { addToBatchSelected, batchSelected, removeFromBatchSelected } = useContext(User)
+  const { addToBasket, basket, removeFromBasket } = useContext(User)
   const [batchActive, setBatchActive] = useState<boolean>(false)
 
   return (
@@ -24,11 +24,11 @@ export function AssetsList({assets}: AssetsListProps) {
           {batchActive ?
             <Fragment>
               <div className={b('batch-select')}>
-                {assets.map(asset => asset.id).every(asset => batchSelected.includes(asset)) ?
-                  <img onClick={() => removeFromBatchSelected(assets.map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/checked_box.svg'} width="14px" /> :
-                  <img onClick={() => addToBatchSelected(assets.filter(asset => !batchSelected.includes(asset.id)).map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/unchecked_box.svg'} width="14px" />
+                {assets.map(asset => asset.id).every(asset => basket.includes(asset)) ?
+                  <img onClick={() => removeFromBasket(assets.map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/checked_box.svg'} width="14px" /> :
+                  <img onClick={() => addToBasket(assets.filter(asset => !basket.includes(asset.id)).map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/unchecked_box.svg'} width="14px" />
                 }
-                <div className={b('selected-count')}>Selected: <b>{batchSelected.length}</b></div>
+                <div className={b('selected-count')}>Selected: <b>{basket.length}</b></div>
                 <img
                   className={b('batch-close')}
                   onClick={() => setBatchActive(false)}
@@ -48,9 +48,9 @@ export function AssetsList({assets}: AssetsListProps) {
         .map(({asset, metadata, defi}) => (
           <UiLayout key={asset.id} className={b('asset')}>
             <div className={b(`${batchActive ? 'checkbox' : 'checkbox--hidden'}`)}>
-              {batchSelected.includes(asset.id) ?
-                <img onClick={() => removeFromBatchSelected([asset.id])} src={'assets/checked_box.svg'} width="20px" /> :
-                <img onClick={() => addToBatchSelected([asset.id])} src={'assets/unchecked_box.svg'} width="20px" />
+              {basket.includes(asset.id) ?
+                <img onClick={() => removeFromBasket([asset.id])} src={'assets/checked_box.svg'} width="20px" /> :
+                <img onClick={() => addToBasket([asset.id])} src={'assets/unchecked_box.svg'} width="20px" />
               }
             </div>
             <Link href={`/asset/${asset.id}`}>

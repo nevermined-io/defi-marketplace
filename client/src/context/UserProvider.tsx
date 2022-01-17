@@ -58,7 +58,7 @@ interface UserProviderState {
     switchToCorrectNetwork() : Promise<any>
     message: string
     tokenSymbol: string
-    batchSelected: string[]
+    basket: string[]
     assets: DDO[]
 }
 
@@ -149,9 +149,9 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         message: 'Connecting to Autonomies...',
         tokenSymbol: '',
         tokenDecimals: 6,
-        batchSelected: [],
-        addToBatchSelected: (dids: string[]) => this.addToBatchSelected(dids),
-        removeFromBatchSelected: (dids: string[]) => this.removeFromBatchSelected(dids),
+        basket: [],
+        addToBasket: (dids: string[]) => this.addToBasket(dids),
+        removeFromBasket: (dids: string[]) => this.removeFromBasket(dids),
         assets: [],
         setAssets: (assets: DDO[]) => this.setAssets(assets)
     }
@@ -302,19 +302,19 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         network !== this.state.network && this.setState({ network })
     }
 
-    public addToBatchSelected (dids: string[]): string[] {
+    public addToBasket (dids: string[]): string[] {
       this.setState(prevSate => ({
-        batchSelected: prevSate.batchSelected.concat(dids)
+        basket: prevSate.basket.concat(dids)
       }))
-      return this.state.batchSelected
+      return this.state.basket
     }
 
-    public removeFromBatchSelected (dids: string[]): string[] {
+    public removeFromBasket (dids: string[]): string[] {
       const didsSet = new Set(dids)
       this.setState(prevState => ({
-        batchSelected: prevState.batchSelected.filter(did => !didsSet.has(did))
+        basket: prevState.basket.filter(did => !didsSet.has(did))
       }))
-      return this.state.batchSelected
+      return this.state.basket
     }
 
     public setAssets (assets: DDO[]) {
