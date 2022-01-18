@@ -1,9 +1,19 @@
-import React, { Fragment, useContext, useState } from 'react'
+import React, { createRef, Fragment, useContext, useState } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import Link from "next/link"
 import Router from 'next/router'
 
-import { BEM, UiLayout, UiText, UiDivider, UiIcon, XuiTokenName, XuiTokenPrice, XuiBuyAsset } from 'ui'
+import {
+  BEM,
+  UiLayout,
+  UiText,
+  UiDivider,
+  UiIcon,
+  XuiTokenName,
+  XuiTokenPrice,
+  UiPopupHandlers,
+  UiPopup, UiButton
+} from 'ui'
 import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
@@ -17,6 +27,17 @@ export function AssetsList({assets}: AssetsListProps) {
   const { addToBasket, basket } = useContext(User)
   const [batchActive, setBatchActive] = useState<boolean>(false)
   const [batchSelected, setBatchSelected] = useState<string[]>([])
+  const popupRef = createRef<UiPopupHandlers>()
+
+  const openPopup = (event: any) => {
+    popupRef.current?.open()
+    event.preventDefault()
+  }
+
+  const closePopup = (event: any) => {
+    popupRef.current?.close()
+    event.preventDefault()
+  }
 
   const addToBatchSelected = (dids: string[]) => setBatchSelected(prevSelected =>
     prevSelected.concat(dids.filter(did => !prevSelected.includes(did)))
@@ -29,6 +50,21 @@ export function AssetsList({assets}: AssetsListProps) {
 
   return (
     <div className={b()}>
+      <UiPopup ref={popupRef}>
+        <div className={b('basket-popup')}>
+          <img src="assets/check_mark.svg" width="73px" />
+          <UiText style={{ color: '#2E405A', margin: '72px 0 25px' }} type="h3">Added to basket</UiText>
+          <div className={b('popup-text')}>
+            You can now view your basket contents from by clicking the navigation icon&nbsp;&nbsp;
+            <img src="assets/basket_icon.svg" width="16px"/>
+          </div>
+          <div className={b('popup-buttons')}>
+            <UiButton cover style={{ padding: '0', width: '170px' }} onClick={closePopup}>Back To Search</UiButton>
+            <UiButton cover style={{ padding: '0', width: '170px' }} type="alt " onClick={() => Router.push('/checkout')}>Go To Basket</UiButton>
+          </div>
+        </div>
+      </UiPopup>
+
       <div className={b('heading')}>
         <div className={b('batch-select-wrapper')}>
           {batchActive ?
@@ -46,12 +82,13 @@ export function AssetsList({assets}: AssetsListProps) {
                   width="12px"
                 />
               </div>
-              <div className={b('basket-add')} onClick={() => addToBasket(batchSelected)}>Add to basket</div>
+              <div className={b('basket-add')} onClick={(e) => {
+                openPopup(e)
+                addToBasket(batchSelected)
+              }}>Add to basket</div>
             </Fragment> :
             <div className={b('batch-select-inactive')} onClick={() => setBatchActive(true)}>Batch Select</div>
           }
-          <div className={b('basket-add')} onClick={() => Router.push('/checkout')}>Checkout</div>
-          {basket.length}
         </div>
       </div>
       {assets
@@ -97,7 +134,10 @@ export function AssetsList({assets}: AssetsListProps) {
               </UiText>
             </UiLayout>
             <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }}/>
-            <img onClick={() => addToBasket([asset.id])} width="24px" src="assets/basket_icon.svg" style={{ cursor: 'pointer' }}/>
+            <img onClick={(e) => {
+              openPopup(e)
+              addToBasket([asset.id])
+            }} width="24px" src="assets/basket_icon.svg" style={{ cursor: 'pointer' }}/>
           </UiLayout>
         ))
       }
