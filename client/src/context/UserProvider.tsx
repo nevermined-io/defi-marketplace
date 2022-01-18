@@ -304,7 +304,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
 
     public addToBasket (dids: string[]): string[] {
       this.setState(prevSate => ({
-        basket: prevSate.basket.concat(dids)
+        basket: prevSate.basket.concat(dids.filter(did => !prevSate.basket.includes(did)))
       }))
       return this.state.basket
     }

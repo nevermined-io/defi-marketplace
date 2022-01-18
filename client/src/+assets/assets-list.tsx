@@ -14,8 +14,18 @@ interface AssetsListProps {
 
 const b = BEM('assets-list', styles)
 export function AssetsList({assets}: AssetsListProps) {
-  const { addToBasket, basket, removeFromBasket } = useContext(User)
+  const { addToBasket, basket } = useContext(User)
   const [batchActive, setBatchActive] = useState<boolean>(false)
+  const [batchSelected, setBatchSelected] = useState<string[]>([])
+
+  const addToBatchSelected = (dids: string[]) => setBatchSelected(prevSelected =>
+    prevSelected.concat(dids.filter(did => !prevSelected.includes(did)))
+  )
+
+  const removeFromBatchSelected = (dids: string[]) => {
+    const didsSet = new Set(dids)
+    setBatchSelected(prevSelected => prevSelected.filter(did => !didsSet.has(did)))
+  }
 
   return (
     <div className={b()}>
@@ -24,11 +34,11 @@ export function AssetsList({assets}: AssetsListProps) {
           {batchActive ?
             <Fragment>
               <div className={b('batch-select')}>
-                {assets.map(asset => asset.id).every(asset => basket.includes(asset)) ?
-                  <img onClick={() => removeFromBasket(assets.map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/checked_box.svg'} width="14px" /> :
-                  <img onClick={() => addToBasket(assets.filter(asset => !basket.includes(asset.id)).map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/unchecked_box.svg'} width="14px" />
+                {assets.every(asset => batchSelected.includes(asset.id)) ?
+                  <img onClick={() => removeFromBatchSelected(assets.map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/checked_box.svg'} width="14px" /> :
+                  <img onClick={() => addToBatchSelected(assets.map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/unchecked_box.svg'} width="14px" />
                 }
-                <div className={b('selected-count')}>Selected: <b>{basket.length}</b></div>
+                <div className={b('selected-count')}>Selected: <b>{batchSelected.length}</b></div>
                 <img
                   className={b('batch-close')}
                   onClick={() => setBatchActive(false)}
@@ -36,10 +46,12 @@ export function AssetsList({assets}: AssetsListProps) {
                   width="12px"
                 />
               </div>
-              <div className={b('basket-add')} onClick={() => Router.push('/checkout')}>Add to basket</div>
+              <div className={b('basket-add')} onClick={() => addToBasket(batchSelected)}>Add to basket</div>
             </Fragment> :
             <div className={b('batch-select-inactive')} onClick={() => setBatchActive(true)}>Batch Select</div>
           }
+          <div className={b('basket-add')} onClick={() => Router.push('/checkout')}>Checkout</div>
+          {basket.length}
         </div>
       </div>
       {assets
@@ -48,9 +60,9 @@ export function AssetsList({assets}: AssetsListProps) {
         .map(({asset, metadata, defi}) => (
           <UiLayout key={asset.id} className={b('asset')}>
             <div className={b(`${batchActive ? 'checkbox' : 'checkbox--hidden'}`)}>
-              {basket.includes(asset.id) ?
-                <img onClick={() => removeFromBasket([asset.id])} src={'assets/checked_box.svg'} width="20px" /> :
-                <img onClick={() => addToBasket([asset.id])} src={'assets/unchecked_box.svg'} width="20px" />
+              {batchSelected.includes(asset.id) ?
+                <img onClick={() => removeFromBatchSelected([asset.id])} src={'assets/checked_box.svg'} width="20px" /> :
+                <img onClick={() => addToBatchSelected([asset.id])} src={'assets/unchecked_box.svg'} width="20px" />
               }
             </div>
             <Link href={`/asset/${asset.id}`}>
@@ -85,9 +97,7 @@ export function AssetsList({assets}: AssetsListProps) {
               </UiText>
             </UiLayout>
             <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }}/>
-            <XuiBuyAsset asset={asset}>
-              <img width="24px" src="assets/basket_icon.svg"/>
-            </XuiBuyAsset>
+            <img onClick={() => addToBasket([asset.id])} width="24px" src="assets/basket_icon.svg" style={{ cursor: 'pointer' }}/>
           </UiLayout>
         ))
       }
