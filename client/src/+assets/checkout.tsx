@@ -1,15 +1,16 @@
 import React, { useContext } from 'react'
 import type { NextPage } from 'next'
 
-import { UiText, UiLayout, UiDivider, UiIcon, XuiTokenPrice, XuiTokenName, XuiBuyAsset, BEM, UiButton } from 'ui'
+import { UiText, UiLayout, UiDivider, UiIcon, XuiTokenPrice, XuiTokenName, BEM, UiButton } from 'ui'
 import { User } from '../context'
 import { getDdoTokenAddress, getDefiInfo, toDate } from '../shared'
 import Link from 'next/link'
 import styles from './checkout.module.scss'
+import Router from 'next/router'
 
 const b = BEM('checkout', styles)
 export const Checkout: NextPage = () => {
-  const { assets: contextAssets, basket } = useContext(User)
+  const { assets: contextAssets, basket, removeFromBasket } = useContext(User)
   const assets = contextAssets.filter(asset => basket.includes(asset.id))
   return (
     <>
@@ -27,8 +28,8 @@ export const Checkout: NextPage = () => {
               .map(asset => ({asset, metadata: asset.findServiceByType('metadata').attributes}))
               .map(data => ({...data, defi: getDefiInfo(data.metadata)}))
               .map(({asset, metadata, defi}) => (
-                <div className={b('table-wrapper')}>
-                  <UiLayout key={asset.id} className={b('asset')}>
+                <div key={asset.id} className={b('table-wrapper')}>
+                  <UiLayout className={b('asset')}>
                     <div className={b('checkbox')}>
                       <img onClick={() => removeFromBasket([asset.id])} src={'assets/close.svg'} width="20px" />
                     </div>
@@ -67,7 +68,7 @@ export const Checkout: NextPage = () => {
           <div className={b('order-summary')}>
             <UiText type="h3" wrapper="h2">Order summary</UiText>
             <hr style={{ borderBottom: '0', borderTop: '1px solid #8AAABE', margin: '22px 0 16px', width: '426px' }}/>
-            <UiLayout justify="end"><div className={b('items-selected')}>5 items</div></UiLayout>
+            <UiLayout justify="end"><div className={b('items-selected')}>{basket.length} items</div></UiLayout>
             <UiDivider/>
             <UiLayout justify="space-between">
               <UiText type="h4-caps" wrapper="h2">TOTAL</UiText>
@@ -76,7 +77,7 @@ export const Checkout: NextPage = () => {
             <UiDivider/>
             <UiButton cover>Purchase</UiButton>
             <UiDivider/>
-            <UiButton cover type="alt">Back To Marketplace</UiButton>
+            <UiButton cover type="alt " onClick={() => Router.push('/list')}>Back To Marketplace</UiButton>
           </div>
         </UiLayout>
       </UiLayout>
