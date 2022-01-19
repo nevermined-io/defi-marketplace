@@ -1,4 +1,4 @@
-import React, { createRef, Fragment, useContext, useState } from 'react'
+import React, { createRef, Fragment, useContext, useEffect, useState } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import Link from "next/link"
 import Router from 'next/router'
@@ -23,8 +23,8 @@ interface AssetsListProps {
 }
 
 const b = BEM('assets-list', styles)
-export function AssetsList({assets}: AssetsListProps) {
-  const { addToBasket, basket } = useContext(User)
+export function AssetsList({ assets }: AssetsListProps) {
+  const { basket, addToBasket } = useContext(User)
   const [batchActive, setBatchActive] = useState<boolean>(false)
   const [batchSelected, setBatchSelected] = useState<string[]>([])
   const popupRef = createRef<UiPopupHandlers>()
@@ -39,13 +39,14 @@ export function AssetsList({assets}: AssetsListProps) {
     event.preventDefault()
   }
 
-  const addToBatchSelected = (dids: string[]) => setBatchSelected(prevSelected =>
-    prevSelected.concat(dids.filter(did => !prevSelected.includes(did)))
-  )
+  const addToBatchSelected = (dids: string[]) => {
+    setBatchSelected(batchSelected.concat(...dids.filter(did => !batchSelected.includes(did))))
+  }
+
 
   const removeFromBatchSelected = (dids: string[]) => {
     const didsSet = new Set(dids)
-    setBatchSelected(prevSelected => prevSelected.filter(did => !didsSet.has(did)))
+    setBatchSelected(batchSelected.filter(did => !didsSet.has(did)))
   }
 
   return (
@@ -56,7 +57,7 @@ export function AssetsList({assets}: AssetsListProps) {
           <UiText style={{ color: '#2E405A', margin: '72px 0 25px' }} type="h3">Added to basket</UiText>
           <div className={b('popup-text')}>
             You can now view your basket contents from by clicking the navigation icon&nbsp;&nbsp;
-            <img src="assets/basket_icon.svg" width="16px"/>
+            <img src="assets/basket_icon.svg" width="16px" />
           </div>
           <div className={b('popup-buttons')}>
             <UiButton cover style={{ padding: '0', width: '170px' }} onClick={closePopup}>Back To Search</UiButton>
@@ -92,9 +93,9 @@ export function AssetsList({assets}: AssetsListProps) {
         </div>
       </div>
       {assets
-        .map(asset => ({asset, metadata: asset.findServiceByType('metadata').attributes}))
-        .map(data => ({...data, defi: getDefiInfo(data.metadata)}))
-        .map(({asset, metadata, defi}) => (
+        .map(asset => ({ asset, metadata: asset.findServiceByType('metadata').attributes }))
+        .map(data => ({ ...data, defi: getDefiInfo(data.metadata) }))
+        .map(({ asset, metadata, defi }) => (
           <UiLayout key={asset.id} className={b('asset')}>
             <div className={b(`${batchActive ? 'checkbox' : 'checkbox--hidden'}`)}>
               {batchSelected.includes(asset.id) ?
@@ -108,36 +109,36 @@ export function AssetsList({assets}: AssetsListProps) {
             <UiText className={b('asset-date')} type="small" variants={['detail']}>
               {toDate(metadata.main.dateCreated).replace(/\//g, '.')}
             </UiText>
-            <UiDivider flex/>
+            <UiDivider flex />
             {defi?.category && defi?.network && (
               <>
                 <UiLayout className={b('info')}>
-                  <UiIcon className={b('info-icon')} icon="folder" color="secondary"/>
+                  <UiIcon className={b('info-icon')} icon="folder" color="secondary" />
                   <UiText variants={['secondary']}>{defi.category}</UiText>
                   <UiText variants={['detail']}>&nbsp;&ndash;&nbsp;</UiText>
                   <UiText variants={['secondary']}>{defi.subcategory}</UiText>
                 </UiLayout>
                 <UiLayout className={b('info')}>
-                  <UiIcon className={b('info-icon')} icon="share" color="secondary"/>
+                  <UiIcon className={b('info-icon')} icon="share" color="secondary" />
                   <UiText variants={['secondary']}>{defi.network}</UiText>
                 </UiLayout>
               </>
             )}
             <UiLayout className={b('info')}>
-              <UiIcon className={b('info-icon')} icon="tag" color="secondary"/>
+              <UiIcon className={b('info-icon')} icon="tag" color="secondary" />
               <UiText variants={['secondary']}>
                 <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice>
                 {' '}
                 <UiText variants={['detail']}>
-                  <XuiTokenName address={getDdoTokenAddress(asset)}/>
+                  <XuiTokenName address={getDdoTokenAddress(asset)} />
                 </UiText>
               </UiText>
             </UiLayout>
-            <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }}/>
+            <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
             <img onClick={(e) => {
               openPopup(e)
               addToBasket([asset.id])
-            }} width="24px" src="assets/basket_icon.svg" style={{ cursor: 'pointer' }}/>
+            }} width="24px" src="assets/basket_icon.svg" style={{ cursor: 'pointer' }} />
           </UiLayout>
         ))
       }

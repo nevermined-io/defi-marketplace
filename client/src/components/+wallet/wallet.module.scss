@@ -16,6 +16,13 @@
     &--network {
       color: gc(pL);
     }
+
+    &--cart {
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      color: #67CFF9;
+    }
   }
   &__logged {
     width: 8px;
