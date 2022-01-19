@@ -10,6 +10,7 @@ export const createBundle = async (bundle: IBundle, datasets: IDataset[]) => {
     return bundleSaved.dataValues.bundle_id
 
   } catch (error) {
+    console.log(error)
     throw error
   }
 }
