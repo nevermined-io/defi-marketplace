@@ -9,6 +9,7 @@ import { User } from '../context'
 import { AssetsList } from './assets-list'
 
 import styles from './landing.module.scss'
+import { UiBanner } from 'ui/banner/banner'
 
 export const Landing: NextPage = () => {
   const b = BEM('landing', styles)
@@ -17,24 +18,7 @@ export const Landing: NextPage = () => {
   }
   return (
     <>
-      <div className={b('bannerContainer')}>
-        <Image src="/assets/nevermined-color.svg" width="115" height="70" />
-        <UiText className={b('bannerText', ["padding"])} wrapper="h1" type="h1">
-          Discover, Distribute &<br />
-          {' '}
-          Download
-          <UiText clear={['text-transform']} > DeFi  </UiText>
-          Data
-        </UiText>
-        <UiDivider type="s" />
-        <UiText className={b('bannerText')} variants={["heading", "secondary"]} wrapper="h3" type="h3">
-          Say Goodbye to Unstructured Data
-        </UiText>
-        <UiButton onClick={redirectToList}>
-          GO TO MARKETPLACE
-        </UiButton>
-        <UiDivider type="xxl" />
-      </div>
+      <UiBanner showButton={true}/>
 
       {/* first section */}
       <UiLayout type="grid"  >

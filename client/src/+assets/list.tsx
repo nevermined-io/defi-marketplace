@@ -8,6 +8,7 @@ import { User } from '../context'
 import { AssetsList } from './assets-list'
 
 import styles from './list.module.scss'
+import { UiBanner } from 'ui/banner/banner'
 
 export const List: NextPage = () => {
   const renderAssets = useCallback(assets => (<AssetsList assets={assets}/>), [])
@@ -16,6 +17,7 @@ export const List: NextPage = () => {
     <>
 
       <UiLayout type="container">
+      <UiBanner showButton={false}/>
         <UiLayout>
           <UiText type="h3" wrapper="h2">Browse DeFi Reports</UiText>
         </UiLayout>
