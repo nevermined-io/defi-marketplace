@@ -55,7 +55,8 @@ interface UserProviderState {
     loginMetamask(): Promise<any>
     loginBurnerWallet(): Promise<any>
     logoutBurnerWallet(): Promise<any>
-    switchToCorrectNetwork() : Promise<any>
+    switchToCorrectNetwork(): Promise<any>
+    // addToBasket(dids: string[]): string[],
     message: string
     tokenSymbol: string
     basket: string[]
@@ -149,7 +150,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         message: 'Connecting to Autonomies...',
         tokenSymbol: '',
         tokenDecimals: 6,
-        basket: [],
+        basket: [] as string[],
         addToBasket: (dids: string[]) => this.addToBasket(dids),
         removeFromBasket: (dids: string[]) => this.removeFromBasket(dids),
         assets: [],
@@ -270,7 +271,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
                     this.setState({
                         account,
                         isLogged: true,
-                        requestFromFaucet: async () => {}
+                        requestFromFaucet: async () => { }
                     })
 
                     await this.fetchBalance(accounts[0])
@@ -302,23 +303,21 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         network !== this.state.network && this.setState({ network })
     }
 
-    public addToBasket (dids: string[]): string[] {
-      this.setState(prevSate => ({
-        basket: prevSate.basket.concat(dids.filter(did => !prevSate.basket.includes(did)))
-      }))
-      return this.state.basket
+    public addToBasket(dids: string[]) {
+        const basket = this.state.basket
+        this.setState({ basket: basket.concat(...dids.filter(did => !basket.includes(did))) })
     }
 
-    public removeFromBasket (dids: string[]): string[] {
-      const didsSet = new Set(dids)
-      this.setState(prevState => ({
-        basket: prevState.basket.filter(did => !didsSet.has(did))
-      }))
-      return this.state.basket
+    public removeFromBasket(dids: string[]): string[] {
+        const didsSet = new Set(dids)
+        this.setState(prevState => ({
+            basket: prevState.basket.filter(did => !didsSet.has(did))
+        }))
+        return this.state.basket
     }
 
-    public setAssets (assets: DDO[]) {
-      this.setState({ assets })
+    public setAssets(assets: DDO[]) {
+        this.setState({ assets })
     }
 
     public render() {
