@@ -34,3 +34,8 @@ export const correctNetworkURL =
     process.env.CORRECT_NETWORK_URL || 'https://matic-mumbai.chainstacklabs.com'
 export const correctNetworkName =
     process.env.CORRECT_NETWORK_NAME || 'mumbai'
+export const bundleServiceUri =
+    process.env.NEXT_BUNDLE_SERVICE_URI || "http://localhost:4001"
+export const bundleCreateUri = "/api/v1/bundle/create" // next redirections on next.config.js
+
+

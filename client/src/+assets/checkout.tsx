@@ -1,12 +1,13 @@
 import React, { useContext } from 'react'
 import type { NextPage } from 'next'
 
-import { UiText, UiLayout, UiDivider, UiIcon, XuiTokenPrice, XuiTokenName, BEM, UiButton } from 'ui'
+import { UiText, UiLayout, UiDivider, UiIcon, XuiTokenPrice, XuiTokenName, BEM, UiButton, XuiBuyAsset } from 'ui'
 import { User } from '../context'
 import { getDdoTokenAddress, getDefiInfo, toDate } from '../shared'
 import Link from 'next/link'
 import styles from './checkout.module.scss'
 import Router from 'next/router'
+import { XuiCreateBundle } from 'ui/+create-bundle/create-bundle'
 
 const b = BEM('checkout', styles)
 export const Checkout: NextPage = () => {
@@ -75,7 +76,9 @@ export const Checkout: NextPage = () => {
               <div className={b('total-price')}>2.5 ETH</div>
             </UiLayout>
             <UiDivider/>
+            <XuiCreateBundle assets={assets}>
             <UiButton cover>Purchase</UiButton>
+            </XuiCreateBundle>
             <UiDivider/>
             <UiButton cover type="alt " onClick={() => Router.push('/list')}>Back To Marketplace</UiButton>
           </div>
