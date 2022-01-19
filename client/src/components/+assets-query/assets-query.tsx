@@ -53,7 +53,10 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
 
 
   const query = {
-    "bool": { "must": mustArray }
+    "bool": {
+      "must": mustArray,
+      "must_not": [{"match": {"service.attributes.additionalInformation.categories": "EventType:bundle"}}]
+    }
   }
 
   useEffect(() => {
