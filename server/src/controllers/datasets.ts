@@ -3,7 +3,7 @@ import { IDataset } from '../models/Dataset'
 
 export const createDataset = async (dataset: IDataset) => {
   try {
-    const exists: any[] = await findDatasetByKey(dataset)
+    const exists: any[] = await findDatasetByName(dataset)
 
     const datasetID = exists.length == 0 ?
       await db.Datasets.create(dataset)
@@ -12,15 +12,16 @@ export const createDataset = async (dataset: IDataset) => {
 
     return datasetID
   } catch (error) {
+    console.log(error)
     throw error
   }
 }
 
-export const findDatasetByKey = (dataset: IDataset) => {
+export const findDatasetByName = (dataset: IDataset) => {
   try {
     return db.Datasets.findAll({
       where: {
-        key: dataset.key
+        file_name: dataset.file_name
       }
     });
   } catch (error) {
