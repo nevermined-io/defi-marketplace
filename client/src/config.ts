@@ -35,7 +35,16 @@ export const correctNetworkURL =
 export const correctNetworkName =
     process.env.CORRECT_NETWORK_NAME || 'mumbai'
 export const bundleServiceUri =
+    // process.env.NEXT_BUNDLE_SERVICE_URI || "https://defi.marketplace.api.keyko.rocks"
     process.env.NEXT_BUNDLE_SERVICE_URI || "http://localhost:4001"
-export const bundleCreateUri = "/api/v1/bundle/create" // next redirections on next.config.js
+export const bundleCreateUri = "/api/v1/bundle/create"
+export const bundleStatusUri = "/api/v1/bundle/status"
+export const BUNDLE_MAX_RETRYS = 12
+export const BUNDLE_RETRY_TIMEOUT = 5000
+export const BUNDLE_STATUS_COMPLETED = 'COMPLETED'
+
+
+
+
 
 

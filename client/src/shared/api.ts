@@ -1,7 +1,7 @@
 import { DDO } from "@nevermined-io/nevermined-sdk-js"
 import { AdditionalInformation } from "@nevermined-io/nevermined-sdk-js"
 import axios from 'axios';
-import { bundleCreateUri, bundleServiceUri } from "src/config";
+import { bundleCreateUri, bundleServiceUri, bundleStatusUri } from "src/config";
 
 interface AdditionalInformationExtended extends AdditionalInformation {
   key: string;
@@ -28,5 +28,12 @@ export const createBundle = (user: string, assets: DDO[]): Promise<any> => {
       user,
       datasets
     }
+  })
+}
+
+export const checkBundleStatus = (bundleId: string): Promise<any> => {
+  return axios({
+    method: 'get',
+    url: `${bundleServiceUri}${bundleStatusUri}/${bundleId}`
   })
 }
