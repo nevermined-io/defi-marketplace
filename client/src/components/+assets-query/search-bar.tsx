@@ -17,16 +17,23 @@ import Router from 'next/router'
 interface SearchBarProps {
   search?: 'onsite' | 'search-page'
   onSearch: () => void
+  buttonSide?: 'left' | 'right'
+  showButton?: boolean
 }
 
 const b = BEM('assets-query', styles)
 
-export function XuiSearchBar({ onSearch }: SearchBarProps) {
+export function XuiSearchBar({ onSearch, buttonSide = 'right', showButton = true }: SearchBarProps) {
   const { searchInputText, fromDate, toDate, selectedCategories, setSelectedCategories, setToDate, setFromDate, setSearchInputText } = useContext(User)
 
+  const [textValue, setTextValue] = useState('')
 
+  //write the text in the serchbar and trigger the query after 1,5 seconds
   const inputChanges = useCallback((event: any) => {
-    setSearchInputText(event.target.value)
+    setTextValue(event.target.value)
+    setTimeout(()=>{console.log("waiting 1 second")
+        setSearchInputText(event.target.value)
+    }, 1500)
   }, [])
 
 
@@ -40,9 +47,14 @@ export function XuiSearchBar({ onSearch }: SearchBarProps) {
     <>
       <UiDivider />
       <UiLayout>
+        {(buttonSide === 'left' && showButton) &&
+          <div className={b('form-button')} onClick={onSearch}>
+            <UiIcon icon="search" />
+          </div>
+        }
         <input
           className={b('input')}
-          value={searchInputText}
+          value={textValue}
           onChange={inputChanges}
           onKeyDown={inputOnEnter}
           placeholder="Search networks, protocols, DEXES & more..."
@@ -71,9 +83,11 @@ export function XuiSearchBar({ onSearch }: SearchBarProps) {
             toDate={toDate}
           />
         </UiDropdown>
-        <div className={b('form-button')} onClick={onSearch}>
-          <UiIcon icon="search" />
-        </div>
+        {(buttonSide === 'right' && showButton) &&
+          <div className={b('form-button')} onClick={onSearch}>
+            <UiIcon icon="search" />
+          </div>
+        }
       </UiLayout>
     </>
 
