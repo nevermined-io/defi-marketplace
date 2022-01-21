@@ -2,14 +2,13 @@ import React, { ReactNode, useContext, useState, useEffect, useCallback } from '
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { SearchQuery } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 
-import { BEM, UiDropdown, UiButton, UiIcon, UiLayout, UiDivider, UiText } from 'ui'
+import { BEM } from 'ui'
 import { User } from '../../context'
 import styles from './assets-query.module.scss'
-import { XuiCategoryDropdown } from 'ui/+assets-query/category-dropdown/category-dropdown'
-import { XuiFilterDropdown } from 'ui/+assets-query/filter-dropdown/filter-dropdown'
 import { Loader } from 'ui/Loader/loader'
-import { getAttributes, getCategories, getVersion, sortBy } from '../../shared'
 import { subcategoryPrefix } from '../../shared/constants'
+import { XuiPagination } from './pagination'
+import { XuiSearchBar } from './search-bar'
 
 interface AssetsQueryProps {
   search?: 'onsite' | 'search-page'
@@ -19,25 +18,20 @@ interface AssetsQueryProps {
 }
 
 const b = BEM('assets-query', styles)
-
+// loads all the asset then filters them looking at the variables defined in the user context 
 export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryProps) {
   const categoryFilter = 'defi-datasets' // Must be defined on config
-  const { assets, sdk, setAssets } = useContext(User)
+  const { assets, sdk, searchInputText, fromDate, toDate, selectedCategories, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText } = useContext(User)
 
   const [totalPages, setTotalPages] = useState<number>(1)
   const [page, setPage] = useState<number>(1)
-
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-
-  // searchInputText is used to set searchText when click on search
-  const [searchInputText, setSearchInputText] = useState('')
   const [searchText, setSearchText] = useState('')
-  const [fromDate, setFromDate] = useState('')
-  const [toDate, setToDate] = useState('')
   const [loading, setLoading] = useState<boolean>(false)
+  // const [queryParams, setQueryParams] = useState({} as any)
+
   const selectedCategoriesEvent = selectedCategories.map(cat => `${subcategoryPrefix}:${cat}`)
 
-  const textFilter = { "query_string": { "query": `*${searchText}*`, "fields": ["service.attributes.main.name"] } }
+  const textFilter = { "query_string": { "query": `*${searchInputText}*`, "fields": ["service.attributes.main.name"] } }
   const datasetCategory = { "match": { "service.attributes.additionalInformation.categories": selectedCategoriesEvent.length === 0 ? "defi-datasets" : selectedCategoriesEvent.join(', ') } }
   const dateFilter = fromDate !== '' && toDate !== '' && {
     "range": {
@@ -55,9 +49,41 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
   const query = {
     "bool": {
       "must": mustArray,
-      "must_not": [{"match": {"service.attributes.additionalInformation.categories": "EventType:bundle"}}]
+      "must_not": [{ "match": { "service.attributes.additionalInformation.categories": "EventType:bundle" } }]
     }
   }
+
+  useCallback(() => {
+    console.log("QPM", queryParams)
+    if (queryParams.toString()) {
+      for (var [key, value] of queryParams.entries()) {
+        console.log(key+ ' => '+ value); 
+        switch (key) {
+          case 'searchInputText': setSearchInputText(value); break
+          case 'selectedCategories': setSelectedCategories(value.split(",")); break
+          case 'toDate': setToDate(value); break
+          case 'fromDate': setFromDate(value); break
+          default: break
+        }
+      }
+    }
+  }, [queryParams])
+
+
+  useEffect(()=> {
+    const queryParams = new URLSearchParams(window.location.search);
+
+    for (var [key, value] of queryParams.entries()) {
+      // console.log(key+ ' => '+ value); 
+      switch (key) {
+        case 'searchInputText': queryParams.get("searchInputText") ? setSearchInputText(value) : setSearchInputText(searchInputText); break
+        case 'selectedCategories':  queryParams.get("selectedCategories") ? setSelectedCategories(value.split(",")) : setSelectedCategories(selectedCategories); break
+        case 'toDate':  queryParams.get("toDate") ? setToDate(value): setToDate(toDate); break
+        case 'fromDate':  queryParams.get("fromDate") ? setToDate(value): setToDate(fromDate); break
+        default: break
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (!sdk.assets) {
@@ -77,86 +103,31 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
         setLoading(false)
         setAssets(results)
         setTotalPages(totalPages)
+        history.replaceState(null, '', `/list?searchInputText=${searchInputText}&fromDate=${fromDate}&toDate=${toDate}&selectedCategories=${selectedCategories}`);
       })
   }, [sdk, page, JSON.stringify(query)])
 
-  const inputChanges = useCallback((event: any) => {
-    setSearchInputText(event.target.value)
-  }, [])
-
   const onSearch = useCallback(() => {
     setSearchText(searchInputText)
-  }, [searchInputText])
-
-  const inputOnEnter = useCallback((event: any) => {
-    if (event.key === 'Enter')
-      onSearch()
-  }, [searchInputText])
+  }, [])
 
   return (
     <>
       {loading && <Loader />}
       {search && (
-        /* Move to components*/
-        <>
-          <UiDivider />
-          <UiLayout>
-            <input
-              className={b('input')}
-              value={searchInputText}
-              onChange={inputChanges}
-              onKeyDown={inputOnEnter}
-              placeholder="Search..."
-            />
-            <UiDropdown
-              imgHeight="6px"
-              imgSrc="/assets/arrow.svg"
-              title="Category"
-              imgWidth="10px"
-            >
-              <XuiCategoryDropdown
-                selectedCategories={selectedCategories}
-                setSelectedCategories={setSelectedCategories}
-              />
-            </UiDropdown>
-            <UiDropdown
-              imgHeight="10px"
-              imgSrc="/assets/filter.svg"
-              title="More filters"
-              imgWidth="10px"
-            >
-              <XuiFilterDropdown
-                setFromDate={setFromDate}
-                setToDate={setToDate}
-                fromDate={fromDate}
-                toDate={toDate}
-              />
-            </UiDropdown>
-            <div className={b('form-button')} onClick={onSearch}>
-              <UiIcon icon="search" />
-            </div>
-          </UiLayout>
-        </>
+        <div>
+
+          <XuiSearchBar onSearch={onSearch} />
+          {/* <UiButton onClick={() => setParams()}>set</UiButton> */}
+        </div>
       )}
 
       {content(assets)}
 
       {totalPages > 1 && (
-        <>
-          <UiDivider type="l" />
-          <UiLayout justify="center" align="center">
-            <UiButton square type="alt" disabled={page === 1} onClick={() => setPage(page - 1)}>
-              <UiIcon icon="arrowLeft" />
-            </UiButton>
-            <UiDivider vertical />
-            <UiText variants={['detail', 'bold']}>{page} / {totalPages}</UiText>
-            <UiDivider vertical />
-            <UiButton square type="alt" disabled={page === totalPages} onClick={() => setPage(page + 1)}>
-              <UiIcon icon="arrowRight" />
-            </UiButton>
-          </UiLayout>
-        </>
+        <XuiPagination setPage={setPage} page={page} totalPages={totalPages} />
       )}
     </>
   )
 }
+
