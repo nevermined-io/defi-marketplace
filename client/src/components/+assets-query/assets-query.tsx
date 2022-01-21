@@ -54,17 +54,16 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
   }
 
 
-
+  //this happen when the page is loaded to get the query string
   useEffect(()=> {
     const queryParams = new URLSearchParams(window.location.search);
-
     for (var [key, value] of queryParams.entries()) {
       // console.log(key+ ' => '+ value); 
       switch (key) {
         case 'searchInputText': queryParams.get("searchInputText") ? setSearchInputText(value) : setSearchInputText(searchInputText); break
         case 'selectedCategories':  queryParams.get("selectedCategories") ? setSelectedCategories(value.split(",")) : setSelectedCategories(selectedCategories); break
         case 'toDate':  queryParams.get("toDate") ? setToDate(value): setToDate(toDate); break
-        case 'fromDate':  queryParams.get("fromDate") ? setToDate(value): setToDate(fromDate); break
+        case 'fromDate':  queryParams.get("fromDate") ? setFromDate(value): setFromDate(fromDate); break
         default: break
       }
     }
@@ -102,8 +101,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
       {search && (
         <div>
 
-          <XuiSearchBar onSearch={onSearch} />
-          {/* <UiButton onClick={() => setParams()}>set</UiButton> */}
+          <XuiSearchBar onSearch={onSearch} showButton={false} />
         </div>
       )}
 

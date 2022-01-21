@@ -50,7 +50,7 @@ export function UiBanner(props: BannerProps) {
               Say Goodbye to Unstructured Data
             </UiText>
             <UiLayout type="container"  >
-              <XuiSearchBar onSearch={onSearch}/>
+              <XuiSearchBar onSearch={onSearch} buttonSide={'left'}/>
             </UiLayout>
             <UiDivider type="l" />
             <UiButton onClick={onSearch}>
