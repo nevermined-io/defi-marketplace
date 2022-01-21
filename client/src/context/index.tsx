@@ -42,6 +42,22 @@ export const User = React.createContext({
     assets: [] as DDO[],
     setAssets: (assets: DDO[]) => {
       /* empty */
+    },
+    searchInputText:'',
+    setSearchInputText:(searchInputText:string) =>{
+        /* empty */
+    },
+    fromDate:'',
+    setFromDate:(fromDate:string) =>{
+        /* empty */
+    },
+    toDate:'',
+    setToDate:(toDate:string) =>{
+        /* empty */
+    },
+    selectedCategories:[] as string[],
+    setSelectedCategories:(selectedCategories:string[]) =>{
+        /* empty */
     }
 })
 

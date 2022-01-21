@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, } from 'react'
 import Web3 from 'web3'
 import { Nevermined, Account, DDO } from '@nevermined-io/nevermined-sdk-js'
 import { User } from '.'
@@ -60,7 +60,11 @@ interface UserProviderState {
     message: string
     tokenSymbol: string
     basket: string[]
-    assets: DDO[]
+    assets: DDO[],
+    searchInputText: string,
+    fromDate: string,
+    toDate: string,
+    selectedCategories: string[]
 }
 
 export default class UserProvider extends PureComponent<{}, UserProviderState> {
@@ -154,7 +158,15 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         addToBasket: (dids: string[]) => this.addToBasket(dids),
         removeFromBasket: (dids: string[]) => this.removeFromBasket(dids),
         assets: [],
-        setAssets: (assets: DDO[]) => this.setAssets(assets)
+        setAssets: (assets: DDO[]) => this.setAssets(assets),
+        searchInputText: '',
+        setSearchInputText: (searchInputText: string) => this.setSearchInputText(searchInputText),
+        fromDate: '',
+        setFromDate: (fromDate: string) => this.setFromDate(fromDate),
+        toDate: '',
+        setToDate: (toDate: string) => this.setToDate(toDate),
+        selectedCategories: [] as string[],
+        setSelectedCategories: (selectedCategories: string[]) => this.setSelectedCategories(selectedCategories),
     }
 
     private accountsInterval: any = null
@@ -318,6 +330,22 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
 
     public setAssets(assets: DDO[]) {
         this.setState({ assets })
+    }
+
+    public setSearchInputText(searchInputText: string) {
+        this.setState({ searchInputText })
+    }
+
+    public setFromDate(fromDate: string) {
+        this.setState({ fromDate })
+    }
+
+    public setToDate(toDate: string) {
+        this.setState({ toDate })
+    }
+
+    public setSelectedCategories(selectedCategories: string[]) {
+        this.setState({ selectedCategories })
     }
 
     public render() {
