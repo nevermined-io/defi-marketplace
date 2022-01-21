@@ -26,4 +26,17 @@ $assets-query__form---size: 64px !default;
     background: gc(sM);
     cursor: pointer;
   }
+
+  &__clear-div {
+    cursor: pointer;
+    width: 58.07px;
+    height: 22.07px;
+    &--clear-button {
+      font-size: 12.8725px;
+      line-height: 15px;
+      margin-right: 5px;
+      color: gc(gL);
+    }
+
+  }
 }
