@@ -53,21 +53,6 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
     }
   }
 
-  useCallback(() => {
-    console.log("QPM", queryParams)
-    if (queryParams.toString()) {
-      for (var [key, value] of queryParams.entries()) {
-        console.log(key+ ' => '+ value); 
-        switch (key) {
-          case 'searchInputText': setSearchInputText(value); break
-          case 'selectedCategories': setSelectedCategories(value.split(",")); break
-          case 'toDate': setToDate(value); break
-          case 'fromDate': setFromDate(value); break
-          default: break
-        }
-      }
-    }
-  }, [queryParams])
 
 
   useEffect(()=> {
