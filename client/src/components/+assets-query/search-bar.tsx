@@ -1,7 +1,6 @@
 
 import React, { ReactNode, useContext, useState, useEffect, useCallback } from 'react'
-import { DDO } from '@nevermined-io/nevermined-sdk-js'
-import { SearchQuery } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
+import Image from "next/image"
 
 import { BEM, UiDropdown, UiButton, UiIcon, UiLayout, UiDivider, UiText } from 'ui'
 import { User } from '../../context'
@@ -42,10 +41,31 @@ export function XuiSearchBar({ onSearch, buttonSide = 'right', showButton = true
       onSearch()
   }, [searchInputText])
 
+  const resetCategories = () => {
+    setSelectedCategories([])
+    setToDate('')
+    setFromDate('')
+    setTextValue('')
+    setSearchInputText('')
+  }
+
 
   return (
     <>
       <UiDivider />
+      <UiLayout type='sides' justify='end'>
+        {
+          (selectedCategories.length || fromDate || toDate) &&
+          <div onClick={resetCategories} className={b('clear-div')} >
+            <span className={b('clear-div',['clear-button'])} >
+              Clear
+            </span>
+            <span className={b('clear-div')} >
+              <Image width="10" height="10" src="/assets/blue-cross.svg"  />
+            </span>
+          </div>
+        }
+      </UiLayout>
       <UiLayout>
         {(buttonSide === 'left' && showButton) &&
           <div className={b('form-button')} onClick={onSearch}>
@@ -59,20 +79,20 @@ export function XuiSearchBar({ onSearch, buttonSide = 'right', showButton = true
           onKeyDown={inputOnEnter}
           placeholder="Search networks, protocols, DEXES & more..."
         />
-          <UiDropdown
-            selected={ selectedCategories.length ? true : false }
-            imgHeight="6px"
-            imgSrc="/assets/arrow.svg"
-            title="Category"
-            imgWidth="10px"
-          >
-            <XuiCategoryDropdown
-              selectedCategories={selectedCategories}
-              setSelectedCategories={setSelectedCategories}
-            />
-          </UiDropdown>
         <UiDropdown
-          selected={ fromDate || toDate? true : false }
+          selected={selectedCategories.length ? true : false}
+          imgHeight="6px"
+          imgSrc="/assets/arrow.svg"
+          title="Category"
+          imgWidth="10px"
+        >
+          <XuiCategoryDropdown
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
+          />
+        </UiDropdown>
+        <UiDropdown
+          selected={fromDate || toDate ? true : false}
           imgHeight="10px"
           imgSrc="/assets/filter.svg"
           title="More filters"
