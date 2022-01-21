@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import { BEM } from 'ui'
 import Image from "next/image"
 
 import styles from './category-dropdown.module.scss'
+import { User } from 'src/context'
 
 interface CategoryDropdownProps {
   selectedCategories: string[]
@@ -16,7 +17,7 @@ const lendingCategories = ['Borrows', 'Deposits', 'Liquidations', 'Repays', 'Red
 const DEXCategories = ['Trades', 'Liquidity']
 
 export function XuiCategoryDropdown(props: CategoryDropdownProps) {
-  const { selectedCategories, setSelectedCategories } = props
+  const { selectedCategories, setSelectedCategories} = useContext(User)
   const [expandLending, setExpandLending] = useState<boolean>(true)
   const [expandDEX, setExpandDEX] = useState<boolean>(false)
 
