@@ -1,0 +1,180 @@
+@import '../../src/styles/index';
+
+.diagram {
+  &__top-text {
+    @include get-font(text);
+
+    text-align: center;
+    font-size: 14px;
+    margin: 0 0 10px 18px;
+    width: 163px;
+  }
+  &__networks {
+    position: relative;
+    height: 200px;
+    width: 195px;
+  }
+  &__circle, &__borrow, &__repay, &__swap, &__liquidity {
+    position: absolute;
+    @include get-font(text);
+  }
+  &__network-logos {
+    align-items: center;
+    column-gap: 18px;
+    display: grid;
+    grid-template-columns: 45px 45px;
+    grid-template-rows: 45px 45px;
+    justify-items: center;
+    left: 47px;
+    position: absolute;
+    row-gap: 20px;
+    top: 47px;
+  }
+  &__row {
+    display: flex;
+  }
+  &__protocols {
+    display: flex;
+    flex-direction: column;
+    margin: 0 30px;
+    justify-content: center;
+  }
+  &__left-arrows, &__dapp-users {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    justify-content: center;
+    position: relative;
+  }
+  &__borrow {
+    top: 30px;
+    left: 55px
+  }
+  &__repay {
+    top: 60px;
+    left: 60px
+  }
+  &__swap {
+    bottom: 63px;
+    left: 60px
+  }
+  &__liquidity {
+    bottom: 30px;
+    left: 30px
+  }
+  &__dapp-user-wrapper {
+    display: grid;
+    place-items: center;
+    width: 96px;
+    height: 34px;
+    position: relative;
+    left: 12px;
+  }
+  &__dapp-user-box {
+    position: absolute;
+  }
+
+  &__big-text {
+    @include get-font(text);
+    color: gc(sM);
+    font-size: 19px;
+    margin-top: 10px;
+    &--dapp-user {
+      position: absolute;
+      margin-top: 0;
+    }
+  }
+  &__small-text {
+    @include get-font(text);
+
+    text-align: center;
+    font-size: 14px;
+    margin-top: 5px;
+    &--python {
+      width: 120px;
+    }
+  }
+  &__up-arrow {
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    margin: 25px 0 17px;
+  }
+  &__logo-and-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    justify-content: center;
+    &--python {
+      width: 150px;
+    }
+    &--filecoin {
+      width: 120px;
+    }
+    &--nevermined {
+      margin: 20px 0 0 510px;
+    }
+  }
+  &__left-arrow {
+    transform: rotate(180deg);
+  }
+  &__left-arrow-wrapper {
+    display: flex;
+    align-items: center;
+    margin-left: 27px;
+  }
+  &__retrieval-wrapper {
+    position: relative;
+    width: 195px;
+  }
+  &__retrieval-box {
+    position: absolute;
+    left: -6px;
+    top: 17px;
+  }
+  &__retrieval-text{
+    position: absolute;
+    @include get-font(text);
+
+    text-align: center;
+    font-size: 14px;
+    margin: 5px 0 10px 18px;
+    width: 180px;
+    left: -10px;
+    top: 30px;
+  }
+  &__nevermined-wrapper {
+    position: relative;
+    height: 113px;
+    margin-left: 505px;
+  }
+  &__nevermined-box {
+    position: absolute;
+    left: -6px;
+    top: 10px;
+  }
+  &__nevermined-text{
+    position: absolute;
+    @include get-font(text);
+
+    text-align: center;
+    font-size: 14px;
+    margin: 5px 0 10px 18px;
+    width: 183px;
+    left: -9px;
+    top: 24px;
+  }
+  &__horizontal-line-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  &__vertical-line {
+    transform: rotate(90deg);
+    margin: 40px 0 0 590px;
+  }
+  &__down-arrow {
+    margin-left: 600px;
+    transform: rotate(180deg);
+  }
+}
