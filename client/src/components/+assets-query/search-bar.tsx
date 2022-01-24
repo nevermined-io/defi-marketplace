@@ -1,17 +1,12 @@
 
-import React, { ReactNode, useContext, useState, useEffect, useCallback } from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import Image from "next/image"
 
-import { BEM, UiDropdown, UiButton, UiIcon, UiLayout, UiDivider, UiText } from 'ui'
+import { BEM, UiDropdown, UiIcon, UiLayout, UiDivider, UiText } from 'ui'
 import { User } from '../../context'
 import styles from './assets-query.module.scss'
 import { XuiCategoryDropdown } from 'ui/+assets-query/category-dropdown/category-dropdown'
 import { XuiFilterDropdown } from 'ui/+assets-query/filter-dropdown/filter-dropdown'
-import { Loader } from 'ui/Loader/loader'
-import { getAttributes, getCategories, getVersion, sortBy } from '../../shared'
-import { subcategoryPrefix } from '../../shared/constants'
-import { XuiPagination } from './pagination'
-import Router from 'next/router'
 
 interface SearchBarProps {
   search?: 'onsite' | 'search-page'
@@ -40,8 +35,8 @@ export function XuiSearchBar({ onSearch, buttonSide = 'right', showButton = true
   }, [textValue])
 
   const submitSearch = () => {
-   if (onSearch) return onSearch(textValue)
-   else setSearchInputText(textValue)
+    if (onSearch) return onSearch(textValue)
+    else setSearchInputText(textValue)
   }
 
   const resetCategories = () => {
