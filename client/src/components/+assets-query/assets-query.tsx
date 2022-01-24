@@ -27,7 +27,6 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
   const [page, setPage] = useState<number>(1)
   const [searchText, setSearchText] = useState('')
   const [loading, setLoading] = useState<boolean>(false)
-  // const [queryParams, setQueryParams] = useState({} as any)
 
   const selectedCategoriesEvent = selectedCategories.map(cat => `${subcategoryPrefix}:${cat}`)
 
@@ -58,7 +57,6 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
   useEffect(()=> {
     const queryParams = new URLSearchParams(window.location.search);
     for (var [key, value] of queryParams.entries()) {
-      // console.log(key+ ' => '+ value); 
       switch (key) {
         case 'searchInputText': queryParams.get("searchInputText") ? setSearchInputText(value) : setSearchInputText(searchInputText); break
         case 'selectedCategories':  queryParams.get("selectedCategories") ? setSelectedCategories(value.split(",")) : setSelectedCategories(selectedCategories); break

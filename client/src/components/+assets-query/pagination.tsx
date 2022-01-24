@@ -12,7 +12,6 @@ interface PaginationProps {
 const b = BEM('assets-query', styles)
 
 export function XuiPagination({ totalPages, page, setPage }: PaginationProps) {
-  // const [page, setPage] = useState<number>(1)
   return (<>
     <UiDivider type="l" />
     <UiLayout justify="center" align="center">
