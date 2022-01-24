@@ -14,17 +14,18 @@ interface BannerProps {
 }
 
 export function UiBanner(props: BannerProps) {
-  const { searchInputText, fromDate, toDate, selectedCategories } = useContext(User)
+  const { fromDate, toDate, selectedCategories, setSearchInputText } = useContext(User)
 
   const redirectToList = () => {
     Router.push('/list')
   }
 
-  const onSearch = () => {
+  const onSearch = (value: any) => {
+    setSearchInputText(value)
     Router.push({
       pathname: '/list',
       query: {
-        searchInputText,
+        value,
         fromDate,
         toDate,
         selectedCategories
@@ -50,10 +51,10 @@ export function UiBanner(props: BannerProps) {
               Say Goodbye to Unstructured Data
             </UiText>
             <UiLayout type="container"  >
-              <XuiSearchBar onSearch={onSearch} buttonSide={'left'}/>
+              <XuiSearchBar onSearch={(value: any) => onSearch(value)} buttonSide={'left'} />
             </UiLayout>
             <UiDivider type="l" />
-            <UiButton onClick={onSearch}>
+            <UiButton onClick={redirectToList}>
               GO TO MARKETPLACE
             </UiButton>
             <UiDivider type="xxl" />
