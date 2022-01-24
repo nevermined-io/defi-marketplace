@@ -91,9 +91,6 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
       })
   }, [sdk, page, JSON.stringify(query)])
 
-  const onSearch = useCallback(() => {
-    setSearchText(searchInputText)
-  }, [])
 
   return (
     <>
@@ -101,7 +98,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
       {search && (
         <div>
 
-          <XuiSearchBar onSearch={onSearch} showButton={false} />
+          <XuiSearchBar  showButton={true} buttonSide={'right'}/>
         </div>
       )}
 

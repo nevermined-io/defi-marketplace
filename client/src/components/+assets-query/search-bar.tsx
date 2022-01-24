@@ -15,7 +15,7 @@ import Router from 'next/router'
 
 interface SearchBarProps {
   search?: 'onsite' | 'search-page'
-  onSearch: () => void
+  onSearch?: (value?: any) => void
   buttonSide?: 'left' | 'right'
   showButton?: boolean
 }
@@ -27,19 +27,22 @@ export function XuiSearchBar({ onSearch, buttonSide = 'right', showButton = true
 
   const [textValue, setTextValue] = useState('')
 
-  //write the text in the serchbar and trigger the query after 1,5 seconds
+  //write the text in the serchbar 
   const inputChanges = useCallback((event: any) => {
     setTextValue(event.target.value)
-    setTimeout(() => {
-      setSearchInputText(event.target.value)
-    }, 1500)
   }, [])
 
 
   const inputOnEnter = useCallback((event: any) => {
-    if (event.key === 'Enter')
-      onSearch()
-  }, [searchInputText])
+    if (event.key === 'Enter') {
+      onSearch ? onSearch(event.target.value) : setSearchInputText(textValue)
+    }
+  }, [textValue])
+
+  const submitSearch = () => {
+   if (onSearch) return onSearch(textValue)
+   else setSearchInputText(textValue)
+  }
 
   const resetCategories = () => {
     setSelectedCategories([])
@@ -57,18 +60,18 @@ export function XuiSearchBar({ onSearch, buttonSide = 'right', showButton = true
         {
           (selectedCategories.length || fromDate || toDate) &&
           <div onClick={resetCategories} className={b('clear-div')} >
-            <span className={b('clear-div',['clear-button'])} >
+            <span className={b('clear-div', ['clear-button'])} >
               Clear
             </span>
             <span className={b('clear-div')} >
-              <Image width="10" height="10" src="/assets/blue-cross.svg"  />
+              <Image width="10" height="10" src="/assets/blue-cross.svg" />
             </span>
           </div>
         }
       </UiLayout>
       <UiLayout>
         {(buttonSide === 'left' && showButton) &&
-          <div className={b('form-button')} onClick={onSearch}>
+          <div className={b('form-button')} onClick={submitSearch}>
             <UiIcon icon="search" />
           </div>
         }
@@ -106,7 +109,7 @@ export function XuiSearchBar({ onSearch, buttonSide = 'right', showButton = true
           />
         </UiDropdown>
         {(buttonSide === 'right' && showButton) &&
-          <div className={b('form-button')} onClick={onSearch}>
+          <div className={b('form-button')} onClick={submitSearch}>
             <UiIcon icon="search" />
           </div>
         }
