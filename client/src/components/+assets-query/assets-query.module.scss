@@ -17,13 +17,17 @@ $assets-query__form---size: 64px !default;
       color: gc(gL);
     }
   }
+  &__search-icon {
+    background: gc(gM);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 42px;
+  }
   &__form-button {
-    height: $fz;
-    width: $fz;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: gc(sM);
     cursor: pointer;
   }
 
