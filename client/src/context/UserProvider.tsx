@@ -80,6 +80,9 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
     }
 
     private loginMetamask = async () => {
+        if (!window.ethereum) {
+            alert('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
+        }
         const metamaskProvider = new MetamaskProvider()
         await metamaskProvider.startLogin()
         const web3 = metamaskProvider.getProvider()
