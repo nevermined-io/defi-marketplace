@@ -18,7 +18,7 @@ interface AssetsQueryProps {
 }
 
 const b = BEM('assets-query', styles)
-// loads all the asset then filters them looking at the variables defined in the user context 
+// loads all the asset then filters them looking at the variables defined in the user context
 export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryProps) {
   const categoryFilter = 'defi-datasets' // Must be defined on config
   const { assets, sdk, searchInputText, fromDate, toDate, selectedCategories, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText } = useContext(User)
@@ -95,8 +95,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
       {loading && <Loader />}
       {search && (
         <div>
-
-          <XuiSearchBar  showButton={true} buttonSide={'right'}/>
+          <XuiSearchBar  showButton={true} />
         </div>
       )}
 

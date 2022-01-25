@@ -47,16 +47,12 @@ export function UiBanner(props: BannerProps) {
       {
         props.showButton ?
           <div>
-            <UiText className={b('bannerText')} variants={["heading", "secondary"]} wrapper="h3" type="h3">
-              Say Goodbye to Unstructured Data
-            </UiText>
+            <UiDivider type="xl" />
+
             <UiLayout type="container"  >
-              <XuiSearchBar onSearch={(value: any) => onSearch(value)} buttonSide={'left'} />
+              <XuiSearchBar onSearch={(value: any) => onSearch(value)} />
             </UiLayout>
             <UiDivider type="l" />
-            <UiButton onClick={redirectToList}>
-              GO TO MARKETPLACE
-            </UiButton>
             <UiDivider type="xxl" />
           </div> :
 
