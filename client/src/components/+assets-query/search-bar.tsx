@@ -93,10 +93,10 @@ export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
           imgWidth="10px"
         >
           <XuiFilterDropdown
-            setFromDate={setFromDate}
-            setToDate={setToDate}
-            fromDate={fromDate}
-            toDate={toDate}
+            // setFromDate={setFromDate}
+            // setToDate={setToDate}
+            // fromDate={fromDate}
+            // toDate={toDate}
           />
         </UiDropdown>
           <div className={b('form-button')} onClick={submitSearch}>

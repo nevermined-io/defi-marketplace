@@ -32,13 +32,17 @@ $h: 1em;
   border: none; /* get rid of Firefox thumb border */
   border-radius: 0; /* get rid of Firefox corner rounding */
   pointer-events: auto; /* catch clicks */
-  width: $h; height: $h;
+  width: $h;
+  height: $h;
 }
 
 .wrap {
   /* same as before */
-  background: /* emulate track with wrapper background */
-    linear-gradient(0deg, #ccc $h, transparent 0);
+  background: /* emulate track with wrapper background */ linear-gradient(
+    0deg,
+    #ccc $h,
+    transparent 0
+  );
 }
 
 .filter-dropdown {
@@ -48,11 +52,15 @@ $h: 1em;
     display: flex;
     justify-content: space-between;
     padding: 15px;
-    width: 400px;
+    width: 865px;
+    height: 179px;
 
     input[type='range'] {
       &::-webkit-slider-runnable-track,
-      &::-webkit-slider-thumb, & { -webkit-appearance: none; }
+      &::-webkit-slider-thumb,
+      & {
+        -webkit-appearance: none;
+      }
 
       /* same as before */
       background: none; /* get rid of white Chrome background */
@@ -61,20 +69,62 @@ $h: 1em;
       margin: 0;
       pointer-events: none; /* let clicks pass through */
 
-      &::-webkit-slider-runnable-track { @include track; }
-      &::-moz-range-track { @include track; }
+      &::-webkit-slider-runnable-track {
+        @include track;
+      }
+      &::-moz-range-track {
+        @include track;
+      }
 
-      &::-webkit-slider-thumb { @include thumb; }
-      &::-moz-range-thumb { @include thumb; }
+      &::-webkit-slider-thumb {
+        @include thumb;
+      }
+      &::-moz-range-thumb {
+        @include thumb;
+      }
+    }
+
+    input[type='date'] {
+      &::-webkit-datetime-edit {
+        background: #2b465c;
+        color: #8aaabe;
+        padding: 1em;
+        margin: 0;
+      }
+
+      &::-webkit-datetime-edit-fields-wrapper {
+        background: #2b465c;
+        padding: 0;
+        margin: 0;
+      }
+      &::-webkit-datetime-edit-text {
+        color: #8aaabe;
+      }
+      &::-webkit-datetime-edit-day-field {
+        color: #8aaabe;
+        padding: 0;
+      }
+
+      &::-webkit-datetime-edit-month-field {
+        color: #8aaabe;
+        padding: 0;
+      }
+      &::-webkit-datetime-edit-year-field {
+        color: #8aaabe;
+        padding: 0;
+      }
+      &::-webkit-calendar-picker-indicator {
+        background-image: url('../../../../public/assets/calendar.svg');
+      }
     }
 
     span {
-      margin: 15px 15px  15px 0;
+      margin: 15px 15px 15px 0;
     }
-
-    //input {
-    //  margin-left: 20px;
-    //}
+  }
+  &__picker {
+    background-color: #2b465c;
+    border: none;
   }
 
   &__title {
@@ -89,5 +139,12 @@ $h: 1em;
   &__vertical-divider {
     border-left: 1px solid gc(gL);
     height: 50px;
+  }
+
+  &__filters-text {
+    font-size: 11.5752px;
+    line-height: 13px;
+    text-transform: uppercase;
+    color: #d0f2ff;
   }
 }
