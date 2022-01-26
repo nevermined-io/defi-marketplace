@@ -58,6 +58,10 @@ export const User = React.createContext({
     selectedCategories:[] as string[],
     setSelectedCategories:(selectedCategories:string[]) =>{
         /* empty */
+    },
+    selectedNetworks:[] as string[],
+    setSelectedNetworks:(selectedNetworks:string[]) =>{
+        /* empty */
     }
 })
 

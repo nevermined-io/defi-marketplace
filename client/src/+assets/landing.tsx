@@ -15,6 +15,9 @@ export const Landing: NextPage = () => {
     const win = window.open(discordUrl, "_blank");
     win?.focus();
   }
+  const redirectToList = () => {
+    Router.push('/list')
+  }
   return (
     <>
       <UiBanner showButton={true} />
@@ -87,14 +90,54 @@ export const Landing: NextPage = () => {
         >The Nevermined DeFi Marketplace<br/>features datsets from your favorite networks, these include:</UiText>
         <div className={b('network-logos-wrapper')}>
           <div className={b('network-logos')}>
-            <img style={{ cursor: 'pointer'}} width="68" src="/assets/logos/bsc.svg"/>
-            <img style={{ cursor: 'pointer'}} width="78" src="/assets/logos/avalanche.svg"/>
-            <img style={{ cursor: 'pointer'}} width="74" src="/assets/logos/celo.svg"/>
-            <img style={{ cursor: 'pointer'}} width="66" src="/assets/logos/polygon.svg"/>
-            <img style={{ cursor: 'pointer'}} width="78" src="/assets/logos/op.svg"/>
-            <img style={{ cursor: 'pointer'}} height="71" src="/assets/logos/ethereum.svg"/>
-            <img style={{ cursor: 'pointer'}} width="78" src="/assets/logos/fantom.svg"/>
-            <img style={{ cursor: 'pointer'}} width="65" src="/assets/logos/arbitrum.svg"/>
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Bsc')}
+              src="/assets/logos/bsc.svg"
+              style={{ cursor: 'pointer'}}
+              width="68"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Avalanche')}
+              src="/assets/logos/avalanche.svg"
+              style={{ cursor: 'pointer'}}
+              width="78"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Celo')}
+              src="/assets/logos/celo.svg"
+              style={{ cursor: 'pointer'}}
+              width="74"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Polygon')}
+              src="/assets/logos/polygon.svg"
+              style={{ cursor: 'pointer'}}
+              width="66"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Optimism')}
+              src="/assets/logos/op.svg"
+              style={{ cursor: 'pointer'}}
+              width="78"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Ethereum')}
+              src="/assets/logos/ethereum.svg"
+              style={{ cursor: 'pointer'}}
+              height="71"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Fantom')}
+              src="/assets/logos/fantom.svg"
+              style={{ cursor: 'pointer'}}
+              width="78"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Arbitrum')}
+              src="/assets/logos/arbitrum.svg"
+              style={{ cursor: 'pointer'}}
+              width="65"
+            />
           </div>
         </div>
         <UiDivider type="xxl"/>
