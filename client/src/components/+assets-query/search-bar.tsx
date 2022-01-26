@@ -97,10 +97,10 @@ export function XuiSearchBar({ onSearch, buttonSide = 'right', showButton = true
           imgWidth="10px"
         >
           <XuiFilterDropdown
-            setFromDate={setFromDate}
-            setToDate={setToDate}
-            fromDate={fromDate}
-            toDate={toDate}
+            // setFromDate={setFromDate}
+            // setToDate={setToDate}
+            // fromDate={fromDate}
+            // toDate={toDate}
           />
         </UiDropdown>
         {(buttonSide === 'right' && showButton) &&
