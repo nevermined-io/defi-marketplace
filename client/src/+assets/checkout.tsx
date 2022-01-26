@@ -73,7 +73,7 @@ export const Checkout: NextPage = () => {
             <UiDivider/>
             <UiLayout justify="space-between">
               <UiText type="h4-caps" wrapper="h2">TOTAL</UiText>
-              <div className={b('total-price')}>2.5 ETH</div>
+              <div className={b('total-price')}>0.1 USDC</div>
             </UiLayout>
             <UiDivider/>
             <XuiCreateBundle assets={assets}>
