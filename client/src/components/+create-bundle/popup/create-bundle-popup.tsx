@@ -45,7 +45,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
         await sdk.assets.consume(agreementId, did, account)
       })
       .catch(error => setError(error.code === MetamaskErrorCodes.CANCELED ? MetamaskCustomErrors.CANCELED[1] : error.message))
-  }, [])
+  }, [did])
 
 
   const start = async () => {
