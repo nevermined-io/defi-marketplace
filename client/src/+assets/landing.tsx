@@ -14,7 +14,7 @@ import { discordUrl } from 'src/config'
 
 export const Landing: NextPage = () => {
   const b = BEM('landing', styles)
-  const redirectToList = () => {
+  const redirectToDiscord = () => {
     const win = window.open(discordUrl, "_blank");
     win?.focus();
   }
@@ -42,7 +42,7 @@ export const Landing: NextPage = () => {
               propose DeFi, blockchain and Web 3 protocol related data sets.
             </UiText>
             <UiLayout type="container" >
-              <UiButton className={b("buttonFeatures")} onClick={redirectToList}>
+              <UiButton className={b("buttonFeatures")} onClick={redirectToDiscord}>
                 Join our discord
               </UiButton>
             </UiLayout>
