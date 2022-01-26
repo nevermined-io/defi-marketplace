@@ -25,7 +25,7 @@ function App({ Component, pageProps }: AppProps) {
           <UiHeader>
             <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
             <UiHeaderLink href="/history">Profile</UiHeaderLink>
-            <UiHeaderLink href="/styles">About</UiHeaderLink>
+            <UiHeaderLink href="/about">About</UiHeaderLink>
           </UiHeader>
 
           <Component {...pageProps} />
