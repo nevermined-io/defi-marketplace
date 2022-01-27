@@ -42,6 +42,7 @@ export const BUNDLE_MAX_RETRYS = 12
 export const BUNDLE_RETRY_TIMEOUT = 5000
 export const BUNDLE_STATUS_COMPLETED = 'COMPLETED'
 export const discordUrl = 'https://discord.gg/d8B4BkV3'
+export const networkArray = ["bsc", "avalanche", "celo", "polygon", "optimism", "ethereum", "fantom", "arbitrum"]
 
 
 

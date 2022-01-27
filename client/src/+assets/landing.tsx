@@ -7,7 +7,8 @@ import { UiText, UiLayout, UiButton, UiDivider, BEM, UiIcon } from 'ui'
 
 import styles from './landing.module.scss'
 import { UiBanner } from 'ui/banner/banner'
-import { discordUrl } from 'src/config'
+import { discordUrl, networkArray } from 'src/config'
+
 
 export const Landing: NextPage = () => {
   const b = BEM('landing', styles)
@@ -95,60 +96,21 @@ export const Landing: NextPage = () => {
           style={{ margin: '40px 0' }}
           type="p"
           variants={["secondary", "detail"]}
-        >The Nevermined DeFi Marketplace<br/>features datsets from your favorite networks, these include:</UiText>
+        >The Nevermined DeFi Marketplace<br />features datsets from your favorite networks, these include:</UiText>
         <div className={b('network-logos-wrapper')}>
           <div className={b('network-logos')}>
-            <img
-              onClick={() => Router.push('/list?selectedNetworks=Bsc')}
-              src="/assets/logos/bsc.svg"
-              style={{ cursor: 'pointer'}}
-              width="68"
-            />
-            <img
-              onClick={() => Router.push('/list?selectedNetworks=Avalanche')}
-              src="/assets/logos/avalanche.svg"
-              style={{ cursor: 'pointer'}}
-              width="78"
-            />
-            <img
-              onClick={() => Router.push('/list?selectedNetworks=Celo')}
-              src="/assets/logos/celo.svg"
-              style={{ cursor: 'pointer'}}
-              width="74"
-            />
-            <img
-              onClick={() => Router.push('/list?selectedNetworks=Polygon')}
-              src="/assets/logos/polygon.svg"
-              style={{ cursor: 'pointer'}}
-              width="66"
-            />
-            <img
-              onClick={() => Router.push('/list?selectedNetworks=Optimism')}
-              src="/assets/logos/op.svg"
-              style={{ cursor: 'pointer'}}
-              width="78"
-            />
-            <img
-              onClick={() => Router.push('/list?selectedNetworks=Ethereum')}
-              src="/assets/logos/ethereum.svg"
-              style={{ cursor: 'pointer'}}
-              height="71"
-            />
-            <img
-              onClick={() => Router.push('/list?selectedNetworks=Fantom')}
-              src="/assets/logos/fantom.svg"
-              style={{ cursor: 'pointer'}}
-              width="78"
-            />
-            <img
-              onClick={() => Router.push('/list?selectedNetworks=Arbitrum')}
-              src="/assets/logos/arbitrum.svg"
-              style={{ cursor: 'pointer'}}
-              width="65"
-            />
+
+            {networkArray.map((network: string) =>
+              <img
+                onClick={() => Router.push(`/list?selectedNetworks=${network}`)}
+                src={`/assets/logos/${network}.svg`}
+                style={{ cursor: 'pointer' }}
+                width="68"
+              />
+            )}
           </div>
         </div>
-        <UiDivider type="xxl"/>
+        <UiDivider type="xxl" />
         <div className={b('centered-text-wrapper')}>
           <UiText wrapper="h2" type="h2" className={b("centered-text")}>
             your one-stop-shop for defi data
@@ -159,7 +121,7 @@ export const Landing: NextPage = () => {
           style={{ margin: '40px 0' }}
           type="p"
           variants={["secondary", "detail"]}
-        >All the ways you can discover and navigate data<br/>
+        >All the ways you can discover and navigate data<br />
           on the Nevermined DeFi data marketplace</UiText>
 
         <div>
