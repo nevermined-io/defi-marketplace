@@ -1,26 +1,169 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import Router from 'next/router'
 import type { NextPage } from 'next'
 import Image from 'next/image'
-import { DDO } from '@nevermined-io/nevermined-sdk-js'
 
-import { UiText, UiLayout, XuiAssetsQuery, UiButton, UiDivider, BEM, UiIcon } from 'ui'
-import { User } from '../context'
-import { AssetsList } from './assets-list'
+import { UiText, UiLayout, UiButton, UiDivider, BEM, UiIcon } from 'ui'
 
 import styles from './landing.module.scss'
 import { UiBanner } from 'ui/banner/banner'
+import { discordUrl } from 'src/config'
 
 export const Landing: NextPage = () => {
   const b = BEM('landing', styles)
+  const redirectToDiscord = () => {
+    const win = window.open(discordUrl, "_blank");
+    win?.focus();
+  }
   const redirectToList = () => {
     Router.push('/list')
   }
   return (
     <>
-      <UiBanner showButton={true}/>
+      <UiBanner showButton={true} />
+      <div className={b('centered-text-wrapper')}>
+        <UiText wrapper="h2" type="h2" className={b("centered-text")} style={{ width: '726px' }}>
+          Purchase data sets from your
+          favorite networks
+        </UiText>
+      </div>
+      <UiDivider type="xxl" />
 
-      {/* first section */}
+      <UiLayout type="container" >
+        <UiLayout type="sides" >
+          <UiLayout type="container"  >
+            <div  >
+              <UiIcon icon="search" color="primary" size="xl" />
+              <UiText className={b("blurriedNumbers")} type="h1" variants={["highlight"]}>1</UiText>
+
+              <UiDivider type="s" />
+
+              <UiText type="h4" variants={["secondary"]}>
+                Search
+              </UiText>
+
+              <UiDivider type="s" />
+
+              <UiText type="p" variants={["detail"]}>
+                Identify your desired product by using Nevermined’s filter functions to select  the data set you wish to purchase.
+              </UiText>
+            </div>
+          </UiLayout>
+          <UiLayout type="container" >
+            {/* <UiIcon icon="basket" color="primary" size="xl" /> */}
+            <Image width="40" height="40" className={b('landingImage')} src="/assets/basket_icon.svg" />
+            <UiText className={b("blurriedNumbers")} type="h1" variants={["highlight"]}>2</UiText>
+            <UiDivider type="s" />
+            <UiText type="h4" variants={["secondary"]}>
+              Shop
+            </UiText>
+            <UiDivider type="s" />
+            <UiText type="p" variants={["detail"]}>
+              Connect your wallet (Polygon or MetaMask) before adding the selected data sets to your basket.
+            </UiText>
+          </UiLayout>
+          <UiLayout type="container" >
+            <UiIcon icon="download" color="primary" size="xl" />
+            <UiText className={b("blurriedNumbers")} type="h1" variants={["highlight"]}>3</UiText>
+            <UiDivider type="s" />
+            <UiText type="h4" variants={["secondary"]}>
+              Download
+            </UiText>
+            <UiDivider type="s" />
+            <UiText type="p" variants={["detail"]}>
+              Head to the check out page to make payment and simply dowload your CSV files.
+            </UiText>
+          </UiLayout>
+        </UiLayout>
+
+        <UiDivider type="xxl" />
+        <div className={b('centered-text-wrapper')}>
+          <UiText wrapper="h2" type="h2" className={b("centered-text")} style={{ width: '543px' }}>
+            Say Goodbye to Unstructured Data
+          </UiText>
+        </div>
+        <UiText
+          className={b('featureSectionText')}
+          style={{ margin: '40px 0' }}
+          type="p"
+          variants={["secondary", "detail"]}
+        >The Nevermined DeFi Marketplace<br/>features datsets from your favorite networks, these include:</UiText>
+        <div className={b('network-logos-wrapper')}>
+          <div className={b('network-logos')}>
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Bsc')}
+              src="/assets/logos/bsc.svg"
+              style={{ cursor: 'pointer'}}
+              width="68"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Avalanche')}
+              src="/assets/logos/avalanche.svg"
+              style={{ cursor: 'pointer'}}
+              width="78"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Celo')}
+              src="/assets/logos/celo.svg"
+              style={{ cursor: 'pointer'}}
+              width="74"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Polygon')}
+              src="/assets/logos/polygon.svg"
+              style={{ cursor: 'pointer'}}
+              width="66"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Optimism')}
+              src="/assets/logos/op.svg"
+              style={{ cursor: 'pointer'}}
+              width="78"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Ethereum')}
+              src="/assets/logos/ethereum.svg"
+              style={{ cursor: 'pointer'}}
+              height="71"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Fantom')}
+              src="/assets/logos/fantom.svg"
+              style={{ cursor: 'pointer'}}
+              width="78"
+            />
+            <img
+              onClick={() => Router.push('/list?selectedNetworks=Arbitrum')}
+              src="/assets/logos/arbitrum.svg"
+              style={{ cursor: 'pointer'}}
+              width="65"
+            />
+          </div>
+        </div>
+        <UiDivider type="xxl"/>
+        <div className={b('centered-text-wrapper')}>
+          <UiText wrapper="h2" type="h2" className={b("centered-text")}>
+            your one-stop-shop for defi data
+          </UiText>
+        </div>
+        <UiText
+          className={b('featureSectionText')}
+          style={{ margin: '40px 0' }}
+          type="p"
+          variants={["secondary", "detail"]}
+        >All the ways you can discover and navigate data<br/>
+          on the Nevermined DeFi data marketplace</UiText>
+
+        <div className={b("bannerContainer")}>
+          <UiButton className={b("buttonFeatures")} onClick={redirectToList}>
+            install Nevermined cli
+          </UiButton>
+          <UiDivider type="s" />
+          <UiText type="p" variants={["secondary", "detail"]}>
+            (If you don’t want to bother with our interface)
+          </UiText>
+        </div>
+      </UiLayout>
       <UiLayout type="grid"  >
         <div>
           <UiLayout type="grid"  >
@@ -40,7 +183,7 @@ export const Landing: NextPage = () => {
               propose DeFi, blockchain and Web 3 protocol related data sets.
             </UiText>
             <UiLayout type="container" >
-              <UiButton className={b("buttonFeatures")} onClick={redirectToList}>
+              <UiButton className={b("buttonFeatures")} onClick={redirectToDiscord}>
                 Join our discord
               </UiButton>
             </UiLayout>
@@ -102,7 +245,7 @@ export const Landing: NextPage = () => {
               <UiDivider />
               <UiText className={b('featureSectionText')} type="p" variants={["secondary", "detail"]}>Whether you’re  publishing DeFi data or purchasing it, our marketplace enables individuals and organizations to leverage value from tokenized data assets.</UiText>
             </UiLayout>
-            <UiLayout type="grid" align="center" direction="column"> 
+            <UiLayout type="grid" align="center" direction="column">
               <Image width="124" height="126" className={b('landingImage')} src="/assets/analysis.svg" />
               <UiText className={b('bannerText')} variants={["secondary"]} wrapper="h3" type="h3">Analysis Ready Data</UiText>
               <UiDivider />
@@ -114,13 +257,13 @@ export const Landing: NextPage = () => {
           <UiDivider type="xxl" />
 
           <UiLayout type="sides" >
-            <UiLayout type="grid" align="center" direction="column"> 
+            <UiLayout type="grid" align="center" direction="column">
               <Image width="124" height="126" className={b('landingImage')} src="/assets/filtering.svg" />
               <UiText className={b('bannerText')} variants={["secondary"]} wrapper="h3" type="h3">Precision Filtering & Search</UiText>
               <UiDivider />
               <UiText className={b('featureSectionText')} type="p" variants={["secondary", "detail"]}>Our practical search engine and filtering capabilities allow you to intuitively find the data sets you’re looking  and save them to your basket until you’re ready to check out.</UiText>
             </UiLayout>
-            <UiLayout type="grid" align="center" direction="column"> 
+            <UiLayout type="grid" align="center" direction="column">
               <Image width="124" height="126" className={b('landingImage')} src="/assets/compatibility.svg" />
               <UiText className={b('bannerText')} variants={["secondary"]} wrapper="h3" type="h3">Crypto Wallet Compatibility</UiText>
               <UiDivider />
@@ -135,80 +278,6 @@ export const Landing: NextPage = () => {
         </UiButton>
       </div>
       <UiDivider type="s" />
-
-
-      {/* 3rd section */}
-      <UiLayout type="container" >
-        <div className={b("bannerContainer")}>
-          <UiLayout className={b("bannerContainer")} type="container"   >
-            {/* <UiLayout className="bannerContainer" type="container" justify="center" > */}
-            <UiText wrapper="h2" type="h2">
-              HOW IT WORKS
-            </UiText>
-            <UiDivider type="l" />
-            <UiText wrapper="h3" variants={["detail"]}>
-              Purchasing DeFi data through Nevermined’s open marketplace is as easy as 1,2,3...
-            </UiText>
-          </UiLayout>
-          <UiDivider type="xl" />
-        </div>
-        <UiLayout type="sides" >
-          <UiLayout type="container"  >
-            <div  >
-              <UiIcon icon="search" color="primary" size="xl" />
-              <UiText className={b("blurriedNumbers")} type="h1" variants={["highlight"]}>1</UiText>
-
-              <UiDivider type="s" />
-
-              <UiText type="h4" variants={["secondary"]}>
-                Search
-              </UiText>
-
-              <UiDivider type="s" />
-
-              <UiText type="p" variants={["detail"]}>
-                Identify your desired product by using Nevermined’s filter functions to select  the data set you wish to purchase.
-              </UiText>
-            </div>
-          </UiLayout>
-          <UiLayout type="container" >
-            {/* <UiIcon icon="basket" color="primary" size="xl" /> */}
-            <Image width="40" height="40" className={b('landingImage')} src="/assets/basket_icon.svg" />
-            <UiText className={b("blurriedNumbers")} type="h1" variants={["highlight"]}>2</UiText>
-            <UiDivider type="s" />
-            <UiText type="h4" variants={["secondary"]}>
-              Shop
-            </UiText>
-            <UiDivider type="s" />
-            <UiText type="p" variants={["detail"]}>
-              Connect your wallet (Polygon or MetaMask) before adding the selected data sets to your basket.
-            </UiText>
-          </UiLayout>
-          <UiLayout type="container" >
-            <UiIcon icon="download" color="primary" size="xl" />
-            <UiText className={b("blurriedNumbers")} type="h1" variants={["highlight"]}>3</UiText>
-            <UiDivider type="s" />
-            <UiText type="h4" variants={["secondary"]}>
-              Download
-            </UiText>
-            <UiDivider type="s" />
-            <UiText type="p" variants={["detail"]}>
-              Head to the check out page to make payment and simply dowload your CSV files.
-            </UiText>
-          </UiLayout>
-
-        </UiLayout>
-        <div className={b("bannerContainer")}>
-          <UiButton className={b("buttonFeatures")} onClick={redirectToList}>
-            install Nevermined cli
-          </UiButton>
-          <UiDivider type="s" />
-          <UiText type="p" variants={["secondary", "detail"]}>
-            (If you don’t want to bother with our interface)
-          </UiText>
-        </div>
-      </UiLayout>
-
 
       {/* 4th section */}
       <UiLayout type="container" align="center" >

@@ -26,6 +26,29 @@ $default_margin: 22px 44px;
     text-align: center;
   }
 
+  &__centered-text-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__centered-text {
+    text-align: center;
+  }
+
+  &__network-logos-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+  &__network-logos {
+    align-items: center;
+    display: grid;
+    grid-template-columns: 88px 88px 88px 88px;
+    grid-template-rows: 88px 88px;
+    column-gap: 40px;
+    row-gap: 40px;
+    justify-items: center;
+  }
+
   &__blurriedNumbers {
     width: 117px;
     height: 237px;

@@ -1,8 +1,7 @@
-
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import Image from "next/image"
 
-import { BEM, UiDropdown, UiIcon, UiLayout, UiDivider, UiText } from 'ui'
+import { BEM, UiDropdown, UiIcon, UiLayout, UiDivider, UiText, UiButton } from 'ui'
 import { User } from '../../context'
 import styles from './assets-query.module.scss'
 import { XuiCategoryDropdown } from 'ui/+assets-query/category-dropdown/category-dropdown'
@@ -11,18 +10,17 @@ import { XuiFilterDropdown } from 'ui/+assets-query/filter-dropdown/filter-dropd
 interface SearchBarProps {
   search?: 'onsite' | 'search-page'
   onSearch?: (value?: any) => void
-  buttonSide?: 'left' | 'right'
   showButton?: boolean
 }
 
 const b = BEM('assets-query', styles)
 
-export function XuiSearchBar({ onSearch, buttonSide = 'right', showButton = true }: SearchBarProps) {
-  const { searchInputText, fromDate, toDate, selectedCategories, setSelectedCategories, setToDate, setFromDate, setSearchInputText } = useContext(User)
+export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
+  const { fromDate, toDate, selectedCategories, setSelectedCategories, setToDate, setFromDate, setSearchInputText } = useContext(User)
 
   const [textValue, setTextValue] = useState('')
 
-  //write the text in the serchbar 
+  //write the text in the serchbar
   const inputChanges = useCallback((event: any) => {
     setTextValue(event.target.value)
   }, [])
@@ -65,11 +63,9 @@ export function XuiSearchBar({ onSearch, buttonSide = 'right', showButton = true
         }
       </UiLayout>
       <UiLayout>
-        {(buttonSide === 'left' && showButton) &&
-          <div className={b('form-button')} onClick={submitSearch}>
-            <UiIcon icon="search" />
-          </div>
-        }
+        <div className={b('search-icon')}>
+          <img src="/assets/search-grey.svg" width="21"/>
+        </div>
         <input
           className={b('input')}
           value={textValue}
@@ -93,7 +89,7 @@ export function XuiSearchBar({ onSearch, buttonSide = 'right', showButton = true
           selected={fromDate || toDate ? true : false}
           imgHeight="10px"
           imgSrc="/assets/filter.svg"
-          title="More filters"
+          title="Filters"
           imgWidth="10px"
         >
           <XuiFilterDropdown
@@ -103,11 +99,12 @@ export function XuiSearchBar({ onSearch, buttonSide = 'right', showButton = true
             // toDate={toDate}
           />
         </UiDropdown>
-        {(buttonSide === 'right' && showButton) &&
           <div className={b('form-button')} onClick={submitSearch}>
-            <UiIcon icon="search" />
+            <UiButton
+              cover
+              style={{ fontSize: '18px', fontWeight: 'normal', height: '64px', textTransform: 'none' }}
+            >Search</UiButton>
           </div>
-        }
       </UiLayout>
     </>
 

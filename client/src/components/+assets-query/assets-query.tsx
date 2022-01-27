@@ -6,7 +6,7 @@ import { BEM } from 'ui'
 import { User } from '../../context'
 import styles from './assets-query.module.scss'
 import { Loader } from 'ui/Loader/loader'
-import { subcategoryPrefix } from '../../shared/constants'
+import { networkPrefix, subcategoryPrefix } from '../../shared'
 import { XuiPagination } from './pagination'
 import { XuiSearchBar } from './search-bar'
 
@@ -18,10 +18,10 @@ interface AssetsQueryProps {
 }
 
 const b = BEM('assets-query', styles)
-// loads all the asset then filters them looking at the variables defined in the user context 
+// loads all the asset then filters them looking at the variables defined in the user context
 export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryProps) {
   const categoryFilter = 'defi-datasets' // Must be defined on config
-  const { assets, sdk, searchInputText, fromDate, toDate, selectedCategories, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText } = useContext(User)
+  const { assets, sdk, searchInputText, fromDate, toDate, selectedCategories, selectedNetworks, setSelectedNetworks, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText } = useContext(User)
 
   const [totalPages, setTotalPages] = useState<number>(1)
   const [page, setPage] = useState<number>(1)
@@ -29,9 +29,11 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
   const [loading, setLoading] = useState<boolean>(false)
 
   const selectedCategoriesEvent = selectedCategories.map(cat => `${subcategoryPrefix}:${cat}`)
+  const selectedNetworkEvent = selectedNetworks.map(cat => `${networkPrefix}:${cat}`)
 
   const textFilter = { "query_string": { "query": `*${searchInputText}*`, "fields": ["service.attributes.main.name"] } }
   const datasetCategory = { "match": { "service.attributes.additionalInformation.categories": selectedCategoriesEvent.length === 0 ? "defi-datasets" : selectedCategoriesEvent.join(', ') } }
+  const datasetNetwork = { "match": { "service.attributes.additionalInformation.blockchain": selectedNetworkEvent.length === 0 ? "" : selectedNetworks.join(', ') } }
   const dateFilter = fromDate !== '' && toDate !== '' && {
     "range": {
       "service.attributes.main.dateCreated": {
@@ -42,6 +44,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
     }
   }
   const mustArray = [textFilter, datasetCategory]
+  selectedNetworkEvent.length !== 0 && mustArray.push(datasetNetwork)
   dateFilter && mustArray.push(dateFilter)
 
 
@@ -60,6 +63,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
       switch (key) {
         case 'searchInputText': queryParams.get("searchInputText") ? setSearchInputText(value) : setSearchInputText(searchInputText); break
         case 'selectedCategories':  queryParams.get("selectedCategories") ? setSelectedCategories(value.split(",")) : setSelectedCategories(selectedCategories); break
+        case 'selectedNetworks': queryParams.get("selectedNetworks") ? setSelectedNetworks(value.split(",")) : setSelectedNetworks(selectedNetworks); break
         case 'toDate':  queryParams.get("toDate") ? setToDate(value): setToDate(toDate); break
         case 'fromDate':  queryParams.get("fromDate") ? setFromDate(value): setFromDate(fromDate); break
         default: break
@@ -85,7 +89,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
         setLoading(false)
         setAssets(results)
         setTotalPages(totalPages)
-        history.replaceState(null, '', `/list?searchInputText=${searchInputText}&fromDate=${fromDate}&toDate=${toDate}&selectedCategories=${selectedCategories}`);
+        history.replaceState(null, '', `/list?searchInputText=${searchInputText}&fromDate=${fromDate}&toDate=${toDate}&selectedCategories=${selectedCategories}&selectedNetworks=${selectedNetworks}`);
       })
   }, [sdk, page, JSON.stringify(query)])
 
@@ -95,8 +99,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
       {loading && <Loader />}
       {search && (
         <div>
-
-          <XuiSearchBar  showButton={true} buttonSide={'right'}/>
+          <XuiSearchBar  showButton={true} />
         </div>
       )}
 
