@@ -16,7 +16,7 @@ interface SearchBarProps {
 const b = BEM('assets-query', styles)
 
 export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
-  const { fromDate, toDate, selectedCategories, setSelectedCategories, setToDate, setFromDate, setSearchInputText } = useContext(User)
+  const { fromDate, toDate, selectedCategories, selectedNetworks, setSelectedCategories, setToDate, setFromDate, setSearchInputText, setSelectedNetworks } = useContext(User)
 
   const [textValue, setTextValue] = useState('')
 
@@ -39,6 +39,7 @@ export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
 
   const resetCategories = () => {
     setSelectedCategories([])
+    setSelectedNetworks([])
     setToDate('')
     setFromDate('')
     setTextValue('')
@@ -51,7 +52,7 @@ export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
       <UiDivider />
       <UiLayout type='sides' justify='end'>
         {
-          (selectedCategories.length || fromDate || toDate) &&
+          (selectedCategories.length || selectedNetworks.length  || fromDate || toDate) &&
           <div onClick={resetCategories} className={b('clear-div')} >
             <span className={b('clear-div', ['clear-button'])} >
               Clear
