@@ -3,6 +3,8 @@ import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import styles from './details.module.scss'
+import { AdditionalInformation } from "@nevermined-io/nevermined-sdk-js"
+
 
 import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiTokenName, XuiTokenPrice, XuiBuyAsset, UiButton } from 'ui'
 import { User } from '../context'
@@ -10,10 +12,15 @@ import { toDate } from '../shared'
 
 const b = BEM('details', styles)
 
+interface AdditionalInformationExtended extends AdditionalInformation {
+  sampleUrl: string;
+}
+
 export const AssetDetails: NextPage = () => {
   const {query: {did}} = useRouter()
   const [asset, setAsset] = useState<DDO | false>()
   const {sdk, account} = useContext(User)
+  const { basket, addToBasket } = useContext(User)
 
   useEffect(() => {
     if (!sdk.assets) {
@@ -33,6 +40,17 @@ export const AssetDetails: NextPage = () => {
   }
 
   const metadata = asset.findServiceByType('metadata').attributes
+
+  const openSample = () => {
+    const addtionalInfoExtended = metadata.additionalInformation as AdditionalInformationExtended
+    const url = addtionalInfoExtended.sampleUrl || ""
+    const win = window.open(url, "_blank");
+    win?.focus();
+  }
+
+  const addtoCart = () => {
+    addToBasket([asset.id])
+  }
 
   const secondWord = "Type"
   const formatCategories = (firstWord: string, word:string) => {
@@ -67,6 +85,7 @@ export const AssetDetails: NextPage = () => {
                   </div>
               })
             }
+            <UiButton cover style={{ padding: '0', width: '160px' }} onClick={openSample}>Download Sample Data</UiButton>
             <UiDivider type="s"/>
             {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
           </div>
@@ -97,9 +116,7 @@ export const AssetDetails: NextPage = () => {
 
             <UiDivider/>
 
-            <XuiBuyAsset search asset={asset}>
-              <UiButton cover>Download</UiButton>
-            </XuiBuyAsset>
+            <UiButton cover onClick={addtoCart}>Add to cart</UiButton>
           </div>
         </UiLayout>
 
