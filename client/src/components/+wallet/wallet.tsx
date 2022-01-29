@@ -39,8 +39,8 @@ export function XuiWallet(props: WalletProps) {
         <div className={b('block', ['cart'])}>
           <Link href={'/checkout'} >
             <span style={{ cursor: 'pointer', display:'flex' }}>
-              <Image width="39" height="24" src="/assets/basket_icon.svg" />
-             <span>{basket.length}</span>
+              <Image width="17" height="16" src="/assets/basket_icon.svg" />
+             <span style={{ marginLeft: '14px' }} >{basket.length}</span>
             </span>
           </Link>
         </div>
@@ -49,7 +49,7 @@ export function XuiWallet(props: WalletProps) {
           <span className={b('logged')} />
           {`${account.substr(0, 6)}...${account.substr(-4)}`}
         </div>
-        
+
         <div className={b('block', ['network'])}>
           {network}
         </div>
