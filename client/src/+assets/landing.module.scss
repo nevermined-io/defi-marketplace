@@ -6,8 +6,35 @@ $default_margin: 22px 44px;
 
 .landing {
   &__bannerContainer {
-    padding: 100px 40px 0 0;
+    padding-top: 80px;
     text-align: center;
+  }
+  &__eclipse-wrapper {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+  }
+  &__graphs-wrapper {
+    width: 430px;
+  }
+  &__key-insights {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__key-insights-text {
+    width: 620px;
+  }
+  &__get-involved-text {
+    width: 620px;
+  }
+  &__categories-list {
+    @include get-font(text);
+    font-size: 18px;
+    color: gc(gL);
+    margin-left: 70px;
+    line-height: 32px;
+    cursor: pointer;
   }
 
   &__bannerText {

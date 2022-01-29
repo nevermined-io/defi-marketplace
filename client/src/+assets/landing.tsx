@@ -18,16 +18,20 @@ export const Landing: NextPage = () => {
   const redirectToList = () => {
     Router.push('/list')
   }
+  const redirectToAbout = () => {
+    Router.push('/about')
+  }
   return (
     <>
       <UiBanner showButton={true} />
+      <UiDivider type="l"/>
       <div className={b('centered-text-wrapper')}>
         <UiText wrapper="h2" type="h2" className={b("centered-text")} style={{ width: '726px' }}>
-          Purchase data sets from your
-          favorite networks
+          Purchase data sets from your favorite networks
         </UiText>
       </div>
       <UiDivider type="xxl" />
+      <UiDivider type="m" />
 
       <UiLayout type="container" >
         <UiLayout type="sides" >
@@ -75,7 +79,11 @@ export const Landing: NextPage = () => {
             </UiText>
           </UiLayout>
         </UiLayout>
-
+        <div className={b("bannerContainer")}>
+        <UiButton className={b("buttonFeatures")} onClick={redirectToList}>
+          View Available Data Sets
+        </UiButton>
+        </div>
         <UiDivider type="xxl" />
         <div className={b('centered-text-wrapper')}>
           <UiText wrapper="h2" type="h2" className={b("centered-text")} style={{ width: '543px' }}>
@@ -154,89 +162,6 @@ export const Landing: NextPage = () => {
         >All the ways you can discover and navigate data<br/>
           on the Nevermined DeFi data marketplace</UiText>
 
-        <div className={b("bannerContainer")}>
-          <UiButton className={b("buttonFeatures")} onClick={redirectToList}>
-            install Nevermined cli
-          </UiButton>
-          <UiDivider type="s" />
-          <UiText type="p" variants={["secondary", "detail"]}>
-            (If you don’t want to bother with our interface)
-          </UiText>
-        </div>
-      </UiLayout>
-      <UiLayout type="grid"  >
-        <div>
-          <UiLayout type="grid"  >
-            <Image width="430" height="325" className={b('landingImage')} src="/assets/planetEclipse.svg" />
-          </UiLayout>
-        </div>
-        <div>
-          <UiLayout type="container" >
-            <UiText wrapper="h2" type="h2" className={b("defaultMargin")}>
-              A Collaborative data Marketplace
-            </UiText>
-            <UiText className={b('defaultMargin')} type="p" variants={["detail"]}>
-              The Nevermined DeFi data marketplace bridges the gap between
-              Decentralized Finance (DeFi) and data analytics.
-              We aim to foster a collaborative ecosystem that
-              helps data analysts to search for, purchase and
-              propose DeFi, blockchain and Web 3 protocol related data sets.
-            </UiText>
-            <UiLayout type="container" >
-              <UiButton className={b("buttonFeatures")} onClick={redirectToDiscord}>
-                Join our discord
-              </UiButton>
-            </UiLayout>
-          </UiLayout>
-        </div>
-      </UiLayout>
-
-      <UiLayout type="grid" >
-        <div>
-          <UiLayout type="container" >
-            <UiText wrapper="h2" type="h2" className={b("defaultMargin")}>
-              Access key insights <br /> in
-              <UiText clear={['text-transform']} > DeFi  </UiText>
-              & web 3
-            </UiText>
-            <UiText className={b("defaultMargin")} type="p" variants={["detail"]}>
-              Gain the advantage in your Defi analysis and investment models by
-              obtaining data sets aggregated daily from leading protocols such as
-              Ethereum and IPFS.* From DeFi lending and historical DEX events,
-              we make normalized datasets avalaible for download, so that you don’t have
-              to run conversions when performing data analysis.
-            </UiText>
-            <UiLayout type="container" >
-              <UiButton className={b("buttonFeatures")} onClick={redirectToList}>
-                search data sets
-              </UiButton>
-
-            </UiLayout>
-          </UiLayout>
-        </div>
-        <div>
-          <UiLayout type="grid" >
-            <Image width="430" height="325" className={b('landingImage')} src="/assets/graphs.svg" />
-          </UiLayout>
-        </div>
-      </UiLayout>
-
-      {/* 2nd section  */}
-      <UiLayout type="container" align="center" >
-        <div className={b("bannerContainer")}>
-          <UiLayout className={b("bannerContainer")} type="container"   >
-            {/* <UiLayout className="bannerContainer" type="container" justify="center" > */}
-            <UiText wrapper="h2" type="h2">
-              FEATURES
-            </UiText>
-            <UiDivider />
-            <UiText type="p" variants={["detail"]}>
-              All the ways you can discover and navigate data on the Nevermined marketplace
-            </UiText>
-          </UiLayout>
-        </div>
-        <UiDivider type="xxl" />
-
         <div>
           <UiLayout type="sides"  >
             <UiLayout type="grid" align="center" direction="column">
@@ -271,15 +196,84 @@ export const Landing: NextPage = () => {
             </UiLayout>
           </UiLayout>
         </div>
+        <UiDivider type="xxl" />
+        <div className={b('centered-text-wrapper')}>
+          <UiText wrapper="h2" type="h2" className={b("centered-text")}>
+            search using your command line
+          </UiText>
+        </div>
+        <div style={{ paddingTop: '22px' }} className={b("bannerContainer")}>
+          <UiText type="p" variants={["secondary", "detail"]}>
+            I don’t need your shiny interface and search filters
+          </UiText>
+          <UiButton className={b("buttonFeatures")} onClick={redirectToList} style={{ marginTop: '22px' }}>
+            install Nevermined cli
+          </UiButton>
+        </div>
       </UiLayout>
-      <div className={b("bannerContainer")}>
-        <UiButton onClick={redirectToList}>
-          GO TO MARKETPLACE
-        </UiButton>
-      </div>
-      <UiDivider type="s" />
+      <UiDivider type="xxl" />
 
-      {/* 4th section */}
+      <div className={b('key-insights')}>
+        <div className={b('key-insights-text')}>
+          <UiLayout type="container" style={{ padding: '0' }}>
+            <UiText wrapper="h2" type="h2" className={b("defaultMargin")}>
+              Access key insights<br/>in defi & web 3
+            </UiText>
+            <UiText style={{ marginBottom: '0' }} className={b('defaultMargin')} type="p" variants={["detail"]}>
+              Gain the advantage in your Defi analysis and investment models by obtaining data sets aggregated daily from leading protocols such as Ethereum and IPFS.* From DeFi lending and historical DEX events, we make normalized datasets avalaible for download, so that you don’t have to run conversions when performing data analysis.
+              <br/><br/>
+              The Nevermined DeFi Marketplace supports the following categories:
+            </UiText>
+            <div style={{ display: 'flex', margin: '5px 0 20px' }}>
+              <ul className={b('categories-list')} style={{ listStyleType: 'square' }}>
+                <li onClick={() => Router.push('/list?selectedCategories=Borrows')}>Borrows</li>
+                <li onClick={() => Router.push('/list?selectedCategories=Deposits')}>Deposits</li>
+                <li onClick={() => Router.push('/list?selectedCategories=Flashloans')}>Flashloans</li>
+                <li onClick={() => Router.push('/list?selectedCategories=Liquidations')}>Liquidations</li>
+              </ul>
+                <ul className={b('categories-list')} style={{ listStyleType: 'square' }}>
+                <li onClick={() => Router.push('/list?selectedCategories=Redeems')}>Redeems</li>
+                <li onClick={() => Router.push('/list?selectedCategories=Repays')}>Repays</li>
+                <li onClick={() => Router.push('/list?selectedCategories=Liquidity')}>Liquidity</li>
+                <li onClick={() => Router.push('/list?selectedCategories=Trades')}>Trades</li>
+              </ul>
+            </div>
+            <UiLayout type="container" >
+              <UiButton className={b("buttonFeatures")} onClick={redirectToAbout}>
+                About Us
+              </UiButton>
+            </UiLayout>
+          </UiLayout>
+        </div>
+        <div className={b('graphs-wrapper')}>
+          <Image width="430" height="325" className={b('landingImage')} src="/assets/graphs.svg" />
+        </div>
+      </div>
+      <UiDivider type="xxl" />
+      <div className={b('key-insights')}>
+        <div className={b('eclipse-wrapper')}>
+          <Image width="430" height="325" className={b('landingImage')} src="/assets/planetEclipse.svg" />
+        </div>
+        <div className={b('get-involved-text')}>
+          <UiLayout type="container" style={{ padding: '0' }}>
+            <UiText wrapper="h2" type="h2" className={b("defaultMargin")}>
+              get involved with<br/>
+              our open source community
+            </UiText>
+            <UiText className={b('defaultMargin')} type="p" variants={["detail"]}>
+              The Nevermined DeFi data marketplace aims to bridge the gap between Decentralized Finance (DeFi) and data analytics.
+              <br/><br/>
+              Our vision is to foster a collaborative ecosystem that helps data analysts to search for, purchase and propose DeFi, blockchain and Web 3 protocol related data sets.
+            </UiText>
+            <UiLayout type="container" >
+              <UiButton className={b("buttonFeatures")} onClick={redirectToDiscord}>
+                Join our discord
+              </UiButton>
+            </UiLayout>
+          </UiLayout>
+        </div>
+      </div>
+
       <UiLayout type="container" align="center" >
         <div className={b("bannerContainer")}>
           <UiLayout className={b("bannerContainer")} type="container"   >
@@ -287,12 +281,14 @@ export const Landing: NextPage = () => {
             <UiText wrapper="h2" type="h2">
               Partners
             </UiText>
-            <UiDivider type="l" />
-            <UiLayout type="grid" >
-              <Image width="125" height="55" className={b('landingImage')} src="/assets/keyko_logo.svg" />
-              <Image width="125" height="55" className={b('landingImage')} src="/assets/filecoin_logo.svg" />
-
-            </UiLayout>
+            <UiDivider type="xl" />
+            <div style={{ display: 'flex', justifyContent: 'center' }} >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '705px' }} >
+                <div><Image width="181" height="49" className={b('landingImage')} src="/assets/filecoin_logo.svg" /></div>
+                <div><Image width="133" height="67" className={b('landingImage')} src="/assets/keyko_logo.svg" /></div>
+                <div><img width="226" height="91" className={b('landingImage')} src="/assets/logos/nevermined_text.png" /></div>
+              </div>
+            </div>
           </UiLayout>
         </div>
       </UiLayout>
