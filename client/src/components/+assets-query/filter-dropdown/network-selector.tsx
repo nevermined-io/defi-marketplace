@@ -12,7 +12,7 @@ export function XuiNetworkSelector() {
         <h5 className={b('title')}>Network</h5>
         <div className={b("network-selector-container")}>
             {networkArray.map((network: string) =>
-               <XuiNetworkBox network={network} />
+               <XuiNetworkBox key={network} network={network} />
             )}
         </div>
 
