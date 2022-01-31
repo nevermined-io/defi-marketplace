@@ -21,7 +21,7 @@ const b = BEM('assets-query', styles)
 // loads all the asset then filters them looking at the variables defined in the user context
 export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryProps) {
   const categoryFilter = 'defi-datasets' // Must be defined on config
-  const { assets, sdk, searchInputText, fromDate, toDate, selectedCategories, selectedNetworks, setSelectedNetworks, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText } = useContext(User)
+  const { assets, sdk, searchInputText, fromDate, toDate, selectedCategories, selectedNetworks, selectedPrice, setSelectedPriceRange, setSelectedNetworks, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText } = useContext(User)
 
   const [totalPages, setTotalPages] = useState<number>(1)
   const [page, setPage] = useState<number>(1)
@@ -43,9 +43,20 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
       }
     }
   }
+
+  const priceRange =  selectedPrice > 0 && {
+    "range": {
+      "service.attributes.main.price": {
+        "gte": "0",
+        "lte": selectedPrice
+      }
+    }
+  }
+
   const mustArray = [textFilter, datasetCategory]
-  selectedNetworkEvent.length !== 0 && mustArray.push(datasetNetwork)
+  selectedNetworkEvent.length > 0 && mustArray.push(datasetNetwork)
   dateFilter && mustArray.push(dateFilter)
+  priceRange && mustArray.push(priceRange)
 
 
   const query = {
@@ -57,15 +68,16 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
 
 
   //this happen when the page is loaded to get the query string
-  useEffect(()=> {
+  useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     for (var [key, value] of queryParams.entries()) {
       switch (key) {
         case 'searchInputText': queryParams.get("searchInputText") ? setSearchInputText(value) : setSearchInputText(searchInputText); break
-        case 'selectedCategories':  queryParams.get("selectedCategories") ? setSelectedCategories(value.split(",")) : setSelectedCategories(selectedCategories); break
+        case 'selectedCategories': queryParams.get("selectedCategories") ? setSelectedCategories(value.split(",")) : setSelectedCategories(selectedCategories); break
         case 'selectedNetworks': queryParams.get("selectedNetworks") ? setSelectedNetworks(value.split(",")) : setSelectedNetworks(selectedNetworks); break
-        case 'toDate':  queryParams.get("toDate") ? setToDate(value): setToDate(toDate); break
-        case 'fromDate':  queryParams.get("fromDate") ? setFromDate(value): setFromDate(fromDate); break
+        case 'toDate': queryParams.get("toDate") ? setToDate(value) : setToDate(toDate); break
+        case 'fromDate': queryParams.get("fromDate") ? setFromDate(value) : setFromDate(fromDate); break
+        case 'priceRange': queryParams.get("priceRange") ? setSelectedPriceRange(parseFloat(value)) : setSelectedPriceRange(selectedPrice); break
         default: break
       }
     }
@@ -89,7 +101,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
         setLoading(false)
         setAssets(results)
         setTotalPages(totalPages)
-        history.replaceState(null, '', `/list?searchInputText=${searchInputText}&fromDate=${fromDate}&toDate=${toDate}&selectedCategories=${selectedCategories}&selectedNetworks=${selectedNetworks}`);
+        history.replaceState(null, '', `/list?searchInputText=${searchInputText}&fromDate=${fromDate}&toDate=${toDate}&selectedCategories=${selectedCategories}&selectedNetworks=${selectedNetworks}&priceRange=${selectedPrice}`);
       })
   }, [sdk, page, JSON.stringify(query)])
 
@@ -99,7 +111,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
       {loading && <Loader />}
       {search && (
         <div>
-          <XuiSearchBar  showButton={true} />
+          <XuiSearchBar showButton={true} />
         </div>
       )}
 

@@ -66,6 +66,7 @@ interface UserProviderState {
     toDate: string,
     selectedCategories: string[]
     selectedNetworks: string[]
+    selectedPrice: number
 }
 
 export default class UserProvider extends PureComponent<{}, UserProviderState> {
@@ -173,6 +174,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         setSelectedCategories: (selectedCategories: string[]) => this.setSelectedCategories(selectedCategories),
         selectedNetworks: [] as string[],
         setSelectedNetworks: (selectedNetworks: string[]) => this.setSelectedNetworks(selectedNetworks),
+        setSelectedPriceRange: (selectedPrice: number) => this.setSelectedPriceRange(selectedPrice)
     }
 
     private accountsInterval: any = null
@@ -356,6 +358,9 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
 
     public setSelectedNetworks(selectedNetworks: string[]) {
         this.setState({ selectedNetworks })
+    }
+    public setSelectedPriceRange(selectedPrice: number) {
+        this.setState({ selectedPrice })
     }
 
     public render() {

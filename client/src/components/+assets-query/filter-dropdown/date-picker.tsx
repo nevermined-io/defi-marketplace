@@ -12,7 +12,7 @@ export function XuiDatePicker() {
     const { fromDate, toDate, setToDate, setFromDate } = useContext(User)
 
 
-    return <div>
+    return <div className={b('filter-container')}>
         <h5 className={b('title')}>Publication Date</h5>
         {/* <span className={b('divider')}></span> */}
         <div className={b('date-pickers')}>

@@ -1,28 +1,25 @@
 import React from 'react'
 
-import { BEM, UiDivider } from 'ui'
+import { BEM } from 'ui'
+import { UiLayout } from 'ui/layout/layout'
 import { XuiDatePicker } from './date-picker'
 
 import styles from './filter-dropdown.module.scss'
 import { XuiNetworkSelector } from './network-selector'
+import { XuiPriceRangeSelector } from './price-range-selector'
 
 interface FilterDropdownProps {
-  setFromDate: Function
-  setToDate: Function
-  fromDate: any
-  toDate: any
+  setPriceRange: Function
 }
 
 const b = BEM('filter-dropdown', styles)
 
-export function XuiFilterDropdown() {
-  // const { setFromDate, setToDate, fromDate, toDate } = props
+export function XuiFilterDropdown(props: FilterDropdownProps) {
 
-  return <div className={b('wrapper')}>
+  return <UiLayout type="grid" className={b('wrapper')}>
     <XuiDatePicker />
     <XuiNetworkSelector />
-    
+    <XuiPriceRangeSelector setPriceRange={props.setPriceRange}/>
 
-    {/* TODO: implement other filters */}
-  </div>
+  </UiLayout>
 }
