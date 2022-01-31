@@ -1,22 +1,21 @@
-import React, { useContext } from 'react'
-import { User } from 'src/context'
+import React, { useContext, useEffect, useState } from 'react'
 
 import { BEM } from 'ui'
-import { UiDivider } from 'ui/divider/divider'
-
+import { networkArray } from 'src/config'
 import styles from './filter-dropdown.module.scss'
+import { XuiNetworkBox } from './network-box'
 
 const b = BEM('filter-dropdown', styles)
-const networkArray = ["ETHereum","avalanche","polygon","binance","arbitrum","Fantom"]
 export function XuiNetworkSelector() {
-    const { fromDate, toDate, setToDate, setFromDate } = useContext(User)
 
-
-    return <div>
+    return <div className={b('filter-container')}>
         <h5 className={b('title')}>Network</h5>
-        {/* <span className={b('divider')}></span> */}
-        <div className={b('network-selector')}>
-           
+        <div className={b("network-selector-container")}>
+            {networkArray.map((network: string) =>
+               <XuiNetworkBox network={network} />
+            )}
         </div>
+
+
     </div>
 }
