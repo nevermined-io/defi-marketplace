@@ -9,16 +9,17 @@ import { XuiFilterDropdown } from 'ui/+assets-query/filter-dropdown/filter-dropd
 
 interface SearchBarProps {
   search?: 'onsite' | 'search-page'
-  onSearch?: (value?: any) => void
+  onSearch?: (searchString?: any, priceRange?:any) => void
   showButton?: boolean
 }
 
 const b = BEM('assets-query', styles)
 
 export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
-  const { fromDate, toDate, selectedCategories, selectedNetworks, setSelectedCategories, setToDate, setFromDate, setSearchInputText, setSelectedNetworks } = useContext(User)
+  const { fromDate, toDate, selectedCategories, selectedNetworks, selectedPrice, setSelectedCategories, setToDate, setFromDate, setSearchInputText, setSelectedNetworks, setSelectedPriceRange } = useContext(User)
 
   const [textValue, setTextValue] = useState('')
+  const [priceValue, setPriceValue] = useState<number>(0)
 
   //write the text in the serchbar
   const inputChanges = useCallback((event: any) => {
@@ -28,13 +29,16 @@ export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
 
   const inputOnEnter = useCallback((event: any) => {
     if (event.key === 'Enter') {
-      onSearch ? onSearch(event.target.value) : setSearchInputText(textValue)
+      onSearch ? onSearch(event.target.value, priceValue) : setSearchInputText(textValue)
     }
   }, [textValue])
 
   const submitSearch = () => {
-    if (onSearch) return onSearch(textValue)
-    else setSearchInputText(textValue)
+    if (onSearch) return onSearch(textValue, priceValue)
+    else {
+      setSearchInputText(textValue)
+      setSelectedPriceRange(priceValue)
+    }
   }
 
   const resetCategories = () => {
@@ -44,6 +48,11 @@ export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
     setFromDate('')
     setTextValue('')
     setSearchInputText('')
+    setSelectedPriceRange(0)
+  }
+
+  const setPriceRange = (price: number) => {
+    setPriceValue(price)
   }
 
 
@@ -52,7 +61,7 @@ export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
       <UiDivider />
       <UiLayout type='sides' justify='end'>
         {
-          (selectedCategories.length || selectedNetworks.length  || fromDate || toDate) &&
+          (selectedCategories.length || selectedNetworks.length > 0 || fromDate || toDate || selectedPrice > 0) &&
           <div onClick={resetCategories} className={b('clear-div')} >
             <span className={b('clear-div', ['clear-button'])} >
               Clear
@@ -65,7 +74,7 @@ export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
       </UiLayout>
       <UiLayout>
         <div className={b('search-icon')}>
-          <img src="/assets/search-grey.svg" width="21"/>
+          <img src="/assets/search-grey.svg" width="21" />
         </div>
         <input
           className={b('input')}
@@ -87,25 +96,22 @@ export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
           />
         </UiDropdown>
         <UiDropdown
-          selected={fromDate || toDate ? true : false}
+          selected={fromDate || toDate || selectedPrice > 0 || selectedNetworks.length ? true : false}
           imgHeight="10px"
           imgSrc="/assets/filter.svg"
           title="Filters"
           imgWidth="10px"
         >
           <XuiFilterDropdown
-            // setFromDate={setFromDate}
-            // setToDate={setToDate}
-            // fromDate={fromDate}
-            // toDate={toDate}
+            setPriceRange={setPriceRange}
           />
         </UiDropdown>
-          <div className={b('form-button')} onClick={submitSearch}>
-            <UiButton
-              cover
-              style={{ fontSize: '18px', fontWeight: 'normal', height: '64px', textTransform: 'none' }}
-            >Search</UiButton>
-          </div>
+        <div className={b('form-button')} onClick={submitSearch}>
+          <UiButton
+            cover
+            style={{ fontSize: '18px', fontWeight: 'normal', height: '64px', textTransform: 'none' }}
+          >Search</UiButton>
+        </div>
       </UiLayout>
     </>
 

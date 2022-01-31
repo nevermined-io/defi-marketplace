@@ -20,15 +20,16 @@ export function UiBanner(props: BannerProps) {
     Router.push('/list')
   }
 
-  const onSearch = (value: any) => {
-    setSearchInputText(value)
+  const onSearch = (searchString: any, priceRange: any) => {
+    setSearchInputText(searchString)
     Router.push({
       pathname: '/list',
       query: {
-        value,
+        value: searchString,
         fromDate,
         toDate,
-        selectedCategories
+        selectedCategories,
+        priceRange
       },
     })
   }
@@ -50,7 +51,7 @@ export function UiBanner(props: BannerProps) {
             <UiDivider type="xl" />
 
             <UiLayout type="container"  >
-              <XuiSearchBar onSearch={(value: any) => onSearch(value)} />
+              <XuiSearchBar onSearch={(searchString: any, priceRange:any) => onSearch(searchString, priceRange)} />
             </UiLayout>
             <UiDivider type="l" />
             <UiDivider type="xxl" />

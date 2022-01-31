@@ -51,23 +51,23 @@ $h: 1em;
     border: 1px solid gc(gM);
     display: flex;
     justify-content: space-between;
-    padding: 15px;
-    width: 865px;
-    height: 179px;
+
+    
 
     input[type='range'] {
-      &::-webkit-slider-runnable-track,
-      &::-webkit-slider-thumb,
-      & {
-        -webkit-appearance: none;
-      }
+      // &::-webkit-slider-runnable-track,
+      // &::-webkit-slider-thumb,
+      // & {
+      //   -webkit-appearance: none;
+      // }
 
       /* same as before */
       background: none; /* get rid of white Chrome background */
-      color: #000;
+      color: blue;
       font: inherit; /* fix too small font-size in both Chrome & Firefox */
       margin: 0;
       pointer-events: none; /* let clicks pass through */
+      width: 100%;
 
       &::-webkit-slider-runnable-track {
         @include track;
@@ -88,14 +88,13 @@ $h: 1em;
       &::-webkit-datetime-edit {
         background: #2b465c;
         color: #8aaabe;
-        padding: 1em;
-        margin: 0;
+        padding: 6%;
+        width:50px
       }
 
       &::-webkit-datetime-edit-fields-wrapper {
         background: #2b465c;
-        padding: 0;
-        margin: 0;
+        
       }
       &::-webkit-datetime-edit-text {
         color: #8aaabe;
@@ -122,6 +121,14 @@ $h: 1em;
       margin: 15px 15px 15px 0;
     }
   }
+
+  &__filter-container{
+    display:flex;
+    flex-direction: column;
+    width:300px;
+    padding:10px
+  }
+
   &__picker {
     background-color: #2b465c;
     border: none;
@@ -130,6 +137,8 @@ $h: 1em;
   &__title {
     font-size: 16px;
     font-weight: bold;
+    text-align: left;
+    padding-bottom: 10px;
   }
 
   &__date-pickers {
@@ -147,4 +156,49 @@ $h: 1em;
     text-transform: uppercase;
     color: #d0f2ff;
   }
+
+  &__network-selector-container {
+    display: flex;
+    flex-wrap: wrap;
+    width:250px;
+    justify-content: space-around;
+  }
+  
+  &__network-selector-box {
+    margin:5px;
+    font-size: 12px;
+    text-transform: uppercase;
+    padding: 5px;
+    cursor: pointer;
+    color: #8AAABE;
+    
+    background: #2B465C;
+   
+    &--selected{
+      background: #67CEF9;
+      color:#132D43;
+    }
+  }
+
+  &__ranges-limits{
+    padding-bottom: 10px;
+
+    span{
+      color: #8AAABE;
+      margin:0;
+      font-size: 14px;
+      justify-items: center;
+      align-items: center;
+    }
+
+    label{
+      padding: 5px;
+      background: #2B465C;
+    }
+  }
+
+  &__range-bar{
+    background-color: red;
+  }
+
 }
