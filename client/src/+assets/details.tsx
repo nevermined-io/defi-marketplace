@@ -74,17 +74,9 @@ export const AssetDetails: NextPage = () => {
             <UiText type="h3" wrapper="h3" variants={['underline']}>Description</UiText>
 
             <UiDivider/>
-            <p>{metadata.additionalInformation!.description}</p>
+            {metadata.additionalInformation!.description?.replaceAll("-","\n-")
+                .split('\n').map((_, i) => (<UiText key={i} block>{_}</UiText>))}
             <UiDivider type="l"/>
-            {
-              metadata.additionalInformation!.categories?.filter(item=> item.substring(0, item.indexOf(":")+1).localeCompare("UserCase:",  undefined, { sensitivity: 'accent' })  && item.substring(0, item.indexOf(":")+1).localeCompare("Version:",  undefined, { sensitivity: 'accent' }) )
-              .map(item=> {
-                return  <div>
-                  <UiText className={b('content')} block={false} type="caps" variants={['secondary']} > {formatCategories(item.substring(0, item.indexOf(secondWord)), item.substring(0, item.indexOf(":")))}: </UiText> {item.substring(item.indexOf(":")+1)}
-                  <UiDivider  type="s"/>
-                  </div>
-              })
-            }
             <UiButton cover style={{ padding: '0', width: '160px' }} onClick={openSample}>Download Sample Data</UiButton>
             <UiDivider type="s"/>
             {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
