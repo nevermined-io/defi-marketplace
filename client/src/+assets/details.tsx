@@ -77,7 +77,10 @@ export const AssetDetails: NextPage = () => {
             <p>{metadata.additionalInformation!.description?.replaceAll("-","\n-")
                 .split('\n').map((_, i) => (<UiText key={i} block>{_}</UiText>))}</p>
             <UiDivider type="l"/>
-            <UiButton cover style={{ padding: '0', width: '160px' }} onClick={openSample}>Download Sample Data</UiButton>
+            <UiButton cover style={{ padding: '0', width: '235px', background: "#2E405A", textTransform: "none"}}
+              onClick={openSample}>
+              <img src="/assets/logos/filecoin_grey.svg" />&nbsp;&nbsp;Download Sample Data
+            </UiButton>
             <UiDivider type="s"/>
             {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
           </div>
