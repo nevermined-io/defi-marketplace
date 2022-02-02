@@ -31,7 +31,7 @@ export const History: NextPage = () => {
           <UiText type="h3" wrapper="h2">Browse DeFi Reports</UiText>
         </UiLayout>
         {assets.map((asset: Bundle, index: number) => (
-          <UiLayout key={asset.did} className={b('asset')}>
+          <UiLayout key={asset.did} id={asset.did} className={b('asset')}>
             <UiText className={b('asset-date')} type="small" variants={['detail']}>
               {`Order #${index}`}
             </UiText>
