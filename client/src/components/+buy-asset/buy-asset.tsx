@@ -6,7 +6,7 @@ import styles from './buy-asset.module.scss'
 import { XuiBuyAssetPopup } from './popup/buy-asset-popup'
 
 interface BuyAssetProps {
-  asset: DDO
+  asset: string
 }
 
 const b = BEM('buy-asset', styles)

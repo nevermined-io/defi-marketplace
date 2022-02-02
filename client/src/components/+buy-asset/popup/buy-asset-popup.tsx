@@ -8,7 +8,7 @@ import styles from './buy-asset-popup.module.scss'
 import { MetamaskErrorCodes, MetamaskCustomErrors } from '../../../shared/constants'
 
 interface BuyAssetPopupProps {
-  asset: DDO
+  asset: string
   close: () => any
 }
 
@@ -34,11 +34,11 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
     setView(1)
 
     const account = (await sdk.accounts.list())[0]
-    const promise = sdk.assets.order(asset.id, 'access', account)
+    const promise = sdk.assets.order(asset, 'access', account)
     promise.subscribe(step => setStep(step))
     promise
       .then(async agreementId => {
-        await sdk.assets.consume(agreementId, asset.id, account)
+        await sdk.assets.consume(agreementId, asset, account)
       })
       .catch(error => setError(error.code === MetamaskErrorCodes.CANCELED ? MetamaskCustomErrors.CANCELED[1] : error.message))
   }, [])
