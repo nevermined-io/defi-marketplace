@@ -41,3 +41,23 @@ export const getBundleStatus = async (id: string): Promise<IBundle> => {
     throw error
   }
 }
+
+
+export const getAllUserBundles = async (user: string): Promise<IBundle> => {
+  try {
+    const bundles = await db.Bundles.findAll({
+      where: {
+        user: user
+      },
+      include: [
+        { model: db.Datasets, as: 'Datasets' }
+    ]
+    });
+
+    return bundles
+
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}

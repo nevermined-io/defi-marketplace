@@ -1,26 +1,27 @@
-import React, { useEffect, useContext, useState, useCallback } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import type { NextPage } from 'next'
-import Image from 'next/image'
-
 import { User } from '../context'
-import { AssetsList } from './assets-list'
+import styles from './assets-list.module.scss'
+import { BEM, UiText, UiLayout, UiIcon, UiDivider, XuiBuyAsset } from 'ui'
+import { getAllUserBundlers, Bundle } from 'src/shared'
 
-import { UiText, UiLayout, XuiAssetsQuery } from 'ui'
-
+const b = BEM('assets-list', styles)
 export const History: NextPage = () => {
-  const [assets, setAssets] = useState<string[]>([])
-  const {sdk, account} = useContext(User)
+  const [assets, setAssets] = useState<Bundle[]>([])
+  const { sdk, account } = useContext(User)
 
   useEffect(() => {
-    if (!sdk.assets) {
+    if (!sdk.accounts) {
       return
     }
-    // TODO: use consumerAssets to get consumer assets 
-    sdk.assets.ownerAssets(account)
-      .then(setAssets)
-  }, [sdk])
+    loadBundles()
+  }, [sdk.accounts])
 
-  const renderAssets = useCallback(assets => (<AssetsList assets={assets}/>), [])
+  const loadBundles = async () => {
+    const account = (await sdk.accounts.list())[0]
+    const userBundles = await getAllUserBundlers(account.getId())
+    setAssets(userBundles)
+  }
 
   return (
     <>
@@ -29,12 +30,18 @@ export const History: NextPage = () => {
         <UiLayout>
           <UiText type="h3" wrapper="h2">Browse DeFi Reports</UiText>
         </UiLayout>
-
-        {!!assets.length && (
-          <XuiAssetsQuery
-            query={{did: assets}}
-            content={renderAssets}/>
-        )}
+        {assets.map((asset: Bundle, index: number) => (
+          <UiLayout key={asset.did} className={b('asset')}>
+            <UiText className={b('asset-date')} type="small" variants={['detail']}>
+              {`Order #${index}`}
+            </UiText>
+            <UiDivider flex />
+            <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
+            <XuiBuyAsset asset={asset.did}>
+              <UiIcon icon="download" color="primary" size="l" />
+            </XuiBuyAsset>
+          </UiLayout>
+        ))}
       </UiLayout>
     </>
   )
