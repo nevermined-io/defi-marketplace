@@ -69,7 +69,7 @@ export const About: NextPage = () => {
         {howAreCreated.split('\n').map((_, i) => (<UiText key={i} type="p" block>{_}</UiText>))}
         <UiDivider type="xl"/>
         <UiLayout>
-          <UiText type="h3" wrapper="h3" variants={['underline']}>How it works</UiText>
+          <UiText type="h4" wrapper="h4" variants={['underline']}>How it works</UiText>
         </UiLayout>
         <UiDivider/>
         {howWorks.split('\n').map((_, i) => (<UiText key={i} type="p" block>{_}</UiText>))}
