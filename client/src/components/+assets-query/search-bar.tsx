@@ -81,7 +81,7 @@ export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
           value={textValue}
           onChange={inputChanges}
           onKeyDown={inputOnEnter}
-          placeholder="Search networks, protocols, DEXES & more..."
+          placeholder="Search protocols..."
         />
         <UiDropdown
           selected={selectedCategories.length ? true : false}
