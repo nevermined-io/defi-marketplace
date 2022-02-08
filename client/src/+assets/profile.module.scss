@@ -1,0 +1,132 @@
+@import '../../src/styles/index';
+
+@mixin animate($animation,$duration,$method,$times){
+  animation: $animation $duration $method $times;
+}
+
+@mixin keyframes($name){
+  @keyframes #{$name}{
+      @content;
+  }
+}
+
+.profile {
+
+  &__button-container{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  &__all-button-container{
+    display: flex;
+    width: 60px;
+    height: 40px;
+    // background-color: #0a2235;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 40px;
+    color: gc(sM);
+    text-transform: capitalize;
+    text-align: center;
+  }
+  
+  &__button-container-second{
+    display: flex;
+    // width: 100px;
+    height: 40px;
+    margin-top:10px;
+    
+  }
+
+  &__all-button{
+    // display: flex;
+    // width: 100px;
+    font-weight: 600;
+    font-size: 16px;
+    padding-left:30%;
+    &--selected{
+      background-color: gc(sM);
+      color:gc(gVD)
+    }
+   
+  }
+
+  &__other-button{
+    width: 200px;
+    font-weight: 600;
+    font-size: 16px;
+    background-color: #0a2235;
+    // background-color: #132D43;
+    align-content: initial;
+    &--selected{
+      background-color: gc(sM);
+      color:gc(gVD)
+    }
+  }
+
+  &__asset {
+    height: 74px;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 0 20px;
+    border: 2px solid gc(gM);
+
+    &--date {
+      margin: 0px 20px;
+      padding-top: 8px;
+
+    }
+    &--header-asset-row {
+      border-bottom:none;
+      border-left:none;
+      border-right:none;
+      //  margin: 0px 20px;
+    }
+  }
+
+  &__asset-header{
+    margin-right: 100px;
+    &--bundle-header{
+      margin-right:200px
+    }
+  }
+
+  &__clear-div {
+    cursor: pointer;
+    width: 58.07px;
+    height: 22.07px;
+    &--clear-button {
+      font-size: 12.8725px;
+      line-height: 15px;
+      margin-right: 5px;
+      color: gc(gL);
+    }
+
+  }
+
+
+  &__loadspinner{
+    display: flex;
+    align-items: center;
+
+    &--text{
+      position:relative;
+      right:-30px;
+      z-index:2
+      
+      
+
+    }
+    &--spinner{
+      z-index:1;
+      @include keyframes(rotate){
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+      }
+      @include animate(rotate, 1.5s, linear, infinite);
+    }
+  }
+
+
+}
