@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext, useState, useCallback } from 'react'
 import type { NextPage } from 'next'
 import Image from "next/image"
 
@@ -6,117 +6,13 @@ import { User } from '../context'
 import styles from './profile.module.scss'
 import { BEM, UiText, UiLayout, UiIcon, UiDivider, XuiBuyAsset } from 'ui'
 import { getAllUserBundlers, Bundle } from 'src/shared'
-const mockAssetArray = [
-  {
-    "bundleId": "86c1a668-6be9-481d-aa13-dd03f8e72e66",
-    "did": "did:nv:cbc927fc5fb19993c3ad018f3f1001ebc4a0d955a9bac07ede8da22b632eab6e",
-    "status": "COMPLETED",
-    "user": "0x0277B0aD0Ba9B830797B671f77a1Fcd1bA008003",
-    "updatedAt": "2022-02-01T15:43:25.000Z",
-    "createdAt": "2022-02-01T15:43:14.000Z",
-    "datasets": [
-      {
-        "datasetId": "a46a35b1-01b8-4583-8621-0f53b8fd61a0",
-        "fileName": "SushiSwap-v1-DEXLIQUI-Celo_20220131_00:00.csv",
-        "source": "filecoin"
-      },
-      {
-        "datasetId": "fc42746c-20f6-4cc4-96cd-c1ada56c43ae",
-        "fileName": "SushiSwap-v1-DEXLIQUI-Fantom_20220131_00:00.csv",
-        "source": "filecoin"
-      },
-      {
-        "datasetId": "fc42746c-20f6-4cc4-96cd-c1ada56c43ae",
-        "fileName": "SushiSwap-v1-DEXLIQUI-Fantom_20220131_00:00.csv",
-        "source": "filecoin"
-      }
-    ]
-  },
-  {
-    "bundleId": "86c1a668-6be9-481d-aa13-dd03f8e72e66",
-    "did": "did:nv:cbc927fc5fb19993c3ad018f3f1001ebc4a0d955a9bac07ede8da22b632eab6e",
-    "status": "PROCESSING",
-    "user": "0x0277B0aD0Ba9B830797B671f77a1Fcd1bA008003",
-    "updatedAt": "2022-02-01T15:43:25.000Z",
-    "createdAt": "2022-02-01T15:43:14.000Z",
-    "datasets": [
-      {
-        "datasetId": "a46a35b1-01b8-4583-8621-0f53b8fd61a0",
-        "fileName": "SushiSwap-v1-DEXLIQUI-Celo_20220131_00:00.csv",
-        "source": "filecoin"
-      },
-      {
-        "datasetId": "fc42746c-20f6-4cc4-96cd-c1ada56c43ae",
-        "fileName": "SushiSwap-v1-DEXLIQUI-Fantom_20220131_00:00.csv",
-        "source": "filecoin"
-      },
-      {
-        "datasetId": "fc42746c-20f6-4cc4-96cd-c1ada56c43ae",
-        "fileName": "SushiSwap-v1-DEXLIQUI-Fantom_20220131_00:00.csv",
-        "source": "filecoin"
-      },
-      {
-        "datasetId": "fc42746c-20f6-4cc4-96cd-c1ada56c43ae",
-        "fileName": "SushiSwap-v1-DEXLIQUI-Fantom_20220131_00:00.csv",
-        "source": "filecoin"
-      }
-    ]
-  },
-  {
-    "bundleId": "86c1a668-6be9-481d-aa13-dd03f8e72e66",
-    "did": "did:nv:cbc927fc5fb19993c3ad018f3f1001ebc4a0d955a9bac07ede8da22b632eab6e",
-    "status": "COMPLETED",
-    "user": "0x0277B0aD0Ba9B830797B671f77a1Fcd1bA008003",
-    "updatedAt": "2022-02-01T15:43:25.000Z",
-    "createdAt": "2022-02-01T15:43:14.000Z",
-    "datasets": [
-      {
-        "datasetId": "a46a35b1-01b8-4583-8621-0f53b8fd61a0",
-        "fileName": "SushiSwap-v1-DEXLIQUI-Celo_20220131_00:00.csv",
-        "source": "filecoin"
-      }
-    ]
-  },
-  {
-    "bundleId": "86c1a668-6be9-481d-aa13-dd03f8e72e66",
-    "did": "did:nv:cbc927fc5fb19993c3ad018f3f1001ebc4a0d955a9bac07ede8da22b632eab6e",
-    "status": "PROCESSING",
-    "user": "0x0277B0aD0Ba9B830797B671f77a1Fcd1bA008003",
-    "updatedAt": "2022-02-01T15:43:25.000Z",
-    "createdAt": "2022-02-01T15:43:14.000Z",
-    "datasets": [
-      {
-        "datasetId": "a46a35b1-01b8-4583-8621-0f53b8fd61a0",
-        "fileName": "SushiSwap-v1-DEXLIQUI-Celo_20220131_00:00.csv",
-        "source": "filecoin"
-      },
-      {
-        "datasetId": "a46a35b1-01b8-4583-8621-0f53b8fd61a0",
-        "fileName": "SushiSwap-v1-DEXLIQUI-Celo_20220131_00:00.csv",
-        "source": "filecoin"
-      },
-      {
-        "datasetId": "fc42746c-20f6-4cc4-96cd-c1ada56c43ae",
-        "fileName": "SushiSwap-v1-DEXLIQUI-Fantom_20220131_00:00.csv",
-        "source": "filecoin"
-      },
-      {
-        "datasetId": "fc42746c-20f6-4cc4-96cd-c1ada56c43ae",
-        "fileName": "SushiSwap-v1-DEXLIQUI-Fantom_20220131_00:00.csv",
-        "source": "filecoin"
-      },
-      {
-        "datasetId": "fc42746c-20f6-4cc4-96cd-c1ada56c43ae",
-        "fileName": "SushiSwap-v1-DEXLIQUI-Fantom_20220131_00:00.csv",
-        "source": "filecoin"
-      }
-    ]
-  }
-]
+import { XuiPagination } from 'ui/+assets-query/pagination'
+import { mockAssetArray } from '../utils/mock-bundles'
 enum assetStatus {
   COMPLETED = "COMPLETED",
   PROCESSING = "PROCESSING"
 }
+const BUNDLES_PER_PAGE = 5
 const b = BEM('profile', styles)
 export const Profile: NextPage = () => {
   const { sdk, account } = useContext(User)
@@ -127,6 +23,8 @@ export const Profile: NextPage = () => {
   const [completed, setCompleted] = useState<boolean>(false)
   const [processing, setProcessing] = useState<boolean>(false)
   // const [sold, setSold] = useState<boolean>(false) TBI
+  const [page, setPage] = useState<number>(1)
+  const [totalPages, setTotalPages] = useState<number>(1)
 
 
   useEffect(() => {
@@ -134,14 +32,55 @@ export const Profile: NextPage = () => {
       return
     }
     loadBundles()
+      .then((assets: any[]) => {
+        setAssets(assets)
+        calculatePages(assets)
+      })
   }, [sdk.accounts])
 
   const loadBundles = async () => {
     const account = (await sdk.accounts.list())[0]
     const userBundles = await getAllUserBundlers(account.getId())
-    console.log("userBundles", userBundles)
-    // setAssets(userBundles)
-    setAssets(mockAssetArray)
+    return userBundles
+    // return mockAssetArray
+  }
+
+  const calculateStartEndPage = useCallback(() => {
+    const start = (page - 1) * BUNDLES_PER_PAGE
+    const end = (page) * BUNDLES_PER_PAGE
+    return { start, end }
+  }, [page])
+
+
+  const calculatePages = (assets: any[]) => {
+    const totPages = Math.ceil(assets.length / BUNDLES_PER_PAGE)
+    setTotalPages(totPages)
+  }
+
+  const checkCompleted = () => {
+    let assetArray = []
+    if (!completed) {
+      setCompleted(true)
+      assetArray = assets.filter((asset: any) => asset.status === assetStatus.COMPLETED)
+    } else {
+      setCompleted(false)
+      assetArray = assets
+    }
+    calculatePages(assetArray)
+    setPage(1)
+  }
+
+  const checkProcessing = () => {
+    let assetArray = []
+    if (!processing) {
+      setProcessing(true)
+      assetArray = assets.filter((asset: any) => asset.status === assetStatus.PROCESSING)
+    } else {
+      setProcessing(false)
+      assetArray = assets
+    }
+    calculatePages(assetArray)
+    setPage(1)
   }
 
 
@@ -164,18 +103,18 @@ export const Profile: NextPage = () => {
             </div> */}
             <div className={b("button-container-second")}>
               <div className={completed ? b("other-button", ['selected']) : b("other-button")}
-                onClick={() => completed ? setCompleted(false) : setCompleted(true)}
+                onClick={checkCompleted}
               >
                 Completed
               </div>
               <div className={processing ? b("other-button", ['selected']) : b("other-button")}
-                onClick={() => processing ? setProcessing(false) : setProcessing(true)}
+                onClick={checkProcessing}
               >
                 Processing
               </div>
               {
                 (completed || processing) &&
-                <div onClick={() => { setCompleted(false); setProcessing(false) }} className={b('clear-div')} >
+                <div onClick={() => { setCompleted(false); setProcessing(false); calculatePages(assets) }} className={b('clear-div')} >
                   <span className={b('clear-div', ['clear-button'])} >
                     Clear
                   </span>
@@ -207,7 +146,7 @@ export const Profile: NextPage = () => {
               Creation Date
             </UiText>
             <UiText type="caps" className={b('asset-header')} variants={['detail']}>
-              Number of datasets
+              N. of datasets
             </UiText>
             <UiText type="caps" className={b('asset-header')} variants={['detail']}>
               Status
@@ -219,10 +158,11 @@ export const Profile: NextPage = () => {
             assets
               .filter((asset: any) => completed ? asset.status === assetStatus.COMPLETED : true)
               .filter((asset: any) => processing ? asset.status === assetStatus.PROCESSING : true)
+              .slice(calculateStartEndPage().start, calculateStartEndPage().end)
               .map((asset: Bundle, index: number) => (
                 <UiLayout key={asset.did} className={b('asset')}>
                   <UiText className={b('asset-date')} type="p" variants={['highlight']}>
-                    {`Order #${index}`}
+                    {asset.bundleId}
                   </UiText>
                   <UiDivider flex />
                   <UiText className={b('asset-date')} type="small" variants={['secondary']}>
@@ -244,6 +184,10 @@ export const Profile: NextPage = () => {
                   </XuiBuyAsset>
                 </UiLayout>
               ))}
+          {
+            totalPages > 1 &&
+            <XuiPagination totalPages={totalPages} page={page} setPage={setPage} />
+          }
         </UiLayout>
       </UiLayout>
     </>
