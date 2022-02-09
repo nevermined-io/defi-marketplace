@@ -9,6 +9,7 @@ import { AdditionalInformation } from "@nevermined-io/nevermined-sdk-js"
 import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiTokenName, XuiTokenPrice, XuiBuyAsset, UiButton } from 'ui'
 import { User } from '../context'
 import { toDate, getDdoTokenAddress } from '../shared'
+import { Markdown } from 'ui/markdown/markdown'
 
 const b = BEM('details', styles)
 
@@ -28,7 +29,10 @@ export const AssetDetails: NextPage = () => {
     }
     sdk.assets.resolve(String(did))
       .then(ddo =>  setAsset(ddo))
-      .catch(() => setAsset(false))
+      .catch((error) => {
+        console.log(error)
+        setAsset(false)
+      })
   }, [sdk])
 
   if (!asset) {
@@ -52,17 +56,6 @@ export const AssetDetails: NextPage = () => {
     addToBasket([asset.id])
   }
 
-  const secondWord = "Type"
-  const formatCategories = (firstWord: string, word:string) => {
-    switch(firstWord){
-      case "Event":
-        return "Event Type";
-      case "Protocol":
-        return "Protocol Type";
-      default:
-        return word
-    }
-  }
   return (
     <>
       <UiLayout type="container">
@@ -83,6 +76,11 @@ export const AssetDetails: NextPage = () => {
             </UiButton>
             <UiDivider type="s"/>
             {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
+            <UiDivider />
+            <UiText type="h3" wrapper="h3" variants={['underline']}>Command Line Interface</UiText>
+            <UiDivider/>
+            <UiText type="p" >To download this dataset directly from the CLI run the following command</UiText>
+            <Markdown code={`$ ncli assets get ${asset.id}`}/>
           </div>
           <UiDivider vertical/>
           <div>
