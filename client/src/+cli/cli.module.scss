@@ -1,0 +1,20 @@
+@import '../../src/styles/index';
+
+.cli {
+  @include component;
+
+  &__row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__columnleft {
+    width: 20%;
+  }
+
+  &__columnright {
+    width: 85%;
+  }
+}
+
+
