@@ -68,7 +68,7 @@ export const Cli: NextPage = () => {
           <UiDivider />
           {setupAccounts.split('\n').map((_, i) => (<UiText key={i} type="p" block>{_}</UiText>))}
           <Markdown code='$ export MNEMONIC="<your 12 words seed phrase>"' height="111px"></Markdown>
-          <UiText>Use keyfiles</UiText>
+          <UiText>Or use keyfiles</UiText>
           <Markdown code={<>
             <p>{'$ export KEYFILE_PATH="<path to keyfile>"'}</p>
             <p>{'$ export KEYFILE_PASSWORD="<keyfile password>"'}</p>
@@ -122,9 +122,7 @@ export const Cli: NextPage = () => {
                 dataset Name: Aave-v2-Ethereum_20210802_00:00.csv - Url: did:nv:e958a092bb50c65047a28f6f26c7e46d7470c78e96d24b7ee66cf7efaf4d589d</p>
             </>
           } height="310px"></Markdown>
-          <UiText>Now we can download the dataset, for that we need first to create and order with the identifier we're interested in</UiText>
-          <Markdown code={"$ ncli assets order did:nv:e958a092bb50c65047a28f6f26c7e46d7470c78e96d24b7ee66cf7efaf4d589d"} height="110px"></Markdown>
-          <UiText>Once the order is created, we can download the asset with</UiText>
+          <UiText>Now we can download any of the existing assets. The next command will order and download the asset files into your system:</UiText>
           <Markdown code={"$ ncli assets get did:nv:e958a092bb50c65047a28f6f26c7e46d7470c78e96d24b7ee66cf7efaf4d589d"} height="110px"></Markdown>
         </>
       )
