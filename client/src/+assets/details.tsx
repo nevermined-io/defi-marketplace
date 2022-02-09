@@ -8,7 +8,7 @@ import { AdditionalInformation } from "@nevermined-io/nevermined-sdk-js"
 
 import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiTokenName, XuiTokenPrice, XuiBuyAsset, UiButton } from 'ui'
 import { User } from '../context'
-import { toDate } from '../shared'
+import { toDate, getDdoTokenAddress } from '../shared'
 
 const b = BEM('details', styles)
 
@@ -98,7 +98,7 @@ export const AssetDetails: NextPage = () => {
               <UiIcon color="secondary" icon="file" size="xl"/>
               <UiDivider vertical type="s"/>
               <UiText block>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>Price:</UiText> <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice> <XuiTokenName/>
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Price:</UiText> <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice> <XuiTokenName address={getDdoTokenAddress(asset)}/>
                 <br/>
                 <UiText className={b('attr')} type="caps" variants={['bold']}>Files:</UiText> {metadata.main.files?.length}
                 <br/>
