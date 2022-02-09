@@ -1,0 +1,41 @@
+@import '../../styles/index';
+
+.markdown {
+  @include component;
+
+  &__header {
+    background: #255883;
+    width: 910px;
+    height: 45px;
+    position: absolute;
+    img {
+      position: absolute;
+      padding: 10px;
+      right: 60px;
+    }
+  }
+
+  &__copy-text {
+    position: absolute;
+    right: 10px;
+    padding: 10px;
+    color: #67CFF9;
+  }
+
+  &__content {
+    background: #1C4263;
+    width: 910px;
+    height: 111px;
+  }
+
+  &__snippet{
+    width: 876px;
+    height: 100px;
+    color: #8AAABE;
+    position: relative;
+    top: 62px;
+    left: 14px;
+    font-size: 18px;
+  }
+
+}
