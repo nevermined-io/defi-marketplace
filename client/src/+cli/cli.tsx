@@ -20,13 +20,6 @@ Use a mnemonic
 `.trim()
 
 
-const howWorks = `
-DeFi Data Marketplace uses three different protocols to retrieve, store and publish data.
-
-All the data came directly from The Graph protocol, which indexes data from several blockchains. This data is retrieved using our library and normalized in a CSV file. To maintain a decentralized way to store this data, this dataset is uploaded to Filecoin where the file will be stored in a decentralized network. Once the dataset is published in Filecoin, we use the link to this file to publish it in the Nevermined protocol. Nevermined allows us to create a marketplace for data, with all this data published in the Filecoin network, we can use Nevermined to put these datasets available to download for the users using a web interface or a command-line interface.
-
-This diagram describes the process to create and publish datasets. `.trim()
-
 const b = BEM('cli', styles)
 export const Cli: NextPage = () => {
   const [view, setView] = useState<number>(1)
@@ -47,11 +40,9 @@ export const Cli: NextPage = () => {
           </UiLayout>
           <UiDivider />
           {installation.split('\n').map((_, i) => (<UiText key={i} type="p" block>{_}</UiText>))}
-          <Markdown code={<>
-            <p>$ npm install -g @nevermined-io/cli</p>
-            <p>or</p>
-            <p>$ yarn global add @nevermined-io/cli</p>
-          </>} height="200px"></Markdown>
+          <Markdown code={"$ npm install -g @nevermined-io/cli"} height="111px"></Markdown>
+          <UiText>or</UiText>
+          <Markdown code={"$ yarn global add @nevermined-io/cli"} height="111px"></Markdown>
           <UiText>After doing that you should have available in your system the ncli tool.</UiText>
           <Markdown code="$ ncli --help" height="111px"></Markdown>
           <UiDivider type="xl" />
@@ -69,16 +60,12 @@ export const Cli: NextPage = () => {
           {setupAccounts.split('\n').map((_, i) => (<UiText key={i} type="p" block>{_}</UiText>))}
           <Markdown code='$ export MNEMONIC="<your 12 words seed phrase>"' height="111px"></Markdown>
           <UiText>Or use keyfiles</UiText>
-          <Markdown code={<>
-            <p>{'$ export KEYFILE_PATH="<path to keyfile>"'}</p>
-            <p>{'$ export KEYFILE_PASSWORD="<keyfile password>"'}</p>
-          </>} height="150px"></Markdown>
+          <Markdown code={'$ export KEYFILE_PATH="<path to keyfile>"'} height="111px"></Markdown>
+          <Markdown code={'$ export KEYFILE_PASSWORD="<keyfile password>"'} height="111px"></Markdown>
           <UiText>Also the RPC provider should be set</UiText>
-          <Markdown code={<>
-            <p>{'export NODE_URL="https://rinkeby.infura.io/v3/INFURA_TOKEN"'}</p>
-            <p>or</p>
-            <p>{'export NODE_URL="https://eth-rinkeby.alchemyapi.io/v2/-ALCHEMY_TOKEN"'}</p>
-          </>} height="200px"></Markdown>
+          <Markdown code={'export NODE_URL="https://rinkeby.infura.io/v3/INFURA_TOKEN"'} height="111px"></Markdown>
+          <UiText>or</UiText>
+          <Markdown code={'export NODE_URL="https://eth-rinkeby.alchemyapi.io/v2/-ALCHEMY_TOKEN"'} height="111px"></Markdown>
         </>
       )
     } else if (view == 3) {
@@ -101,7 +88,7 @@ export const Cli: NextPage = () => {
                 Gateway: https://gateway.matic.nevermined.rocks<br />
                 Metadata API: https://metadata.matic.nevermined.rocks</p>
             </>
-          } height="310px"></Markdown>
+          } height="310px" disableCopy={true} ></Markdown>
 
         </>
       )
@@ -121,7 +108,7 @@ export const Cli: NextPage = () => {
                 dataset Name: Aave-v2-Ethereum_20210804_00:00.csv - Url: did:nv:b28c53b3268853f25ea53f145c2c45b7fed2eb04ebf6fd301274cca1914907fb<br />
                 dataset Name: Aave-v2-Ethereum_20210802_00:00.csv - Url: did:nv:e958a092bb50c65047a28f6f26c7e46d7470c78e96d24b7ee66cf7efaf4d589d</p>
             </>
-          } height="310px"></Markdown>
+          } height="310px" disableCopy={true} ></Markdown>
           <UiText>Now we can download any of the existing assets. The next command will order and download the asset files into your system:</UiText>
           <Markdown code={"$ ncli assets get did:nv:e958a092bb50c65047a28f6f26c7e46d7470c78e96d24b7ee66cf7efaf4d589d"} height="110px"></Markdown>
         </>
