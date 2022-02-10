@@ -92,6 +92,26 @@ export function AssetsList({ assets }: AssetsListProps) {
           }
         </div>
       </div>
+        {/* <UiLayout type="container"> */}
+          <UiLayout className={b('asset',['asset-row-header'])}>
+            <UiText type="caps" className={b('asset', ['indexer'])} variants={['detail']}>
+            indexer
+            </UiText>
+            {/* <UiText type="caps" className={b('asset-header')} variants={['detail']}>
+            protocol
+            </UiText> */}
+            <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
+            category
+            </UiText>
+            <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
+            network
+            </UiText>
+            <UiText type="caps" className={b('info', ['price'])} variants={['detail']}>
+            price
+            </UiText>
+          </UiLayout>
+          <UiDivider />
+        {/* </UiLayout> */}
       {assets
         .map(asset => ({ asset, metadata: asset.findServiceByType('metadata').attributes }))
         .map(data => ({ ...data, defi: getDefiInfo(data.metadata) }))
@@ -103,13 +123,15 @@ export function AssetsList({ assets }: AssetsListProps) {
                 <img onClick={() => addToBatchSelected([asset.id])} src={'assets/unchecked_box.svg'} width="20px" />
               }
             </div>
+            <div className={`${b('asset-title')}`}>
             <Link href={`/asset/${asset.id}`}>
-              <UiText className={`pointer ${b('asset-title')}`} wrapper="h4" type="h4">{metadata.main.name}</UiText>
+              <UiText className={`pointer`} wrapper="h4" type="h4">{metadata.main.name}</UiText>
             </Link>
             <UiText className={b('asset-date')} type="small" variants={['detail']}>
               {toDate(metadata.main.dateCreated).replace(/\//g, '.')}
             </UiText>
-            <UiDivider flex />
+
+              </div>
             {defi?.category && defi?.network && (
               <>
                 <UiLayout className={b('info')}>
@@ -124,7 +146,7 @@ export function AssetsList({ assets }: AssetsListProps) {
                 </UiLayout>
               </>
             )}
-            <UiLayout className={b('info')}>
+            <UiLayout className={b('info', ['price'])}>
               <UiIcon className={b('info-icon')} icon="tag" color="secondary" />
               <UiText variants={['secondary']}>
                 <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice>
