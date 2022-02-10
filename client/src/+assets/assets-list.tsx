@@ -148,7 +148,7 @@ export function AssetsList({ assets }: AssetsListProps) {
                   onClick={() => setSelectedNetworks(!selectedNetworks.includes(defi.network) ? selectedNetworks.concat(defi.network) : selectedNetworks )}
                 >
                   <img
-                    src={`/assets/logos/${defi.network}.svg`}
+                    src={`assets/logos/${defi.network}.svg`}
                     style={{ cursor: 'pointer', paddingRight: "10px" }}
                     width="25"
                   />
