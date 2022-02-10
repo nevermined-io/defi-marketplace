@@ -13,6 +13,10 @@ const b = BEM('checkout', styles)
 export const Checkout: NextPage = () => {
   const { assets: contextAssets, basket, removeFromBasket } = useContext(User)
   const assets = contextAssets.filter(asset => basket.includes(asset.id))
+  const totalPrice = assets.map(
+    asset => Number(asset.findServiceByType('metadata').attributes.main.price)
+  ).reduce((partialSum, a) => partialSum + a, 0);
+
   return (
     <>
       <UiLayout justify="flex-start" type="container">
@@ -73,7 +77,7 @@ export const Checkout: NextPage = () => {
             <UiDivider/>
             <UiLayout justify="space-between">
               <UiText type="h4-caps" wrapper="h2">TOTAL</UiText>
-              <div className={b('total-price')}>0.1 USDC</div>
+              <div className={b('total-price')}><XuiTokenPrice>{totalPrice}</XuiTokenPrice></div>
             </UiLayout>
             <UiDivider/>
             <XuiCreateBundle assets={assets}>
