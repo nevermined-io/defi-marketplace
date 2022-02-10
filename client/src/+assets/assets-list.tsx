@@ -141,7 +141,12 @@ export function AssetsList({ assets }: AssetsListProps) {
                   <UiText variants={['secondary']}>{defi.subcategory}</UiText>
                 </UiLayout>
                 <UiLayout className={b('info')}>
-                  <UiIcon className={b('info-icon')} icon="share" color="secondary" />
+                <img
+                // onClick={()=> setSelectedNetworks( selectedNetworks.concat(defi.network))}
+                src={`/assets/logos/${defi.network}.svg`}
+                style={{ cursor: 'pointer', paddingRight: "10px"}}
+                width="25"
+              />
                   <UiText variants={['secondary']}>{defi.network}</UiText>
                 </UiLayout>
               </>
