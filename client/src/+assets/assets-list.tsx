@@ -24,7 +24,7 @@ interface AssetsListProps {
 
 const b = BEM('assets-list', styles)
 export function AssetsList({ assets }: AssetsListProps) {
-  const { basket, selectedNetworks,selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories } = useContext(User)
+  const { basket, selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories } = useContext(User)
   const [batchActive, setBatchActive] = useState<boolean>(false)
   const [batchSelected, setBatchSelected] = useState<string[]>([])
   const popupRef = createRef<UiPopupHandlers>()
@@ -136,8 +136,8 @@ export function AssetsList({ assets }: AssetsListProps) {
             {defi?.category && defi?.network && (
               <>
                 <UiLayout className={b('info')}
-                  onClick={() => setSelectedCategories(!selectedCategories.includes(defi.category) ? selectedCategories.concat(defi.subcategory) : selectedCategories )}
-                
+                  onClick={() => setSelectedCategories(!selectedCategories.includes(defi.category) ? selectedCategories.concat(defi.subcategory) : selectedCategories)}
+
                 >
                   <UiIcon className={b('info-icon')} icon="folder" color="secondary" />
                   <UiText variants={['secondary']}>{defi.category}</UiText>
@@ -145,10 +145,10 @@ export function AssetsList({ assets }: AssetsListProps) {
                   <UiText variants={['secondary']}>{defi.subcategory}</UiText>
                 </UiLayout>
                 <UiLayout className={b('info')}
-                  onClick={() => setSelectedNetworks(!selectedNetworks.includes(defi.network) ? selectedNetworks.concat(defi.network) : selectedNetworks )}
+                  onClick={() => setSelectedNetworks(!selectedNetworks.includes(defi.network) ? selectedNetworks.concat(defi.network) : selectedNetworks)}
                 >
                   <img
-                    src={`/assets/logos/${defi.network}.svg`}
+                    src={`/assets/logos/${defi.network.toLowerCase()}.svg`}
                     style={{ cursor: 'pointer', paddingRight: "10px" }}
                     width="25"
                   />
