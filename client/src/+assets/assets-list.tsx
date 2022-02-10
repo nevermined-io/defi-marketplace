@@ -24,7 +24,7 @@ interface AssetsListProps {
 
 const b = BEM('assets-list', styles)
 export function AssetsList({ assets }: AssetsListProps) {
-  const { basket, addToBasket } = useContext(User)
+  const { basket, selectedNetworks,selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories } = useContext(User)
   const [batchActive, setBatchActive] = useState<boolean>(false)
   const [batchSelected, setBatchSelected] = useState<string[]>([])
   const popupRef = createRef<UiPopupHandlers>()
@@ -92,26 +92,26 @@ export function AssetsList({ assets }: AssetsListProps) {
           }
         </div>
       </div>
-        {/* <UiLayout type="container"> */}
-          <UiLayout className={b('asset',['asset-row-header'])}>
-            <UiText type="caps" className={b('asset', ['indexer'])} variants={['detail']}>
-            indexer
-            </UiText>
-            {/* <UiText type="caps" className={b('asset-header')} variants={['detail']}>
+      {/* <UiLayout type="container"> */}
+      <UiLayout className={b('asset', ['asset-row-header'])}>
+        <UiText type="caps" className={b('asset', ['indexer'])} variants={['detail']}>
+          indexer
+        </UiText>
+        {/* <UiText type="caps" className={b('asset-header')} variants={['detail']}>
             protocol
             </UiText> */}
-            <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
-            category
-            </UiText>
-            <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
-            network
-            </UiText>
-            <UiText type="caps" className={b('info', ['price'])} variants={['detail']}>
-            price
-            </UiText>
-          </UiLayout>
-          <UiDivider />
-        {/* </UiLayout> */}
+        <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
+          category
+        </UiText>
+        <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
+          network
+        </UiText>
+        <UiText type="caps" className={b('info', ['price'])} variants={['detail']}>
+          price
+        </UiText>
+      </UiLayout>
+      <UiDivider />
+      {/* </UiLayout> */}
       {assets
         .map(asset => ({ asset, metadata: asset.findServiceByType('metadata').attributes }))
         .map(data => ({ ...data, defi: getDefiInfo(data.metadata) }))
@@ -124,29 +124,34 @@ export function AssetsList({ assets }: AssetsListProps) {
               }
             </div>
             <div className={`${b('asset-title')}`}>
-            <Link href={`/asset/${asset.id}`}>
-              <UiText className={`pointer`} wrapper="h4" type="h4">{metadata.main.name}</UiText>
-            </Link>
-            <UiText className={b('asset-date')} type="small" variants={['detail']}>
-              {toDate(metadata.main.dateCreated).replace(/\//g, '.')}
-            </UiText>
+              <Link href={`/asset/${asset.id}`}>
+                <UiText className={`pointer`} wrapper="h4" type="h4"
+                >{metadata.main.name}</UiText>
+              </Link>
+              <UiText className={b('asset-date')} type="small" variants={['detail']}>
+                {toDate(metadata.main.dateCreated).replace(/\//g, '.')}
+              </UiText>
 
-              </div>
+            </div>
             {defi?.category && defi?.network && (
               <>
-                <UiLayout className={b('info')}>
+                <UiLayout className={b('info')}
+                  onClick={() => setSelectedCategories(!selectedCategories.includes(defi.category) ? selectedCategories.concat(defi.subcategory) : selectedCategories )}
+                
+                >
                   <UiIcon className={b('info-icon')} icon="folder" color="secondary" />
                   <UiText variants={['secondary']}>{defi.category}</UiText>
                   <UiText variants={['detail']}>&nbsp;&ndash;&nbsp;</UiText>
                   <UiText variants={['secondary']}>{defi.subcategory}</UiText>
                 </UiLayout>
-                <UiLayout className={b('info')}>
-                <img
-                // onClick={()=> setSelectedNetworks( selectedNetworks.concat(defi.network))}
-                src={`/assets/logos/${defi.network}.svg`}
-                style={{ cursor: 'pointer', paddingRight: "10px"}}
-                width="25"
-              />
+                <UiLayout className={b('info')}
+                  onClick={() => setSelectedNetworks(!selectedNetworks.includes(defi.network) ? selectedNetworks.concat(defi.network) : selectedNetworks )}
+                >
+                  <img
+                    src={`/assets/logos/${defi.network}.svg`}
+                    style={{ cursor: 'pointer', paddingRight: "10px" }}
+                    width="25"
+                  />
                   <UiText variants={['secondary']}>{defi.network}</UiText>
                 </UiLayout>
               </>
