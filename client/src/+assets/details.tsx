@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import styles from './details.module.scss'
 import { AdditionalInformation } from "@nevermined-io/nevermined-sdk-js"
+import Image from "next/image"
 
 
 import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiTokenName, XuiTokenPrice, XuiBuyAsset, UiButton } from 'ui'
@@ -18,9 +19,9 @@ interface AdditionalInformationExtended extends AdditionalInformation {
 }
 
 export const AssetDetails: NextPage = () => {
-  const {query: {did}} = useRouter()
+  const { query: { did } } = useRouter()
   const [asset, setAsset] = useState<DDO | false>()
-  const {sdk, account} = useContext(User)
+  const { sdk, account } = useContext(User)
   const { basket, addToBasket } = useContext(User)
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export const AssetDetails: NextPage = () => {
       return
     }
     sdk.assets.resolve(String(did))
-      .then(ddo =>  setAsset(ddo))
+      .then(ddo => setAsset(ddo))
       .catch((error) => {
         console.log(error)
         setAsset(false)
@@ -38,7 +39,15 @@ export const AssetDetails: NextPage = () => {
   if (!asset) {
     return (
       <UiLayout type="container">
-        <UiText alert>{asset === false ? 'Error loading the asset' : 'Loading...'}</UiText>
+        {asset === false ?
+          <UiText alert>Error loading the asset</UiText>
+          :
+          <UiLayout type="container"  className={b("spinner-container")} >
+            <UiText className={b("loadspinner")} >
+              <Image width="50" height="50" src="/assets/profile-loadspinner.svg" className={b("loadspinner", ["spinner"])} />
+            </UiText>
+          </UiLayout>
+        }
       </UiLayout>
     )
   }
@@ -66,48 +75,48 @@ export const AssetDetails: NextPage = () => {
           <div className={b('content')}>
             <UiText type="h3" wrapper="h3" variants={['underline']}>Description</UiText>
 
-            <UiDivider/>
-            <p>{metadata.additionalInformation!.description?.replaceAll("-","\n-")
-                .split('\n').map((_, i) => (<UiText key={i} block>{_}</UiText>))}</p>
-            <UiDivider type="l"/>
-            <UiButton cover style={{ padding: '0', width: '235px', background: "#2E405A", textTransform: "none"}}
+            <UiDivider />
+            <p>{metadata.additionalInformation!.description?.replaceAll("-", "\n-")
+              .split('\n').map((_, i) => (<UiText key={i} block>{_}</UiText>))}</p>
+            <UiDivider type="l" />
+            <UiButton cover style={{ padding: '0', width: '235px', background: "#2E405A", textTransform: "none" }}
               onClick={openSample}>
               <img src="/assets/logos/filecoin_grey.svg" />&nbsp;&nbsp;Download Sample Data
             </UiButton>
-            <UiDivider type="s"/>
+            <UiDivider type="s" />
             {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
             <UiDivider />
             <UiText type="h3" wrapper="h3" variants={['underline']}>Command Line Interface</UiText>
-            <UiDivider/>
+            <UiDivider />
             <UiText type="p" >To download this dataset directly from the CLI run the following command</UiText>
-            <Markdown code={`$ ncli assets get ${asset.id}`}/>
+            <Markdown code={`$ ncli assets get ${asset.id}`} />
           </div>
-          <UiDivider vertical/>
+          <UiDivider vertical />
           <div>
             <UiText block className={b('side-box')}>
               <UiText className={b('attr')} type="caps" >Author:</UiText> {metadata.main.author}
-              <br/>
+              <br />
               <UiText className={b('attr')} type="caps">Date:</UiText> {toDate(metadata.main.dateCreated)}
             </UiText>
 
-            <UiDivider/>
+            <UiDivider />
 
             <UiLayout>
-              <UiIcon color="secondary" icon="file" size="xl"/>
-              <UiDivider vertical type="s"/>
+              <UiIcon color="secondary" icon="file" size="xl" />
+              <UiDivider vertical type="s" />
               <UiText block>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>Price:</UiText> <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice> <XuiTokenName address={getDdoTokenAddress(asset)}/>
-                <br/>
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Price:</UiText> <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice> <XuiTokenName address={getDdoTokenAddress(asset)} />
+                <br />
                 <UiText className={b('attr')} type="caps" variants={['bold']}>Files:</UiText> {metadata.main.files?.length}
-                <br/>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>Size:</UiText> {metadata.main.files?.map(item=> Number(item.contentLength)).reduce((acc,el)=> acc+el) + " bytes"}
-                <br/>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>Type:</UiText> {metadata.main.files?.map(item=> item.contentType).reduce((acc,el)=> {return acc.includes(el) ? acc:acc.concat(` ${el}`)})}
+                <br />
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Size:</UiText> {metadata.main.files?.map(item => Number(item.contentLength)).reduce((acc, el) => acc + el) + " bytes"}
+                <br />
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Type:</UiText> {metadata.main.files?.map(item => item.contentType).reduce((acc, el) => { return acc.includes(el) ? acc : acc.concat(` ${el}`) })}
               </UiText>
-              <UiDivider flex/>
+              <UiDivider flex />
             </UiLayout>
 
-            <UiDivider/>
+            <UiDivider />
 
             <UiButton cover onClick={addtoCart}>Add to cart</UiButton>
           </div>
