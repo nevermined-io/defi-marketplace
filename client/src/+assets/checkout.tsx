@@ -81,7 +81,7 @@ export const Checkout: NextPage = () => {
             </UiLayout>
             <UiDivider/>
             <XuiCreateBundle assets={assets}>
-            <UiButton cover>Purchase</UiButton>
+            { assets.length > 0 ? <UiButton cover>Purchase</UiButton> : <></>}
             </XuiCreateBundle>
             <UiDivider/>
             <UiButton cover type="alt " onClick={() => Router.push('/list')}>Back To Marketplace</UiButton>
