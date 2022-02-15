@@ -18,7 +18,6 @@ export function XuiPriceRangeSelector(props: PriceRangeProps) {
         <h5 className={b('title')}>Price Range</h5>
         <div>
             <UiLayout type="sides" className={b('ranges-limits')}>
-                <label > </label>
                 <label >{priceValue} <span>USDC</span></label>
             </UiLayout>
             <input
