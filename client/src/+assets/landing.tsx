@@ -22,6 +22,9 @@ export const Landing: NextPage = () => {
   const redirectToAbout = () => {
     Router.push('/about')
   }
+  const redirectToCli= () => {
+    Router.push('/cli')
+  }
   return (
     <>
       <UiBanner showButton={true} />
@@ -168,7 +171,7 @@ export const Landing: NextPage = () => {
           <UiText type="p" variants={["secondary", "detail"]}>
             I don’t need your shiny interface and search filters
           </UiText>
-          <UiButton className={b("buttonFeatures")} onClick={redirectToList} style={{ marginTop: '22px' }}>
+          <UiButton className={b("buttonFeatures")} onClick={redirectToCli} style={{ marginTop: '22px' }}>
             install Nevermined cli
           </UiButton>
         </div>
