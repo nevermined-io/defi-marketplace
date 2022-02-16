@@ -160,7 +160,7 @@ export const Profile: NextPage = () => {
             {
               assets
                 .filter((asset: any) => completed ? asset.status === assetStatus.COMPLETED : true)
-                .filter((asset: any) => processing ? asset.status === assetStatus.PROCESSING : true)
+                .filter((asset: any) => processing ?( asset.status === assetStatus.PROCESSING || asset.status === assetStatus.PENDING) : true)
                 .slice(calculateStartEndPage().start, calculateStartEndPage().end)
                 .map((asset: Bundle, index: number) => (
                   <UiLayout key={asset.did} className={b('asset')}>
