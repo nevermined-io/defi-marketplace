@@ -10,7 +10,8 @@ import { XuiPagination } from 'ui/+assets-query/pagination'
 import { mockAssetArray } from '../utils/mock-bundles'
 enum assetStatus {
   COMPLETED = "COMPLETED",
-  PROCESSING = "PROCESSING"
+  PROCESSING = "PROCESSING",
+  PENDING = "PENDING"
 }
 const BUNDLES_PER_PAGE = 5
 const b = BEM('profile', styles)
@@ -129,7 +130,7 @@ export const Profile: NextPage = () => {
               </div>
             </div>
             {
-              assets.find((item: any) => item.status === assetStatus.PROCESSING) &&
+              assets.find((item: any) => item.status === assetStatus.PROCESSING || item.status === assetStatus.PENDING) &&
               <span className={b("loadspinner")} >
                 <UiText type="small" wrapper="small" variants={['highlight']} className={b("loadspinner", ["text"])}>Checkout packaging in progress...</UiText>
                 <Image width="50" height="50" src="/assets/profile-loadspinner.svg" className={b("loadspinner", ["spinner"])} />
