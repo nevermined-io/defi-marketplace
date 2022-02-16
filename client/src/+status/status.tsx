@@ -5,8 +5,9 @@ import styles from './status.module.scss'
 import { BEM, UiText, UiLayout, UiDivider } from 'ui'
 import { User } from '../context'
 import { PlatformVersions } from '@nevermined-io/nevermined-sdk-js'
+import Image from "next/image"
 
-const b = BEM('details', styles)
+const b = BEM('status', styles)
 
 export const Status: NextPage = () => {
   const { sdk } = useContext(User)
@@ -91,6 +92,11 @@ export const Status: NextPage = () => {
         <UiText block wrapper="h1" type="h1" variants={['heading']}>Marketplace Status</UiText>
         <UiText block type="h3" wrapper="h3" variants={['underline']}>Components status</UiText>
         <UiDivider />
+        <UiLayout type="container"  className={b("spinner-container")} >
+            <UiText className={b("loadspinner")} >
+              <Image width="50" height="50" src="/assets/profile-loadspinner.svg" className={b("loadspinner", ["spinner"])} />
+            </UiText>
+          </UiLayout>
       </UiLayout>
   )
 }
