@@ -7,6 +7,8 @@ import { createBundle, checkBundleStatus } from 'src/shared'
 import { BUNDLE_MAX_RETRYS, BUNDLE_STATUS_COMPLETED, BUNDLE_RETRY_TIMEOUT } from 'src/config'
 import { MetamaskErrorCodes, MetamaskCustomErrors } from '../../../shared/constants'
 import Router from 'next/router'
+import { CircleSpinner } from 'ui/loaders/circle-spinner'
+import Image from 'next/image'
 
 
 interface CreateBundlePopupProps {
@@ -70,7 +72,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
           await new Promise(r => setTimeout(r, BUNDLE_RETRY_TIMEOUT));
         }
       }
-      if (retrys == BUNDLE_MAX_RETRYS)  setView(3)
+      if (retrys == BUNDLE_MAX_RETRYS) setView(3)
     }
   }
 
@@ -87,16 +89,15 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   }
 
   const goToProfile = () => {
-      Router.push('/profile')
+    Router.push('/profile')
   }
 
   useEffect(() => {
     checkStatus()
   }, [bundleId])
 
-
   useEffect(() => {
-    if(did != "") setView(2)
+    if (did != "") setView(2)
   }, [did])
 
   useEffect(() => {
@@ -120,32 +121,36 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   } else if (view == 0) {
     return (
       <>
-      <div className={b('confirm')}>
-        <UiText block type="h3" className={b('text')}>Do you really want to <br /> make this purchase?</UiText>
-        <UiDivider type="xl" />
-        <UiLayout style={{padding: '30px'}}>
-          <UiButton className={b('button')} onClick={start}>Yes</UiButton>
-          <UiDivider vertical />
-          <UiButton className={b('button')} type="secondary" onClick={cleanAndClose}>Cancel</UiButton>
-        </UiLayout>
+        <div className={b('confirm')}>
+          <UiText block type="h3" className={b('text')}>Do you really want to <br /> make this purchase?</UiText>
+          <UiDivider type="xl" />
+          <UiLayout style={{ padding: '30px' }}>
+            <UiButton className={b('button')} onClick={start}>Yes</UiButton>
+            <UiDivider vertical />
+            <UiButton className={b('button')} type="secondary" onClick={cleanAndClose}>Cancel</UiButton>
+          </UiLayout>
         </div>
       </>
     )
   } else if (view == 1) {
     return (
       <>
-      <div className={b('options')}>
-        <UiText block type="h3" className={b('text')}>multiple asset package being created....</UiText>
-        <UiDivider type="xl" />
-        <UiText block type="p" className={b('text')}>
-          If the package takes too long to create, you can leave this page.
-          As soon as the purchase is ready, we will notify you on your profile.
-        </UiText>
-        <UiLayout style={{padding: '30px'}}>
-          <UiButton className={b('button')} onClick={goToProfile} >Go to profile</UiButton>
-          <UiDivider vertical />
-          <UiButton className={b('button')} type="secondary" onClick={cleanAndClose}>Cancel</UiButton>
-        </UiLayout>
+        <div className={b('options')}>
+          <UiText block type="h3" className={b('text', ['title'])}>multiple asset package being created....</UiText>
+          <UiDivider type="m" />
+          <CircleSpinner width="150" height="150" />
+          <UiDivider type="m" />
+          <UiText block type="p" className={b('text')} >
+            If the package takes too long to create, you can leave this page.
+            As soon as the purchase is ready, we will notify you on your profile.
+          </UiText>
+          <UiLayout>
+          </UiLayout>
+          <UiLayout style={{ padding: '30px' }}>
+            <UiButton className={b('button')} onClick={goToProfile} >Go to profile</UiButton>
+            <UiDivider vertical />
+            <UiButton className={b('button')} type="secondary" onClick={cleanAndClose}>Cancel</UiButton>
+          </UiLayout>
         </div>
       </>
     )
@@ -153,14 +158,14 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   else if (view == 2) {
     return (
       <>
-      <div className={b('confirm')}>
-        <UiText block type="h3" className={b('text')}>Your datasets are ready to download</UiText>
-        <UiDivider type="xl" />
-        <UiLayout style={{padding: '30px'}}>
-          <UiButton className={b('button')} onClick={startPurchase} >Purchase</UiButton>
-          <UiDivider vertical />
-          <UiButton className={b('button')} type="secondary" onClick={cleanAndClose}>Cancel</UiButton>
-        </UiLayout>
+        <div className={b('confirm')}>
+          <UiText block type="h3" className={b('text')}>Your datasets are ready to download</UiText>
+          <UiDivider type="xl" />
+          <UiLayout style={{ padding: '30px' }}>
+            <UiButton className={b('button')} onClick={startPurchase} >Purchase</UiButton>
+            <UiDivider vertical />
+            <UiButton className={b('button')} type="secondary" onClick={cleanAndClose}>Cancel</UiButton>
+          </UiLayout>
         </div>
       </>
     )
@@ -168,17 +173,18 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   else if (view == 3) {
     return (
       <>
-      <div className={b('confirm')} style={{height:'420px'}}>
-        <UiText block type="h3" className={b('text')}>This process is taking more than expected</UiText>
-        <UiText block type="p" className={b('text')}>
-          The process is taking longer than expected, you can now leave this page.
-          As soon as the purchase is ready, we will notify you on your profile.
-        </UiText>
-        <UiLayout style={{padding: '30px'}}>
-          <UiButton className={b('button')} onClick={goToProfile}>Go to profile</UiButton>
-          <UiDivider vertical />
-          <UiButton className={b('button')} type="secondary" onClick={cleanAndClose}>Cancel</UiButton>
-        </UiLayout>
+        <div className={b('confirm')} style={{ height: '420px' }}>
+          <UiText block type="h3" className={b('text')}>This process is taking more than expected</UiText>
+          <Image width="50" height="50" src="/assets/nevermined-color.svg" />
+          <UiText block type="p" className={b('text', ['more-than-expected'])}>
+            The process is taking longer than expected, you can now leave this page.
+            As soon as the purchase is ready, we will notify you on your profile.
+          </UiText>
+          <UiLayout style={{ padding: '30px' }}>
+            <UiButton className={b('button')} onClick={goToProfile}>Go to profile</UiButton>
+            <UiDivider vertical />
+            <UiButton className={b('button')} type="secondary" onClick={cleanAndClose}>Cancel</UiButton>
+          </UiLayout>
         </div>
       </>
     )

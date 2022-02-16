@@ -17,7 +17,13 @@
 
   &__text {
     color: gc(gD) !important;
-    padding-top: 60.5px;
+    padding: 10px;
+    &--title{
+      padding: 10px 40px 10px 40px;
+    }
+    &--more-than-expected{
+      padding: 20px
+    }
 
   }
   &__button {

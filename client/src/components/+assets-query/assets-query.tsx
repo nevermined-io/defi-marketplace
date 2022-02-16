@@ -5,7 +5,7 @@ import { SearchQuery } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata
 import { BEM } from 'ui'
 import { User } from '../../context'
 import styles from './assets-query.module.scss'
-import { Loader } from 'ui/Loader/loader'
+import { Loader } from 'ui/loaders/loader'
 import { networkPrefix, subcategoryPrefix } from '../../shared'
 import { XuiPagination } from './pagination'
 import { XuiSearchBar } from './search-bar'
