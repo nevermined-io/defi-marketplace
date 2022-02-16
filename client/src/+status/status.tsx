@@ -6,6 +6,7 @@ import { BEM, UiText, UiLayout, UiDivider } from 'ui'
 import { User } from '../context'
 import { PlatformVersions } from '@nevermined-io/nevermined-sdk-js'
 import Image from "next/image"
+import { CircleSpinner } from 'ui/loaders/circle-spinner'
 
 const b = BEM('status', styles)
 
@@ -92,11 +93,7 @@ export const Status: NextPage = () => {
         <UiText block wrapper="h1" type="h1" variants={['heading']}>Marketplace Status</UiText>
         <UiText block type="h3" wrapper="h3" variants={['underline']}>Components status</UiText>
         <UiDivider />
-        <UiLayout type="container"  className={b("spinner-container")} >
-            <UiText className={b("loadspinner")} >
-              <Image width="50" height="50" src="/assets/profile-loadspinner.svg" className={b("loadspinner", ["spinner"])} />
-            </UiText>
-          </UiLayout>
+        <CircleSpinner width="150" height="150"/>
       </UiLayout>
   )
 }
