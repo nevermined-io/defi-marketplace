@@ -93,9 +93,6 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   }
 
   useEffect(() => {
-    setView(3)
-  })
-  useEffect(() => {
     checkStatus()
   }, [bundleId])
 
