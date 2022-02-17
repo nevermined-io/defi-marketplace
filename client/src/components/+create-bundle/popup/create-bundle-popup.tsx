@@ -93,6 +93,9 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   }
 
   useEffect(() => {
+    setView(3)
+  })
+  useEffect(() => {
     checkStatus()
   }, [bundleId])
 
@@ -176,7 +179,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   else if (view == 3) {
     return (
       <>
-        <div className={b('confirm')}>
+        <div className={b('confirm')} style={{ height: '450px' }}>
           <UiText block type="h3" className={b('text')}>This process is taking more than expected</UiText>
           <Image width="50" height="50" src="/assets/nevermined-color.svg" />
           <UiText block type="p" className={b('text', ['more-than-expected'])}>
