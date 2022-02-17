@@ -146,7 +146,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
           </UiText>
           <UiLayout>
           </UiLayout>
-          <UiLayout style={{ padding: '30px' }}>
+          <UiLayout style={{ padding: '15px' }}>
             <UiButton className={b('button')} onClick={goToProfile} >Go to profile</UiButton>
             <UiDivider vertical />
             <UiButton className={b('button')} type="secondary" onClick={cleanAndClose}>Cancel</UiButton>
@@ -160,7 +160,9 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
       <>
         <div className={b('confirm')}>
           <UiText block type="h3" className={b('text')}>Your datasets are ready to download</UiText>
-          <UiDivider type="xl" />
+          <UiDivider type="s" />
+          <Image width="50" height="50" src="/assets/nevermined-color.svg" />
+          <UiDivider type="s" />
           <UiLayout style={{ padding: '30px' }}>
             <UiButton className={b('button')} onClick={startPurchase} >Purchase</UiButton>
             <UiDivider vertical />
@@ -203,18 +205,19 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   } else if (view === 5) {
     return (
       <>
-        <UiDivider type="l" />
-        <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
-        <UiDivider type="l" />
-        <UiText block type="h3" className={b('text')}>Purchase Successful!</UiText>
-        <UiDivider />
-        <UiText block className={b('text', ['content'])}>You can now download your report anytime from your the history page you have here.</UiText>
-        <UiDivider type="l" />
-        <UiLayout>
-          <UiButton className={b('button')} onClick={close}>Complete</UiButton>
-          <UiDivider vertical />
-          <UiButton className={b('button')} type="secondary" onClick={close}>Download</UiButton>
-        </UiLayout>
+        <div className={b('confirm')} style={{ height: '420px' }}>
+          <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
+          <UiDivider type="l" />
+          <UiText block type="h3" className={b('text')}>Purchase Successful!</UiText>
+          <UiDivider />
+          <UiText block className={b('text', ['content'])}>You can now download your report anytime from your the history page you have here.</UiText>
+          <UiDivider type="l" />
+          <UiLayout style={{ justifyContent: "center" }}>
+            <UiButton className={b('button')} onClick={close}>Complete</UiButton>
+            <UiDivider vertical />
+            <UiButton className={b('button')} type="secondary" onClick={close}>Download</UiButton>
+          </UiLayout>
+        </div>
       </>
     )
   } else {
