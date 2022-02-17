@@ -107,14 +107,16 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   if (error) {
     return (
       <>
-        <UiDivider type="l" />
-        <UiIcon className={b('icon', ['error'])} icon="circleError" size="xxl" />
-        <UiDivider type="l" />
-        <UiText block type="h3" className={b('text')}>Purchase failed!</UiText>
-        <UiDivider />
-        <UiText block className={b('text', ['content'])}>{error}</UiText>
-        <UiDivider type="l" />
-        <UiButton className={b('button')} type="error" onClick={cleanAndClose}>Return</UiButton>
+        <div className={b('confirm')} style={{ height: '420px' }}>
+          <UiDivider type="s" />
+          <UiIcon className={b('icon', ['error'])} icon="circleError" size="xxl" />
+          <UiDivider type="s" />
+          <UiText block type="h3" className={b('text')}>Purchase failed!</UiText>
+          <UiDivider />
+          <UiText block className={b('text', ['content'])}>{error}</UiText>
+          <UiDivider type="s" />
+          <UiButton className={b('button')} type="error" onClick={cleanAndClose}>Return</UiButton>
+        </div>
       </>
     )
 
@@ -137,16 +139,15 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
       <>
         <div className={b('options')}>
           <UiText block type="h3" className={b('text', ['title'])}>multiple asset package being created....</UiText>
-          <UiDivider type="m" />
+          <UiDivider type="s" />
           <CircleSpinner width="150" height="150" />
-          <UiDivider type="m" />
           <UiText block type="p" className={b('text')} >
             If the package takes too long to create, you can leave this page.
             As soon as the purchase is ready, we will notify you on your profile.
           </UiText>
           <UiLayout>
           </UiLayout>
-          <UiLayout style={{ padding: '15px' }}>
+          <UiLayout style={{ padding: '5px', justifyContent: "center" }}>
             <UiButton className={b('button')} onClick={goToProfile} >Go to profile</UiButton>
             <UiDivider vertical />
             <UiButton className={b('button')} type="secondary" onClick={cleanAndClose}>Cancel</UiButton>
@@ -163,7 +164,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
           <UiDivider type="s" />
           <Image width="50" height="50" src="/assets/nevermined-color.svg" />
           <UiDivider type="s" />
-          <UiLayout style={{ padding: '30px' }}>
+          <UiLayout style={{ padding: '5px', justifyContent: "center" }}>
             <UiButton className={b('button')} onClick={startPurchase} >Purchase</UiButton>
             <UiDivider vertical />
             <UiButton className={b('button')} type="secondary" onClick={cleanAndClose}>Cancel</UiButton>
@@ -175,14 +176,14 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   else if (view == 3) {
     return (
       <>
-        <div className={b('confirm')} style={{ height: '420px' }}>
+        <div className={b('confirm')}>
           <UiText block type="h3" className={b('text')}>This process is taking more than expected</UiText>
           <Image width="50" height="50" src="/assets/nevermined-color.svg" />
           <UiText block type="p" className={b('text', ['more-than-expected'])}>
             The process is taking longer than expected, you can now leave this page.
             As soon as the purchase is ready, we will notify you on your profile.
           </UiText>
-          <UiLayout style={{ padding: '30px' }}>
+          <UiLayout style={{ padding: '5px', justifyContent: "center" }}>
             <UiButton className={b('button')} onClick={goToProfile}>Go to profile</UiButton>
             <UiDivider vertical />
             <UiButton className={b('button')} type="secondary" onClick={cleanAndClose}>Cancel</UiButton>
@@ -193,19 +194,18 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   } else if (view === 4) {
     return (
       <>
-        <UiText block type="h3" className={b('text')}>Transaction in <br /> progress...</UiText>
-        <UiDivider type="l" />
-        <UiDivider />
-        <UiCircleProgress
-          progress={step / maxStep}
-          content={stepMessages[step]} />
-        <UiDivider />
+        <div className={b('options')} style={{ height: '480px' }}>
+          <UiText block type="h3" className={b('text')}>Transaction in <br /> progress...</UiText>
+          <UiCircleProgress
+            progress={step / maxStep}
+            content={stepMessages[step]} />
+        </div>
       </>
     )
   } else if (view === 5) {
     return (
       <>
-        <div className={b('confirm')} style={{ height: '420px' }}>
+        <div className={b('confirm')} style={{ height: '480px' }}>
           <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
           <UiDivider type="l" />
           <UiText block type="h3" className={b('text')}>Purchase Successful!</UiText>
