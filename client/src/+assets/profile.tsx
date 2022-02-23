@@ -4,21 +4,29 @@ import Image from "next/image"
 
 import { User } from '../context'
 import styles from './profile.module.scss'
-import { BEM, UiText, UiLayout, UiIcon, UiDivider, XuiBuyAsset } from 'ui'
+import { BEM, UiText, UiLayout, UiDivider, XuiBuyAsset } from 'ui'
 import { getAllUserBundlers, Bundle } from 'src/shared'
 import { XuiPagination } from 'ui/+assets-query/pagination'
-import { mockAssetArray } from '../utils/mock-bundles'
+import { Account, subgraphs } from '@nevermined-io/nevermined-sdk-js'
+import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { accessConditionGraphUrl } from 'src/config'
+
 enum assetStatus {
   COMPLETED = "COMPLETED",
   PROCESSING = "PROCESSING",
   PENDING = "PENDING"
 }
+
+interface ExtendedBundle extends Bundle {
+  purchased: boolean
+}
+
 const BUNDLES_PER_PAGE = 5
 const b = BEM('profile', styles)
 export const Profile: NextPage = () => {
   const { sdk, account } = useContext(User)
 
-  const [assets, setAssets] = useState<Bundle[]>([])
+  const [assets, setAssets] = useState<ExtendedBundle[]>([])
 
   // const [all, setAll] = useState<boolean>(false) TBI
   const [completed, setCompleted] = useState<boolean>(false)
@@ -26,24 +34,55 @@ export const Profile: NextPage = () => {
   // const [sold, setSold] = useState<boolean>(false) TBI
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
+  const [userAccount, setUserAccount] = useState<Account>(null)
 
 
   useEffect(() => {
     if (!sdk.accounts) {
       return
     }
+    sdk.accounts.list().then(
+      accounts => setUserAccount(accounts[0])
+    )
     loadBundles()
       .then((assets: any[]) => {
         setAssets(assets)
         calculatePages(assets)
       })
+
   }, [sdk.accounts])
 
+
+  const loadEvents = async (account: string) => {
+    const fullfilled = await subgraphs.AccessCondition.getFulfilleds(
+      accessConditionGraphUrl,
+      {
+        where: {
+          _grantee: account,
+        },
+      },
+      {
+        _documentId: true
+      }
+    )
+
+    return fullfilled
+
+  }
+
   const loadBundles = async () => {
-    const account = (await sdk.accounts.list())[0]
-    const userBundles = account ? await getAllUserBundlers(account.getId()) : []
-    return userBundles
-    // return mockAssetArray
+    const userBundles = userAccount ? await getAllUserBundlers(userAccount.getId()) : []
+    const purchasedBundles = await loadEvents(userAccount.getId())
+    const userBundlesPurchased: ExtendedBundle[] = userBundles.map(bundle => {
+      return {
+        ...bundle,
+        purchased: purchasedBundles.filter(
+          purchased => purchased._documentId == didZeroX(bundle.did)
+        ).length > 0 ? true : false,
+      }
+    })
+
+    return userBundlesPurchased
   }
 
   const calculateStartEndPage = useCallback(() => {
@@ -82,6 +121,13 @@ export const Profile: NextPage = () => {
     }
     calculatePages(assetArray)
     setPage(1)
+  }
+
+  const downloadAsset = (did: any) => {
+    sdk.assets.download(
+      did,
+      userAccount
+    )
   }
 
 
@@ -160,9 +206,9 @@ export const Profile: NextPage = () => {
             {
               assets
                 .filter((asset: any) => completed ? asset.status === assetStatus.COMPLETED : true)
-                .filter((asset: any) => processing ?( asset.status === assetStatus.PROCESSING || asset.status === assetStatus.PENDING) : true)
+                .filter((asset: any) => processing ? (asset.status === assetStatus.PROCESSING || asset.status === assetStatus.PENDING) : true)
                 .slice(calculateStartEndPage().start, calculateStartEndPage().end)
-                .map((asset: Bundle, index: number) => (
+                .map((asset: ExtendedBundle, index: number) => (
                   <UiLayout key={asset.did} className={b('asset')}>
                     <UiText className={b('asset-date')} type="p" variants={['highlight']}>
                       {asset.bundleId}
@@ -182,9 +228,13 @@ export const Profile: NextPage = () => {
                     <UiDivider flex />
                     {/* <UiDivider flex /> */}
                     <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
-                    <XuiBuyAsset asset={asset.did}>
-                      <img width="24px" src="assets/basket_icon.svg" style={{ cursor: 'pointer' }} />
-                    </XuiBuyAsset>
+                    {asset.purchased ?
+                      <img width="24px" src="assets/download_icon.svg" style={{ cursor: 'pointer' }}  onClick={() => downloadAsset(asset.did)}/>
+                      :
+                      <XuiBuyAsset asset={asset.did}>
+                        <img width="24px" src="assets/basket_icon.svg" style={{ cursor: 'pointer' }} />
+                      </XuiBuyAsset>}
+
                   </UiLayout>
                 ))}
             {
@@ -193,16 +243,16 @@ export const Profile: NextPage = () => {
             }
           </UiLayout>
         </UiLayout>
-      </>:
+      </> :
       <UiLayout type="container">
 
         <UiLayout type="container">
           <UiText wrapper="h1" type="h1" variants={['heading']}>Profile</UiText>
-          <UiText type="h2" wrapper="h2"> {account ? `${account.substr(0, 6)}...${account.substr(-4)}`: ""}</UiText>
+          <UiText type="h2" wrapper="h2"> {account ? `${account.substr(0, 6)}...${account.substr(-4)}` : ""}</UiText>
         </UiLayout>
         <UiDivider type="l" />
         <UiLayout className={b('asset', ['header-asset-row'])}>
-          <UiText style={{ justifyContent: "center"}} type="p" variants={['secondary']}>
+          <UiText style={{ justifyContent: "center" }} type="p" variants={['secondary']}>
             NO ORDERS YET
           </UiText>
         </UiLayout>

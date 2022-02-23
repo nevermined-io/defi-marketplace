@@ -44,6 +44,9 @@ export const BUNDLE_RETRY_TIMEOUT = 5000
 export const BUNDLE_STATUS_COMPLETED = 'COMPLETED'
 export const discordUrl = 'https://discord.gg/d8B4BkV3'
 export const networkArray = ["bsc", "avalanche", "celo", "polygon", "optimism", "ethereum", "fantom", "arbitrum"]
+export const accessConditionGraphUrl = process.env.NEXT_PUBLIC_ACCESS_CONDITION_URI || "https://graph-node.mumbai.keyko.rocks/subgraphs/name/neverminedio/AccessCondition"
+
+
 
 
 
