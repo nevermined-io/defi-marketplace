@@ -34,22 +34,18 @@ export const Profile: NextPage = () => {
   // const [sold, setSold] = useState<boolean>(false) TBI
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
-  const [userAccount, setUserAccount] = useState<Account>(null)
 
 
   useEffect(() => {
     if (!sdk.accounts) {
       return
     }
-    sdk.accounts.list().then(
-      accounts => setUserAccount(accounts[0])
-    )
-    loadBundles()
-      .then((assets: any[]) => {
-        setAssets(assets)
-        calculatePages(assets)
-      })
-
+    sdk.accounts.list().then((accounts) => {
+        loadBundles(accounts[0])
+          .then((assets: any[]) => {
+            setAssets(assets)
+            calculatePages(assets)
+      })})
   }, [sdk.accounts])
 
 
@@ -70,8 +66,8 @@ export const Profile: NextPage = () => {
 
   }
 
-  const loadBundles = async () => {
-    const userBundles = userAccount ? await getAllUserBundlers(userAccount.getId()) : []
+  const loadBundles = async (userAccount: Account) => {
+    const userBundles = await getAllUserBundlers(userAccount.getId())
     const purchasedBundles = await loadEvents(userAccount.getId())
     const userBundlesPurchased: ExtendedBundle[] = userBundles.map(bundle => {
       return {
@@ -229,7 +225,7 @@ export const Profile: NextPage = () => {
                     {/* <UiDivider flex /> */}
                     <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
                     {asset.purchased ?
-                      <img width="24px" src="assets/download_icon.svg" style={{ cursor: 'pointer' }}  onClick={() => downloadAsset(asset.did)}/>
+                      <img width="24px" src="assets/download_icon.svg" style={{ cursor: 'pointer' }} onClick={() => downloadAsset(asset.did)} />
                       :
                       <XuiBuyAsset asset={asset.did}>
                         <img width="24px" src="assets/basket_icon.svg" style={{ cursor: 'pointer' }} />
