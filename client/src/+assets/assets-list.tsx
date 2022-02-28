@@ -17,6 +17,7 @@ import {
 import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
+import { AddedToBasketPopup } from './added-to-basket-popup'
 
 interface AssetsListProps {
   assets: DDO[]
@@ -51,20 +52,7 @@ export function AssetsList({ assets }: AssetsListProps) {
 
   return (
     <div className={b()}>
-      <UiPopup ref={popupRef}>
-        <div className={b('basket-popup')}>
-          <img src="assets/check_mark.svg" width="73px" />
-          <UiText style={{ color: '#2E405A', margin: '72px 0 25px' }} type="h3">Added to basket</UiText>
-          <div className={b('popup-text')}>
-            You can now view your basket contents from by clicking the navigation icon&nbsp;&nbsp;
-            <img src="assets/basket_icon.svg" width="16px" />
-          </div>
-          <div className={b('popup-buttons')}>
-            <UiButton cover style={{ padding: '0', width: '170px' }} onClick={closePopup}>Back To Search</UiButton>
-            <UiButton cover style={{ padding: '0', width: '170px' }} type="alt " onClick={() => Router.push('/checkout')}>Go To Basket</UiButton>
-          </div>
-        </div>
-      </UiPopup>
+       <AddedToBasketPopup  closePopup={closePopup} popupRef={popupRef} />
 
       <div className={b('heading')}>
         <div className={b('batch-select-wrapper')}>
