@@ -11,6 +11,7 @@ import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiTokenName, XuiTokenPrice, 
 import { User } from '../context'
 import { toDate, getDdoTokenAddress } from '../shared'
 import { Markdown } from 'ui/markdown/markdown'
+import { AddedToBasketPopup } from './added-to-basket-popup'
 
 const b = BEM('details', styles)
 
@@ -78,20 +79,7 @@ export const AssetDetails: NextPage = () => {
 
   return (
     <>
-      <UiPopup ref={popupRef}>
-        <div className={b('basket-popup')}>
-          <img src="/assets/check_mark.svg" width="73px" />
-          <UiText style={{ color: '#2E405A', margin: '72px 0 25px' }} type="h3">Added to basket</UiText>
-          <div className={b('popup-text')}>
-            You can now view your basket contents from by clicking the navigation icon&nbsp;&nbsp;
-            <img src="/assets/basket_icon.svg" width="16px" />
-          </div>
-          <div className={b('popup-buttons')}>
-            <UiButton cover style={{ padding: '0', width: '170px' }} onClick={closePopup}>Back To Search</UiButton>
-            <UiButton cover style={{ padding: '0', width: '170px' }} type="alt " onClick={() => Router.push('/checkout')}>Go To Basket</UiButton>
-          </div>
-        </div>
-      </UiPopup>
+      <AddedToBasketPopup  closePopup={closePopup} popupRef={popupRef} />
 
       <UiLayout type="container">
         <UiText wrapper="h1" type="h1" variants={['heading']}>Details</UiText>
@@ -144,7 +132,7 @@ export const AssetDetails: NextPage = () => {
 
             <UiDivider />
 
-            <UiButton cover onClick={(e) => {
+            <UiButton cover onClick={(e: any) => {
               openPopup(e)
               addtoCart()
             }}>Add to cart</UiButton>
