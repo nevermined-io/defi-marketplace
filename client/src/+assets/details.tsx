@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext, useState, createRef } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
@@ -7,7 +7,7 @@ import { AdditionalInformation } from "@nevermined-io/nevermined-sdk-js"
 import Image from "next/image"
 
 
-import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiTokenName, XuiTokenPrice, XuiBuyAsset, UiButton } from 'ui'
+import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiTokenName, XuiTokenPrice, UiButton, UiPopupHandlers, UiPopup } from 'ui'
 import { User } from '../context'
 import { toDate, getDdoTokenAddress } from '../shared'
 import { Markdown } from 'ui/markdown/markdown'
@@ -23,6 +23,17 @@ export const AssetDetails: NextPage = () => {
   const [asset, setAsset] = useState<DDO | false>()
   const { sdk, account } = useContext(User)
   const { basket, addToBasket } = useContext(User)
+  const popupRef = createRef<UiPopupHandlers>()
+
+  const openPopup = (event: any) => {
+    popupRef.current?.open()
+    event.preventDefault()
+  }
+
+  const closePopup = (event: any) => {
+    popupRef.current?.close()
+    event.preventDefault()
+  }
 
   useEffect(() => {
     if (!sdk.assets) {
@@ -42,7 +53,7 @@ export const AssetDetails: NextPage = () => {
         {asset === false ?
           <UiText alert>Error loading the asset</UiText>
           :
-          <UiLayout type="container"  className={b("spinner-container")} >
+          <UiLayout type="container" className={b("spinner-container")} >
             <UiText className={b("loadspinner")} >
               <Image width="50" height="50" src="/assets/profile-loadspinner.svg" className={b("loadspinner", ["spinner"])} />
             </UiText>
@@ -67,6 +78,21 @@ export const AssetDetails: NextPage = () => {
 
   return (
     <>
+      <UiPopup ref={popupRef}>
+        <div className={b('basket-popup')}>
+          <img src="/assets/check_mark.svg" width="73px" />
+          <UiText style={{ color: '#2E405A', margin: '72px 0 25px' }} type="h3">Added to basket</UiText>
+          <div className={b('popup-text')}>
+            You can now view your basket contents from by clicking the navigation icon&nbsp;&nbsp;
+            <img src="/assets/basket_icon.svg" width="16px" />
+          </div>
+          <div className={b('popup-buttons')}>
+            <UiButton cover style={{ padding: '0', width: '170px' }} onClick={closePopup}>Back To Search</UiButton>
+            <UiButton cover style={{ padding: '0', width: '170px' }} type="alt " onClick={() => Router.push('/checkout')}>Go To Basket</UiButton>
+          </div>
+        </div>
+      </UiPopup>
+
       <UiLayout type="container">
         <UiText wrapper="h1" type="h1" variants={['heading']}>Details</UiText>
         <UiText type="h2" wrapper="h2" variants={['heading']}>{metadata.main.name}</UiText>
@@ -118,7 +144,11 @@ export const AssetDetails: NextPage = () => {
 
             <UiDivider />
 
-            <UiButton cover onClick={addtoCart}>Add to cart</UiButton>
+            <UiButton cover onClick={(e) => {
+              openPopup(e)
+              addtoCart()
+            }}>Add to cart</UiButton>
+            {/* <UiButton cover onClick={addtoCart}>Add to cart</UiButton> */}
           </div>
         </UiLayout>
 
