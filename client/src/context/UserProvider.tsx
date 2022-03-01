@@ -5,6 +5,7 @@ import { User } from '.'
 import MarketProvider from './MarketProvider'
 import { MetamaskProvider } from './MetamaskProvider'
 import { BurnerWalletProvider } from './BurnerWalletProvider'
+import { correctNetworkName } from '../config';
 
 import {
     metadataUri,
@@ -224,12 +225,15 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
 
     private loadNevermined = async (): Promise<void> => {
         const { sdk } = await provideNevermined(this.state.web3)
-        this.setState({ sdk, isLoading: false }, () => {
+        this.setState({ sdk, isLoading: false }, async () => {
+            const network = await sdk.keeper?.getNetworkName();
             this.initNetworkPoll()
             this.initAccountsPoll()
             this.fetchNetwork()
             this.fetchAccounts()
-            this.fetchTokenSymbol()
+            if (network === correctNetworkName) {
+                this.fetchTokenSymbol()
+            }
         })
     }
 
