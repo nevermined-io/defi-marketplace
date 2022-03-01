@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import type { NextPage } from 'next'
 
-import { UiText, UiLayout, UiDivider, UiIcon, XuiTokenPrice, XuiTokenName, BEM, UiButton} from 'ui'
+import { UiText, UiLayout, UiDivider, UiIcon, XuiTokenPrice, XuiTokenName, BEM, UiButton } from 'ui'
 import { User } from '../context'
 import { getDdoTokenAddress, getDefiInfo, toDate } from '../shared'
 import Link from 'next/link'
@@ -100,12 +100,12 @@ export const Checkout: NextPage = () => {
               !(isLogged && account) ?
                 <UiButton cover onClick={loginMetamask}>Connect Wallet</UiButton>
                 :
-                (network === correctNetworkName && assets.length > 0 && connected) ?
+                (network === correctNetworkName && assets.length && connected) ?
                   <XuiCreateBundle assets={assets}>
-                    {assets.length > 0 ? <UiButton cover>Purchase</UiButton> : <></>}
+                    {assets.length ? <UiButton cover>Purchase</UiButton> : <></>}
                   </XuiCreateBundle>
                   :
-                  assets.length > 0 ? <UiButton cover onClick={handleChangeNetwork}>Switch Network & Purchase</UiButton> : <></>
+                  assets.length ? <UiButton cover onClick={handleChangeNetwork}>Switch Network & Purchase</UiButton> : <></>
             }
             <UiDivider />
             <UiButton cover type="alt " onClick={() => Router.push('/list')}>Back To Marketplace</UiButton>
