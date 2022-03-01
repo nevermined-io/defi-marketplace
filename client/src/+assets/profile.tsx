@@ -34,13 +34,14 @@ export const Profile: NextPage = () => {
   // const [sold, setSold] = useState<boolean>(false) TBI
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
-
+  const [userAccount, setUserAccount] = useState<Account>()
 
   useEffect(() => {
     if (!sdk.accounts) {
       return
     }
     sdk.accounts.list().then((accounts) => {
+        setUserAccount(accounts[0])
         loadBundles(accounts[0])
           .then((assets: any[]) => {
             setAssets(assets)
@@ -66,9 +67,9 @@ export const Profile: NextPage = () => {
 
   }
 
-  const loadBundles = async (userAccount: Account) => {
-    const userBundles = await getAllUserBundlers(userAccount.getId())
-    const purchasedBundles = await loadEvents(userAccount.getId())
+  const loadBundles = async (account: Account) => {
+    const userBundles = await getAllUserBundlers(account.getId())
+    const purchasedBundles = await loadEvents(account.getId())
     const userBundlesPurchased: ExtendedBundle[] = userBundles.map(bundle => {
       return {
         ...bundle,
@@ -120,10 +121,12 @@ export const Profile: NextPage = () => {
   }
 
   const downloadAsset = (did: any) => {
-    sdk.assets.download(
-      did,
-      userAccount
-    )
+    if(userAccount) {
+      sdk.assets.download(
+        did,
+        userAccount
+      )
+    }
   }
 
 
