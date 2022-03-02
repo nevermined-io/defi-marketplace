@@ -134,8 +134,30 @@ export const Profile: NextPage = () => {
   }
 
   const onOpenBundleDetails = async (index: number) => {
-    showBundleDetail[index] = !showBundleDetail[index];
-    setShowBundleDetail([...showBundleDetail]);
+    showBundleDetail[index] = !showBundleDetail[index]
+    setShowBundleDetail([...showBundleDetail])
+  }
+
+  const setFormat = (filename: string) => {
+    const parts = filename.replace('_', '-').split('-')
+    let date = parts[4]
+      .slice(0, 8)
+      .split('')
+
+    date.splice(4, 0, ':')
+    date.splice(7, 0, ':')
+    
+    return (
+      <>
+        <span className={b('asset-detail')}>Protocol:</span><span className={b('asset-detail-value')}> {parts[0]}</span>
+        <span className={b('asset-detail')}>Version:</span> <span className={b('asset-detail-value')}> {parts[1]}</span>
+        <span className={b('asset-detail')}>Entity:</span> <span className={b('asset-detail-value')}> {parts[2]}</span>
+        <span className={b('asset-detail')}>Blockchain:</span> <span className={b('asset-detail-value')}> {parts[3].toUpperCase()}</span>
+        <span className={b('asset-detail')}>Date:</span> <span className={b('asset-detail-value')}> 
+          {date.join('')}
+            </span>
+      </>
+    )
   }
 
   return (
@@ -255,11 +277,7 @@ export const Profile: NextPage = () => {
                             <UiLayout className={b('asset-detail-container')}>
                               <UiDivider vertical/>
                               <UiText className={b('asset-date')} type="small" variants={['secondary']}>
-                                <span className={b('asset-detail')}>Filename:</span> {dataSet.fileName}
-                              </UiText>
-                              <UiDivider flex/>
-                              <UiText className={b('asset-date')} type="small" variants={['secondary']}>
-                              <span className={b('asset-detail')}>Source:</span> {dataSet.source}
+                                {setFormat(dataSet.fileName)}
                               </UiText>
                             </UiLayout>
                           </UiLayout>
