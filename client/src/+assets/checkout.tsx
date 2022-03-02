@@ -25,6 +25,7 @@ export const Checkout: NextPage = () => {
     connect(true)
   }
 
+
   return (
     <>
       <UiLayout justify="flex-start" type="container">

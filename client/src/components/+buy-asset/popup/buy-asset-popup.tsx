@@ -39,6 +39,7 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
     promise
       .then(async agreementId => {
         await sdk.assets.consume(agreementId, asset, account)
+        setView(2)
       })
       .catch(error => setError(error.code === MetamaskErrorCodes.CANCELED ? MetamaskCustomErrors.CANCELED[1] : error.message))
   }, [])

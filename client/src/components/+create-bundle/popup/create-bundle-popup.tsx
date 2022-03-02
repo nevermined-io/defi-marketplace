@@ -34,6 +34,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   const [view, setView] = useState<0 | 1 | 2 | 3 | 4 | 5>(0)
   const [step, setStep] = useState<OrderProgressStep>(0)
   const maxStep = (Object.keys(OrderProgressStep).length / 2) - 1
+  const { removeFromBasket } = useContext(User)
 
 
   const startPurchase = useCallback(async () => {
@@ -46,10 +47,16 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
     promise
       .then(async agreementId => {
         await sdk.assets.consume(agreementId, did, account)
+        setView(5)
+        emptyBasket()
       })
       .catch(error => setError(error.code === MetamaskErrorCodes.CANCELED ? MetamaskCustomErrors.CANCELED[1] : error.message))
   }, [did])
 
+
+  const emptyBasket =() => {
+    removeFromBasket(assets.map(asset => asset.id))
+  }
 
   const start = async () => {
     const account = (await sdk.accounts.list())[0]
@@ -89,6 +96,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   }
 
   const goToProfile = () => {
+    emptyBasket()
     Router.push('/profile')
   }
 
@@ -210,12 +218,10 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
           <UiDivider type="l" />
           <UiText block type="h3" className={b('text')}>Purchase Successful!</UiText>
           <UiDivider />
-          <UiText block className={b('text', ['content'])}>You can now download your report anytime from your the history page you have here.</UiText>
+          <UiText block className={b('text', ['content'])}>You can now download your report anytime from your profile page.</UiText>
           <UiDivider type="l" />
           <UiLayout style={{ justifyContent: "center" }}>
             <UiButton className={b('button')} onClick={close}>Complete</UiButton>
-            <UiDivider vertical />
-            <UiButton className={b('button')} type="secondary" onClick={close}>Download</UiButton>
           </UiLayout>
         </div>
       </>
