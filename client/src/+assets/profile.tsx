@@ -35,18 +35,22 @@ export const Profile: NextPage = () => {
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
   const [showBundleDetail, setShowBundleDetail] = useState<boolean[]>(assets.map(asset => !asset))
-
+  const [userAccount, setUserAccount] = useState<Account>()
 
   useEffect(() => {
     if (!sdk.accounts) {
       return
     }
     sdk.accounts.list().then((accounts) => {
+      if (accounts.length > 0) {
+        setUserAccount(accounts[0])
         loadBundles(accounts[0])
           .then((assets: any[]) => {
             setAssets(assets)
             calculatePages(assets)
-      })})
+          })
+      }
+    })
   }, [sdk.accounts])
 
 
@@ -67,9 +71,9 @@ export const Profile: NextPage = () => {
 
   }
 
-  const loadBundles = async (userAccount: Account) => {
-    const userBundles = await getAllUserBundlers(userAccount.getId())
-    const purchasedBundles = await loadEvents(userAccount.getId())
+  const loadBundles = async (account: Account) => {
+    const userBundles = await getAllUserBundlers(account.getId())
+    const purchasedBundles = await loadEvents(account.getId())
     const userBundlesPurchased: ExtendedBundle[] = userBundles.map(bundle => {
       return {
         ...bundle,
@@ -121,10 +125,12 @@ export const Profile: NextPage = () => {
   }
 
   const downloadAsset = (did: any) => {
-    sdk.assets.download(
-      did,
-      userAccount
-    )
+    if (userAccount) {
+      sdk.assets.download(
+        did,
+        userAccount
+      )
+    }
   }
 
   const onOpenBundleDetails = async (index: number) => {

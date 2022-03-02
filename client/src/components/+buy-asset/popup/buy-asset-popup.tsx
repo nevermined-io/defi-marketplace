@@ -39,6 +39,7 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
     promise
       .then(async agreementId => {
         await sdk.assets.consume(agreementId, asset, account)
+        setView(2)
       })
       .catch(error => setError(error.code === MetamaskErrorCodes.CANCELED ? MetamaskCustomErrors.CANCELED[1] : error.message))
   }, [])
@@ -65,13 +66,15 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
   } else if (view === 0) {
     return (
       <>
-        <UiText block type="h3" className={b('text')}>Do you really want to <br /> make this purchase?</UiText>
-        <UiDivider type="xl" />
-        <UiLayout>
-          <UiButton className={b('button')} onClick={start}>Yes</UiButton>
-          <UiDivider vertical />
-          <UiButton className={b('button')} type="secondary" onClick={close}>Cancel</UiButton>
-        </UiLayout>
+        <div className={b('confirm')}>
+          <UiText block type="h3" className={b('text')}>Do you really want to <br /> make this purchase?</UiText>
+          <UiDivider type="xl" />
+          <UiLayout style={{ padding: '30px' }}>
+            <UiButton className={b('button')} onClick={start}>Yes</UiButton>
+            <UiDivider vertical />
+            <UiButton className={b('button')} type="secondary" onClick={close}>Cancel</UiButton>
+          </UiLayout>
+        </div>
       </>
     )
   } else if (view === 1) {

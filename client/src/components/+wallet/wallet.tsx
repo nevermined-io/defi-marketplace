@@ -1,5 +1,5 @@
-import React, { Props, createRef, useEffect, useState } from 'react'
-import { BEM, modList, extendClassName, UiButton, UiPopup, UiPopupHandlers } from 'ui'
+import React from 'react'
+import { BEM, UiButton} from 'ui'
 import { User } from '../../context'
 import { correctNetworkName } from '../../config'
 import styles from './wallet.module.scss'
@@ -12,21 +12,7 @@ interface WalletProps {
 const b = BEM('wallet', styles)
 
 export function XuiWallet(props: WalletProps) {
-  const { isLogged, account, network, basket, loginMetamask, switchToCorrectNetwork } = React.useContext(User)
-  const [connected, connect] = useState(false)
-
-  const UiRef = createRef<UiPopupHandlers>()
-
-  useEffect(() => {
-    if (!network) { UiRef.current?.close() }
-    if (network !== correctNetworkName) { UiRef.current?.open() }
-    if (network === correctNetworkName || connected) { UiRef.current?.close() }
-  }, [UiRef, network, connected]);
-
-  const handleChangeNetwork = () => {
-    switchToCorrectNetwork()
-    connect(true)
-  }
+  const { isLogged, account, network, basket, loginMetamask } = React.useContext(User)
 
   return !(isLogged && account)
     ? (
@@ -53,11 +39,6 @@ export function XuiWallet(props: WalletProps) {
         <div className={b('block', ['network'])}>
           {network}
         </div>
-        <UiPopup ref={UiRef}>
-          <UiButton onClick={handleChangeNetwork}>
-            {`Switch To ${correctNetworkName} Network`}
-          </UiButton>
-        </UiPopup>
       </>
     )
 }
