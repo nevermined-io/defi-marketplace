@@ -5,8 +5,7 @@ import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import styles from './details.module.scss'
 import { AdditionalInformation } from "@nevermined-io/nevermined-sdk-js"
 import Image from "next/image"
-
-
+import { Loader } from '../components/loaders/loader';
 import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiTokenName, XuiTokenPrice, UiButton, UiPopupHandlers, UiPopup } from 'ui'
 import { User } from '../context'
 import { toDate, getDdoTokenAddress } from '../shared'
@@ -56,7 +55,7 @@ export const AssetDetails: NextPage = () => {
           :
           <UiLayout type="container" className={b("spinner-container")} >
             <UiText className={b("loadspinner")} >
-              <Image width="50" height="50" src="/assets/profile-loadspinner.svg" className={b("loadspinner", ["spinner"])} />
+              <Loader/>
             </UiText>
           </UiLayout>
         }
