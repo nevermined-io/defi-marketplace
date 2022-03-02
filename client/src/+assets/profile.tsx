@@ -9,7 +9,7 @@ import { getAllUserBundlers, Bundle } from 'src/shared'
 import { XuiPagination } from 'ui/+assets-query/pagination'
 import { Account, subgraphs } from '@nevermined-io/nevermined-sdk-js'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
-import { accessConditionGraphUrl } from 'src/config'
+import { accessConditionGraphUrl, entitesNames } from 'src/config'
 
 enum assetStatus {
   COMPLETED = "COMPLETED",
@@ -153,7 +153,7 @@ export const Profile: NextPage = () => {
       <>
         <span className={b('asset-detail')}>Protocol:</span><span className={b('asset-detail-value')}> {parts[0]}</span>
         <span className={b('asset-detail')}>Version:</span> <span className={b('asset-detail-value')}> {parts[1]}</span>
-        <span className={b('asset-detail')}>Entity:</span> <span className={b('asset-detail-value')}> {parts[2]}</span>
+        <span className={b('asset-detail')}>Entity:</span> <span className={b('asset-detail-value')}> {entitesNames[parts[2]]}</span>
         <span className={b('asset-detail')}>Blockchain:</span> <span className={b('asset-detail-value')}> {parts[3].toUpperCase()}</span>
         <span className={b('asset-detail')}>Date:</span> <span className={b('asset-detail-value')}>
           {date.join('')}
