@@ -46,7 +46,9 @@ export const Profile: NextPage = () => {
         setUserAccount(accounts[0])
         loadBundles(accounts[0])
           .then((assets: any[]) => {
-            setAssets(assets)
+            setAssets(assets.sort(
+              (a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+            )
             calculatePages(assets)
           })
       }
@@ -146,14 +148,14 @@ export const Profile: NextPage = () => {
 
     date.splice(4, 0, ':')
     date.splice(7, 0, ':')
-    
+
     return (
       <>
         <span className={b('asset-detail')}>Protocol:</span><span className={b('asset-detail-value')}> {parts[0]}</span>
         <span className={b('asset-detail')}>Version:</span> <span className={b('asset-detail-value')}> {parts[1]}</span>
         <span className={b('asset-detail')}>Entity:</span> <span className={b('asset-detail-value')}> {parts[2]}</span>
         <span className={b('asset-detail')}>Blockchain:</span> <span className={b('asset-detail-value')}> {parts[3].toUpperCase()}</span>
-        <span className={b('asset-detail')}>Date:</span> <span className={b('asset-detail-value')}> 
+        <span className={b('asset-detail')}>Date:</span> <span className={b('asset-detail-value')}>
           {date.join('')}
             </span>
       </>
@@ -269,7 +271,7 @@ export const Profile: NextPage = () => {
                             <img width="24px" src="assets/basket_icon.svg" style={{ cursor: 'pointer' }} />
                           </XuiBuyAsset>}
                       </UiLayout>
-                      {showBundleDetail[index] && 
+                      {showBundleDetail[index] &&
                       asset.datasets.map(dataSet => (
                         <UiLayout className={b('asset-dataset')} justify='center' align='center' direction='column' type='container' key={dataSet.datasetId}>
                           <UiLayout className={b('asset-dataset-container')}>

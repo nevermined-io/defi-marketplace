@@ -16,7 +16,7 @@
     display: flex;
     justify-content: space-between;
   }
-  
+
   &__all-button-container{
     display: flex;
     width: 60px;
@@ -30,13 +30,13 @@
     text-transform: capitalize;
     text-align: center;
   }
-  
+
   &__button-container-second{
     display: flex;
     // width: 100px;
     height: 40px;
     margin-top:10px;
-    
+
   }
 
   &__all-button{
@@ -49,7 +49,7 @@
       background-color: gc(sM);
       color:gc(gVD)
     }
-   
+
   }
 
   &__other-button{
@@ -173,13 +173,14 @@
   &__loadspinner{
     display: flex;
     align-items: center;
+    padding-right: 42px;
 
     &--text{
       position:relative;
       right:-30px;
       z-index:2
-      
-      
+
+
 
     }
     &--spinner{
