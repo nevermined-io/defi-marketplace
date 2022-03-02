@@ -66,13 +66,34 @@
   }
 
   &__asset {
-    height: 74px;
-    align-items: center;
+    flex-flow: column;
     margin-bottom: 16px;
-    padding: 0 20px;
     border: 2px solid gc(gM);
 
+    &-bundle {
+      padding: 0 16px;
+      align-items: center;
+      flex-flow: row;
+    }
+
+    &-button {
+      padding: 0 15px;
+    }
+
+    &-arrow {
+      fill: #fff;
+      transform: rotate(-90deg);
+      &--shrink {
+        transform: rotate(0);
+      }
+    }
+
+    &-bundle-id {
+      margin-left: 10px;
+    }
+
     &--date {
+      flex-flow: row;
       margin: 0px 20px;
       padding-top: 8px;
 
@@ -81,13 +102,53 @@
       border-bottom:none;
       border-left:none;
       border-right:none;
+      flex-flow: row;
+    }
+
+    &-dataset {
+      border-top: 2px solid gc(gM);
+      padding: 10px;
+      width: 100%;
+      text-align: left;
+      flex-flow: row;
+    }
+
+    &-dataset-container {
+      flex-flow: row;
+    }
+
+    &-file {
+      flex-basis: 8%;
+    }
+
+    &-detail-container {
+      flex-flow: column;
+    }
+
+    &-detail {
+      font-weight: bold;
+      font-size: 16px;
     }
   }
 
   &__asset-header{
-    margin-right: 6%;
-    &--bundle-header{
-      margin-right:37%
+    text-align: center;
+
+    &--bundle-header {
+      flex-basis: 39%;
+    }
+
+    &--bundle-header-date {
+      flex-basis: 21%;
+      margin-left: 35px;
+    }
+
+    &--bundle-header-dataset {
+      flex-basis: 12%;
+    }
+
+    &--bundle-header-status {
+      flex-basis: 13%;
     }
   }
 
