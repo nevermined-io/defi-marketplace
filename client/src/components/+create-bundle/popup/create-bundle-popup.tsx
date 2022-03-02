@@ -151,7 +151,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
           <CircleSpinner width="150" height="150" />
           <UiText block type="p" className={b('text')} >
             If the package takes too long to create, you can leave this page.
-            As soon as the purchase is ready, we will notify you on your profile.
+            As soon as the purchase is ready, we will notify you on your profile page.
           </UiText>
           <UiLayout>
           </UiLayout>
@@ -189,7 +189,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
           <Image width="50" height="50" src="/assets/nevermined-color.svg" />
           <UiText block type="p" className={b('text', ['more-than-expected'])}>
             The process is taking longer than expected, you can now leave this page.
-            As soon as the purchase is ready, we will notify you on your profile.
+            As soon as the purchase is ready, we will notify you on your profile page.
           </UiText>
           <UiLayout style={{ padding: '5px', justifyContent: "center" }}>
             <UiButton className={b('button')} onClick={goToProfile}>Go to profile</UiButton>
