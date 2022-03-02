@@ -41,12 +41,15 @@ export const Profile: NextPage = () => {
       return
     }
     sdk.accounts.list().then((accounts) => {
+      if (accounts.length > 0) {
         setUserAccount(accounts[0])
         loadBundles(accounts[0])
           .then((assets: any[]) => {
             setAssets(assets)
             calculatePages(assets)
-      })})
+          })
+      }
+    })
   }, [sdk.accounts])
 
 
@@ -121,7 +124,7 @@ export const Profile: NextPage = () => {
   }
 
   const downloadAsset = (did: any) => {
-    if(userAccount) {
+    if (userAccount) {
       sdk.assets.download(
         did,
         userAccount
