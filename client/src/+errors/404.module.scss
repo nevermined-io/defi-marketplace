@@ -1,0 +1,30 @@
+@import '../../src/styles/index';
+
+.not-found {
+    &__container-page {
+        text-align: center;
+        padding-top: 5%;
+        
+        span {
+            font-size: 180px;
+        }
+    }
+
+    &__description {
+        margin-top: 30px;
+        color: #67CFF9;
+        font-size: 24px;
+
+        &-link {
+            a {
+                font-size: 24px;
+                color: #fff;
+
+                &:hover {
+                    text-decoration: underline;
+                    color: #67CFF9;
+                }
+            }
+        }
+    }
+}
