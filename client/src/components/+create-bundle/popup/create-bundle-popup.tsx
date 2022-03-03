@@ -54,7 +54,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   }, [did])
 
 
-  const emptyBasket =() => {
+  const emptyBasket = () => {
     removeFromBasket(assets.map(asset => asset.id))
   }
 
@@ -100,6 +100,13 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
     Router.push('/profile')
   }
 
+  const showDownloadView = async () => {
+    if (step === 3 && view === 4) {
+      await new Promise(r => setTimeout(r, 2000));
+      setView(5)
+    }
+  }
+
   useEffect(() => {
     checkStatus()
   }, [bundleId])
@@ -111,6 +118,11 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   useEffect(() => {
     clean()
   }, [])
+
+  useEffect(() => {
+    showDownloadView()
+  }, [step])
+
 
 
   if (error) {
@@ -216,14 +228,10 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
       <>
         <div className={b('confirm')} style={{ height: '480px' }}>
           <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
-          <UiDivider type="l" />
           <UiText block type="h3" className={b('text')}>Purchase Successful!</UiText>
-          <UiDivider />
-          <UiText block className={b('text', ['content'])}>You can now download your report anytime from your profile page.</UiText>
+          <CircleSpinner width="150" height="150" />
+          <UiText block className={b('text', ['content'])}>Plase sign the message and the datasets will be downloaded shortly. You can always download this dataset from you profile page.</UiText>
           <UiDivider type="l" />
-          <UiLayout style={{ justifyContent: "center" }}>
-            <UiButton className={b('button')} onClick={close}>Complete</UiButton>
-          </UiLayout>
         </div>
       </>
     )
