@@ -21,8 +21,9 @@ interface AdditionalInformationExtended extends AdditionalInformation {
 export const AssetDetails: NextPage = () => {
   const { query: { did } } = useRouter()
   const [asset, setAsset] = useState<DDO | false>()
-  const { sdk, account } = useContext(User)
-  const { basket, addToBasket } = useContext(User)
+  const [isConnected, setIsConnected] = useState(false)
+  const [ownAsset, setOwnAsset] = useState(false)
+  const { account, sdk, addToBasket, loginMetamask, isLogged } = useContext(User)
   const popupRef = createRef<UiPopupHandlers>()
 
   const openPopup = (event: any) => {
@@ -39,12 +40,21 @@ export const AssetDetails: NextPage = () => {
     if (!sdk.assets) {
       return
     }
-    sdk.assets.resolve(String(did))
-      .then(ddo => setAsset(ddo))
-      .catch((error) => {
+
+    (async () => {
+      setIsConnected(isLogged)
+      const accountOwner = account ? await sdk.assets?.owner(String(did)) : undefined
+      setOwnAsset(account === accountOwner)
+      
+      try {
+        let ddo = await sdk.assets.resolve(String(did))
+        setAsset(ddo)
+      } catch (error) {
         console.log(error)
         setAsset(false)
-      })
+      }
+
+    })()
   }, [sdk])
 
   if (!asset) {
@@ -92,17 +102,20 @@ export const AssetDetails: NextPage = () => {
             <p>{metadata.additionalInformation!.description?.replaceAll("-", "\n-")
               .split('\n').map((_, i) => (<UiText key={i} block>{_}</UiText>))}</p>
             <UiDivider type="l" />
-            <UiButton cover style={{ padding: '0', width: '235px', background: "#2E405A", textTransform: "none" }}
-              onClick={openSample}>
-              <img src="/assets/logos/filecoin_grey.svg" />&nbsp;&nbsp;Download Sample Data
-            </UiButton>
-            <UiDivider type="s" />
-            {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
-            <UiDivider />
-            <UiText type="h3" wrapper="h3" variants={['underline']}>Command Line Interface</UiText>
-            <UiDivider />
-            <UiText type="p" >To download this dataset directly from the CLI run the following command</UiText>
-            <Markdown code={`$ ncli assets get ${asset.id}`} />
+
+            {ownAsset && <>
+              <UiButton cover style={{ padding: '0', width: '235px', background: "#2E405A", textTransform: "none" }}
+                onClick={openSample}>
+                <img src="/assets/logos/filecoin_grey.svg" />&nbsp;&nbsp;Download
+              </UiButton>
+              <UiDivider type="s" />
+              {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
+              <UiDivider />
+              <UiText type="h3" wrapper="h3" variants={['underline']}>Command Line Interface</UiText>
+              <UiDivider />
+              <UiText type="p" >To download this dataset directly from the CLI run the following command</UiText>
+              <Markdown code={`$ ncli assets get ${asset.id}`} />
+            </>}
           </div>
           <UiDivider vertical />
           <div>
@@ -130,12 +143,17 @@ export const AssetDetails: NextPage = () => {
             </UiLayout>
 
             <UiDivider />
-
-            <UiButton cover onClick={(e: any) => {
-              openPopup(e)
-              addtoCart()
-            }}>Add to cart</UiButton>
-            {/* <UiButton cover onClick={addtoCart}>Add to cart</UiButton> */}
+            
+            {!ownAsset && 
+              <UiButton cover onClick={(e: any) => {
+                if(!isConnected) {
+                  loginMetamask()
+                  return
+                }
+                openPopup(e)
+                addtoCart()
+              }}>{isConnected ? 'Buy' : 'Connect Wallet'}</UiButton>
+            }
           </div>
         </UiLayout>
 
