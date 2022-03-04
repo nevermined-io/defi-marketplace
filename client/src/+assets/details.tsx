@@ -1,10 +1,10 @@
 import React, { useEffect, useContext, useState, createRef } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import styles from './details.module.scss'
 import { AdditionalInformation } from "@nevermined-io/nevermined-sdk-js"
-import Image from "next/image"
 import { Loader } from '../components/loaders/loader';
 import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiTokenName, XuiTokenPrice, UiButton, UiPopupHandlers, UiPopup } from 'ui'
 import { User } from '../context'
@@ -23,7 +23,7 @@ export const AssetDetails: NextPage = () => {
   const [asset, setAsset] = useState<DDO | false>()
   const [isConnected, setIsConnected] = useState(false)
   const [ownAsset, setOwnAsset] = useState(false)
-  const { account, sdk, addToBasket, loginMetamask, isLogged } = useContext(User)
+  const { account, sdk, addToBasket, loginMetamask, isLogged, userBundles } = useContext(User)
   const popupRef = createRef<UiPopupHandlers>()
 
   const openPopup = (event: any) => {
@@ -43,8 +43,6 @@ export const AssetDetails: NextPage = () => {
 
     (async () => {
       setIsConnected(isLogged)
-      const accountOwner = account ? await sdk.assets?.owner(String(did)) : undefined
-      setOwnAsset(account === accountOwner)
       
       try {
         let ddo = await sdk.assets.resolve(String(did))
@@ -56,6 +54,12 @@ export const AssetDetails: NextPage = () => {
 
     })()
   }, [sdk])
+
+  useEffect(() => {
+    if (account && userBundles?.length) {
+      // match id of the asset with the id userbundle datasetArray
+    }
+  }, [account, userBundles])
 
   if (!asset) {
     return (
@@ -97,16 +101,13 @@ export const AssetDetails: NextPage = () => {
         <UiLayout align="start" type="sides">
           <div className={b('content')}>
             <UiText type="h3" wrapper="h3" variants={['underline']}>Description</UiText>
-
             <UiDivider />
             <p>{metadata.additionalInformation!.description?.replaceAll("-", "\n-")
               .split('\n').map((_, i) => (<UiText key={i} block>{_}</UiText>))}</p>
-            <UiDivider type="l" />
-
-            {ownAsset && <>
+            <UiDivider type="l" />    
               <UiButton cover style={{ padding: '0', width: '235px', background: "#2E405A", textTransform: "none" }}
                 onClick={openSample}>
-                <img src="/assets/logos/filecoin_grey.svg" />&nbsp;&nbsp;Download
+                <img src="/assets/logos/filecoin_grey.svg" />&nbsp;&nbsp;Download Sample Data
               </UiButton>
               <UiDivider type="s" />
               {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
@@ -115,7 +116,6 @@ export const AssetDetails: NextPage = () => {
               <UiDivider />
               <UiText type="p" >To download this dataset directly from the CLI run the following command</UiText>
               <Markdown code={`$ ncli assets get ${asset.id}`} />
-            </>}
           </div>
           <UiDivider vertical />
           <div>
@@ -144,7 +144,10 @@ export const AssetDetails: NextPage = () => {
 
             <UiDivider />
             
-            {!ownAsset && 
+            {ownAsset ? 
+              <UiText>
+                You already purchased this dataset, <Link href='/profile'>see in your bundle</Link>  
+              </UiText> :
               <UiButton cover onClick={(e: any) => {
                 if(!isConnected) {
                   loginMetamask()
@@ -152,11 +155,9 @@ export const AssetDetails: NextPage = () => {
                 }
                 openPopup(e)
                 addtoCart()
-              }}>{isConnected ? 'Buy' : 'Connect Wallet'}</UiButton>
-            }
+              }}>{isConnected ? 'Purchase' : 'Connect Wallet'}</UiButton>}
           </div>
         </UiLayout>
-
       </UiLayout>
     </>
   )

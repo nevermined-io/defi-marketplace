@@ -6,6 +6,7 @@ import MarketProvider from './MarketProvider'
 import { MetamaskProvider } from './MetamaskProvider'
 import { BurnerWalletProvider } from './BurnerWalletProvider'
 import { correctNetworkName } from '../config';
+import { getAllUserBundlers, Bundle } from '../shared/api';
 
 import {
     metadataUri,
@@ -52,6 +53,7 @@ interface UserProviderState {
     network: string
     web3: Web3
     sdk: Nevermined
+    userBundles: Bundle[]
     requestFromFaucet(account: string): Promise<any>
     loginMetamask(): Promise<any>
     loginBurnerWallet(): Promise<any>
@@ -72,7 +74,7 @@ interface UserProviderState {
 
 export default class UserProvider extends PureComponent<{}, UserProviderState> {
     public componentDidUpdate() {
-        window?.ethereum?.on('accountsChanged', (accounts) => {
+        window?.ethereum?.on('accountsChanged', async (accounts) => {
             this.fetchAccounts()
         })
 
@@ -147,6 +149,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
             eth: 0,
             nevermined: 0
         },
+        userBundles: [],
         network: '',
         web3: DEFAULT_WEB3,
         account: '',
@@ -156,7 +159,6 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         loginBurnerWallet: (): Promise<any> => this.loginBurnerWallet(),
         logoutBurnerWallet: (): Promise<any> => this.logoutBurnerWallet(),
         switchToCorrectNetwork: (): Promise<any> => this.switchToCorrectNetwork(),
-
         message: 'Connecting to Autonomies...',
         tokenSymbol: '',
         tokenDecimals: 6,
@@ -288,8 +290,9 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
 
             accounts = await sdk.accounts.list()
 
-            if (accounts.length > 0) {
+            if (accounts.length) {
                 const account = await accounts[0].getId()
+                await this.fetchAllUserBundlers(account)
 
                 if (account !== this.state.account) {
                     this.setState({
@@ -325,6 +328,14 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
             network = await sdk.keeper.getNetworkName()
         }
         network !== this.state.network && this.setState({ network })
+    }
+
+    private fetchAllUserBundlers = async (account: string) => {
+
+        if(account) {
+            const bundles = await getAllUserBundlers(account)
+            this.setState({ userBundles: bundles })   
+        }
     }
 
     public addToBasket(dids: string[]) {

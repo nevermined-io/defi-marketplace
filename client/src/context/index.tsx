@@ -3,6 +3,7 @@ import Web3 from 'web3'
 import { DDO, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 
 import { MarketProviderState } from './MarketProvider'
+import { Bundle } from '../shared/api';
 
 export const User = React.createContext({
     isLogged: false,
@@ -10,6 +11,7 @@ export const User = React.createContext({
     isWeb3Capable: false,
     isLoading: false,
     account: '',
+    userBundles: [] as Bundle[],
     web3: {} as Web3,
     sdk: {} as Nevermined,
     balance: {
