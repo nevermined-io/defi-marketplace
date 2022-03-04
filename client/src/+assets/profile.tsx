@@ -5,7 +5,7 @@ import Image from "next/image"
 import { User } from '../context'
 import styles from './profile.module.scss'
 import { BEM, UiText, UiLayout, UiDivider, XuiBuyAsset, UiButton, UiIcon } from 'ui'
-import { getAllUserBundlers, Bundle } from 'src/shared'
+import { Bundle } from 'src/shared'
 import { XuiPagination } from 'ui/+assets-query/pagination'
 import { Account, subgraphs } from '@nevermined-io/nevermined-sdk-js'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
@@ -24,7 +24,7 @@ interface ExtendedBundle extends Bundle {
 const BUNDLES_PER_PAGE = 5
 const b = BEM('profile', styles)
 export const Profile: NextPage = () => {
-  const { sdk, account } = useContext(User)
+  const { sdk, account, userBundles } = useContext(User)
 
   const [assets, setAssets] = useState<ExtendedBundle[]>([])
 
@@ -38,7 +38,7 @@ export const Profile: NextPage = () => {
   const [userAccount, setUserAccount] = useState<Account>()
 
   useEffect(() => {
-    if (!sdk.accounts) {
+    if (!sdk.accounts || !userBundles) {
       return
     }
     sdk.accounts.list().then((accounts) => {
@@ -53,7 +53,7 @@ export const Profile: NextPage = () => {
           })
       }
     })
-  }, [sdk.accounts])
+  }, [sdk.accounts, userBundles])
 
 
   const loadEvents = async (account: string) => {
@@ -74,7 +74,6 @@ export const Profile: NextPage = () => {
   }
 
   const loadBundles = async (account: Account) => {
-    const userBundles = await getAllUserBundlers(account.getId())
     const purchasedBundles = await loadEvents(account.getId())
     const userBundlesPurchased: ExtendedBundle[] = userBundles.map(bundle => {
       return {
