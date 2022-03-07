@@ -6,13 +6,14 @@ import styles from './create-bundle.module.scss'
 import { XuiCreateBundlePopup } from './popup/create-bundle-popup'
 
 interface BuyAssetProps {
-  assets: DDO[]
+  assets: DDO[],
+  price: number
 }
 
 const b = BEM('create-bundle', styles)
 
 export function XuiCreateBundle(props: BuyAssetProps & HTMLAttributes<any> & Props<any>) {
-  const {children, assets} = props
+  const {children, assets, price} = props
   const popupRef = createRef<UiPopupHandlers>()
 
   const openPopup = (event: any) => {
@@ -23,7 +24,7 @@ export function XuiCreateBundle(props: BuyAssetProps & HTMLAttributes<any> & Pro
   return (
     <>
       <UiPopup ref={popupRef}>
-        <XuiCreateBundlePopup assets={assets} close={() => popupRef.current?.close()}/>
+        <XuiCreateBundlePopup assets={assets} price={price} close={() => popupRef.current?.close()}/>
       </UiPopup>
 
       <div className={extendClassName(props, b())} onClick={openPopup}>
