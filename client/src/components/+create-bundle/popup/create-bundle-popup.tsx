@@ -12,7 +12,8 @@ import Image from 'next/image'
 
 
 interface CreateBundlePopupProps {
-  assets: DDO[]
+  assets: DDO[],
+  price: number,
   close: () => any
 }
 
@@ -26,7 +27,7 @@ const stepMessages = {
 const b = BEM('create-bundle-popup', styles)
 
 export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
-  const { close, assets } = props
+  const { close, assets, price } = props
   const { sdk } = useContext(User)
   const [error, setError] = useState<string | undefined>(undefined)
   const [bundleId, setBundleId] = useState<string | undefined>(undefined)
@@ -61,7 +62,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   const start = async () => {
     const account = (await sdk.accounts.list())[0]
     setView(1)
-    createBundle(account.getId(), assets)
+    createBundle(account.getId(), assets, price)
       .then(response => setBundleId(response.data.bundle_id))
       .catch(err => setError(err.message))
   }

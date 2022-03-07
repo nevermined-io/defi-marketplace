@@ -5,7 +5,8 @@ export interface IBundle {
   bundle_id: string,
   user: string,
   did: string,
-  status: string
+  status: string,
+  price: number
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -14,7 +15,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
     bundle_id: string;
     user: string;
     did: string;
-    status: string
+    status: string;
+    price: number
 
     static associate(models: any) {
       Bundle.belongsToMany(models.Datasets, {
@@ -31,7 +33,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
     },
     user: DataTypes.STRING,
     did: DataTypes.STRING,
-    status: DataTypes.STRING
+    status: DataTypes.STRING,
+    price: DataTypes.NUMBER
   }, {
     sequelize,
     modelName: 'Bundles'

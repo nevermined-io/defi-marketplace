@@ -11,7 +11,7 @@ const create = async (req: Request, res: Response) => {
     const datasets = req.body.datasets.map(
       dataset => {
         return {
-          dataset_id: uuidv4(),
+          dataset_id: dataset.id,
           key: dataset.key,
           source: dataset.source,
           file_name: dataset.file_name
@@ -20,7 +20,7 @@ const create = async (req: Request, res: Response) => {
     )
 
     const savedDatasets = await saveDatasets(datasets)
-    const bundleId = await saveBundle(req.body.user, savedDatasets)
+    const bundleId = await saveBundle(req.body.user, savedDatasets, req.body.price)
 
     res.json(
       {
@@ -35,13 +35,14 @@ const create = async (req: Request, res: Response) => {
 }
 
 
-const saveBundle = async (user: string, datasets: IDataset[]) => {
+const saveBundle = async (user: string, datasets: IDataset[], price: number) => {
   const bundleId = uuidv4()
   return createBundle({
     bundle_id: bundleId,
     did: "",
     status: "PENDING",
-    user
+    user,
+    price
   }, datasets)
 }
 

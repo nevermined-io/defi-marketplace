@@ -102,7 +102,7 @@ export const Checkout: NextPage = () => {
                 <UiButton cover onClick={loginMetamask}>Connect Wallet</UiButton>
                 :
                 (network === correctNetworkName && assets.length && connected) ?
-                  <XuiCreateBundle assets={assets}>
+                  <XuiCreateBundle assets={assets} price={totalPrice}>
                     {assets.length ? <UiButton cover>Purchase</UiButton> : <></>}
                   </XuiCreateBundle>
                   :

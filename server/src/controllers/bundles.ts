@@ -27,13 +27,14 @@ export const getBundleStatus = async (id: string): Promise<IBundle> => {
 
     if (bundle.lenght == 0) return null
 
-    const { bundle_id, user, did, status } = bundle[0].dataValues
+    const { bundle_id, user, did, status, price } = bundle[0].dataValues
 
     return {
       bundle_id,
       user,
       did,
-      status
+      status,
+      price
     }
 
   } catch (error) {
