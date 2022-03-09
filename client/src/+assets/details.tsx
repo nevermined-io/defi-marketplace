@@ -56,10 +56,12 @@ export const AssetDetails: NextPage = () => {
   }, [sdk])
 
   useEffect(() => {
-    if (account && userBundles?.length) {
-      // match id of the asset with the id userbundle datasetArray
+    if (asset && userBundles?.length) {
+      if (userBundles.some(bundle => bundle.datasets.some(dataset => dataset.datasetId === asset.id))) {
+        setOwnAsset(true)
+      } 
     }
-  }, [account, userBundles])
+  }, [asset, userBundles])
 
   if (!asset) {
     return (
@@ -145,8 +147,8 @@ export const AssetDetails: NextPage = () => {
             <UiDivider />
             
             {ownAsset ? 
-              <UiText>
-                You already purchased this dataset, <Link href='/profile'>see in your bundle</Link>  
+              <UiText className={b('already-purchased')}>
+                You already purchased this dataset, <span className={b('already-purchased-link')}><Link href='/profile'>see in your bundle</Link></span>  
               </UiText> :
               <UiButton cover onClick={(e: any) => {
                 if(!isConnected) {
