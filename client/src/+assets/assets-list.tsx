@@ -1,7 +1,6 @@
 import React, { createRef, Fragment, useContext, useEffect, useState } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import Link from "next/link"
-import { Account } from '@nevermined-io/nevermined-sdk-js'
 
 import {
   BEM,
@@ -24,10 +23,9 @@ interface AssetsListProps {
 
 const b = BEM('assets-list', styles)
 export function AssetsList({ assets }: AssetsListProps) {
-  const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles, sdk } = useContext(User)
+  const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles } = useContext(User)
   const [batchActive, setBatchActive] = useState<boolean>(false)
   const [batchSelected, setBatchSelected] = useState<string[]>([])
-  const [userAccount, setUserAccount] = useState<Account>()
   const popupRef = createRef<UiPopupHandlers>()
 
   const openPopup = (event: any) => {
@@ -49,31 +47,6 @@ export function AssetsList({ assets }: AssetsListProps) {
     const didsSet = new Set(dids)
     setBatchSelected(batchSelected.filter(did => !didsSet.has(did)))
   }
-
-  const downloadAsset = (did: any) => {
-    const bundle = userBundles.find(bundle => bundle.datasets.some(dataset => dataset.datasetId === did));
-    if (userAccount && bundle?.did) {
-      sdk.assets.download(
-        bundle?.did,
-        userAccount
-      )
-    }
-  }
-
-  useEffect(() => {
-    if (!sdk.accounts) {
-      return
-    }
-
-    (async () => {
-      const accounts = await sdk.accounts.list();
-
-      if (accounts.length) {
-        setUserAccount(accounts[0])
-      }
-    })();
-
-  }, [sdk.accounts])
 
   return (
     <div className={b()}>
@@ -183,7 +156,7 @@ export function AssetsList({ assets }: AssetsListProps) {
             </UiLayout>
             <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
             {userBundles.some(bundle => bundle.datasets.some(dataset => dataset.datasetId === asset.id)) ?
-              <img alt='download' width="24px" src="assets/download_icon.svg" style={{ cursor: 'pointer' }} onClick={() => downloadAsset(asset.id)} /> 
+              <img alt='download' width="24px" src="assets/added_to_basket.svg" /> 
                 :
                 <img 
                 alt='basket'
