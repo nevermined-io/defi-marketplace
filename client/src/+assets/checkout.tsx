@@ -13,7 +13,6 @@ import { correctNetworkName } from '../config'
 const b = BEM('checkout', styles)
 export const Checkout: NextPage = () => {
   const { assets: contextAssets, basket, network, isLogged, account, removeFromBasket, switchToCorrectNetwork, loginMetamask } = useContext(User)
-  const [connected, connect] = useState(false)
 
   const assets = contextAssets.filter(asset => basket.includes(asset.id))
   const totalPrice = assets.map(
@@ -22,9 +21,7 @@ export const Checkout: NextPage = () => {
 
   const handleChangeNetwork = () => {
     switchToCorrectNetwork()
-    connect(true)
   }
-
 
   return (
     <>
@@ -101,7 +98,7 @@ export const Checkout: NextPage = () => {
               !(isLogged && account) ?
                 <UiButton cover onClick={loginMetamask}>Connect Wallet</UiButton>
                 :
-                (network === correctNetworkName && assets.length && connected) ?
+                (network === correctNetworkName && assets.length && isLogged) ?
                   <XuiCreateBundle assets={assets} price={totalPrice}>
                     {assets.length ? <UiButton cover>Purchase</UiButton> : <></>}
                   </XuiCreateBundle>
