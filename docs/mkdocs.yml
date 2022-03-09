@@ -1,0 +1,90 @@
+site_name: "DeFi Data Marketplace"
+site_description: "Discover, Distribute & Download DeFi Data"
+site_author: Nevermined
+site_url: https://nevermined-io.github.io/defi-marketplace/
+
+# Repository
+repo_name: nevermined-io/docs
+repo_url: https://github.com/nevermined-io/docs
+
+# Copyright
+copyright: "Copyright &copy; 2021 Nevermined"
+
+theme:
+  name: material
+  language: en
+  features:
+    - toc.integrate
+    # - navigation.expand
+    # - navigation.tabs
+  font:
+    text: Roboto
+    code: Roboto Mono
+  palette:
+    scheme: default
+    primary: black
+    accent: indigo
+
+  # Necessary for search to work properly
+  include_search_page: false
+  search_index_only: true
+
+  # Default values, taken from mkdocs_theme.yml
+  language: en
+
+# Plugins
+plugins:
+  - search
+
+# Extensions
+markdown_extensions:
+  - markdown.extensions.admonition
+  - markdown.extensions.codehilite:
+      guess_lang: false
+  - markdown.extensions.def_list
+  - markdown.extensions.footnotes
+  - markdown.extensions.meta
+  - markdown.extensions.attr_list
+  - markdown.extensions.toc:
+      permalink: true
+  - pymdownx.highlight:
+      linenums: false
+  - pymdownx.superfences
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: textileio
+      repo: docs
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - markdown_captions
+
+
+# Customization
+extra:
+  social:
+      link: https://discord.gg/GZju2qScKq
+    - icon: fontawesome/brands/youtube
+
+
+nav:
+  - Home: Index.md
+  - How to use the Marketplace: Using_marketplace.md
+  - Wallet set up: Payment.md
+  - Supported reports: Reports.md
+  - Social:
+    - Discord: https://discord.gg/GZju2qScKq
+
