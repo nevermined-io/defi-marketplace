@@ -50,6 +50,16 @@ export function AssetsList({ assets }: AssetsListProps) {
     setBatchSelected(batchSelected.filter(did => !didsSet.has(did)))
   }
 
+  const downloadAsset = (did: any) => {
+    const bundle = userBundles.find(bundle => bundle.datasets.some(dataset => dataset.datasetId === did));
+    if (userAccount && bundle?.did) {
+      sdk.assets.download(
+        bundle?.did,
+        userAccount
+      )
+    }
+  }
+
   useEffect(() => {
     if (!sdk.accounts) {
       return
@@ -64,16 +74,6 @@ export function AssetsList({ assets }: AssetsListProps) {
     })();
 
   }, [sdk.accounts])
-
-  const downloadAsset = (did: any) => {
-    const bundle = userBundles.find(bundle => bundle.datasets.some(dataset => dataset.datasetId === did));
-    if (userAccount && bundle?.did) {
-      sdk.assets.download(
-        bundle?.did,
-        userAccount
-      )
-    }
-  }
 
   return (
     <div className={b()}>
