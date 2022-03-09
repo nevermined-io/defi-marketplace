@@ -4,8 +4,8 @@ site_author: Nevermined
 site_url: https://nevermined-io.github.io/defi-marketplace/
 
 # Repository
-repo_name: nevermined-io/docs
-repo_url: https://github.com/nevermined-io/docs
+repo_name: nevermined-io/defi-marketplace
+repo_url: https://github.com/nevermined-io/defi-marketplace
 
 # Copyright
 copyright: "Copyright &copy; 2021 Nevermined"
