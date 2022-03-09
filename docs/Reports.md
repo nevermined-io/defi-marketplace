@@ -1,5 +1,5 @@
 # Available reports
-This marketplace collects data from different protocols in several blockchains, the datasets collected are being increased constantly so these tables will reflect which data is available.ç
+This marketplace collects data from different protocols in several blockchains, the datasets collected are being increased constantly so these tables will reflect which data is available.
 
 ## Networks supported
  - Arbitrum
