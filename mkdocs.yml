@@ -81,10 +81,10 @@ extra:
 
 
 nav:
-  - Home: Index.md
-  - How to use the Marketplace: Using_marketplace.md
-  - Wallet set up: Payment.md
-  - Supported reports: Reports.md
+  - Home: docs/Index.md
+  - How to use the Marketplace: docs/Using_marketplace.md
+  - Wallet set up: docs/Payment.md
+  - Supported reports: docs/Reports.md
   - Social:
     - Discord: https://discord.gg/GZju2qScKq
 
