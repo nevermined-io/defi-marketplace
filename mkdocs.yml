@@ -80,10 +80,10 @@ extra:
       link: https://discord.gg/GZju2qScKq
 
 nav:
-  - Home: Index.md
-  - How to use the Marketplace: Using_marketplace.md
-  - Wallet set up: Payment.md
-  - Supported reports: Reports.md
+  - Home: index.md
+  - How to use the Marketplace: using_marketplace.md
+  - Wallet set up: payment.md
+  - Supported reports: reports.md
   - Social:
     - Discord: https://discord.gg/GZju2qScKq
 
