@@ -25,18 +25,18 @@ This repo contains a client and a server, both written in TypeScript:
 - **client**: Nextjs app setup with [Nevermined SDK JS](https://github.com/nevermined-io/sdk-js). Web app with the markeplace frontend.
 - **server**: Node.js app, using [Express](https://expressjs.com). Used to create bundles on user purchase.
 
-To run these services first it's needed to install the dependencies in each folder with
+To run these services, first install the dependencies:
 
 ```bash
 npm install
 ```
 
-Then to run the client in development mode should run
+In development mode, run:
 ```bash
 npm run dev
 ```
 
-And for the server
+And for the server:
 ```bash
 npm run start-watch
 ```
@@ -45,18 +45,18 @@ Open [http://localhost:3000](http://localhost:3000) to view the client in the br
 
 ### Starting the environment
 
-The client is configured to run as a standalone service, using the configuration provided, the client will connect to the test environment in mumbai testnet. In order to change this configuration and use a local nevermined stack change the enviroment variables described in the section [environment variables](#environment-variables)
+The client is configured to run as a standalone service. Using the configuration provided, the client will connect to the test environment in mumbai testnet. In order to change this configuration and use a local nevermined stack, change the enviroment variables described in the section [environment variables](#environment-variables)
 
-The server needs a database where save and retrieve the data needed to create the bundles, To create this database a docker-compose.yml file is provided. To create the database once that we are in the server folder we can run 
+The server needs a database in order to save and retrieve the data needed to create the bundles, To create this database a docker-compose.yml file is provided. Cd into the server folder and run: 
 
 ```bash
 docker-compose up
 ```
 
-This will create a MySql database where the server will store the data, but first we need to create the database schema.To do so, we can execute [this script](https://github.com/nevermined-io/defi-dataset-loader/blob/master/data/database_schema.sql) in the new database created, that will create the schema for us. 
+This will create a MySql database where the server will store the data. Next step is to create the database schema. To do so, we can execute [this script](https://github.com/nevermined-io/defi-dataset-loader/blob/master/data/database_schema.sql) in the new database created, that will create the schema for us. 
 
 ### Configuration
-Both client an server has some enviroment variables where configure which environment will be used.
+Both client an server have some environment variables that configure which environment will be used.
 
 #### Environment Variables
 On the client side there are two files that contains env vars.
@@ -107,7 +107,7 @@ npm run lint
 ```
 
 ### Production
-To create the production code run
+To create the production code run:
 
 ```bash
 npm run build
