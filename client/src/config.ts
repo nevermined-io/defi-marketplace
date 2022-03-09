@@ -29,11 +29,11 @@ export const ipfsGatewayUri =
 export const ipfsNodeUri =
     process.env.NEXT_PUBLIC_IPFS_NODE_URI || 'https://ipfs.infura.io:5001'
 export const correctNetworkId =
-    process.env.CORRECT_NETWORK_ID || '0x13881'
+    process.env.NEXT_PUBLIC_CORRECT_NETWORK_ID || '0x13881'
 export const correctNetworkURL =
-    process.env.CORRECT_NETWORK_URL || 'https://matic-mumbai.chainstacklabs.com'
+    process.env.NEXT_PUBLIC_CORRECT_NETWORK_URL || 'https://matic-mumbai.chainstacklabs.com'
 export const correctNetworkName =
-    process.env.CORRECT_NETWORK_NAME || 'mumbai'
+    process.env.NEXT_PUBLIC_CORRECT_NETWORK_NAME || 'mumbai'
 export const bundleServiceUri =
     process.env.NEXT_PUBLIC_BUNDLE_SERVICE_URI || "https://defi.marketplace.api.keyko.rocks"
 export const bundleCreateUri = "/api/v1/bundle/create"
@@ -55,8 +55,8 @@ export const entitesNames = {
   "LENDRED": "Redeems",
   "LENDREP": "Repays"
 }
-
-
+export const docsUrl =
+    process.env.NEXT_PUBLIC_DOCS_URL || "https://nevermined-io.github.io/defi-marketplace/"
 
 
 

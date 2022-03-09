@@ -1,14 +1,11 @@
 import '../src/styles/globals.scss'
-
 import React from 'react'
-
 import Head from 'next/head'
-
-
 import type { AppProps } from 'next/app'
-import { UiHeader, UiText, UiButton, UiHeaderLink, UiFooter, UiDivider } from 'ui'
+import { UiHeader, UiHeaderLink, UiFooter, UiDivider } from 'ui'
 
 import UserProvider from '../src/context/UserProvider'
+import { docsUrl } from 'src/config'
 
 function App({ Component, pageProps }: AppProps) {
   // const context = React.useContext(User)
@@ -26,6 +23,7 @@ function App({ Component, pageProps }: AppProps) {
             <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
             <UiHeaderLink href="/profile">Profile</UiHeaderLink>
             <UiHeaderLink href="/about">About</UiHeaderLink>
+            <UiHeaderLink href={docsUrl} target='_blank'>Docs</UiHeaderLink>
           </UiHeader>
 
           <Component {...pageProps} />
