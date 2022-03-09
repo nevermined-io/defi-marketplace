@@ -10,24 +10,38 @@ const b = BEM('header', styles)
 
 interface HeaderLinkProps {
   href: string
-  children: string
+  children: string,
+  target?: string
 }
 
-export function UiHeaderLink({href, children}: HeaderLinkProps) {
+export function UiHeaderLink({ href, target, children }: HeaderLinkProps) {
   const router = useRouter();
   const active = router.pathname === href;
-  return (
-    <Link href={href}>
+
+  const renderContent = () => {
+    return (
       <span>
         <UiText
-          className={`pointer ${b('link', {active})}`}
+          className={`pointer ${b('link', { active })}`}
           type="link-caps"
           variants={active ? [] : ['highlight']}>
-
           {children}
         </UiText>
       </span>
-    </Link>
+    )
+  }
+  return (
+    <>
+      {target ?
+        <a href={href} target={target}>
+          {renderContent()}
+        </a>
+        :
+        <Link href={href}>
+          {renderContent()}
+        </Link>
+      }
+    </>
   )
 }
 
@@ -36,21 +50,21 @@ interface HeaderProps {
   children?: (typeof UiHeaderLink)[]
 }
 
-export function UiHeader({logoHref, children}: HeaderProps) {
+export function UiHeader({ logoHref, children }: HeaderProps) {
   return (
     <header className={b()}>
       <UiLayout align="center" className={b('content')}>
         <Link href={logoHref || '/'}>
           <span>
-            <Image width="39" height="24" className={b('logo')} src="/assets/nevermined.svg"/>
+            <Image width="39" height="24" className={b('logo')} src="/assets/nevermined.svg" />
           </span>
         </Link>
 
-        <UiDivider flex/>
+        <UiDivider flex />
 
         <UiLayout>{children}</UiLayout>
 
-        <XuiWallet/>
+        <XuiWallet />
       </UiLayout>
     </header>
   )
