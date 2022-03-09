@@ -76,9 +76,8 @@ markdown_extensions:
 # Customization
 extra:
   social:
-      link: https://discord.gg/GZju2qScKq
     - icon: fontawesome/brands/youtube
-
+      link: https://discord.gg/GZju2qScKq
 
 nav:
   - Home: docs/Index.md
