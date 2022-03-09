@@ -1,7 +1,7 @@
 import React, { createRef, Fragment, useContext, useEffect, useState } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import Link from "next/link"
-import Router from 'next/router'
+import { Account } from '@nevermined-io/nevermined-sdk-js'
 
 import {
   BEM,
@@ -12,7 +12,6 @@ import {
   XuiTokenName,
   XuiTokenPrice,
   UiPopupHandlers,
-  UiPopup, UiButton
 } from 'ui'
 import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
 import styles from './assets-list.module.scss'
@@ -25,9 +24,10 @@ interface AssetsListProps {
 
 const b = BEM('assets-list', styles)
 export function AssetsList({ assets }: AssetsListProps) {
-  const { basket, selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories } = useContext(User)
+  const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles, sdk } = useContext(User)
   const [batchActive, setBatchActive] = useState<boolean>(false)
   const [batchSelected, setBatchSelected] = useState<string[]>([])
+  const [userAccount, setUserAccount] = useState<Account>()
   const popupRef = createRef<UiPopupHandlers>()
 
   const openPopup = (event: any) => {
@@ -50,6 +50,31 @@ export function AssetsList({ assets }: AssetsListProps) {
     setBatchSelected(batchSelected.filter(did => !didsSet.has(did)))
   }
 
+  useEffect(() => {
+    if (!sdk.accounts) {
+      return
+    }
+
+    (async () => {
+      const accounts = await sdk.accounts.list();
+
+      if (accounts.length) {
+        setUserAccount(accounts[0])
+      }
+    })();
+
+  }, [sdk.accounts])
+
+  const downloadAsset = (did: any) => {
+    const bundle = userBundles.find(bundle => bundle.datasets.some(dataset => dataset.datasetId === did));
+    if (userAccount && bundle?.did) {
+      sdk.assets.download(
+        bundle?.did,
+        userAccount
+      )
+    }
+  }
+
   return (
     <div className={b()}>
        <AddedToBasketPopup  closePopup={closePopup} popupRef={popupRef} />
@@ -60,11 +85,12 @@ export function AssetsList({ assets }: AssetsListProps) {
             <Fragment>
               <div className={b('batch-select')}>
                 {assets.every(asset => batchSelected.includes(asset.id)) ?
-                  <img onClick={() => removeFromBatchSelected(assets.map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/checked_box.svg'} width="14px" /> :
-                  <img onClick={() => addToBatchSelected(assets.map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/unchecked_box.svg'} width="14px" />
+                  <img alt='checkbox' onClick={() => removeFromBatchSelected(assets.map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/checked_box.svg'} width="14px" /> :
+                  <img alt='uncheckbox' onClick={() => addToBatchSelected(assets.map(asset => asset.id))} className={b('batch-checkbox')} src={'assets/unchecked_box.svg'} width="14px" />
                 }
                 <div className={b('selected-count')}>Selected: <b>{batchSelected.length}</b></div>
                 <img
+                  alt='close'
                   className={b('batch-close')}
                   onClick={() => setBatchActive(false)}
                   src={'assets/close.svg'}
@@ -136,6 +162,7 @@ export function AssetsList({ assets }: AssetsListProps) {
                   onClick={() => setSelectedNetworks(!selectedNetworks.includes(defi.network) ? selectedNetworks.concat(defi.network) : selectedNetworks)}
                 >
                   <img
+                    alt='network'
                     src={`/assets/logos/${defi.network.toLowerCase()}.svg`}
                     style={{ cursor: 'pointer', paddingRight: "10px" }}
                     width="25"
@@ -155,10 +182,16 @@ export function AssetsList({ assets }: AssetsListProps) {
               </UiText>
             </UiLayout>
             <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
-            <img onClick={(e) => {
-              openPopup(e)
-              addToBasket([asset.id])
-            }} width="24px" src="assets/basket_icon.svg" style={{ cursor: 'pointer' }} />
+            {userBundles.some(bundle => bundle.datasets.some(dataset => dataset.datasetId === asset.id)) ?
+              <img alt='download' width="24px" src="assets/download_icon.svg" style={{ cursor: 'pointer' }} onClick={() => downloadAsset(asset.id)} /> 
+                :
+                <img 
+                alt='basket'
+                onClick={(e) => {
+                openPopup(e)
+                addToBasket([asset.id])
+              }} width="24px" src="assets/basket_icon.svg" style={{ cursor: 'pointer' }} />
+            }
           </UiLayout>
         ))
       }
