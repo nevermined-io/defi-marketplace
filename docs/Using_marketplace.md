@@ -11,7 +11,7 @@ To filter the data, several filters can be applied. In order to find the event t
 Also, other advanced filters can be used, to only return datasets that cames from a specific blockchain, publication date or based on the price. 
 
 ## Buying datasets
-Once we know which datasets we want to download, we need to add them to the shopping cart. There are several ways to do a show. 
+Once we know which datasets we want to download, we need to add them to the shopping cart. There are several ways to do it: 
 
 - Adding the dataset from the search list.
 When the search list is returned all the datasets will have an icon at the right to directly add the dataset to the shopping cart
@@ -26,8 +26,7 @@ When the search list is returned all the datasets each dataset can be clicked in
 
 
 - Adding several datasets with batch selection
-When the search list is returned all the datasets, several datasets can be added to the cart at the same time using the "Batch Select" feature.
-Once this batch selection is activated several datasets can be added, also all the datasets in the list can be added by clicking the top check. 
+When the search list is returned, several datasets be added to the cart at the same time using the "Batch Select" feature once it is activated. All the datasets in the list can be added by clicking the top check.  
 
 ![banner](./assets/batch_select.png)
 
