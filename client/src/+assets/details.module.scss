@@ -76,4 +76,19 @@
     width: 100%;
   }
 
+  &__already-purchased {
+    color: #67CFF9;
+
+    &-link {
+      a {
+          color: #fff;
+
+          &:hover {
+              text-decoration: underline;
+              color: #67CFF9;
+          }
+      }
+    }
+  }
+
 }

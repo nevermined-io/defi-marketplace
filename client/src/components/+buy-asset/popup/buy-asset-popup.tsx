@@ -1,6 +1,6 @@
-import React, { Props, HTMLAttributes, useState, useCallback, useContext, createRef } from 'react'
-import { DDO, OrderProgressStep } from '@nevermined-io/nevermined-sdk-js'
-
+import React, { useState, useCallback, useContext, useEffect } from 'react'
+import { OrderProgressStep } from '@nevermined-io/nevermined-sdk-js'
+import { CircleSpinner } from 'ui/loaders/circle-spinner'
 import { BEM, UiText, UiDivider, UiLayout, UiButton, UiCircleProgress, UiIcon } from 'ui'
 import { User } from '../../../context'
 
@@ -39,7 +39,7 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
     promise
       .then(async agreementId => {
         await sdk.assets.consume(agreementId, asset, account)
-        setView(2)
+        close()
       })
       .catch(error => setError(error.code === MetamaskErrorCodes.CANCELED ? MetamaskCustomErrors.CANCELED[1] : error.message))
   }, [])
@@ -48,6 +48,18 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
     setError(undefined)
     setView(0)
   }, [])
+
+
+  const showDownloadView = async () => {
+    if (step === 3 && view === 1) {
+      await new Promise(r => setTimeout(r, 2000));
+      setView(2)
+    }
+  }
+
+  useEffect(() => {
+    showDownloadView()
+  }, [step])
 
   if (error) {
     return (
@@ -92,18 +104,13 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
   } else if (view === 2) {
     return (
       <>
-        <UiDivider type="l" />
-        <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
-        <UiDivider type="l" />
-        <UiText block type="h3" className={b('text')}>Purchase Successful!</UiText>
-        <UiDivider />
-        <UiText block className={b('text', ['content'])}>You can now download your report anytime from your the history page you have here.</UiText>
-        <UiDivider type="l" />
-        <UiLayout>
-          <UiButton className={b('button')} onClick={close}>Complete</UiButton>
-          <UiDivider vertical />
-          <UiButton className={b('button')} type="secondary" onClick={close}>Download</UiButton>
-        </UiLayout>
+        <div className={b('confirm')} style={{ height: '480px' }}>
+          <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
+          <UiText block type="h3" className={b('text')}>Purchase Successful!</UiText>
+          <CircleSpinner width="150" height="150" />
+          <UiText block className={b('text', ['content'])}>Plase sign the message and the datasets will be downloaded shortly. You can always download this dataset from you profile page.</UiText>
+          <UiDivider type="l" />
+        </div>
       </>
     )
   } else {
