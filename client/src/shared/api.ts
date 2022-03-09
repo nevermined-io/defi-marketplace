@@ -25,16 +25,18 @@ export interface Bundle {
   createdAt: string;
 }
 
-export const createBundle = (user: string, assets: DDO[]): Promise<any> => {
+export const createBundle = (user: string, assets: DDO[], price: number): Promise<any> => {
   const datasets = assets
     .map(asset => ({
       additionalInformationExtend:
-        asset.findServiceByType('metadata').attributes.additionalInformation as AdditionalInformationExtended
+        asset.findServiceByType('metadata').attributes.additionalInformation as AdditionalInformationExtended,
+      id: asset.id
     }))
-    .map(additionalInformation => ({
-      key: additionalInformation.additionalInformationExtend.key,
-      source: additionalInformation.additionalInformationExtend.source,
-      file_name: additionalInformation.additionalInformationExtend.file_name
+    .map(assetInfo => ({
+      id: assetInfo.id,
+      key: assetInfo.additionalInformationExtend.key,
+      source: assetInfo.additionalInformationExtend.source,
+      file_name: assetInfo.additionalInformationExtend.file_name
     }))
 
   return axios({
@@ -42,7 +44,8 @@ export const createBundle = (user: string, assets: DDO[]): Promise<any> => {
     url: bundleServiceUri + bundleCreateUri,
     data: {
       user,
-      datasets
+      datasets,
+      price
     }
   })
 }
