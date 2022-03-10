@@ -68,6 +68,9 @@ export const User = React.createContext({
     selectedPrice: 0,
     setSelectedPriceRange: (selectedPrice: number) => {
         /* empty */
+    },
+    setAllUserBundles: (account: string) => {
+        /* empty */
     }
 })
 

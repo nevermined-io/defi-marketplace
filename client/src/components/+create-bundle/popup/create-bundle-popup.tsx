@@ -28,7 +28,7 @@ const b = BEM('create-bundle-popup', styles)
 
 export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   const { close, assets, price } = props
-  const { sdk } = useContext(User)
+  const { sdk, setAllUserBundles } = useContext(User)
   const [error, setError] = useState<string | undefined>(undefined)
   const [bundleId, setBundleId] = useState<string | undefined>(undefined)
   const [did, setDID] = useState<string>("")
@@ -63,7 +63,10 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
     const account = (await sdk.accounts.list())[0]
     setView(1)
     createBundle(account.getId(), assets, price)
-      .then(response => setBundleId(response.data.bundle_id))
+      .then(async response => {
+        await setBundleId(response.data.bundle_id)
+        await setAllUserBundles(account.getId())
+      })
       .catch(err => setError(err.message))
   }
 
