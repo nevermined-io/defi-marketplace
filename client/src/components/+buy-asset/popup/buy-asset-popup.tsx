@@ -23,7 +23,7 @@ const b = BEM('buy-asset-popup', styles)
 
 export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
   const { close, asset } = props
-  const { sdk, setAllUserBundles } = useContext(User)
+  const { sdk } = useContext(User)
   const [view, setView] = useState<0 | 1 | 2>(0)
   const [step, setStep] = useState<OrderProgressStep>(0)
   const [error, setError] = useState<string | undefined>(undefined)
@@ -33,14 +33,12 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
     setStep(0)
     setView(1)
 
-    
     const account = (await sdk.accounts.list())[0]
     const promise = sdk.assets.order(asset, 'access', account)
     promise.subscribe(step => setStep(step))
     promise
       .then(async agreementId => {
         await sdk.assets.consume(agreementId, asset, account)
-        await setAllUserBundles(account.getId())
         close()
       })
       .catch(error => setError(error.code === MetamaskErrorCodes.CANCELED ? MetamaskCustomErrors.CANCELED[1] : error.message))
