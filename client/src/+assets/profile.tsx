@@ -11,7 +11,7 @@ import { Account, subgraphs } from '@nevermined-io/nevermined-sdk-js'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { accessConditionGraphUrl, entitesNames } from 'src/config'
 
-enum assetStatus {
+enum AssetStatus {
   COMPLETED = "COMPLETED",
   PROCESSING = "PROCESSING",
   PENDING = "PENDING"
@@ -103,7 +103,7 @@ export const Profile: NextPage = () => {
     let assetArray = []
     if (!completed) {
       setCompleted(true)
-      assetArray = assets.filter((asset: any) => asset.status === assetStatus.COMPLETED)
+      assetArray = assets.filter((asset: any) => asset.status === AssetStatus.COMPLETED)
     } else {
       setCompleted(false)
       assetArray = assets
@@ -116,7 +116,7 @@ export const Profile: NextPage = () => {
     let assetArray = []
     if (!processing) {
       setProcessing(true)
-      assetArray = assets.filter((asset: any) => asset.status === assetStatus.PROCESSING)
+      assetArray = assets.filter((asset: any) => asset.status === AssetStatus.PROCESSING)
     } else {
       setProcessing(false)
       assetArray = assets
@@ -205,7 +205,7 @@ export const Profile: NextPage = () => {
               </div>
             </div>
             {
-              assets.find((item: any) => item.status === assetStatus.PROCESSING || item.status === assetStatus.PENDING) &&
+              assets.find((item: any) => item.status === AssetStatus.PROCESSING || item.status === AssetStatus.PENDING) &&
               <span className={b("loadspinner")} >
                 <UiText type="small" wrapper="small" variants={['highlight']} className={b("loadspinner", ["text"])}>Checkout packaging in progress...</UiText>
                 <Image width="50" height="50" src="/assets/profile-loadspinner.svg" className={b("loadspinner", ["spinner"])} />
@@ -234,15 +234,15 @@ export const Profile: NextPage = () => {
 
             {
               assets
-                .filter((asset: any) => completed ? asset.status === assetStatus.COMPLETED : true)
-                .filter((asset: any) => processing ? (asset.status === assetStatus.PROCESSING || asset.status === assetStatus.PENDING) : true)
+                .filter((asset: any) => completed ? asset.status === AssetStatus.COMPLETED : true)
+                .filter((asset: any) => processing ? (asset.status === AssetStatus.PROCESSING || asset.status === AssetStatus.PENDING) : true)
                 .slice(calculateStartEndPage().start, calculateStartEndPage().end)
                 .map((asset: ExtendedBundle, index: number) => (
                     <UiLayout className={b('asset')} direction={'row'} key={asset.did}>
                       <UiLayout className={b('asset-bundle')}>
                         <UiText className={b('asset-date')} type="p" variants={['highlight']}>
                           <UiButton className={b('asset-button')} type='alt' onClick={() => onOpenBundleDetails(index)}>
-                            <Image width="10" height="10" className={b('asset-arrow', [showBundleDetail[index] ? 'shrink': ''])} src="/assets/arrow.svg" />
+                            <Image width="10" height="10" alt='loading' className={b('asset-arrow', [showBundleDetail[index] ? 'shrink': ''])} src="/assets/arrow.svg" />
                             <UiText className={b('asset-bundle-id')}>
                               {asset.bundleId}
                             </UiText>
@@ -263,12 +263,16 @@ export const Profile: NextPage = () => {
                         <UiDivider flex />
                         {/* <UiDivider flex /> */}
                         <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
-                        {asset.purchased ?
-                          <img width="24px" src="assets/download_icon.svg" style={{ cursor: 'pointer' }} onClick={() => downloadAsset(asset.did)} />
+                        {asset.status === AssetStatus.PENDING || asset.status === AssetStatus.PROCESSING ?
+                          <Image width='24' height='24' alt='loading' src="/assets/profile-loadspinner.svg" className={b("loadspinner", ["spinner"])} />
+                          : asset.purchased ?
+                            <Image width='24' height='24' alt='download' src="/assets/download_icon.svg" style={{ cursor: 'pointer' }} onClick={() => downloadAsset(asset.did)} />
                           :
                           <XuiBuyAsset asset={asset.did}>
-                            <img width="24px" src="assets/basket_icon.svg" style={{ cursor: 'pointer' }} />
-                          </XuiBuyAsset>}
+                            <Image width='24' height='24' alt='basket' src="/assets/basket_icon.svg" style={{ cursor: 'pointer' }} />
+                          </XuiBuyAsset>
+                        } 
+                        
                       </UiLayout>
                       {showBundleDetail[index] &&
                       asset.datasets.map(dataSet => (
