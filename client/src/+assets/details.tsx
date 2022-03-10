@@ -23,7 +23,7 @@ export const AssetDetails: NextPage = () => {
   const [asset, setAsset] = useState<DDO | false>()
   const [isConnected, setIsConnected] = useState(false)
   const [ownAsset, setOwnAsset] = useState(false)
-  const { account, sdk, addToBasket, loginMetamask, isLogged, userBundles } = useContext(User)
+  const { sdk, addToBasket, loginMetamask, isLogged, userBundles } = useContext(User)
   const popupRef = createRef<UiPopupHandlers>()
 
   const openPopup = (event: any) => {

@@ -70,6 +70,7 @@ interface UserProviderState {
     selectedCategories: string[]
     selectedNetworks: string[]
     selectedPrice: number
+    setAllUserBundles(): Promise<void> 
 }
 
 export default class UserProvider extends PureComponent<{}, UserProviderState> {
@@ -177,7 +178,8 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         setSelectedCategories: (selectedCategories: string[]) => this.setSelectedCategories(selectedCategories),
         selectedNetworks: [] as string[],
         setSelectedNetworks: (selectedNetworks: string[]) => this.setSelectedNetworks(selectedNetworks),
-        setSelectedPriceRange: (selectedPrice: number) => this.setSelectedPriceRange(selectedPrice)
+        setSelectedPriceRange: (selectedPrice: number) => this.setSelectedPriceRange(selectedPrice),
+        setAllUserBundles: (account: string): Promise<void> => this.fetchAllUserBundlers(account)
     }
 
     private accountsInterval: any = null
@@ -232,7 +234,8 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
             this.initNetworkPoll()
             this.initAccountsPoll()
             this.fetchNetwork()
-            this.fetchAccounts()
+            await this.fetchAccounts()
+            await this.fetchAllUserBundlers(this.state.account)
             if (network === correctNetworkName) {
                 this.fetchTokenSymbol()
             }
@@ -292,7 +295,6 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
 
             if (accounts.length) {
                 const account = await accounts[0].getId()
-                await this.fetchAllUserBundlers(account)
 
                 if (account !== this.state.account) {
                     this.setState({

@@ -38,7 +38,7 @@ export const Profile: NextPage = () => {
   const [userAccount, setUserAccount] = useState<Account>()
 
   useEffect(() => {
-    if (!sdk.accounts || !userBundles) {
+    if (!sdk.accounts || !userBundles.length) {
       return
     }
     sdk.accounts.list().then((accounts) => {
