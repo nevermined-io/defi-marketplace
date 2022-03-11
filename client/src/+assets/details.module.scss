@@ -35,10 +35,8 @@
       position:relative;
       // right:-30px;
       z-index:2
-      
-      
-
     }
+
     &--spinner{
       z-index:1;
       @include keyframes(rotate){
@@ -46,6 +44,36 @@
         100% { -webkit-transform: rotate(360deg); }
       }
       @include animate(rotate, 1.5s, linear, infinite);
+    }
+  }
+
+  &__provenance-title {
+    margin-bottom: 30px;
+  }
+
+  &__provenance-entry {
+    margin-bottom: 16px;
+    border: 2px solid gc(gM);
+    flex-flow: row;
+    padding: 10px;
+
+    &-data {
+      flex-basis: 33%;
+      text-transform: capitalize;
+
+      &-ellipse {
+        margin-right: 15px;
+        align-self: center;
+      }
+
+      &--left {
+        align-items: flex-start;
+      }
+
+      &--right {
+        justify-content: flex-end;
+      }
+
     }
   }
   

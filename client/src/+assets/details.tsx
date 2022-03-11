@@ -1,18 +1,20 @@
-import React, { useEffect, useContext, useState, createRef } from 'react'
+import React, { useEffect, useContext, useState, createRef, useCallback } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { DDO } from '@nevermined-io/nevermined-sdk-js'
+import { DDO, AdditionalInformation } from '@nevermined-io/nevermined-sdk-js'
 import styles from './details.module.scss'
-import { AdditionalInformation } from "@nevermined-io/nevermined-sdk-js"
 import { Loader } from '../components/loaders/loader';
 import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiTokenName, XuiTokenPrice, UiButton, UiPopupHandlers, UiPopup } from 'ui'
 import { User } from '../context'
-import { toDate, getDdoTokenAddress } from '../shared'
+import { toDate, getDdoTokenAddress, calculateStartEndPage, calculatePages } from '../shared'
 import { Markdown } from 'ui/markdown/markdown'
 import { AddedToBasketPopup } from './added-to-basket-popup'
+import Image from "next/image"
+import { XuiPagination } from 'ui/+assets-query/pagination'
 
 const b = BEM('details', styles)
+const PROVENANCE_PER_PAGE = 4;
 
 interface AdditionalInformationExtended extends AdditionalInformation {
   sampleUrl: string;
@@ -25,6 +27,70 @@ export const AssetDetails: NextPage = () => {
   const [ownAsset, setOwnAsset] = useState(false)
   const { sdk, addToBasket, loginMetamask, isLogged, userBundles } = useContext(User)
   const popupRef = createRef<UiPopupHandlers>()
+  const [page, setPage] = useState<number>(1)
+  const [totalPages, setTotalPages] = useState<number>(1)
+
+  const [provenance, setProvenance] = useState([{
+      id: 1,
+      action: 'published',
+      date: new Date(2021, 4, 16, 12, 40, 0, 0),
+      account: '0x2Ac9180390a96FBc9532384E13E96ba7CB427403',
+      price: 0.021,
+      currency: 'ETH'
+    },
+    {
+      id: 2,
+      action: 'bought',
+      date: new Date(2021, 5, 21, 12, 40, 0, 0),
+      account: '0xF91d149BE554304DDD391937f9DcF57341cFAf02',
+      price: 0.021,
+      currency: 'ETH'
+    },
+    {
+      id: 3,
+      action: 'bought',
+      date: new Date(2021, 6, 16, 12, 40, 0, 0),
+      account: '0xF91d149BE554304DDD391937f9DcF57341cFAf02',
+      price: 0.021,
+      currency: 'ETH'
+    },
+    {
+      id: 4,
+      action: 'bought',
+      date: new Date(2021, 7, 8, 12, 40, 0, 0),
+      account: '0xF91d149BE554304DDD391937f9DcF57341cFAf02',
+      price: 0.021,
+      currency: 'ETH'
+    },
+    {
+      id: 5,
+      action: 'bought',
+      date: new Date(2021, 8, 15, 12, 40, 0, 0),
+      account: '0xF91d149BE554304DDD391937f9DcF57341cFAf02',
+      price: 0.021,
+      currency: 'ETH'
+    },
+    {
+      id: 6,
+      action: 'bought',
+      date: new Date(2021, 11, 25, 12, 40, 0, 0),
+      account: '0xF91d149BE554304DDD391937f9DcF57341cFAf02',
+      price: 0.021,
+      currency: 'ETH'
+    }
+  ]);
+
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }
+
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour12: true,
+    hour: 'numeric',
+    minute: 'numeric'
+  }
 
   const openPopup = (event: any) => {
     popupRef.current?.open()
@@ -36,8 +102,12 @@ export const AssetDetails: NextPage = () => {
     event.preventDefault()
   }
 
+  const startEndPage = useCallback(() => {
+    return calculateStartEndPage(page, PROVENANCE_PER_PAGE)
+  }, [page])
+
   useEffect(() => {
-    if (!sdk.assets) {
+    if (!sdk.assets || !did) {
       return
     }
 
@@ -62,6 +132,10 @@ export const AssetDetails: NextPage = () => {
       } 
     }
   }, [asset, userBundles])
+
+  useEffect(() => {
+    setTotalPages(calculatePages(provenance.length, PROVENANCE_PER_PAGE))
+  }, [provenance])
 
   if (!asset) {
     return (
@@ -111,6 +185,47 @@ export const AssetDetails: NextPage = () => {
                 onClick={openSample}>
                 <img src="/assets/logos/filecoin_grey.svg" />&nbsp;&nbsp;Download Sample Data
               </UiButton>
+              <UiDivider type='s'/>
+              <UiText type="h3" wrapper="h3" variants={['underline']} className={b('provenance-title')}>Provenance</UiText>
+              {provenance
+                .slice(startEndPage().start, startEndPage().end)
+                .map(p => (
+                  <div key={p.id}>
+                    <UiText type="h4" wrapper="h4">{p.date.toLocaleDateString("en-US", dateOptions)}</UiText>
+                    <UiLayout direction='row' className={b('provenance-entry')}>
+                      <UiLayout direction='row' className={b('provenance-entry-data', ['left'])}>
+                        <UiLayout className={b('provenance-entry-data-ellipse')}>
+                          <Image width='26' height='26' alt='ellipse' src='/assets/ellipse.svg'/>
+                        </UiLayout>
+                        <UiLayout direction='column'>
+                          <UiText type='p'>{p.action}</UiText>
+                          <UiText type='small'>{p.date.toLocaleTimeString("en-US", timeOptions)}</UiText>
+                        </UiLayout>
+                      </UiLayout>
+                      <UiLayout direction='row' className={b('provenance-entry-data', ['left'])}>
+                        <UiLayout className={b('provenance-entry-data-ellipse')}>
+                          <Image width='26' height='26' alt='ellipse' src='/assets/ellipse.svg'/>
+                        </UiLayout>
+                        <UiLayout direction='column'>
+                          <UiText type='p'>By</UiText>
+                          <UiText type='small'>{p.account.slice(0, 10)}...{p.account.slice(-4)}</UiText>
+                        </UiLayout>
+                      </UiLayout>
+                      <UiLayout direction='row' className={b('provenance-entry-data', ['right'])}>
+                        <UiLayout direction='column'>
+                          <UiText type='p'>Price</UiText>
+                          <UiText type='small'>{p.price} {p.currency}</UiText>
+                        </UiLayout>
+                      </UiLayout>
+                    </UiLayout>
+                  </div>
+              ))}
+
+              {
+              totalPages > 1 &&
+                <XuiPagination totalPages={totalPages} page={page} setPage={setPage} />
+              }
+
               <UiDivider type="s" />
               {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
               <UiDivider />
