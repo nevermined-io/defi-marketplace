@@ -5,11 +5,11 @@ import Image from "next/image"
 import { User } from '../context'
 import styles from './profile.module.scss'
 import { BEM, UiText, UiLayout, UiDivider, XuiBuyAsset, UiButton, UiIcon } from 'ui'
-import { Bundle } from 'src/shared'
+import { Bundle, calculatePages, calculateStartEndPage } from 'src/shared'
 import { XuiPagination } from 'ui/+assets-query/pagination'
 import { Account, subgraphs } from '@nevermined-io/nevermined-sdk-js'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
-import { accessConditionGraphUrl, entitesNames } from 'src/config'
+import { graphUrl, entitesNames } from 'src/config'
 
 enum AssetStatus {
   COMPLETED = "COMPLETED",
@@ -49,7 +49,7 @@ export const Profile: NextPage = () => {
             setAssets(assets.sort(
               (a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
             )
-            calculatePages(assets)
+            setTotalPages(calculatePages(assets.length, BUNDLES_PER_PAGE))
           })
       }
     })
@@ -58,7 +58,7 @@ export const Profile: NextPage = () => {
 
   const loadEvents = async (account: string) => {
     const fullfilled = await subgraphs.AccessCondition.getFulfilleds(
-      accessConditionGraphUrl,
+      `${graphUrl}/AccessCondition`,
       {
         where: {
           _grantee: account,
@@ -87,17 +87,9 @@ export const Profile: NextPage = () => {
     return userBundlesPurchased
   }
 
-  const calculateStartEndPage = useCallback(() => {
-    const start = (page - 1) * BUNDLES_PER_PAGE
-    const end = (page) * BUNDLES_PER_PAGE
-    return { start, end }
+  const startEndPage = useCallback(() => {
+    return calculateStartEndPage(page, BUNDLES_PER_PAGE)
   }, [page])
-
-
-  const calculatePages = (assets: any[]) => {
-    const totPages = Math.ceil(assets.length / BUNDLES_PER_PAGE)
-    setTotalPages(totPages)
-  }
 
   const checkCompleted = () => {
     let assetArray = []
@@ -108,7 +100,7 @@ export const Profile: NextPage = () => {
       setCompleted(false)
       assetArray = assets
     }
-    calculatePages(assetArray)
+    setTotalPages(calculatePages(assetArray.length, BUNDLES_PER_PAGE))
     setPage(1)
   }
 
@@ -121,7 +113,7 @@ export const Profile: NextPage = () => {
       setProcessing(false)
       assetArray = assets
     }
-    calculatePages(assetArray)
+    setTotalPages(calculatePages(assetArray.length, BUNDLES_PER_PAGE))
     setPage(1)
   }
 
@@ -192,7 +184,7 @@ export const Profile: NextPage = () => {
                 </div>
                 {
                   (completed || processing) &&
-                  <div onClick={() => { setCompleted(false); setProcessing(false); calculatePages(assets) }} className={b('clear-div')} >
+                  <div onClick={() => { setCompleted(false); setProcessing(false); setTotalPages(calculatePages(assets.length, BUNDLES_PER_PAGE)) }} className={b('clear-div')} >
                     <span className={b('clear-div', ['clear-button'])} >
                       Clear
                     </span>
@@ -236,7 +228,7 @@ export const Profile: NextPage = () => {
               assets
                 .filter((asset: any) => completed ? asset.status === AssetStatus.COMPLETED : true)
                 .filter((asset: any) => processing ? (asset.status === AssetStatus.PROCESSING || asset.status === AssetStatus.PENDING) : true)
-                .slice(calculateStartEndPage().start, calculateStartEndPage().end)
+                .slice(startEndPage().start, startEndPage().end)
                 .map((asset: ExtendedBundle, index: number) => (
                     <UiLayout className={b('asset')} direction={'row'} key={asset.did}>
                       <UiLayout className={b('asset-bundle')}>
