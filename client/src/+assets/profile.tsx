@@ -95,6 +95,7 @@ export const Profile: NextPage = () => {
     let assetArray = []
     if (!completed) {
       setCompleted(true)
+      if (processing) setProcessing(false)
       assetArray = assets.filter((asset: any) => asset.status === AssetStatus.COMPLETED)
     } else {
       setCompleted(false)
@@ -108,6 +109,7 @@ export const Profile: NextPage = () => {
     let assetArray = []
     if (!processing) {
       setProcessing(true)
+      if (completed)  setCompleted(false)
       assetArray = assets.filter((asset: any) => asset.status === AssetStatus.PROCESSING)
     } else {
       setProcessing(false)
