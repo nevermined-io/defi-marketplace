@@ -50,3 +50,13 @@ export const getVersion = (categories: string[] | undefined) =>
     ?.find(cat => cat.includes('Version') || /\d/.test(cat))
     ?.split('.').pop()
 
+export const calculateStartEndPage = (page: number, itemsPerPage: number) => {
+  const start = (page - 1) * itemsPerPage
+  const end = (page) * itemsPerPage
+  return { start, end }
+};
+
+
+export const calculatePages = (totalItems: number, itemsPerPage: number) => {
+  return Math.ceil(totalItems / itemsPerPage)
+};
