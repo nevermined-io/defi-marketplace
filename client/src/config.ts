@@ -39,6 +39,7 @@ export const bundleServiceUri =
 export const bundleCreateUri = "/api/v1/bundle/create"
 export const bundleStatusUri = "/api/v1/bundle/status"
 export const userBundlesUri = "/api/v1/user/history"
+export const bundleDataset = "/api/v1/bundle/contains"
 export const BUNDLE_MAX_RETRYS = 12
 export const BUNDLE_RETRY_TIMEOUT = 5000
 export const BUNDLE_STATUS_COMPLETED = 'COMPLETED'

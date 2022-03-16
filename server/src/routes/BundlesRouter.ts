@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express'
-import { createBundle, getBundleStatus } from '../controllers/bundles'
+import { createBundle, getBundleStatus, getBundleWithDataset } from '../controllers/bundles'
 import { createDataset } from '../controllers/datasets'
 import { v4 as uuidv4 } from 'uuid'
 import { IDataset } from '../models/Dataset'
@@ -69,7 +69,25 @@ const checkStatus = async (req: Request, res: Response) => {
   res.json({ bundle })
 }
 
+
+const containsDataset = async (req: Request, res: Response) => {
+
+  const { dataset } = req.params
+  const bundles = await getBundleWithDataset(dataset)
+
+  if (!bundles) {
+    res
+      .status(500)
+      .json({ message: 'internal server error' })
+      .send()
+  }
+
+  res.json({ bundles })
+
+}
+
 router.post('/create', create)
 router.get('/status/:id', checkStatus)
+router.get('/contains/:dataset', containsDataset)
 
 export default router

@@ -7,9 +7,10 @@ import styles from './profile.module.scss'
 import { BEM, UiText, UiLayout, UiDivider, XuiBuyAsset, UiButton, UiIcon } from 'ui'
 import { Bundle, calculatePages, calculateStartEndPage } from 'src/shared'
 import { XuiPagination } from 'ui/+assets-query/pagination'
-import { Account, subgraphs } from '@nevermined-io/nevermined-sdk-js'
+import { Account } from '@nevermined-io/nevermined-sdk-js'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { graphUrl, entitesNames } from 'src/config'
+import { loadFullfilledEvents } from 'src/shared/graphql'
 
 enum AssetStatus {
   COMPLETED = "COMPLETED",
@@ -56,30 +57,13 @@ export const Profile: NextPage = () => {
   }, [sdk.accounts, userBundles])
 
 
-  const loadEvents = async (account: string) => {
-    const fullfilled = await subgraphs.AccessCondition.getFulfilleds(
-      `${graphUrl}/AccessCondition`,
-      {
-        where: {
-          _grantee: account,
-        },
-      },
-      {
-        _documentId: true
-      }
-    )
-
-    return fullfilled
-
-  }
-
   const loadBundles = async (account: Account) => {
-    const purchasedBundles = await loadEvents(account.getId())
+    const purchasedBundles = await loadFullfilledEvents(account.getId())
     const userBundlesPurchased: ExtendedBundle[] = userBundles.map(bundle => {
       return {
         ...bundle,
         purchased: purchasedBundles.filter(
-          purchased => purchased._documentId == didZeroX(bundle.did)
+          purchased => purchased.documentId == didZeroX(bundle.did)
         ).length > 0 ? true : false,
       }
     })
@@ -265,8 +249,8 @@ export const Profile: NextPage = () => {
                           <XuiBuyAsset asset={asset.did}>
                             <Image width='24' height='24' alt='basket' src="/assets/basket_icon.svg" style={{ cursor: 'pointer' }} />
                           </XuiBuyAsset>
-                        } 
-                        
+                        }
+
                       </UiLayout>
                       {showBundleDetail[index] &&
                       asset.datasets.map(dataSet => (

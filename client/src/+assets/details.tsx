@@ -7,11 +7,14 @@ import styles from './details.module.scss'
 import { Loader } from '../components/loaders/loader';
 import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiTokenName, XuiTokenPrice, UiButton, UiPopupHandlers, UiPopup } from 'ui'
 import { User } from '../context'
-import { toDate, getDdoTokenAddress, calculateStartEndPage, calculatePages } from '../shared'
+import { toDate, getDdoTokenAddress, calculateStartEndPage, calculatePages, getBundlesWithDataset } from '../shared'
 import { Markdown } from 'ui/markdown/markdown'
 import { AddedToBasketPopup } from './added-to-basket-popup'
 import Image from "next/image"
 import { XuiPagination } from 'ui/+assets-query/pagination'
+import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { loadPublishedEvent, RegisteredAsset } from 'src/shared/graphql'
+
 
 const b = BEM('details', styles)
 const PROVENANCE_PER_PAGE = 4;
@@ -25,60 +28,11 @@ export const AssetDetails: NextPage = () => {
   const [asset, setAsset] = useState<DDO | false>()
   const [isConnected, setIsConnected] = useState(false)
   const [ownAsset, setOwnAsset] = useState(false)
-  const { sdk, addToBasket, loginMetamask, isLogged, userBundles } = useContext(User)
+  const { sdk, addToBasket, loginMetamask, isLogged, userBundles, web3 } = useContext(User)
   const popupRef = createRef<UiPopupHandlers>()
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
-
-  const [provenance, setProvenance] = useState([{
-      id: 1,
-      action: 'published',
-      date: new Date(2021, 4, 16, 12, 40, 0, 0),
-      account: '0x2Ac9180390a96FBc9532384E13E96ba7CB427403',
-      price: 0.021,
-      currency: 'ETH'
-    },
-    {
-      id: 2,
-      action: 'bought',
-      date: new Date(2021, 5, 21, 12, 40, 0, 0),
-      account: '0xF91d149BE554304DDD391937f9DcF57341cFAf02',
-      price: 0.021,
-      currency: 'ETH'
-    },
-    {
-      id: 3,
-      action: 'bought',
-      date: new Date(2021, 6, 16, 12, 40, 0, 0),
-      account: '0xF91d149BE554304DDD391937f9DcF57341cFAf02',
-      price: 0.021,
-      currency: 'ETH'
-    },
-    {
-      id: 4,
-      action: 'bought',
-      date: new Date(2021, 7, 8, 12, 40, 0, 0),
-      account: '0xF91d149BE554304DDD391937f9DcF57341cFAf02',
-      price: 0.021,
-      currency: 'ETH'
-    },
-    {
-      id: 5,
-      action: 'bought',
-      date: new Date(2021, 8, 15, 12, 40, 0, 0),
-      account: '0xF91d149BE554304DDD391937f9DcF57341cFAf02',
-      price: 0.021,
-      currency: 'ETH'
-    },
-    {
-      id: 6,
-      action: 'bought',
-      date: new Date(2021, 11, 25, 12, 40, 0, 0),
-      account: '0xF91d149BE554304DDD391937f9DcF57341cFAf02',
-      price: 0.021,
-      currency: 'ETH'
-    }
-  ]);
+  const [provenance, setProvenance] = useState([]);
 
   const dateOptions: Intl.DateTimeFormatOptions = {
     month: 'short',
@@ -106,6 +60,40 @@ export const AssetDetails: NextPage = () => {
     return calculateStartEndPage(page, PROVENANCE_PER_PAGE)
   }, [page])
 
+  const getProvenanceInfo = async () => {
+    const published = await loadPublishedEvent(didZeroX(did), web3)
+    const bundlesPuchased = await getBundlesWithDataset(did)
+
+    const provenance = bundlesPuchased.map(bundle => {
+      return {
+        id: bundle.did,
+        action: 'bought',
+        date: new Date(bundle.createdAt),
+        account: bundle.user,
+        price: 0,
+        currency: 'USDC'
+      }
+    })
+
+    if (published) {
+      provenance.push({
+        id: published.did,
+        action: 'published',
+        date: published.registeredAt,
+        account: published.owner,
+        price: 0,
+        currency: 'USDC'
+      })
+    }
+    setProvenance(provenance)
+  }
+
+
+  useEffect(() => {
+    getProvenanceInfo()
+  }, [web3])
+
+
   useEffect(() => {
     if (!sdk.assets || !did) {
       return
@@ -113,7 +101,7 @@ export const AssetDetails: NextPage = () => {
 
     (async () => {
       setIsConnected(isLogged)
-      
+
       try {
         let ddo = await sdk.assets.resolve(String(did))
         setAsset(ddo)
@@ -129,9 +117,11 @@ export const AssetDetails: NextPage = () => {
     if (asset && userBundles?.length) {
       if (userBundles.some(bundle => bundle.datasets.some(dataset => dataset.datasetId === asset.id))) {
         setOwnAsset(true)
-      } 
+      }
     }
   }, [asset, userBundles])
+
+
 
   useEffect(() => {
     setTotalPages(calculatePages(provenance.length, PROVENANCE_PER_PAGE))
@@ -145,7 +135,7 @@ export const AssetDetails: NextPage = () => {
           :
           <UiLayout type="container" className={b("spinner-container")} >
             <UiText className={b("loadspinner")} >
-              <Loader/>
+              <Loader />
             </UiText>
           </UiLayout>
         }
@@ -168,7 +158,7 @@ export const AssetDetails: NextPage = () => {
 
   return (
     <>
-      <AddedToBasketPopup  closePopup={closePopup} popupRef={popupRef} />
+      <AddedToBasketPopup closePopup={closePopup} popupRef={popupRef} />
 
       <UiLayout type="container">
         <UiText wrapper="h1" type="h1" variants={['heading']}>Details</UiText>
@@ -180,59 +170,59 @@ export const AssetDetails: NextPage = () => {
             <UiDivider />
             <p>{metadata.additionalInformation!.description?.replaceAll("-", "\n-")
               .split('\n').map((_, i) => (<UiText key={i} block>{_}</UiText>))}</p>
-            <UiDivider type="l" />    
-              <UiButton cover style={{ padding: '0', width: '235px', background: "#2E405A", textTransform: "none" }}
-                onClick={openSample}>
-                <img src="/assets/logos/filecoin_grey.svg" />&nbsp;&nbsp;Download Sample Data
-              </UiButton>
-              <UiDivider type='s'/>
-              <UiText type="h3" wrapper="h3" variants={['underline']} className={b('provenance-title')}>Provenance</UiText>
-              {provenance
-                .slice(startEndPage().start, startEndPage().end)
-                .map(p => (
-                  <div key={p.id}>
-                    <UiText type="h4" wrapper="h4">{p.date.toLocaleDateString("en-US", dateOptions)}</UiText>
-                    <UiLayout direction='row' className={b('provenance-entry')}>
-                      <UiLayout direction='row' className={b('provenance-entry-data', ['left'])}>
-                        <UiLayout className={b('provenance-entry-data-ellipse')}>
-                          <Image width='26' height='26' alt='ellipse' src='/assets/ellipse.svg'/>
-                        </UiLayout>
-                        <UiLayout direction='column'>
-                          <UiText type='p'>{p.action}</UiText>
-                          <UiText type='small'>{p.date.toLocaleTimeString("en-US", timeOptions)}</UiText>
-                        </UiLayout>
+            <UiDivider type="l" />
+            <UiButton cover style={{ padding: '0', width: '235px', background: "#2E405A", textTransform: "none" }}
+              onClick={openSample}>
+              <img src="/assets/logos/filecoin_grey.svg" />&nbsp;&nbsp;Download Sample Data
+            </UiButton>
+            <UiDivider type='s' />
+            <UiText type="h3" wrapper="h3" variants={['underline']} className={b('provenance-title')}>Provenance</UiText>
+            {provenance
+              .slice(startEndPage().start, startEndPage().end)
+              .map(p => (
+                <div key={p.id}>
+                  <UiText type="h4" wrapper="h4">{p.date.toLocaleDateString("en-US", dateOptions)}</UiText>
+                  <UiLayout direction='row' className={b('provenance-entry')}>
+                    <UiLayout direction='row' className={b('provenance-entry-data', ['left'])}>
+                      <UiLayout className={b('provenance-entry-data-ellipse')}>
+                        <Image width='26' height='26' alt='ellipse' src='/assets/ellipse.svg' />
                       </UiLayout>
-                      <UiLayout direction='row' className={b('provenance-entry-data', ['left'])}>
-                        <UiLayout className={b('provenance-entry-data-ellipse')}>
-                          <Image width='26' height='26' alt='ellipse' src='/assets/ellipse.svg'/>
-                        </UiLayout>
-                        <UiLayout direction='column'>
-                          <UiText type='p'>By</UiText>
-                          <UiText type='small'>{p.account.slice(0, 10)}...{p.account.slice(-4)}</UiText>
-                        </UiLayout>
-                      </UiLayout>
-                      <UiLayout direction='row' className={b('provenance-entry-data', ['right'])}>
-                        <UiLayout direction='column'>
-                          <UiText type='p'>Price</UiText>
-                          <UiText type='small'>{p.price} {p.currency}</UiText>
-                        </UiLayout>
+                      <UiLayout direction='column'>
+                        <UiText type='p'>{p.action}</UiText>
+                        <UiText type='small'>{p.date.toLocaleTimeString("en-US", timeOptions)}</UiText>
                       </UiLayout>
                     </UiLayout>
-                  </div>
+                    <UiLayout direction='row' className={b('provenance-entry-data', ['left'])}>
+                      <UiLayout className={b('provenance-entry-data-ellipse')}>
+                        <Image width='26' height='26' alt='ellipse' src='/assets/ellipse.svg' />
+                      </UiLayout>
+                      <UiLayout direction='column'>
+                        <UiText type='p'>By</UiText>
+                        <UiText type='small'>{p.account.slice(0, 10)}...{p.account.slice(-4)}</UiText>
+                      </UiLayout>
+                    </UiLayout>
+                    <UiLayout direction='row' className={b('provenance-entry-data', ['right'])}>
+                      <UiLayout direction='column'>
+                        <UiText type='p'>Price</UiText>
+                        <UiText type='small'>{p.price} {p.currency}</UiText>
+                      </UiLayout>
+                    </UiLayout>
+                  </UiLayout>
+                </div>
               ))}
 
-              {
+            {
               totalPages > 1 &&
-                <XuiPagination totalPages={totalPages} page={page} setPage={setPage} />
-              }
+              <XuiPagination totalPages={totalPages} page={page} setPage={setPage} />
+            }
 
-              <UiDivider type="s" />
-              {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
-              <UiDivider />
-              <UiText type="h3" wrapper="h3" variants={['underline']}>Command Line Interface</UiText>
-              <UiDivider />
-              <UiText type="p" >To download this dataset directly from the CLI run the following command</UiText>
-              <Markdown code={`$ ncli assets get ${asset.id}`} />
+            <UiDivider type="s" />
+            {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
+            <UiDivider />
+            <UiText type="h3" wrapper="h3" variants={['underline']}>Command Line Interface</UiText>
+            <UiDivider />
+            <UiText type="p" >To download this dataset directly from the CLI run the following command</UiText>
+            <Markdown code={`$ ncli assets get ${asset.id}`} />
           </div>
           <UiDivider vertical />
           <div>
@@ -260,13 +250,13 @@ export const AssetDetails: NextPage = () => {
             </UiLayout>
 
             <UiDivider />
-            
-            {ownAsset ? 
+
+            {ownAsset ?
               <UiText className={b('already-purchased')}>
-                You already purchased this dataset, <span className={b('already-purchased-link')}><Link href='/profile'>see in your bundle</Link></span>  
+                You already purchased this dataset, <span className={b('already-purchased-link')}><Link href='/profile'>see in your bundle</Link></span>
               </UiText> :
               <UiButton cover onClick={(e: any) => {
-                if(!isConnected) {
+                if (!isConnected) {
                   loginMetamask()
                   return
                 }
