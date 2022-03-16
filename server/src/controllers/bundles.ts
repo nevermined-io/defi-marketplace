@@ -52,7 +52,28 @@ export const getAllUserBundles = async (user: string): Promise<IBundle> => {
       },
       include: [
         { model: db.Datasets, as: 'Datasets' }
-    ]
+      ]
+    });
+
+    return bundles
+
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+
+
+export const getBundleWithDataset = async (dataset: string): Promise<IBundle> => {
+  try {
+    const bundles = await db.Bundles.findAll({
+      include: [
+        {
+          model: db.Datasets, as: 'Datasets',
+          where: { dataset_id: dataset }
+        },
+      ]
     });
 
     return bundles
