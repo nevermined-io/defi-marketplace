@@ -64,23 +64,19 @@ export const getAllUserBundlers = async (user: string): Promise<Bundle[]> => {
     url: `${bundleServiceUri}${userBundlesUri}/${user}`
   })
 
-  return response.data.bundles.map((bundle: any) => {
-    return {
+  return response.data.bundles.map((bundle: any) => ({
       bundleId: bundle.bundle_id,
       did: bundle.did,
       status: bundle.status,
       user: bundle.user,
       updatedAt: bundle.updatedAt,
       createdAt: bundle.createdAt,
-      datasets: bundle.Datasets.map((dataset: any) => {
-        return {
+      datasets: bundle.Datasets.map((dataset: any) => ({
           datasetId: dataset.dataset_id,
           fileName: dataset.file_name,
           source: dataset.source
-        }
-      })
-    }
-  })
+      }))
+  }))
 }
 
 

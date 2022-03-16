@@ -47,7 +47,7 @@ export const loadPublishedEvent = async (asset: string, web3: Web3): Promise<Reg
     }
   )
 
-  if (registered.length > 0) {
+  if (registered.length) {
     const tx = await web3.eth.getBlock(registered[0]._blockNumberUpdated.toNumber())
     return {
       did: registered[0]._did,

@@ -64,19 +64,18 @@ export const AssetDetails: NextPage = () => {
     const published = await loadPublishedEvent(didZeroX(did), web3)
     const bundlesPuchased = await getBundlesWithDataset(did)
 
-    const provenance = bundlesPuchased.map(bundle => {
-      return {
+    const provenance = bundlesPuchased.map(bundle => ({
         id: bundle.did,
         action: 'bought',
         date: new Date(bundle.createdAt),
         account: bundle.user,
         price: 0,
         currency: 'USDC'
-      }
-    })
+      })
+    )
 
     if (published) {
-      provenance.push({
+      provenance.unshift({
         id: published.did,
         action: 'published',
         date: published.registeredAt,
