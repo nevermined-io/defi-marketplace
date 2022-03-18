@@ -15,7 +15,8 @@ import {
     faucetUri,
     nodeUri,
     secretStoreUri,
-    verbose
+    verbose,
+    graphUrl
 } from '../config'
 
 export async function provideNevermined(web3Provider: Web3): Promise<any> {
@@ -27,7 +28,9 @@ export async function provideNevermined(web3Provider: Web3): Promise<any> {
         faucetUri,
         gatewayAddress,
         secretStoreUri,
-        verbose
+        verbose,
+        graphHttpUri: graphUrl
+
     }
     const sdk: any = await Nevermined.getInstance(config)
     return { sdk }
@@ -70,7 +73,7 @@ interface UserProviderState {
     selectedCategories: string[]
     selectedNetworks: string[]
     selectedPrice: number
-    setAllUserBundles(): Promise<void> 
+    setAllUserBundles(): Promise<void>
 }
 
 export default class UserProvider extends PureComponent<{}, UserProviderState> {
@@ -336,7 +339,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
 
         if(account) {
             const bundles = await getAllUserBundlers(account)
-            this.setState({ userBundles: bundles })   
+            this.setState({ userBundles: bundles })
         }
     }
 
