@@ -116,7 +116,7 @@ export function AssetsList({ assets }: AssetsListProps) {
                 >{metadata.main.name}</UiText>
               </Link>
               <UiText className={b('asset-date')} type="small" variants={['detail']}>
-                {toDate(metadata.main.dateCreated).replace(/\//g, '.')}
+                {toDate(metadata.main.datePublished).replace(/\//g, '.')}
               </UiText>
 
             </div>
@@ -156,9 +156,9 @@ export function AssetsList({ assets }: AssetsListProps) {
             </UiLayout>
             <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
             {userBundles.some(bundle => bundle.datasets.some(dataset => dataset.datasetId === asset.id)) ?
-              <img alt='download' width="24px" src="assets/added_to_basket.svg" /> 
+              <img alt='download' width="24px" src="assets/added_to_basket.svg" />
                 :
-                <img 
+                <img
                 alt='basket'
                 onClick={(e) => {
                 openPopup(e)
