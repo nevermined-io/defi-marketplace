@@ -13,9 +13,21 @@ function App({ Component, pageProps }: AppProps) {
     <UserProvider>
       <>
         <Head>
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-11ZZZNJ4Q5"></script>
+          <script dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments)}
+              gtag('js', new Date());
+
+              gtag('config', 'G-11ZZZNJ4Q5');
+            `
+          }}>
+          </script>
           <title>Nevermined DeFi Marketplace</title>
           <meta name="description" content="Nevermined DeFi Marketplace" />
           <link rel="icon" href="/favicon.ico" />
+
         </Head>
 
         <div>
