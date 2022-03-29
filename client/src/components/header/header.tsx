@@ -1,4 +1,4 @@
-import React, { Props } from "react"
+import React, { useEffect } from "react"
 import { useRouter } from "next/router";
 import { BEM, UiDivider, UiLayout, UiButton, UiText, XuiWallet } from "ui"
 import Link from "next/link"
@@ -17,6 +17,19 @@ interface HeaderLinkProps {
 export function UiHeaderLink({ href, target, children }: HeaderLinkProps) {
   const router = useRouter();
   const active = router.pathname === href;
+
+  const handleRouteChange = (url: string) => {
+    (window as any).gtag('config', 'G-11ZZZNJ4Q5', {
+      page_path: url,
+    });
+  };
+
+  useEffect(() => {
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
 
   const renderContent = () => {
     return (
