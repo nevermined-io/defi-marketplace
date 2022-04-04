@@ -1,7 +1,7 @@
 import { DDO } from "@nevermined-io/nevermined-sdk-js"
 import { AdditionalInformation } from "@nevermined-io/nevermined-sdk-js"
 import axios from 'axios';
-import { bundleCreateUri, bundleServiceUri, bundleStatusUri, userBundlesUri, bundleDataset } from "src/config";
+import { bundleCreateUri, bundleServiceUri, bundleStatusUri, userBundlesUri, bundleDataset, sampleUri } from "src/config";
 
 interface AdditionalInformationExtended extends AdditionalInformation {
   key: string;
@@ -65,17 +65,17 @@ export const getAllUserBundlers = async (user: string): Promise<Bundle[]> => {
   })
 
   return response.data.bundles.map((bundle: any) => ({
-      bundleId: bundle.bundle_id,
-      did: bundle.did,
-      status: bundle.status,
-      user: bundle.user,
-      updatedAt: bundle.updatedAt,
-      createdAt: bundle.createdAt,
-      datasets: bundle.Datasets.map((dataset: any) => ({
-          datasetId: dataset.dataset_id,
-          fileName: dataset.file_name,
-          source: dataset.source
-      }))
+    bundleId: bundle.bundle_id,
+    did: bundle.did,
+    status: bundle.status,
+    user: bundle.user,
+    updatedAt: bundle.updatedAt,
+    createdAt: bundle.createdAt,
+    datasets: bundle.Datasets.map((dataset: any) => ({
+      datasetId: dataset.dataset_id,
+      fileName: dataset.file_name,
+      source: dataset.source
+    }))
   }))
 }
 
@@ -104,4 +104,22 @@ export const getBundlesWithDataset = async (dataset: string): Promise<Bundle[]> 
       })
     }
   })
+}
+
+
+
+export const getSampleURL = async (protocolType: string, eventType: string): Promise<string> => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${bundleServiceUri}${sampleUri}/${protocolType}/${eventType}`
+    })
+
+    console.log(response)
+    return response.data.sample.sample_url
+
+  } catch (error) {
+    return ""
+  }
+
 }

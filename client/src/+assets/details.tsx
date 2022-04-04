@@ -7,13 +7,14 @@ import styles from './details.module.scss'
 import { Loader } from '../components/loaders/loader';
 import { BEM, UiText, UiIcon, UiLayout, UiDivider, XuiTokenName, XuiTokenPrice, UiButton, UiPopupHandlers, UiPopup } from 'ui'
 import { User } from '../context'
-import { toDate, getDdoTokenAddress, calculateStartEndPage, calculatePages, getBundlesWithDataset } from '../shared'
+import { toDate, getDdoTokenAddress, calculateStartEndPage, calculatePages, getBundlesWithDataset, getSampleURL } from '../shared'
 import { Markdown } from 'ui/markdown/markdown'
 import { AddedToBasketPopup } from './added-to-basket-popup'
 import Image from "next/image"
 import { XuiPagination } from 'ui/+assets-query/pagination'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { loadPublishedEvent, RegisteredAsset } from 'src/shared/graphql'
+import { EVENT_PREFIX, PROTOCOL_PREFIX } from 'src/config'
 
 
 const b = BEM('details', styles)
@@ -144,9 +145,13 @@ export const AssetDetails: NextPage = () => {
 
   const metadata = asset.findServiceByType('metadata').attributes
 
-  const openSample = () => {
+  const openSample = async () => {
     const addtionalInfoExtended = metadata.additionalInformation as AdditionalInformationExtended
-    const url = addtionalInfoExtended.sampleUrl || ""
+    const categoryElement = addtionalInfoExtended.categories?.find(category => category.includes(PROTOCOL_PREFIX))
+    const eventElement = addtionalInfoExtended.categories?.find(event => event.includes(EVENT_PREFIX))
+    const category = categoryElement?.substring(categoryElement.indexOf(':') + 1) || ""
+    const event = eventElement?.substring(eventElement.indexOf(':') + 1) || ""
+    const url = await getSampleURL(category, event)
     const win = window.open(url, "_blank");
     win?.focus();
   }
