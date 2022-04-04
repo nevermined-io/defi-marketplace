@@ -40,6 +40,7 @@ export const bundleCreateUri = "/api/v1/bundle/create"
 export const bundleStatusUri = "/api/v1/bundle/status"
 export const userBundlesUri = "/api/v1/user/history"
 export const bundleDataset = "/api/v1/bundle/contains"
+export const sampleUri = "/api/v1/sample"
 export const BUNDLE_MAX_RETRYS = 12
 export const BUNDLE_RETRY_TIMEOUT = 5000
 export const BUNDLE_STATUS_COMPLETED = 'COMPLETED'
@@ -58,6 +59,9 @@ export const entitesNames = {
 }
 export const docsUrl =
     process.env.NEXT_PUBLIC_DOCS_URL || "https://nevermined-io.github.io/defi-marketplace/"
+export const PROTOCOL_PREFIX = 'ProtocolType'
+export const EVENT_PREFIX = 'EventType'
+
 
 
 
