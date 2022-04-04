@@ -8,6 +8,7 @@ import db from './models'
 
 import BundleRouter from './routes/BundlesRouter'
 import UserRouter from './routes/UserRouter'
+import SampleRouter from './routes/SampleRouter'
 
 const app = express()
 
@@ -40,6 +41,8 @@ app.get('/', (_, res) => {
 
 app.use('/api/v1/bundle', BundleRouter)
 app.use('/api/v1/user', UserRouter)
+app.use('/api/v1/sample', SampleRouter)
+
 
 app.use((_, res) => {
   res.status(404).send()
