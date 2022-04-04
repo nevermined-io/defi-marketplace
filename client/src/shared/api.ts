@@ -115,7 +115,6 @@ export const getSampleURL = async (protocolType: string, eventType: string): Pro
       url: `${bundleServiceUri}${sampleUri}/${protocolType}/${eventType}`
     })
 
-    console.log(response)
     return response.data.sample.sample_url
 
   } catch (error) {
