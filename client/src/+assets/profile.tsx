@@ -48,7 +48,7 @@ export const Profile: NextPage = () => {
         loadBundles(accounts[0])
           .then((assets: any[]) => {
             setAssets(assets.sort(
-              (a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+              (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
             )
             setTotalPages(calculatePages(assets.length, BUNDLES_PER_PAGE))
           })
@@ -93,7 +93,7 @@ export const Profile: NextPage = () => {
     let assetArray = []
     if (!processing) {
       setProcessing(true)
-      if (completed)  setCompleted(false)
+      if (completed) setCompleted(false)
       assetArray = assets.filter((asset: any) => asset.status === AssetStatus.PROCESSING)
     } else {
       setProcessing(false)
@@ -134,7 +134,7 @@ export const Profile: NextPage = () => {
         <span className={b('asset-detail')}>Blockchain:</span> <span className={b('asset-detail-value')}> {parts[3].toUpperCase()}</span>
         <span className={b('asset-detail')}>Date:</span> <span className={b('asset-detail-value')}>
           {date.join('')}
-            </span>
+        </span>
       </>
     )
   }
@@ -216,49 +216,51 @@ export const Profile: NextPage = () => {
                 .filter((asset: any) => processing ? (asset.status === AssetStatus.PROCESSING || asset.status === AssetStatus.PENDING) : true)
                 .slice(startEndPage().start, startEndPage().end)
                 .map((asset: ExtendedBundle, index: number) => (
-                    <UiLayout className={b('asset')} direction={'row'} key={asset.did}>
-                      <UiLayout className={b('asset-bundle')}>
-                        <UiText className={b('asset-date')} type="p" variants={['highlight']}>
-                          <UiButton className={b('asset-button')} type='alt' onClick={() => onOpenBundleDetails(index)}>
-                            <Image width="10" height="10" alt='loading' className={b('asset-arrow', [showBundleDetail[index] ? 'shrink': ''])} src="/assets/arrow.svg" />
-                            <UiText className={b('asset-bundle-id')}>
-                              {asset.bundleId}
-                            </UiText>
-                          </UiButton>
-                        </UiText>
-                        <UiDivider flex />
-                        <UiText className={b('asset-date')} type="small" variants={['secondary']}>
-                          {new Date(asset.createdAt).toDateString()}
-                        </UiText>
-                        <UiDivider flex />
-                        <UiText className={b('asset-date')} type="small" variants={['secondary']}>
-                          {asset.datasets.length}
-                        </UiText>
-                        <UiDivider flex />
-                        <UiText className={b('asset-date')} type="small" variants={['secondary']}>
-                          {asset.status}
-                        </UiText>
-                        <UiDivider flex />
-                        {/* <UiDivider flex /> */}
-                        <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
-                        {asset.status === AssetStatus.PENDING || asset.status === AssetStatus.PROCESSING ?
-                          <Image width='24' height='24' alt='loading' src="/assets/profile-loadspinner.svg" className={b("loadspinner", ["spinner"])} />
-                          : asset.purchased ?
-                            <Image width='24' height='24' alt='download' src="/assets/download_icon.svg" style={{ cursor: 'pointer' }} onClick={() => downloadAsset(asset.did)} />
+                  <UiLayout className={b('asset')} direction={'row'} key={asset.did}>
+                    <UiLayout className={b('asset-bundle')}>
+                      <UiText className={b('asset-date')} type="p" variants={['highlight']}>
+                        <UiButton className={b('asset-button')} type='alt' onClick={() => onOpenBundleDetails(index)}>
+                          <Image width="10" height="10" alt='loading' className={b('asset-arrow', [showBundleDetail[index] ? 'shrink' : ''])} src="/assets/arrow.svg" />
+                          <UiText className={b('asset-bundle-id')}>
+                            {asset.bundleId}
+                          </UiText>
+                        </UiButton>
+                      </UiText>
+                      <UiDivider flex />
+                      <UiText className={b('asset-date')} type="small" variants={['secondary']}>
+                        {new Date(asset.createdAt).toDateString()}
+                      </UiText>
+                      <UiDivider flex />
+                      <UiText className={b('asset-date')} type="small" variants={['secondary']}>
+                        {asset.datasets.length}
+                      </UiText>
+                      <UiDivider flex />
+                      <UiText className={b('asset-date')} type="small" variants={['secondary']}>
+                        {asset.status}
+                      </UiText>
+                      <UiDivider flex />
+                      {/* <UiDivider flex /> */}
+                      <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
+                      {asset.status === AssetStatus.PENDING || asset.status === AssetStatus.PROCESSING ?
+                        <Image width='24' height='24' alt='loading' src="/assets/profile-loadspinner.svg" className={b("loadspinner", ["spinner"])} />
+                        : asset.purchased ?
+                          <div  style={{ cursor: 'pointer' }}>
+                            <Image width='24' height='24' alt='download' src="/assets/download_icon.svg" onClick={() => downloadAsset(asset.did)} />
+                          </div>
                           :
                           <XuiBuyAsset asset={asset.did}>
                             <Image width='24' height='24' alt='basket' src="/assets/basket_icon.svg" style={{ cursor: 'pointer' }} />
                           </XuiBuyAsset>
-                        }
+                      }
 
-                      </UiLayout>
-                      {showBundleDetail[index] &&
+                    </UiLayout>
+                    {showBundleDetail[index] &&
                       asset.datasets.map(dataSet => (
                         <UiLayout className={b('asset-dataset')} justify='center' align='center' direction='column' type='container' key={dataSet.datasetId}>
                           <UiLayout className={b('asset-dataset-container')}>
-                            <UiIcon className={b('asset-file')} icon="file" color="secondary"/>
+                            <UiIcon className={b('asset-file')} icon="file" color="secondary" />
                             <UiLayout className={b('asset-detail-container')}>
-                              <UiDivider vertical/>
+                              <UiDivider vertical />
                               <UiText className={b('asset-date')} type="small" variants={['secondary']}>
                                 {setFormat(dataSet.fileName)}
                               </UiText>
@@ -267,7 +269,7 @@ export const Profile: NextPage = () => {
                         </UiLayout>
                       ))
                     }
-                    </UiLayout>
+                  </UiLayout>
 
                 ))}
             {
