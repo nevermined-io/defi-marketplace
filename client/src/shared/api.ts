@@ -128,11 +128,7 @@ export const getDashboardUrl = async (): Promise<any> => {
   return axios({
     method: 'get',
     url: "https://1q6lvqnlg3.execute-api.us-east-1.amazonaws.com/test/anonymous-embed-sample",
-    params: { "mode": "getUrl" },
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
-    }
+    params: {"mode": "getUrl"}
   })
 
 }
