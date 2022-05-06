@@ -122,3 +122,13 @@ export const getSampleURL = async (protocolType: string, eventType: string): Pro
   }
 
 }
+
+
+export const getDashboardUrl = async (): Promise<any> => {
+  return axios({
+    method: 'get',
+    url: "https://1q6lvqnlg3.execute-api.us-east-1.amazonaws.com/test/anonymous-embed-sample",
+    params: {"mode": "getUrl"}
+  })
+
+}
