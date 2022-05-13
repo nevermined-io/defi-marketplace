@@ -34,6 +34,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
   const textFilter = { "query_string": { "query": `*${searchInputText}*`, "fields": ["service.attributes.main.name"] } }
   const datasetCategory = { "match": { "service.attributes.additionalInformation.categories": selectedCategoriesEvent.length === 0 ? "defi-datasets" : selectedCategoriesEvent.join(', ') } }
   const datasetNetwork = { "match": { "service.attributes.additionalInformation.blockchain": selectedNetworkEvent.length === 0 ? "" : selectedNetworks.join(', ') } }
+  const listed = { "match": { "service.attributes.curation.isListed":  "true" } }
   const dateFilter = fromDate !== '' && toDate !== '' && {
     "range": {
       "service.attributes.main.dateCreated": {
@@ -53,7 +54,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
     }
   }
 
-  const mustArray = [textFilter, datasetCategory]
+  const mustArray = [textFilter, datasetCategory, listed]
   selectedNetworkEvent.length > 0 && mustArray.push(datasetNetwork)
   dateFilter && mustArray.push(dateFilter)
   priceRange && mustArray.push(priceRange)
