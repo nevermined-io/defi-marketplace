@@ -44,19 +44,16 @@ export default class MarketProvider extends PureComponent<
 
     private getTotalAssets = async () => {
         const searchQuery = {
-            offset: 1,
+            offset: 100,
             page: 1,
-            query: {
-                "categories": categories
-            },
             sort: {
-                value: 1
+                created: "desc"
             }
         }
 
         try {
             const { nevermined } = this.props
-            const search = await nevermined.assets.query(searchQuery)
+            const search = await nevermined.assets.query(searchQuery as any)
             this.setState({ totalAssets: search.totalResults })
         } catch (error) {
             Logger.error('Error', error.message)

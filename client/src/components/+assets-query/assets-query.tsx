@@ -94,7 +94,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
         page,
         query: query!,
         sort: {
-          created: -1
+          created: 'desc'
         }
       })
       .then(({ results, totalPages }) => {
