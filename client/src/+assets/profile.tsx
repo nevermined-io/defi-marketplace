@@ -1,16 +1,17 @@
-import React, { useEffect, useContext, useState, useCallback } from 'react'
+import React, { useEffect, useContext, useState, useCallback, createRef } from 'react'
 import type { NextPage } from 'next'
 import Image from "next/image"
 
 import { User } from '../context'
 import styles from './profile.module.scss'
-import { BEM, UiText, UiLayout, UiDivider, XuiBuyAsset, UiButton, UiIcon } from 'ui'
+import { BEM, UiText, UiLayout, UiDivider, XuiBuyAsset, UiButton, UiIcon, UiPopupHandlers } from 'ui'
 import { Bundle, calculatePages, calculateStartEndPage } from 'src/shared'
 import { XuiPagination } from 'ui/+assets-query/pagination'
 import { Account } from '@nevermined-io/nevermined-sdk-js'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { graphUrl, entitesNames } from 'src/config'
 import { loadFullfilledEvents } from 'src/shared/graphql'
+import { DownloadPopup } from 'ui/+download-asset/popup/download-asset-popup'
 
 enum AssetStatus {
   COMPLETED = "COMPLETED",
@@ -37,6 +38,7 @@ export const Profile: NextPage = () => {
   const [totalPages, setTotalPages] = useState<number>(1)
   const [showBundleDetail, setShowBundleDetail] = useState<boolean[]>(assets.map(asset => !asset))
   const [userAccount, setUserAccount] = useState<Account>()
+  const popupRef = createRef<UiPopupHandlers>()
 
   useEffect(() => {
     if (!sdk.accounts || !userBundles.length) {
@@ -139,9 +141,20 @@ export const Profile: NextPage = () => {
     )
   }
 
+  const closeDownloadPopup = (event: any) => {
+    popupRef.current?.close()
+    event.preventDefault()
+  }
+
+  const openDownloadPopup = (event: any) => {
+    popupRef.current?.open()
+    event.preventDefault()
+  }
+
   return (
     assets.length > 0 ?
       <>
+        <DownloadPopup closePopup={closeDownloadPopup} popupRef={popupRef} />
         <UiLayout type="container">
 
           <UiLayout type="container">
@@ -244,8 +257,11 @@ export const Profile: NextPage = () => {
                       {asset.status === AssetStatus.PENDING || asset.status === AssetStatus.PROCESSING ?
                         <Image width='24' height='24' alt='loading' src="/assets/profile-loadspinner.svg" className={b("loadspinner", ["spinner"])} />
                         : asset.purchased ?
-                          <div  style={{ cursor: 'pointer' }}>
-                            <Image width='24' height='24' alt='download' src="/assets/download_icon.svg" onClick={() => downloadAsset(asset.did)} />
+                          <div style={{ cursor: 'pointer' }}>
+                            <Image width='24' height='24' alt='download' src="/assets/download_icon.svg" onClick={(e) => {
+                              downloadAsset(asset.did)
+                              openDownloadPopup(e)
+                              }} />
                           </div>
                           :
                           <XuiBuyAsset asset={asset.did}>
