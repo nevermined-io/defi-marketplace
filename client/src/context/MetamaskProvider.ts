@@ -34,6 +34,10 @@ export class MetamaskProvider {
     try {
       await window.ethereum.enable()
       localStorage.setItem('logType', 'Metamask')
+      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      if (chainId !== correctNetworkId) {
+        await this.switchChain()
+      }
     } catch (error) {
       return
     }
