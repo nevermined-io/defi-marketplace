@@ -5,7 +5,7 @@ import { User } from '.'
 import MarketProvider from './MarketProvider'
 import { MetamaskProvider } from './MetamaskProvider'
 import { BurnerWalletProvider } from './BurnerWalletProvider'
-import { correctNetworkName } from '../config';
+import { correctNetworkId, correctNetworkName } from '../config';
 import { getAllUserBundlers, Bundle } from '../shared/api';
 
 import {
@@ -83,6 +83,8 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         })
 
         window?.ethereum?.on('chainChanged', async (accounts) => {
+            //not sure if fetchNetwork makes sense.
+            //chainChanged event has chainId as a parameter.
             await this.fetchNetwork()
         })
 
@@ -94,6 +96,10 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         }
         const metamaskProvider = new MetamaskProvider()
         await metamaskProvider.startLogin()
+        this.getProviderAndLoadNevermined(metamaskProvider)
+    }
+
+    private getProviderAndLoadNevermined = (metamaskProvider: any) => {
         const web3 = metamaskProvider.getProvider()
         this.setState(
             {
@@ -110,17 +116,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
     private switchToCorrectNetwork = async () => {
         const metamaskProvider = new MetamaskProvider()
         await metamaskProvider.switchChain()
-        const web3 = metamaskProvider.getProvider()
-        this.setState(
-            {
-                isLogged: true,
-                isBurner: false,
-                web3
-            },
-            () => {
-                this.loadNevermined()
-            }
-        )
+        this.getProviderAndLoadNevermined(metamaskProvider)
     }
 
     private loginBurnerWallet = async () => {
@@ -191,6 +187,18 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
 
     public async componentDidMount() {
         await this.bootstrap()
+
+        //needed to automatically load the asset details when the network is changed to the correct one
+        window?.ethereum?.on('chainChanged', async (chainId: any) => {
+            if (chainId === correctNetworkId) {
+                const metamaskProvider = new MetamaskProvider()
+                await metamaskProvider.switchChain()
+                this.getProviderAndLoadNevermined(metamaskProvider)
+            } else {
+                this.loadNevermined()
+            }
+
+        })
     }
 
     private initAccountsPoll(): void {
@@ -337,7 +345,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
 
     private fetchAllUserBundlers = async (account: string) => {
 
-        if(account) {
+        if (account) {
             const bundles = await getAllUserBundlers(account)
             this.setState({ userBundles: bundles })
         }
