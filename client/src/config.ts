@@ -1,7 +1,7 @@
 //
 // NEVERMINED REMOTE CONNECTIONS
 //
-export const metadataUri = 'http://localhost:3100' // next redirections on next.config.js
+export const marketplaceUri = '/api/metadata' // next redirections on next.config.js
 export const gatewayUri = '/api/gateway' // next redirections on next.config.js
 export const faucetUri = '/api/faucet' // next redirections on next.config.js
 export const gatewayAddress =

@@ -9,7 +9,7 @@ import { correctNetworkName } from '../config';
 import { getAllUserBundlers, Bundle } from '../shared/api';
 
 import {
-    metadataUri,
+    marketplaceUri,
     gatewayUri,
     gatewayAddress,
     faucetUri,
@@ -23,7 +23,7 @@ export async function provideNevermined(web3Provider: Web3): Promise<any> {
     const config = {
         web3Provider,
         nodeUri,
-        metadataUri,
+        marketplaceUri,
         gatewayUri,
         faucetUri,
         gatewayAddress,
