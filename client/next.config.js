@@ -20,6 +20,9 @@ module.exports = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  publicRuntimeConfig: {
+    staticFolder: '/public'
+  },
   rewrites() {
     return [
       {

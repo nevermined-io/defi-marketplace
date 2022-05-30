@@ -16,7 +16,8 @@ import {
     nodeUri,
     secretStoreUri,
     verbose,
-    graphUrl
+    graphUrl,
+    artifactsFolder
 } from '../config'
 
 export async function provideNevermined(web3Provider: Web3): Promise<any> {
@@ -29,10 +30,12 @@ export async function provideNevermined(web3Provider: Web3): Promise<any> {
         gatewayAddress,
         secretStoreUri,
         verbose,
+        artifactsFolder,
         graphHttpUri: graphUrl
 
     }
-    const sdk: any = await Nevermined.getInstance(config)
+    const sdk: Nevermined = await Nevermined.getInstance(config)
+
     return { sdk }
 }
 
