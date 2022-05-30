@@ -5,6 +5,7 @@
 /server/node_modules
 /client/node_modules
 /client/.next
+/client/public/artifacts/*
 /server/dist
 /.pnp
 .pnp.js

@@ -1,3 +1,6 @@
+import getConfig from 'next/config'
+
+const { publicRuntimeConfig } = getConfig()
 //
 // NEVERMINED REMOTE CONNECTIONS
 //
@@ -10,6 +13,7 @@ export const nodeUri =
   process.env.NEXT_PUBLIC_NODE_URI ||
   'https://polygon-mumbai.g.alchemy.com/v2/GHT7ODcuJCgTuQGyvjI92G6hI5hyJLEa'
 export const secretStoreUri = process.env.NEXT_PUBLIC_SECRET_STORE_URI || 'http://localhost:12001'
+export const artifactsFolder = `/artifacts`
 
 //
 // APP CONFIG
