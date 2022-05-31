@@ -4,9 +4,9 @@
 
 RETRY_COUNT=0
 COMMAND_STATUS=1
-DEST_FOLDER=node_modules/@nevermined-io/contracts/artifacts/
+DEST_FOLDER=client/public
 
-mkdir -p node_modules/@nevermined-io/contracts/artifacts/
+mkdir -p client/public/artifacts/
 mkdir -p node_modules/@nevermined-io/contracts/circuits/
 
 printf '\n\e[33m◯ Waiting for contracts to be generated...\e[0m\n'
