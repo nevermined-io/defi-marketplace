@@ -7,7 +7,8 @@
 
 ## Getting Started
 
-First, run the development server:
+First, download the artifacts first in the folder `public/artifacts`
+after run
 
 ```bash
 npm run dev
