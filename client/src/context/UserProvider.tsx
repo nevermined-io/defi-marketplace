@@ -20,7 +20,7 @@ import {
     artifactsFolder
 } from '../config'
 
-export async function provideNevermined(web3Provider: Web3): Promise<any> {
+export async function provideNevermined(web3Provider: Web3): Promise<{sdk: Nevermined}> {
     const config = {
         web3Provider,
         nodeUri,
@@ -30,6 +30,7 @@ export async function provideNevermined(web3Provider: Web3): Promise<any> {
         gatewayAddress,
         secretStoreUri,
         verbose,
+        marketplaceAuthToken: localStorage.getItem('marketplaceApiToken') || '',
         artifactsFolder,
         graphHttpUri: graphUrl
 
@@ -160,7 +161,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         network: '',
         web3: DEFAULT_WEB3,
         account: '',
-        sdk: {} as any,
+        sdk: {} as Nevermined,
         requestFromFaucet: (): Promise<FaucetResponse> => requestFromFaucet(''),
         loginMetamask: (): Promise<any> => this.loginMetamask(),
         loginBurnerWallet: (): Promise<any> => this.loginBurnerWallet(),
@@ -233,8 +234,17 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         tokenSymbol !== this.state.tokenSymbol && this.setState({ tokenSymbol })
     }
 
+    private marketplaceLogin = async(sdk: Nevermined, account: Account): Promise<void> => {
+        let credential = await sdk.utils.jwt.generateClientAssertion(account)
+
+        const token = await sdk.marketplace.login(credential)
+
+        localStorage.setItem('marketplaceApiToken', token)
+    }
+
     private loadNevermined = async (): Promise<void> => {
         const { sdk } = await provideNevermined(this.state.web3)
+
         this.setState({ sdk, isLoading: false }, async () => {
             const network = await sdk.keeper?.getNetworkName();
             this.initNetworkPoll()
@@ -303,6 +313,8 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
                 const account = await accounts[0].getId()
 
                 if (account !== this.state.account) {
+                    this.marketplaceLogin(sdk, accounts[0])
+
                     this.setState({
                         account,
                         isLogged: true,

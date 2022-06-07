@@ -4,7 +4,7 @@ const { publicRuntimeConfig } = getConfig()
 //
 // NEVERMINED REMOTE CONNECTIONS
 //
-export const marketplaceUri = '/api/metadata' // next redirections on next.config.js
+export const marketplaceUri = process.env.NEXT_PUBLIC_MARKETPLACE_API || 'http://localhost:3100' // next redirections on next.config.js
 export const gatewayUri = '/api/gateway' // next redirections on next.config.js
 export const faucetUri = '/api/faucet' // next redirections on next.config.js
 export const gatewayAddress =
@@ -13,7 +13,8 @@ export const nodeUri =
   process.env.NEXT_PUBLIC_NODE_URI ||
   'https://polygon-mumbai.g.alchemy.com/v2/GHT7ODcuJCgTuQGyvjI92G6hI5hyJLEa'
 export const secretStoreUri = process.env.NEXT_PUBLIC_SECRET_STORE_URI || 'http://localhost:12001'
-export const artifactsFolder = `/artifacts`
+export const artifactsFolder =
+  process.env.NEXT_PUBLIC_ARTIFACTS_FOLDER_URL || `http://localhost:3000/artifacts`
 
 //
 // APP CONFIG
