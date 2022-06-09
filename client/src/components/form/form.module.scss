@@ -1,0 +1,61 @@
+.form {
+    &__container {
+        width: 100%;
+    }
+
+    &__form-group {
+        &--vertical {
+            label, input {
+                display: block;
+            }
+
+            label {
+                margin-bottom: 15px;
+            }
+        }
+
+        &--horizontal {
+            label {
+                margin-right: 15px;
+            }
+        }
+
+
+
+        label {
+            font-size: 28px;
+            font-family: "Titillium Web", sans-serif;
+            color: #67CFF9;
+        }
+
+        input {
+            background-color: #2B465C;
+            color: #fff;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 0;
+            width: 100%;
+
+            &::placeholder {
+                color: #8AAABE;
+            }
+        }
+    }
+
+    &__form-add-item-container {
+        display: flex;
+
+        input {
+            flex-basis: 90%;
+            justify-self: flex-start;
+        }
+
+        &--add-button {
+            height: 50px;
+            flex-basis: 10%;
+            justify-self: flex-end;
+            font-size: 30px;
+            padding-bottom: 4px;
+        }
+    }
+}

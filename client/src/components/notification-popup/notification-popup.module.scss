@@ -1,0 +1,27 @@
+@import '../../../src/styles/index';
+
+
+.notification-popup {
+
+  &__notification-popup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 516px;
+    padding: 105px 70px 40px;
+    width: 512px;
+  }
+
+  &__popup-text {
+    color: #132D43;
+    font-size: 18px;
+    line-height: 32px;
+  }
+
+  &__popup-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    width: 100%;
+  }
+}

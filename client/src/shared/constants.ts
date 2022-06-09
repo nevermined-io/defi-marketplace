@@ -1,6 +1,6 @@
 export enum Category {
   Dex = 'Dex',
-  Lending = 'Lending',
+  Lending = 'Lending'
 }
 export const categories = Object.keys(Category)
 
@@ -11,7 +11,7 @@ export enum Subcategory {
   Flashloans = 'Flashloans',
   Liquidations = 'Liquidations',
   Redeems = 'Redeems',
-  Repays = 'Repays',
+  Repays = 'Repays'
 }
 export const subcategories = Object.keys(Subcategory)
 
@@ -20,7 +20,7 @@ export enum Network {
   Polygon = 'Polygon',
   Arbitrum = 'Arbitrum',
   Bsc = 'BSC',
-  Fantom = 'Fantom',
+  Fantom = 'Fantom'
 }
 export const networks = Object.keys(Network)
 
@@ -36,4 +36,6 @@ export enum MetamaskErrorCodes {
   CANCELED = 4001
 }
 
-
+export enum StoreItemTypes {
+  MarketplaceApiToken = 'marketplaceApiToken'
+}

@@ -5,6 +5,7 @@ $ui-text--heading---color: gc(sM) !default;
 $ui-text--highlight---color: gc(sM) !default;
 $ui-text--secondary---color: gc(sL) !default;
 $ui-text--detail---color: gc(gL) !default;
+$ui-text--success---color: gc(success) !default;
 
 
 @mixin ui-text($type: false, $line-height: true, $no-color: false) {
@@ -144,6 +145,10 @@ $ui-text--detail---color: gc(gL) !default;
 
     &--detail {
       color: $ui-text--detail---color;
+    }
+
+    &--success {
+      color: $ui-text--success---color;
     }
 
     // Clear styles
