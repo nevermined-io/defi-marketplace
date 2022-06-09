@@ -34,6 +34,7 @@ function App({ Component, pageProps }: AppProps) {
           <UiHeader>
             <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
             <UiHeaderLink href="/profile">Profile</UiHeaderLink>
+            <UiHeaderLink href="/user-profile">Account</UiHeaderLink>
             <UiHeaderLink href="/about">About</UiHeaderLink>
             <UiHeaderLink href={docsUrl} target='_blank'>Docs</UiHeaderLink>
           </UiHeader>

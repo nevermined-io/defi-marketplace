@@ -7,7 +7,7 @@ interface TextProps<W extends keyof JSX.IntrinsicElements> {
   block?: boolean
   type?: 'h1' | 'h2' | 'h3' | 'h4' | 'h4-caps' | 'p' | 'caps' | 'small' | 'small-caps' | 'link' | 'link-bold' | 'link-caps'
   clear?: ('font' | 'color' | 'line-height' | 'text-transform')[]
-  variants?: ('heading' | 'highlight' | 'detail' | 'secondary' | 'underline' | 'bold')[]
+  variants?: ('heading' | 'highlight' | 'detail' | 'secondary' | 'underline' | 'bold' | 'success')[]
   alert?: boolean
 }
 

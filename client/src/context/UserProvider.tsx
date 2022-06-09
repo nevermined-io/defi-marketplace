@@ -65,6 +65,7 @@ interface UserProviderState {
     loginMetamask(): Promise<any>
     loginBurnerWallet(): Promise<any>
     logoutBurnerWallet(): Promise<any>
+    loginMarketPlaceApi(sdk: Nevermined, account: Account): Promise<void>
     switchToCorrectNetwork(): Promise<any>
     // addToBasket(dids: string[]): string[],
     message: string
@@ -166,6 +167,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         loginMetamask: (): Promise<any> => this.loginMetamask(),
         loginBurnerWallet: (): Promise<any> => this.loginBurnerWallet(),
         logoutBurnerWallet: (): Promise<any> => this.logoutBurnerWallet(),
+        loginMarketplaceAPI: (sdk: Nevermined, account: Account): Promise<void> => this.marketplaceLogin(sdk, account),
         switchToCorrectNetwork: (): Promise<any> => this.switchToCorrectNetwork(),
         message: 'Connecting to Autonomies...',
         tokenSymbol: '',
@@ -313,6 +315,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
                 const account = await accounts[0].getId()
 
                 if (account !== this.state.account) {
+                    if(!localStorage.getItem('marketplaceApiToken'))
                     this.marketplaceLogin(sdk, accounts[0])
 
                     this.setState({

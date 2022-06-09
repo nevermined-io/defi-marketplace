@@ -1,6 +1,6 @@
 import React from 'react'
 import Web3 from 'web3'
-import { DDO, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, DDO, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 
 import { MarketProviderState } from './MarketProvider'
 import { Bundle } from '../shared/api';
@@ -26,6 +26,9 @@ export const User = React.createContext({
         /* empty */
     },
     loginBurnerWallet: () => {
+        /* empty */
+    },
+    loginMarketplaceAPI: (sdk: Nevermined, account: Account) => {
         /* empty */
     },
     switchToCorrectNetwork: () => {

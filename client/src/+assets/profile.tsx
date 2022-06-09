@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useCallback, createRef } from 'react'
+import React, { useEffect, useContext, useState, useCallback, useRef } from 'react'
 import type { NextPage } from 'next'
 import Image from "next/image"
 
@@ -38,7 +38,7 @@ export const Profile: NextPage = () => {
   const [totalPages, setTotalPages] = useState<number>(1)
   const [showBundleDetail, setShowBundleDetail] = useState<boolean[]>(assets.map(asset => !asset))
   const [userAccount, setUserAccount] = useState<Account>()
-  const popupRef = createRef<UiPopupHandlers>()
+  const popupRef = useRef<UiPopupHandlers>()
 
   useEffect(() => {
     if (!sdk.accounts || !userBundles.length) {

@@ -1,7 +1,6 @@
 import React from 'react'
 import { BEM, UiText, UiPopup, UiPopupHandlers, UiButton } from 'ui'
 import styles from './download-asset-popup.module.scss'
-import Router from 'next/router'
 
 
 
