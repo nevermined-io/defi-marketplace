@@ -1,20 +1,20 @@
 import React, { InputHTMLAttributes } from 'react'
 import { UiText } from 'ui'
 
-interface FormInputProps {
+interface FormTextareaProps {
     label: string,
     inputError?: string
 }
 
-export const FormInput = (props: FormInputProps & InputHTMLAttributes<any>) => {
+export const FormTextarea = (props: FormTextareaProps & InputHTMLAttributes<any>) => {
     const {label, inputError, value, type, placeholder, onChange, disabled, className } = props;
 
     return (
         <div className={className}>
             <label>{label}</label>
-            <input type={type} value={value} placeholder={placeholder} disabled={disabled} onChange={onChange}/>
+            <textarea value={value} placeholder={placeholder} disabled={disabled} onChange={onChange}/>
             {inputError && 
-                <UiText variants={['error']}>{inputError}</UiText>
+                <UiText alert={true}>{inputError}</UiText>
             }
         </div>
     )
