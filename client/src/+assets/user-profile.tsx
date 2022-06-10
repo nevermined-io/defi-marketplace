@@ -50,7 +50,6 @@ export const UserProfile: NextPage = () => {
         try {
             const accounts = await sdk.accounts.list()
             const accountToAdd = accounts.find(a => a.getId().toLowerCase() === newAddress)
-            console.log(accountToAdd)
             const credential = await sdk.utils.jwt.generateClientAssertion(accountToAdd)
             const token = await sdk.marketplace.addNewAddress(credential)
             localStorage.setItem(StoreItemTypes.MarketplaceApiToken, token)
