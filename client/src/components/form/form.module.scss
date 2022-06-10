@@ -28,17 +28,20 @@
             color: #67CFF9;
         }
 
-        input {
+        textarea, input {
             background-color: #2B465C;
             color: #fff;
-            padding: 16px;
-            margin-bottom: 20px;
-            border: 0;
             width: 100%;
+            padding: 16px;
+            border: 0;
 
             &::placeholder {
                 color: #8AAABE;
             }
+        }
+
+        textarea {
+            height: 150px;
         }
     }
 
