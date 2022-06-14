@@ -1,5 +1,5 @@
 import React, { ReactNode, useContext, useState, useEffect, useCallback } from 'react'
-import { DDO } from '@nevermined-io/nevermined-sdk-js'
+import { DDO, Bookmark } from '@nevermined-io/nevermined-sdk-js'
 import { SearchQuery } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 
 import { BEM } from 'ui'
@@ -13,19 +13,18 @@ import { XuiSearchBar } from './search-bar'
 interface AssetsQueryProps {
   search?: 'onsite' | 'search-page'
   query?: SearchQuery['query']
+  onlyBookmark?: boolean
   pageSize?: number
   content: (assets: DDO[]) => ReactNode | undefined;
 }
 
 const b = BEM('assets-query', styles)
 // loads all the asset then filters them looking at the variables defined in the user context
-export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryProps) {
-  const categoryFilter = 'defi-datasets' // Must be defined on config
-  const { assets, sdk, searchInputText, fromDate, toDate, selectedCategories, selectedNetworks, selectedPrice, setSelectedPriceRange, setSelectedNetworks, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText } = useContext(User)
+export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = false }: AssetsQueryProps) {
+  const { assets, sdk, searchInputText, fromDate, toDate, selectedCategories, selectedNetworks, selectedPrice, setSelectedPriceRange, setSelectedNetworks, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText, setBookmarks, bookmarks, userProfile } = useContext(User)
 
   const [totalPages, setTotalPages] = useState<number>(1)
   const [page, setPage] = useState<number>(1)
-  const [searchText, setSearchText] = useState('')
   const [loading, setLoading] = useState<boolean>(false)
 
   const selectedCategoriesEvent = selectedCategories.map(cat => `${subcategoryPrefix}:${cat}`)
@@ -67,6 +66,18 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
     }
   }
 
+  useEffect(() => {
+    if(!userProfile?.userId) {
+      return
+    }
+
+    (async() => {
+      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
+
+      setBookmarks([...bookmarksData.results])
+    })()
+  }, [userProfile])
+
 
   //this happen when the page is loaded to get the query string
   useEffect(() => {
@@ -99,12 +110,16 @@ export function XuiAssetsQuery({ search, content, pageSize = 12 }: AssetsQueryPr
         }
       })
       .then(({ results, totalPages }) => {
+        if( onlyBookmark ) {
+          results = results.filter(item => bookmarks?.some(bookmark => bookmark.did === item.id))
+        }
+
         setLoading(false)
         setAssets(results)
         setTotalPages(totalPages)
         history.replaceState(null, '', `/list?searchInputText=${searchInputText}&fromDate=${fromDate}&toDate=${toDate}&selectedCategories=${selectedCategories}&selectedNetworks=${selectedNetworks}&priceRange=${selectedPrice}`);
       })
-  }, [sdk, page, JSON.stringify(query)])
+  }, [sdk, page, JSON.stringify(query), bookmarks])
 
 
   return (

@@ -3,6 +3,31 @@
 .assets-list {
   margin-top: 32px;
 
+  &__bookmark {
+    position: absolute;
+    cursor: pointer;
+    right: 0;
+    top: 0;
+
+    &--cover {
+      position: absolute;
+      right: 0;
+    }
+
+    &--plus {
+      z-index: 1;
+      right: 1px;
+    }
+
+    &--minus {
+      z-index: 1;
+      right: 2px;
+      top: -4px;
+      font-size: 20px;
+      color: #132D43;
+    }
+  }
+
   &__heading {
     margin-bottom: 32px;
   }
@@ -67,6 +92,7 @@
 
   &__asset {
     height: 74px;
+    position: relative;
     align-items: center;
     margin-bottom: 16px;
     padding: 0 20px;
