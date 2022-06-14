@@ -200,14 +200,6 @@ export const UserPublish: NextPage = () => {
                     <FormGroup orientation={Orientation.Vertical}>
                         <FormInput
                             className={b('publish-form-input')}
-                            label='Sample File ID *'
-                            value={userPublish.sample_file_id} onChange={(e) => setUserPublish({...userPublish, sample_file_id: e.target.value})}
-                            placeholder='Type the filecoin id for the sample file'
-                        />
-                    </FormGroup>
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
-                            className={b('publish-form-input')}
                             label='Sample File ID'
                             value={userPublish.sample_file_id} onChange={(e) => setUserPublish({...userPublish, sample_file_id: e.target.value})}
                             placeholder='Type the filecoin id for the sample file'
