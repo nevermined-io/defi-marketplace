@@ -1,6 +1,6 @@
 import React, { PureComponent, } from 'react'
 import Web3 from 'web3'
-import { Nevermined, Account, DDO } from '@nevermined-io/nevermined-sdk-js'
+import { Nevermined, Account, DDO, Profile, Bookmark } from '@nevermined-io/nevermined-sdk-js'
 import { User } from '.'
 import MarketProvider from './MarketProvider'
 import { MetamaskProvider } from './MetamaskProvider'
@@ -53,6 +53,8 @@ interface UserProviderState {
     isWeb3Capable: boolean
     isLoading: boolean
     account: string
+    userProfile: Profile
+    bookmarks: Bookmark[]
     balance: {
         eth: number
         nevermined: number
@@ -79,6 +81,7 @@ interface UserProviderState {
     selectedNetworks: string[]
     selectedPrice: number
     setAllUserBundles(): Promise<void>
+    setBookmark(userId: string): Promise<void> 
 }
 
 export default class UserProvider extends PureComponent<{}, UserProviderState> {
@@ -97,6 +100,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         if (!window.ethereum) {
             alert('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
         }
+
         const metamaskProvider = new MetamaskProvider()
         await metamaskProvider.startLogin()
         const web3 = metamaskProvider.getProvider()
@@ -154,11 +158,13 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         isBurner: false,
         isWeb3Capable: Boolean(window.web3 || window.ethereum),
         isLoading: true,
+        bookmarks: [],
         balance: {
             eth: 0,
             nevermined: 0
         },
         userBundles: [],
+        userProfile: {},
         network: '',
         web3: DEFAULT_WEB3,
         account: '',
@@ -188,7 +194,8 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         selectedNetworks: [] as string[],
         setSelectedNetworks: (selectedNetworks: string[]) => this.setSelectedNetworks(selectedNetworks),
         setSelectedPriceRange: (selectedPrice: number) => this.setSelectedPriceRange(selectedPrice),
-        setAllUserBundles: (account: string): Promise<void> => this.fetchAllUserBundlers(account)
+        setAllUserBundles: (account: string): Promise<void> => this.fetchAllUserBundlers(account),
+        setBookmarks: (bookmarks: Bookmark[]): void => this.setBookmarks(bookmarks) 
     }
 
     private accountsInterval: any = null
@@ -245,7 +252,11 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
     }
 
     private loadNevermined = async (): Promise<void> => {
-        const { sdk } = await provideNevermined(this.state.web3)
+        const { sdk } = await provideNevermined(this.state.web3);
+
+        (window as any)?.ethereum?.on('accountsChanged', async (accounts: string[]) => {
+            await this.fetchUserProfile(accounts[0])      
+        })
 
         this.setState({ sdk, isLoading: false }, async () => {
             const network = await sdk.keeper?.getNetworkName();
@@ -254,6 +265,7 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
             this.fetchNetwork()
             await this.fetchAccounts()
             await this.fetchAllUserBundlers(this.state.account)
+            await this.fetchUserProfile(this.state.account)
             if (network === correctNetworkName) {
                 this.fetchTokenSymbol()
             }
@@ -353,6 +365,17 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
         network !== this.state.network && this.setState({ network })
     }
 
+    private fetchUserProfile = async (address: string): Promise<void> => {
+        const { sdk } = this.state
+
+        try {
+            const userProfile = await sdk.profiles.findOneByAddress(address)
+            this.setState({ userProfile })
+        } catch (error: any) {
+            console.error(error.message)
+        }
+    }
+
     private fetchAllUserBundlers = async (account: string) => {
 
         if(account) {
@@ -399,6 +422,10 @@ export default class UserProvider extends PureComponent<{}, UserProviderState> {
     }
     public setSelectedPriceRange(selectedPrice: number) {
         this.setState({ selectedPrice })
+    }
+
+    public setBookmarks(bookmarks: Bookmark[]) {
+        this.setState({ bookmarks: [...bookmarks]})
     }
 
     public render() {

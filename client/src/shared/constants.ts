@@ -39,3 +39,9 @@ export enum MetamaskErrorCodes {
 export enum StoreItemTypes {
   MarketplaceApiToken = 'marketplaceApiToken'
 }
+
+export enum State {
+  Disabled = 'disabled',
+  Unconfirmed = 'unconfirmed',
+  Confirmed = 'confirmed'
+}

@@ -3,7 +3,7 @@ import { BEM, modList, extendClassName } from 'ui'
 import styles from './button.module.scss'
 
 interface ButtonProps {
-  type: 'secondary' | 'alt' | 'error'
+  type: 'secondary' | 'icon' | 'alt' | 'error'
   cover?: boolean
   square?: boolean
 }
