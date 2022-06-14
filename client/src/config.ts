@@ -10,8 +10,8 @@ export const faucetUri = '/api/faucet' // next redirections on next.config.js
 export const gatewayAddress =
   process.env.NEXT_PUBLIC_GATEWAY_ADDRESS || '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0'
 export const nodeUri =
-  process.env.NEXT_PUBLIC_NODE_URI ||
-  'https://polygon-mumbai.g.alchemy.com/v2/GHT7ODcuJCgTuQGyvjI92G6hI5hyJLEa'
+  process.env.NEXT_PUBLIC_NODE_URI || 'http://localhost:8545'
+  //'https://polygon-mumbai.g.alchemy.com/v2/GHT7ODcuJCgTuQGyvjI92G6hI5hyJLEa'
 export const secretStoreUri = process.env.NEXT_PUBLIC_SECRET_STORE_URI || 'http://localhost:12001'
 export const artifactsFolder =
   process.env.NEXT_PUBLIC_ARTIFACTS_FOLDER_URL || `http://localhost:3000/artifacts`

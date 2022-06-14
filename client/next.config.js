@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 
-const gatewayUrl = process.env.NEXT_PUBLIC_GATEWAY_URI || "https://gateway.mumbai.nevermined.rocks"
+// const gatewayUrl = process.env.NEXT_PUBLIC_GATEWAY_URI || "https://gateway.mumbai.nevermined.rocks" 
+const gatewayUrl = process.env.NEXT_PUBLIC_GATEWAY_URI || "http://localhost:8030"
+
 const faucetUrl = process.env.NEXT_PUBLIC_FAUCET_URI || "http://localhost:3001"
 
 module.exports = {
