@@ -197,7 +197,7 @@ export const UserProfile: NextPage = () => {
                     </div>
                 </Form>
             </UiLayout>
-            <UiLayout type='container'>
+            <UiLayout type='container' className={b('profile-addresses')}>
                 <UiText type="h2" wrapper="h2">Addresses</UiText>
                 <div  className={b('profile-horizontal-line')}/>
                 <Form>                  
