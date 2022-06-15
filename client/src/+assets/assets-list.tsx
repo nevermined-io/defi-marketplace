@@ -74,8 +74,8 @@ export function AssetsList({ assets }: AssetsListProps) {
       const bookmark = bookmarks.find(item => item.did === did );
 
       if (bookmark?.id) {
-        await sdk.bookmarks.deleteOneById(bookmark?.id);
-        setBookmarks(bookmarks.filter(item => item.id !== bookmark?.id))
+        await sdk.bookmarks.deleteOneById(bookmark.id);
+        setBookmarks(bookmarks.filter(item => item.id !== bookmark.id))
       }
 
     } catch (error: any) {
