@@ -172,7 +172,6 @@ export const Profile: NextPage = () => {
   }
 
   return (
-    assets.length > 0 ?
       <>
         <DownloadPopup closePopup={closeDownloadPopup} popupRef={popupRef} />
         <UiLayout type="container">
@@ -235,7 +234,7 @@ export const Profile: NextPage = () => {
                 <XuiAssetsQuery content={renderAssets} onlyBookmark={true}/>
             </UiLayout>
 
-            : 
+            : assets.length ?
 
           <UiLayout type="container">
             <UiLayout className={b('asset', ['header-asset-row'])}>
@@ -323,22 +322,12 @@ export const Profile: NextPage = () => {
               totalPages > 1 &&
               <XuiPagination totalPages={totalPages} page={page} setPage={setPage} />
             }
+          </UiLayout> :
+          <UiLayout type='container'>
+            <UiText>NO ORDERS YET, HOWEVER YOU CAN STILL CLICK IN BOOKMARKS TO CHECK YOUR FAVORITE ASSETS</UiText>
           </UiLayout>
         }
         </UiLayout>
-      </> :
-      <UiLayout type="container">
-
-        <UiLayout type="container">
-          <UiText wrapper="h1" type="h1" variants={['heading']}>Profile</UiText>
-          <UiText type="h2" wrapper="h2"> {account ? `${account.substr(0, 6)}...${account.substr(-4)}` : ""}</UiText>
-        </UiLayout>
-        <UiDivider type="l" />
-        <UiLayout className={b('asset', ['header-asset-row'])}>
-          <UiText style={{ justifyContent: "center" }} type="p" variants={['secondary']}>
-            NO ORDERS YET
-          </UiText>
-        </UiLayout>
-      </UiLayout>
+      </>
   )
 }
