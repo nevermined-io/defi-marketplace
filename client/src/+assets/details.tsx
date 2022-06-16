@@ -14,7 +14,7 @@ import Image from "next/image"
 import { XuiPagination } from 'ui/+assets-query/pagination'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { loadPublishedEvent, RegisteredAsset } from 'src/shared/graphql'
-import { EVENT_PREFIX, PROTOCOL_PREFIX } from 'src/config'
+import { correctNetworkId, correctNetworkName, EVENT_PREFIX, PROTOCOL_PREFIX } from 'src/config'
 
 
 const b = BEM('details', styles)
@@ -29,11 +29,12 @@ export const AssetDetails: NextPage = () => {
   const [asset, setAsset] = useState<DDO | false>()
   const [isConnected, setIsConnected] = useState(false)
   const [ownAsset, setOwnAsset] = useState(false)
-  const { sdk, addToBasket, loginMetamask, isLogged, userBundles, web3 } = useContext(User)
+  const { sdk, addToBasket, loginMetamask,switchToCorrectNetwork,  isLogged, userBundles, web3 } = useContext(User)
   const popupRef = createRef<UiPopupHandlers>()
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
   const [provenance, setProvenance] = useState([]);
+  const [isCorrectNetwork, setIsCorrectNetwork] = useState(true);
 
   const dateOptions: Intl.DateTimeFormatOptions = {
     month: 'short',
@@ -66,13 +67,13 @@ export const AssetDetails: NextPage = () => {
     const bundlesPuchased = await getBundlesWithDataset(did)
 
     const provenance = bundlesPuchased.map(bundle => ({
-        id: bundle.did,
-        action: 'bought',
-        date: new Date(bundle.createdAt),
-        account: bundle.user,
-        price: 0,
-        currency: 'USDC'
-      })
+      id: bundle.did,
+      action: 'bought',
+      date: new Date(bundle.createdAt),
+      account: bundle.user,
+      price: 0,
+      currency: 'USDC'
+    })
     )
 
     if (published) {
@@ -122,6 +123,42 @@ export const AssetDetails: NextPage = () => {
   }, [asset, userBundles])
 
 
+  // if chain change, show button to swit
+  useEffect(() => {
+    const checkNetworkAndSetState = (chainId: any) => {
+      if (chainId !== correctNetworkId) {
+        setIsCorrectNetwork(false)
+      } else {
+      }
+    }
+
+    window.ethereum.on('chainChanged', checkNetworkAndSetState)
+
+    //remove the event
+    return () => {
+      window.ethereum.removeListener('chainChanged', checkNetworkAndSetState)
+    }
+  }, [])
+
+  // check network on page load 
+  useEffect(() => {
+    if (!window.ethereum) {
+      return
+    }
+
+    (async () => {
+      try {
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== correctNetworkId) {
+          setIsCorrectNetwork(false)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    })()
+  }, [])
+
+
 
   useEffect(() => {
     setTotalPages(calculatePages(provenance.length, PROVENANCE_PER_PAGE))
@@ -129,15 +166,28 @@ export const AssetDetails: NextPage = () => {
 
   if (!asset) {
     return (
-      <UiLayout type="container">
-        {asset === false ?
-          <UiText alert>Error loading the asset</UiText>
-          :
-          <UiLayout type="container" className={b("spinner-container")} >
-            <UiText className={b("loadspinner")} >
-              <Loader />
-            </UiText>
-          </UiLayout>
+      <UiLayout type="grid"
+        align="center"
+        justify="space-between"
+        direction="column">
+        {
+          !isCorrectNetwork ?
+            <>
+              <UiText style={{ padding: '10px' }} alert>Please,  switch to {correctNetworkName} to see the details</UiText>
+              <UiButton style={{ margin: '10px', padding: '10px', background: "#2E405A", textTransform: "none" }}
+                onClick={async () => await switchToCorrectNetwork()}>
+                switch to {correctNetworkName} network
+              </UiButton>
+            </>
+            :
+            asset ===false ?
+              <UiText style={{ padding: '10px' }} alert>Error loading the asset</UiText>
+              :
+              <UiLayout type="container" className={b("spinner-container")} >
+                <UiText className={b("loadspinner")} >
+                  <Loader />
+                </UiText>
+              </UiLayout>
         }
       </UiLayout>
     )
