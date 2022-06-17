@@ -43,6 +43,11 @@
     padding: 0;
   }
 
+  &--icon {
+    background: none;
+    border: 0;
+  }
+
   &[disabled] {
     pointer-events: none;
   }

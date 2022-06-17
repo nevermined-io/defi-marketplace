@@ -56,7 +56,7 @@ export const UserProfile: NextPage = () => {
             setAddresses([...addresses, newAddress])
             setNewAddress('')
             setIsAddressAdded(true)
-            setSuccessMessage('Added is added successfully')
+            setSuccessMessage('Address is added successfully')
         } catch (error: any) {
             if(error.message.includes('"statusCode":401')) {
                 setErrorMessage('Your login is expired. Please change to the previous address, reload and sign again')
@@ -151,7 +151,7 @@ export const UserProfile: NextPage = () => {
             <UiDivider/>
             <UiLayout type='container'>
                 <div  className={b('profile-horizontal-line')}/>
-                <Form className=''>
+                <Form>
                     <FormGroup orientation={Orientation.Vertical}>
                         <FormInput
                             className={b('profile-form-input')}
@@ -187,14 +187,36 @@ export const UserProfile: NextPage = () => {
                             linkedinProfile: e.target.value
                         }})}/>
                     </FormGroup>
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormTextarea
-                            label='Current Addresses'
-                            value={addresses.join(', ')}
-                            disabled
-                        />
+                    <div className={b('profile-submit-container')}>
+                        <div className={b('profile-submit-container', ['updated-message'])}>
+                            {(isUpdated) ? <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> : null}
+                        </div>
+                        <div className={b('profile-submit-container', ['submit'])}>
+                            <UiButton onClick={onSubmitUserProfile}>Update Profile</UiButton>
+                        </div>
+                    </div>
+                </Form>
+            </UiLayout>
+            <UiLayout type='container' className={b('profile-addresses')}>
+                <UiText type="h2" wrapper="h2">Addresses</UiText>
+                <div  className={b('profile-horizontal-line')}/>
+                <Form>                  
+                    <div>
+                        <UiText type='h3'>Current Addresses</UiText>
+                    </div>
+                    <div>
                         <UiText variants={['detail']}>Change your wallet account to add more address to your profile</UiText>
-                    </FormGroup>
+                    </div>
+
+                    <div className={b('profile-current-addresses-container')}>
+                        {addresses.map(a => 
+                            <div key={a} className={b('profile-current-address')}>
+                                {a}
+                            </div>    
+                        )}
+                    </div>
+                    
+
                     {newAddress && 
                         <FormGroup orientation={Orientation.Vertical} className={b('profile-add-address')}>
                             <FormAddItem
@@ -205,13 +227,10 @@ export const UserProfile: NextPage = () => {
                             />
                         </FormGroup>
                     }
-                    
+
                     <div className={b('profile-submit-container')}>
                         <div className={b('profile-submit-container', ['updated-message'])}>
-                            {(isUpdated || isAddressAdded) ? <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> : null}
-                        </div>
-                        <div className={b('profile-submit-container', ['submit'])}>
-                            <UiButton onClick={onSubmitUserProfile}>Update Profile</UiButton>
+                            {(isAddressAdded) ? <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> : null}
                         </div>
                     </div>
                 </Form>

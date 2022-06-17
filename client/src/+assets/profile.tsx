@@ -4,14 +4,15 @@ import Image from "next/image"
 
 import { User } from '../context'
 import styles from './profile.module.scss'
-import { BEM, UiText, UiLayout, UiDivider, XuiBuyAsset, UiButton, UiIcon, UiPopupHandlers } from 'ui'
+import { BEM, UiText, UiLayout, UiDivider, XuiBuyAsset, UiButton, UiIcon, UiPopupHandlers, XuiAssetsQuery } from 'ui'
 import { Bundle, calculatePages, calculateStartEndPage } from 'src/shared'
 import { XuiPagination } from 'ui/+assets-query/pagination'
-import { Account } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Bookmark } from '@nevermined-io/nevermined-sdk-js'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { graphUrl, entitesNames } from 'src/config'
 import { loadFullfilledEvents } from 'src/shared/graphql'
 import { DownloadPopup } from 'ui/+download-asset/popup/download-asset-popup'
+import { AssetsList } from './assets-list'
 
 enum AssetStatus {
   COMPLETED = "COMPLETED",
@@ -33,12 +34,14 @@ export const Profile: NextPage = () => {
   // const [all, setAll] = useState<boolean>(false) TBI
   const [completed, setCompleted] = useState<boolean>(false)
   const [processing, setProcessing] = useState<boolean>(false)
+  const [bookmarkFilter, setBookmarkFiler] = useState<boolean>(false)
   // const [sold, setSold] = useState<boolean>(false) TBI
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
   const [showBundleDetail, setShowBundleDetail] = useState<boolean[]>(assets.map(asset => !asset))
   const [userAccount, setUserAccount] = useState<Account>()
   const popupRef = useRef<UiPopupHandlers>()
+  const renderAssets = useCallback(assets => (<AssetsList assets={assets}/>), [])
 
   useEffect(() => {
     if (!sdk.accounts || !userBundles.length) {
@@ -77,11 +80,27 @@ export const Profile: NextPage = () => {
     return calculateStartEndPage(page, BUNDLES_PER_PAGE)
   }, [page])
 
+  const checkBookmarkFilter = () => {
+    let assetArray = []
+    if (!bookmarkFilter) {
+      setBookmarkFiler(true)
+      if (processing) setProcessing(false)
+      if (completed) setCompleted(false)
+      assetArray = assets.filter((asset: any) => asset.status === AssetStatus.COMPLETED)
+    } else {
+      setBookmarkFiler(false)
+      assetArray = assets
+    }
+    setTotalPages(calculatePages(assetArray.length, BUNDLES_PER_PAGE))
+    setPage(1)
+  }
+
   const checkCompleted = () => {
     let assetArray = []
     if (!completed) {
       setCompleted(true)
       if (processing) setProcessing(false)
+      if (bookmarkFilter) setBookmarkFiler(false)
       assetArray = assets.filter((asset: any) => asset.status === AssetStatus.COMPLETED)
     } else {
       setCompleted(false)
@@ -96,6 +115,7 @@ export const Profile: NextPage = () => {
     if (!processing) {
       setProcessing(true)
       if (completed) setCompleted(false)
+      if (bookmarkFilter) setBookmarkFiler(false)
       assetArray = assets.filter((asset: any) => asset.status === AssetStatus.PROCESSING)
     } else {
       setProcessing(false)
@@ -162,7 +182,6 @@ export const Profile: NextPage = () => {
   }
 
   return (
-    assets.length > 0 ?
       <>
         <DownloadPopup closePopup={closeDownloadPopup} popupRef={popupRef} />
         <UiLayout type="container">
@@ -181,6 +200,11 @@ export const Profile: NextPage = () => {
               all
             </div> */}
               <div className={b("button-container-second")}>
+              <div className={bookmarkFilter ? b("other-button", ['selected']) : b("other-button")}
+                  onClick={checkBookmarkFilter}
+                >
+                  Bookmark
+                </div>
                 <div className={completed ? b("other-button", ['selected']) : b("other-button")}
                   onClick={checkCompleted}
                 >
@@ -192,8 +216,8 @@ export const Profile: NextPage = () => {
                   Processing
                 </div>
                 {
-                  (completed || processing) &&
-                  <div onClick={() => { setCompleted(false); setProcessing(false); setTotalPages(calculatePages(assets.length, BUNDLES_PER_PAGE)) }} className={b('clear-div')} >
+                  (completed || processing || bookmarkFilter) &&
+                  <div onClick={() => { setCompleted(false); setProcessing(false); setBookmarkFiler(false); setTotalPages(calculatePages(assets.length, BUNDLES_PER_PAGE)) }} className={b('clear-div')} >
                     <span className={b('clear-div', ['clear-button'])} >
                       Clear
                     </span>
@@ -201,12 +225,12 @@ export const Profile: NextPage = () => {
                       <Image width="10" height="10" src="/assets/blue-cross.svg" />
                     </span>
                   </div>
-
                 }
               </div>
             </div>
             {
-              assets.find((item: any) => item.status === AssetStatus.PROCESSING || item.status === AssetStatus.PENDING) &&
+              (!bookmarkFilter &&
+              assets.find((item: any) => item.status === AssetStatus.PROCESSING || item.status === AssetStatus.PENDING)) &&
               <span className={b("loadspinner")} >
                 <UiText type="small" wrapper="small" variants={['highlight']} className={b("loadspinner", ["text"])}>Checkout packaging in progress...</UiText>
                 <Image width="50" height="50" src="/assets/profile-loadspinner.svg" className={b("loadspinner", ["spinner"])} />
@@ -215,6 +239,12 @@ export const Profile: NextPage = () => {
           </UiLayout>
 
           <UiDivider />
+          { bookmarkFilter ?
+            <UiLayout type="container">
+                <XuiAssetsQuery content={renderAssets} onlyBookmark={true}/>
+            </UiLayout>
+
+            : assets.length ?
 
           <UiLayout type="container">
             <UiLayout className={b('asset', ['header-asset-row'])}>
@@ -302,21 +332,12 @@ export const Profile: NextPage = () => {
               totalPages > 1 &&
               <XuiPagination totalPages={totalPages} page={page} setPage={setPage} />
             }
+          </UiLayout> :
+          <UiLayout type='container'>
+            <UiText>NO ORDERS YET, HOWEVER YOU CAN STILL CLICK IN BOOKMARKS TO CHECK YOUR FAVORITE ASSETS</UiText>
           </UiLayout>
+        }
         </UiLayout>
-      </> :
-      <UiLayout type="container">
-
-        <UiLayout type="container">
-          <UiText wrapper="h1" type="h1" variants={['heading']}>Profile</UiText>
-          <UiText type="h2" wrapper="h2"> {account ? `${account.substr(0, 6)}...${account.substr(-4)}` : ""}</UiText>
-        </UiLayout>
-        <UiDivider type="l" />
-        <UiLayout className={b('asset', ['header-asset-row'])}>
-          <UiText style={{ justifyContent: "center" }} type="p" variants={['secondary']}>
-            NO ORDERS YET
-          </UiText>
-        </UiLayout>
-      </UiLayout>
+      </>
   )
 }

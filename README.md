@@ -2,21 +2,20 @@
 
 # DeFi Data Marketplace
 
-- [DeFi Data Marketplace](#DeFi-data-marketplace)
+- [DeFi Data Marketplace](#defi-data-marketplace)
   - [Get Started](#get-started)
     - [Starting the environment](#starting-the-environment)
     - [Configuration](#configuration)
       - [Environment Variables](#environment-variables)
       - [Connecting to local NVM](#connecting-to-local-nvm)
       - [Connecting to Mumbai](#connecting-to-mumbai)
-  - [Testing](#testing)
-  - [Code Style](#code-style)
-  - [Production](#production)
-  - [Releases](#releases)
-  - [Changelog](#changelog)
-  - [Build](#build)
-  - [Attribution](#attribution)
-  - [License](#license)
+    - [Testing](#testing)
+    - [Code Style](#code-style)
+    - [Production](#production)
+    - [How to make a release](#how-to-make-a-release)
+    - [Changelog](#changelog)
+    - [Build](#build)
+    - [License](#license)
 
 ## Get Started
 
@@ -41,29 +40,29 @@ And for the server:
 npm run start-watch
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the client in the browser. 
+Open [http://localhost:3000](http://localhost:3000) to view the client in the browser.
 
 ### Starting the environment
 
 The client is configured to run as a standalone service. Using the configuration provided, the client will connect to the test environment in mumbai testnet. In order to change this configuration and use a local nevermined stack, change the enviroment variables described in the section [environment variables](#environment-variables)
 
-The server needs a database in order to save and retrieve the data needed to create the bundles, To create this database a docker-compose.yml file is provided. Cd into the server folder and run: 
+The server needs a database in order to save and retrieve the data needed to create the bundles, To create this database a docker-compose.yml file is provided. Cd into the server folder and run:
 
 ```bash
 docker-compose up
 ```
 
-This will create a MySql database where the server will store the data. Next step is to create the database schema. To do so, we can execute [this script](https://github.com/nevermined-io/defi-dataset-loader/blob/master/data/database_schema.sql) in the new database created, that will create the schema for us. 
+This will create a MySql database where the server will store the data. Next step is to create the database schema. To do so, we can execute [this script](https://github.com/nevermined-io/defi-dataset-loader/blob/master/data/database_schema.sql) in the new database created, that will create the schema for us.
 
 ### Configuration
 Both client an server have some environment variables that configure which environment will be used.
 
 #### Environment Variables
 On the client side there are two files that contains env vars.
-* `src/config.ts` 
+* `src/config.ts`
 * `next.config.js`
 
-On the server side, the env vars are defined at 
+On the server side, the env vars are defined at
 * `src/config.ts`
 
 #### Connecting to local NVM
@@ -111,6 +110,15 @@ To create the production code run:
 
 ```bash
 npm run build
+```
+
+### How to make a release
+1. Make sure that the versions in both package.json (client, server) files are up to date.
+
+2. Tag the repo and push the tag
+```bash
+git tag v0.1.0
+git push origin v0.1.0
 ```
 ### Changelog
 See the [CHANGELOG.md](./CHANGELOG.md) file. This file is auto-generated during the above mentioned release process.

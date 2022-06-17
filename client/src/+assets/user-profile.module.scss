@@ -1,3 +1,5 @@
+@import '../../src/styles/index';
+
 .user-profile {
     &__profile-horizontal-line {
         border-top: 2px solid #2B465C;
@@ -25,7 +27,25 @@
         margin-bottom: 20px;
     }
 
+    &__profile-addresses {
+        margin-top: 40px;
+    }
+
     &__profile-add-address {
         margin-top: 20px;
+    }
+
+    &__profile-current-addresses-container {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    &__profile-current-address {
+        border: 2px solid gc(gM);
+        flex-basis: 40%;
+        text-align: center;
+        margin: 30px 50px 0 0;
+        padding: 20px;
     }
 }

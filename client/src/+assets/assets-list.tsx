@@ -1,5 +1,5 @@
-import React, { createRef, Fragment, useContext, useEffect, useState } from 'react'
-import { DDO } from '@nevermined-io/nevermined-sdk-js'
+import React, { useRef, Fragment, useContext, useEffect, useState } from 'react'
+import { DDO, Bookmark } from '@nevermined-io/nevermined-sdk-js'
 import Link from "next/link"
 
 import {
@@ -11,8 +11,9 @@ import {
   XuiTokenName,
   XuiTokenPrice,
   UiPopupHandlers,
+  NotificationPopup,
 } from 'ui'
-import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
+import { toDate, getDefiInfo, getDdoTokenAddress, newLogin } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
 import { AddedToBasketPopup } from './added-to-basket-popup'
@@ -23,10 +24,11 @@ interface AssetsListProps {
 
 const b = BEM('assets-list', styles)
 export function AssetsList({ assets }: AssetsListProps) {
-  const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles } = useContext(User)
+  const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles, sdk, userProfile, loginMarketplaceAPI, bookmarks, setBookmarks } = useContext(User)
+  const [errorMessage, setErrorMessage] = useState('')
   const [batchActive, setBatchActive] = useState<boolean>(false)
   const [batchSelected, setBatchSelected] = useState<string[]>([])
-  const popupRef = createRef<UiPopupHandlers>()
+  const popupRef = useRef<UiPopupHandlers>()
 
   const openPopup = (event: any) => {
     popupRef.current?.open()
@@ -42,15 +44,67 @@ export function AssetsList({ assets }: AssetsListProps) {
     setBatchSelected(batchSelected.concat(...dids.filter(did => !batchSelected.includes(did))))
   }
 
+  const checkError = (message: string) => {
+    if(message.includes('"statusCode":401')) {
+      newLogin(sdk, loginMarketplaceAPI)
+      setErrorMessage('Your login is expired. Please first sign with your wallet and after try again')
+    } else {
+      setErrorMessage(message)
+    }
+    
+    popupRef.current?.open()
+  }
+
+  const onAddBookmark = async (did: string, description: string) => {
+    try {
+      const bookmark = await sdk.bookmarks.create({
+        did,
+        userId: userProfile.userId,
+        description,
+      });
+  
+      setBookmarks([...bookmarks, bookmark])
+    } catch (error: any) {
+      checkError(error.message)
+    }
+  }
+
+  const onRemoveBookmark = async (did: string) => {
+    try {
+      const bookmark = bookmarks.find(item => item.did === did );
+
+      if (bookmark?.id) {
+        await sdk.bookmarks.deleteOneById(bookmark.id);
+        setBookmarks(bookmarks.filter(item => item.id !== bookmark.id))
+      }
+
+    } catch (error: any) {
+      checkError(error.message)
+    }
+  }
+
 
   const removeFromBatchSelected = (dids: string[]) => {
     const didsSet = new Set(dids)
     setBatchSelected(batchSelected.filter(did => !didsSet.has(did)))
   }
 
+  useEffect(() => {
+    if(!userProfile?.userId) {
+      return
+    }
+
+    (async () => {
+      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
+
+      setBookmarks([...bookmarksData.results])
+    })()
+  }, [userProfile])
+
   return (
     <div className={b()}>
        <AddedToBasketPopup  closePopup={closePopup} popupRef={popupRef} />
+       <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef}/>
 
       <div className={b('heading')}>
         <div className={b('batch-select-wrapper')}>
@@ -154,6 +208,29 @@ export function AssetsList({ assets }: AssetsListProps) {
                 </UiText>
               </UiText>
             </UiLayout>
+            {bookmarks.some(bookmark => bookmark.did === asset.id) ? 
+            <UiLayout className={b('bookmark')} onClick={() => onRemoveBookmark(asset.id)}>
+                <img
+                className={b('bookmark', ['cover'])}
+                      alt='network'
+                      src={'/assets/bookmark-marked.svg'}
+                      style={{ cursor: 'pointer'}}
+                      width="25"
+                />
+                <div className={b('bookmark', ['minus'])}>-</div>
+              </UiLayout>
+              : 
+              <UiLayout className={b('bookmark')} onClick={() => onAddBookmark(asset.id, '')}>
+                  <img
+                    className={b('bookmark', ['cover'])}
+                          alt='network'
+                          src={'/assets/bookmark.svg'}
+                          style={{ cursor: 'pointer'}}
+                          width="25"
+                    />
+                  <div className={b('bookmark', ['plus'])}>+</div>
+                </UiLayout>
+            }
             <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
             {userBundles.some(bundle => bundle.datasets.some(dataset => dataset.datasetId === asset.id)) ?
               <img alt='download' width="24px" src="assets/added_to_basket.svg" />
