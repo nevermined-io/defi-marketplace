@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
 import { User } from '../context'
-import { Form, FormGroup, FormInput, FormAddItem, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
+import { Form, FormSelect, FormGroup, FormInput, FormAddItem, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
 import { NextPage } from 'next'
 import { newLogin, StoreItemTypes } from '../shared'
 import { NotificationPopup } from '../components'
@@ -73,6 +73,139 @@ export const UserPublish: NextPage = () => {
         }
         
     }
+
+
+    METADATA  IN LOADER
+
+    metadata = {
+            "main": {
+                "name": file_name[0] + " " + file_name[1],
+                "dateCreated": date_created,
+                "author": "Keyko GmbH",
+                "license": "CC0: Public Domain",
+                "price": self.price,
+                "datePublished": data_published,
+                "network": self.blockchain,
+                "files": [
+                    {
+                        "index": 0,
+                        "contentType": "text/csv",
+                        "checksum": str(uuid.uuid4()),
+                        "checksumType": "MD5",
+                        "contentLength": self.file_size,
+                        "url": self.url
+                    }
+                ],
+                "type": "dataset"
+            },
+            "additionalInformation": {
+                "description": description,
+                "categories": [
+                    f'ProtocolType:{self.category}',
+                    f'EventType:{self.subcategory}',
+                    f'Blockchain:{self.blockchain}',
+                    f'UseCase:defi-datasets',
+                    f'Version:{version}'
+                ],
+                "blockchain": self.blockchain,
+                "version": version,
+                "source": "filecoin",
+                "file_name": self.filename,
+                "key": key.hex(),
+                "sampleUrl": sample_url
+            },
+        }
+
+        ddo = self.nevermined.assets.create(
+            metadata=metadata,
+            publisher_account=self.account,
+            providers=[self.gateway_address],
+            asset_rewards={
+                "_amounts": [str(self.price)],
+                "_receivers": [os.getenv('PROVIDER_ADDRESS')],
+                "_tokenAddress": os.getenv('TOKEN_ADDRESS')
+            }
+        )
+
+
+
+        METADATA IN EON
+
+        import { MetaData, Nevermined } from "@nevermined-io/nevermined-sdk-js";
+
+
+        const generateMetadata = (i: number): MetaData => {
+    const projectMetadata = generateProjectMetadata(i)
+    const metadata = {
+        main: {
+            name: projectMetadata.name,
+            dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
+            author: projectMetadata.attributes.developer,
+            license: '',
+            // Leave at zero for now so that users trying it on mumbai
+            // don't need to fund their wallets with USDC
+            price: '0',
+            datePublished: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
+            type: 'dataset',
+            network: 'India',
+            files: [
+                {
+                    index: 1,
+                    contentType: 'text/plain',
+                    url: 's3://carbon-ox-mumbai/retirement.pdf',
+                    contentLength: '136',
+                }
+            ]
+        },
+        additionalInformation: {
+            description,
+            categories: ["carbonv3"],
+            blockchain: "India",
+            version: "0.0.5",
+            source: "filecoin",
+            file_name: "Certificate.pdf",
+            customData: projectMetadata
+        }
+    } as MetaData
+
+    return metadata
+}
+
+
+const publish = async (i: number) => {
+    const nevermined = await Nevermined.getInstance(config)
+    const publisher = (await nevermined.accounts.list())[0]
+
+    const assetRewards = new AssetRewards(publisher.getId(), new BigNumber(0))
+
+    // create an mint nft
+    const ddo = await nevermined.nfts.create(
+        generateMetadata(i),
+        publisher,
+        100,
+        0,
+        assetRewards,
+        undefined,
+        MUMBAI_USDC,
+        true,
+        undefined,
+    )
+
+    // give the gateway permission to transfer the nft and release the rewards
+    // this only needs to be called once
+    await nevermined.nfts.setApprovalForAll(
+        config.gatewayAddress!,
+        true,
+        publisher
+    )
+
+    return ddo
+}
+
+
+
+
+
     */
 
     const onSubmitUserPublish = async() => {
@@ -142,6 +275,18 @@ export const UserPublish: NextPage = () => {
             <UiLayout type='container'>
                 <div  className={b('publish-horizontal-line')}/>
                 <Form className=''>
+
+
+                    <FormGroup orientation={Orientation.Vertical}>
+                        <FormSelect
+                            className={b('publish-form-input')}
+                            label='Test Select'
+                            inputError={inputError}
+                            value={userPublish.title} onChange={(e) => setUserPublish({...userPublish, title: e.target.value})}
+                            placeholder='Pick one'
+                        />
+                    </FormGroup>
+
                     <FormGroup orientation={Orientation.Vertical}>
                         <FormInput
                             className={b('publish-form-input')}
