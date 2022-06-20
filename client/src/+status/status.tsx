@@ -2,13 +2,9 @@ import React, { useEffect, useContext, useState } from 'react'
 import type { NextPage } from 'next'
 import styles from './status.module.scss'
 
-import { BEM, UiText, UiLayout, UiDivider } from '@nevermined-io/styles'
+import { BEM, UiText, UiLayout, UiDivider, CircleSpinner } from '@nevermined-io/styles'
 import { User } from '../context'
 import { PlatformVersions } from '@nevermined-io/nevermined-sdk-js'
-import Image from "next/image"
-import { CircleSpinner } from 'ui/loaders/circle-spinner'
-
-const b = BEM('status', styles)
 
 export const Status: NextPage = () => {
   const { sdk } = useContext(User)
