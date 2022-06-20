@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import type { NextPage } from 'next'
 import styles from './diagram.module.scss'
 
-import { BEM } from 'ui'
+import { BEM } from '@nevermined-io/styles'
 import Image from 'next/image'
 
 const b = BEM('diagram', styles)
