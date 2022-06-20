@@ -1,7 +1,7 @@
 import React, { Props, HTMLAttributes, useContext, createRef } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 
-import { BEM, modList, extendClassName, UiButton, UiPopup, UiPopupHandlers } from 'ui'
+import { BEM, extendClassName, UiPopup, UiPopupHandlers } from '@nevermined-io/styles'
 import styles from './buy-asset.module.scss'
 import { XuiBuyAssetPopup } from './popup/buy-asset-popup'
 

@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { BEM } from 'ui'
-import { UiLayout } from 'ui/layout/layout'
+import { BEM, UiLayout } from '@nevermined-io/styles'
 import { XuiDatePicker } from './date-picker'
 
 import styles from './filter-dropdown.module.scss'

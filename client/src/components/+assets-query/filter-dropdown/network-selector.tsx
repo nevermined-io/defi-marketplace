@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 
-import { BEM } from 'ui'
+import { BEM } from '@nevermined-io/styles'
 import { networkArray } from 'src/config'
 import styles from './filter-dropdown.module.scss'
 import { XuiNetworkBox } from './network-box'

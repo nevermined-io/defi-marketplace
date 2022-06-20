@@ -8,11 +8,10 @@ import {
   UiText,
   UiDivider,
   UiIcon,
-  XuiTokenName,
-  XuiTokenPrice,
   UiPopupHandlers,
   NotificationPopup,
-} from 'ui'
+} from '@nevermined-io/styles'
+import { XuiTokenName, XuiTokenPrice} from 'ui'
 import { toDate, getDefiInfo, getDdoTokenAddress, newLogin } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'

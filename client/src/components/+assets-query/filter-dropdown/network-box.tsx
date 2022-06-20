@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { User } from 'src/context'
 
-import { BEM } from 'ui'
+import { BEM } from '@nevermined-io/styles'
 import styles from './filter-dropdown.module.scss'
 
 interface NetworkBoxProps {

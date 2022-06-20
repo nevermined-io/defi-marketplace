@@ -1,11 +1,10 @@
 import React, { useContext } from "react"
 import Router from 'next/router'
-import { BEM, UiButton, UiDivider, UiText } from "ui"
+import { BEM, UiDivider, UiText, UiLayout } from "@nevermined-io/styles"
 import Image from "next/image"
 import styles from './banner.module.scss'
 import { XuiSearchBar } from "ui/+assets-query/search-bar"
 import { User } from "src/context"
-import { UiLayout } from "ui/layout/layout"
 
 const b = BEM('banner', styles)
 

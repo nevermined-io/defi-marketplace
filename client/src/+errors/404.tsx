@@ -1,4 +1,4 @@
-import {UiLayout, UiText, BEM} from 'ui'
+import {UiLayout, UiText, BEM} from '@nevermined-io/styles'
 import styles from './404.module.scss'
 import Link from "next/link"
 

@@ -1,6 +1,6 @@
-import React, { ReactNode, useContext, useState, useEffect, useCallback } from 'react'
+import React from 'react'
 
-import { BEM, UiButton, UiIcon, UiLayout, UiDivider, UiText } from 'ui'
+import { BEM, UiButton, UiIcon, UiLayout, UiDivider, UiText } from '@nevermined-io/styles'
 import styles from './assets-query.module.scss'
 
 interface PaginationProps {

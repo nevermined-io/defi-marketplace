@@ -1,6 +1,6 @@
 import React, { Props } from "react"
 import { useRouter } from "next/router";
-import { BEM, UiDivider, UiLayout, UiText } from "ui"
+import { BEM, UiDivider, UiLayout, UiText } from "@nevermined-io/styles"
 import Link from "next/link"
 import Image from "next/image"
 import styles from './footer.module.scss'
