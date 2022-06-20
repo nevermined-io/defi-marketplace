@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { User } from 'src/context'
 
-import { BEM } from 'ui'
-import { networkArray } from 'src/config'
+import { BEM, UiLayout } from '@nevermined-io/styles'
 import styles from './filter-dropdown.module.scss'
-import { UiLayout } from 'ui/layout/layout'
 
 const b = BEM('filter-dropdown', styles)
 interface PriceRangeProps {

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 
-import { BEM } from 'ui'
+import { BEM } from '@nevermined-io/styles'
 import Image from "next/image"
 
 import styles from './category-dropdown.module.scss'

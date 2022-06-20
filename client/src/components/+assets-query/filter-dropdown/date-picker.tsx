@@ -1,8 +1,7 @@
 import React, { useContext } from 'react'
 import { User } from 'src/context'
 
-import { BEM } from 'ui'
-import { UiDivider } from 'ui/divider/divider'
+import { BEM, UiDivider } from '@nevermined-io/styles'
 
 import styles from './filter-dropdown.module.scss'
 

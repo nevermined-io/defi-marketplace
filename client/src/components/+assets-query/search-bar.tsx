@@ -1,7 +1,8 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import Image from "next/image"
 
-import { BEM, UiDropdown, UiIcon, UiLayout, UiDivider, UiText, UiButton } from 'ui'
+import { BEM, UiIcon, UiLayout, UiDivider, UiText, UiButton } from '@nevermined-io/styles'
+import { UiDropdown } from '@nevermined-io/styles'
 import { User } from '../../context'
 import styles from './assets-query.module.scss'
 import { XuiCategoryDropdown } from 'ui/+assets-query/category-dropdown/category-dropdown'

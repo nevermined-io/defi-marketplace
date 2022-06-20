@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import React, { useState } from 'react'
 import Link from "next/link"
-import { UiText, UiDivider, UiLayout, BEM } from 'ui'
+import { UiText, UiDivider, UiLayout, BEM } from '@nevermined-io/styles'
 import { Markdown } from 'ui/markdown/markdown'
 import styles from './cli.module.scss'
 
