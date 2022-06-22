@@ -9,6 +9,7 @@ import { correctNetworkId, correctNetworkName } from '../config';
 import { getAllUserBundlers, Bundle } from '../shared/api';
 
 import {
+    gatewayURL,
     marketplaceUri,
     gatewayAddress,
     faucetUri,
@@ -19,13 +20,10 @@ import {
     artifactsFolder
 } from '../config'
 
-import {gatewayUrl} from '../../next.config'
-
 
 export async function provideNevermined(web3Provider: Web3): Promise<{sdk: Nevermined}> {
 
-    const gatewayUri = gatewayUrl  
-      
+    const gatewayUri = gatewayURL
     const config = {
         web3Provider,
         nodeUri,
