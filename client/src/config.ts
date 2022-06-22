@@ -10,13 +10,17 @@ export const marketplaceUri = 'https://defi.v2.marketplace-api.mumbai.nevermined
 export const gatewayUri = '/api/gateway' // next redirections on next.config.js
 export const faucetUri = '/api/faucet' // next redirections on next.config.js
 export const gatewayAddress = '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0'
-  // process.env.NEXT_PUBLIC_GATEWAY_ADDRESS || '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0'
+//export const gatewayAddress =   process.env.NEXT_PUBLIC_GATEWAY_ADDRESS || '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0'
 export const nodeUri = 'https://polygon-mumbai.g.alchemy.com/v2/GHT7ODcuJCgTuQGyvjI92G6hI5hyJLEa'
-  //process.env.NEXT_PUBLIC_NODE_URI || 'http://localhost:8545'
-  //'https://polygon-mumbai.g.alchemy.com/v2/GHT7ODcuJCgTuQGyvjI92G6hI5hyJLEa'
+//export const nodeUri = process.env.NEXT_PUBLIC_NODE_URI || 'http://localhost:8545'
 export const secretStoreUri = process.env.NEXT_PUBLIC_SECRET_STORE_URI || 'http://localhost:12001'
 export const artifactsFolder =
   process.env.NEXT_PUBLIC_ARTIFACTS_FOLDER_URL || `http://localhost:3000/artifacts2`
+
+export const tier1NftContractAddress = ''
+export const tier2NftContractAddress = ''
+export const tier3NftContractAddress = ''
+export const Nft721ContractAddress = '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
 
 //
 // APP CONFIG
@@ -36,7 +40,7 @@ export const correctNetworkURL =
   process.env.NEXT_PUBLIC_CORRECT_NETWORK_URL || 'https://matic-mumbai.chainstacklabs.com'
 export const correctNetworkName = process.env.NEXT_PUBLIC_CORRECT_NETWORK_NAME || 'mumbai'
 export const bundleServiceUri = ' https://defi.v2.bundler.mumbai.nevermined.rocks'
-  //process.env.NEXT_PUBLIC_BUNDLE_SERVICE_URI || 'https://defi.marketplace.api.keyko.rocks'
+  //process.env.NEXT_PUBLIC_BUNDLE_SERVICE_URI || 'https://defi.v2.bundler.mumbai.nevermined.rocks'
 export const bundleCreateUri = '/api/v1/bundle/create'
 export const bundleStatusUri = '/api/v1/bundle/status'
 export const userBundlesUri = '/api/v1/user/history'
@@ -56,6 +60,11 @@ export const networkArray = [
   'fantom',
   'arbitrum'
 ]
+
+export const categories = ['None','Borrows', 'Deposits', 'Liquidations', 'Repays', 'Redeems', 'Flashloans', 'Trades', 'Liquidity']
+export const protocols = ['None','Aave', 'Compound', 'Kashi', 'Balancer', 'Bancor', 'SushiSwap', 'Dodoex', 'Ubeswap', 'Pancakeswap', 'Pangolin', 'Traderjoe']
+export const assetTypes = ['dataset', 'report', 'notebook', 'dashboard']
+
 export const graphUrl =
   process.env.NEXT_PUBLIC_ACCESS_CONDITION_URI ||
   'https://graph-node.mumbai.keyko.rocks/subgraphs/name/neverminedio'

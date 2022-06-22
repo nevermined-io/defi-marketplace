@@ -28,7 +28,8 @@
             color: #67CFF9;
         }
 
-        textarea, input {
+
+        textarea, input, select {
             background-color: #2B465C;
             color: #fff;
             width: 100%;
@@ -43,6 +44,12 @@
         textarea {
             height: 150px;
         }
+
+        
+        option {
+            background-color: #2B465C;
+            color: #fff;
+         }
     }
 
     &__form-add-item-container {
