@@ -148,12 +148,17 @@ export const UserPublish: NextPage = () => {
             }
 
             const metadata = generateMetadata()
+
+            const accounts = await sdk.accounts.list()
+            const user_account = await accounts[0]
+            const user_address = user_account.getId()
+
+            // variable account in UserProvider stores the address!
         
-            /*
-            const assetRewards = new AssetRewards(account, new BigNumber(userPublish.price))
+            const assetRewards = new AssetRewards(user_address, new BigNumber(userPublish.price))
             const ddo = await sdk.nfts.create721(
                 metadata,
-                account,
+                user_account,
                 assetRewards,
                 Nft721ContractAddress
             )
@@ -162,7 +167,7 @@ export const UserPublish: NextPage = () => {
                 console.log("Asset Published with DID: " + ddo.id)
                 alert("Asset Published with DID: " + ddo.id)
             }
-            */
+        
 
             setIsUpated(true)
             setSuccessMessage('Your Asset has been published successfully')
