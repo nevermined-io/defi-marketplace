@@ -27,6 +27,8 @@ interface UserPublishParams {
     network: string
     price: number
     tier: string
+    file_name: string
+    content_length: string
 
 }
 
@@ -41,7 +43,7 @@ export const UserPublish: NextPage = () => {
     const [userId, setUserId] = useState('')
     const [userPublish, setUserPublish] = useState<UserPublishParams>({
         name: '',
-        author: userProfile.nickname,
+        author: '',
         description: '',
         type: 'dataset',
         category: 'None',
@@ -50,7 +52,9 @@ export const UserPublish: NextPage = () => {
         sample_file_id: '',
         network: '',
         price: 0,
-        tier: 'Tier 1'
+        tier: 'Tier 1',
+        file_name: '',
+        content_length: ''
     })
 
     
@@ -63,7 +67,7 @@ export const UserPublish: NextPage = () => {
     const generateMetadata = () => {
 
         //   pending
-        // contentlength  if filecoin id
+        // contentlength and filename if filecoin id
         // ojo checksum and key set in gateway
 
         const metadata = {
@@ -147,6 +151,7 @@ export const UserPublish: NextPage = () => {
                 return
             }
 
+
             const metadata = generateMetadata()
 
             const accounts = await sdk.accounts.list()
@@ -155,6 +160,7 @@ export const UserPublish: NextPage = () => {
 
             // variable account in UserProvider stores the address!
         
+            /*
             const assetRewards = new AssetRewards(user_address, new BigNumber(userPublish.price))
             const ddo = await sdk.nfts.create721(
                 metadata,
@@ -167,7 +173,7 @@ export const UserPublish: NextPage = () => {
                 console.log("Asset Published with DID: " + ddo.id)
                 alert("Asset Published with DID: " + ddo.id)
             }
-        
+        */
 
             setIsUpated(true)
             setSuccessMessage('Your Asset has been published successfully')
@@ -203,7 +209,6 @@ export const UserPublish: NextPage = () => {
                         <FormInput
                             className={b('publish-form-input')}
                             label='Author'
-                            disabled
                             value={userPublish.author} onChange={(e) => setUserPublish({...userPublish, author: e.target.value})}
                             placeholder='Type the author'
                         />
