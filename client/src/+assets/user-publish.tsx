@@ -11,7 +11,6 @@ import BigNumber from "bignumber.js";
 import { networkArray, categories, protocols, assetTypes, Nft721ContractAddress, gatewayURL } from 'src/config'
 import axios from "axios";
 
-import fs from 'fs'
 
 const b = BEM('user-publish', styles)
 const tiers: string[] = ["Tier 1", "Tier 2", "Tier 3"]
@@ -191,6 +190,7 @@ export const UserPublish: NextPage = () => {
             const user_account = await accounts[0]
             const user_address = user_account.getId() 
             
+            /*
             const assetRewards = new AssetRewards(user_address, new BigNumber(userPublish.price))
             const ddo = await sdk.nfts.create721(
                 metadata,
@@ -203,6 +203,7 @@ export const UserPublish: NextPage = () => {
                 console.log("Asset Published with DID: " + ddo.id)
                 alert("Asset Published with DID: " + ddo.id)
             }
+            */
         
 
             setIsUpated(true)
