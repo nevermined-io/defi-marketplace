@@ -1,13 +1,12 @@
 import getConfig from 'next/config'
-import gatewayUrl from 'next/config'
 
-const { publicRuntimeConfig } = getConfig()
+const { publicRuntimeConfig} = getConfig()
 //
 // NEVERMINED REMOTE CONNECTIONS
 //
 //export const marketplaceUri = process.env.NEXT_PUBLIC_MARKETPLACE_API || 'http://localhost:3100' // next redirections on next.config.js
 export const marketplaceUri = 'https://defi.v2.marketplace-api.mumbai.nevermined.rocks'
-export const gatewayURL = gatewayUrl 
+export const gatewayURL = process.env.NEXT_PUBLIC_GATEWAY_URI || "https://defi.v2.gateway.mumbai.nevermined.rocks" 
 
 export const gatewayUri = '/api/gateway' // next redirections on next.config.js
 export const faucetUri = '/api/faucet' // next redirections on next.config.js

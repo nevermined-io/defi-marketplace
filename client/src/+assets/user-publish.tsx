@@ -8,7 +8,10 @@ import styles from './user-publish.module.scss'
 import { MetaData, Nevermined } from "@nevermined-io/nevermined-sdk-js"
 import AssetRewards from "@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards";
 import BigNumber from "bignumber.js";
-import { networkArray, categories, protocols, assetTypes, Nft721ContractAddress } from 'src/config'
+import { networkArray, categories, protocols, assetTypes, Nft721ContractAddress, gatewayURL } from 'src/config'
+import axios from "axios";
+
+import fs from 'fs'
 
 const b = BEM('user-publish', styles)
 const tiers: string[] = ["Tier 1", "Tier 2", "Tier 3"]
@@ -28,8 +31,8 @@ interface UserPublishParams {
     price: number
     tier: string
     file_name: string
-    content_length: string
-
+    file_size: string
+    file_type: string
 }
 
 export const UserPublish: NextPage = () => {
@@ -54,8 +57,11 @@ export const UserPublish: NextPage = () => {
         price: 0,
         tier: 'Tier 1',
         file_name: '',
-        content_length: ''
+        file_size: '',
+        file_type: ''
     })
+
+    const [fileSelected, setFileSelected] = useState<File>()
 
     
     const closePopup = (event: any) => {
@@ -83,9 +89,9 @@ export const UserPublish: NextPage = () => {
                 files: [
                     {
                         index: 1,
-                        contentType: 'text/plain',
+                        contentType: userPublish.file_type,
                         url: userPublish.file_id,
-                        contentLength: '',
+                        contentLength: userPublish.file_size,
                     }
                 ]
             },
@@ -100,7 +106,7 @@ export const UserPublish: NextPage = () => {
                 blockchain: userPublish.network,
                 version: "v1",
                 source: "filecoin",
-                file_name: "Asset.csv"
+                file_name: userPublish.file_name
             }
         } as MetaData
     
@@ -114,53 +120,77 @@ export const UserPublish: NextPage = () => {
                 setInputError('Title is required')
                 return
             }
-
             if (!userPublish.author) {
                 setInputError('Author is required')
                 return
             }
-
             if (!userPublish.description) {
                 setInputError('Description is required')
                 return
             }
-
             if (!userPublish.type) {
                 setInputError('Type is required')
                 return
             }
-
-
             if (!userPublish.category) {
                 setInputError('Category is required')
                 return
             }
-
             if (!userPublish.protocol) {
                 setInputError('Protocol is required')
                 return
             }
-
-            if (!userPublish.file_id) {
-                setInputError('File is required')
+            if (!userPublish.file_id && !fileSelected) {
+                setInputError('Local File  or Filecoin URL is required')
                 return
             }
-
             if (!userPublish.network) {
                 setInputError('Network is required')
                 return
             }
+                
+            /**
+             * if file_id && !fileSelected
+             *      validate is valid filecoin id
+             *      get file_name, file_size and file_type from filecoin and update userPublish
+             */
 
+            if (userPublish.file_id && !fileSelected){
+                console.log("using file ID")
+                userPublish.file_name= "Filecoin File.csv"
+                userPublish.file_size = "500"
+                userPublish.file_type = "text/csv"
+            }else {
+                const url:string = await uploadFileToFilecoin()
+                userPublish.file_id = url
+
+                console.log("Filecoin URL: " + url)
+                alert("FILE UPLOADED TO FILECOIN!! CID: " + url)
+            }          
+
+            console.log("author: " +userPublish.author)
+            console.log("name: " +userPublish.name)
+            console.log("description: " +userPublish.description)
+            console.log("type: " +userPublish.type)
+            console.log("category: " +userPublish.category)
+            console.log("protocol: " +userPublish.protocol)
+            console.log("network: " +userPublish.network)
+            console.log("author: " +userPublish.author)  
+            console.log("price: " +userPublish.price)
+            console.log("tier: " + userPublish.tier)
+            console.log("file ID: " +userPublish.file_id)
+            console.log("file name: " + userPublish.file_name)
+            console.log("file size: " + userPublish.file_size)
+            console.log("file_type: " + userPublish.file_type)
 
             const metadata = generateMetadata()
+            console.log(JSON.stringify(metadata))
 
+             // variable account in UserProvider stores only the address!
             const accounts = await sdk.accounts.list()
             const user_account = await accounts[0]
-            const user_address = user_account.getId()
-
-            // variable account in UserProvider stores the address!
-        
-            /*
+            const user_address = user_account.getId() 
+            
             const assetRewards = new AssetRewards(user_address, new BigNumber(userPublish.price))
             const ddo = await sdk.nfts.create721(
                 metadata,
@@ -173,7 +203,7 @@ export const UserPublish: NextPage = () => {
                 console.log("Asset Published with DID: " + ddo.id)
                 alert("Asset Published with DID: " + ddo.id)
             }
-        */
+        
 
             setIsUpated(true)
             setSuccessMessage('Your Asset has been published successfully')
@@ -189,6 +219,67 @@ export const UserPublish: NextPage = () => {
             popupRef.current?.open()
         }
     }
+
+   
+    const handleFileChange = function (e: React.ChangeEvent<HTMLInputElement>) {
+        const fileList = e.target.files;
+         if (!fileList || !fileList[0]){
+             setFileSelected(undefined)
+             return;
+         } 
+        
+        const file = fileList[0]
+        setFileSelected(file);
+
+        userPublish.file_name = file.name
+        userPublish.file_size = String(file.size)
+        userPublish.file_type = file.type  
+        
+      };
+
+     
+    const handlePostRequest = async (url:string, formData: FormData) => {
+            
+        const response = await axios.post(url, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        return response.data
+      };
+    
+    const uploadFileToFilecoin = async () => {
+        if (fileSelected) {
+            
+            /*
+            const stream = fileSelected.stream()
+            const url = (await sdk.files.uploadFilecoin(stream)).url
+            */
+
+            const form = new FormData()
+            form.append('file', fileSelected)
+            /** 
+             const gatewayUploadUrl = sdk.gateway.getUploadFilecoinEndpoint()
+             returns a weird string:
+             "function _default() {
+                return runtimeConfig;
+                    }/api/v1/gateway/services/upload/filecoin"
+            const gatewayUploadUrl = sdk.gateway.getUploadFilecoinEndpoint()
+            */
+
+            const gatewayUploadUrl = gatewayURL + "/api/v1/gateway/services/upload/filecoin"
+            console.log("gatewayUpload url: " + gatewayUploadUrl)
+
+            //const response = await handlePostRequest(gatewayUploadUrl, form)    
+            //const url = response.url;
+            const url = "cid://bafkreihli7bq6ikp3kfpdsd35s3edxkx7jakcdth6chjadwjw5ujg35tja"      
+            console.log("response url:" + url )
+            return url
+        }
+
+        return userPublish.file_id
+    };
+    
 
     return (
         <UiLayout type='container'>
@@ -298,6 +389,15 @@ export const UserPublish: NextPage = () => {
                             label='Sample File ID'
                             value={userPublish.sample_file_id} onChange={(e) => setUserPublish({...userPublish, sample_file_id: e.target.value})}
                             placeholder='Type the filecoin id for the sample file'
+                        />
+                    </FormGroup>
+                    <FormGroup orientation={Orientation.Vertical}>
+                        <FormInput
+                            className={b('publish-form-input')}
+                            type = "file"
+                            label='File'
+                            onChange={handleFileChange}
+                            placeholder='Select the file'
                         />
                     </FormGroup>
                     
