@@ -186,7 +186,7 @@ export const UserPublishMultiStep: NextPage = () => {
             const user_account = await accounts[0]
             const user_address = user_account.getId() 
             
-            /*
+            
             const assetRewards = new AssetRewards(user_address, new BigNumber(userPublish.price))
             const ddo = await sdk.nfts.create721(
                 metadata,
@@ -199,9 +199,7 @@ export const UserPublishMultiStep: NextPage = () => {
                 console.log("Asset Published with DID: " + ddo.id)
                 alert("Asset Published with DID: " + ddo.id)
             }
-            */
         
-
             setIsUpated(true)
             setSuccessMessage('Your Asset has been published successfully')
             setInputError('')
@@ -266,9 +264,9 @@ export const UserPublishMultiStep: NextPage = () => {
             const gatewayUploadUrl = gatewayURL + "/api/v1/gateway/services/upload/filecoin"
             console.log("gatewayUpload url: " + gatewayUploadUrl)
 
-            //const response = await handlePostRequest(gatewayUploadUrl, form)    
-            //const url = response.url;
-            const url = "cid://bafkreihli7bq6ikp3kfpdsd35s3edxkx7jakcdth6chjadwjw5ujg35tja"      
+            const response = await handlePostRequest(gatewayUploadUrl, form)    
+            const url = response.url;
+            //const url = "cid://bafkreihli7bq6ikp3kfpdsd35s3edxkx7jakcdth6chjadwjw5ujg35tja"      
             console.log("response url:" + url )
             return url
         }
