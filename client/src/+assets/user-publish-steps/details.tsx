@@ -71,7 +71,7 @@ export const DetailsStep = (props: DetailsProps) => {
      
             <UiLayout type='container'>
                
-                    <UiText type="h2" wrapper="h2">Details</UiText>
+                    <UiText type="h2" wrapper="h2">Details - Step 2 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>
 
                     <FormGroup orientation={Orientation.Vertical}>               

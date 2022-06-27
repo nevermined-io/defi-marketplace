@@ -58,7 +58,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
      
             <UiLayout type='container'>
 
-                <UiText type="h2" wrapper="h2">Basic Info</UiText>
+                <UiText type="h2" wrapper="h2">Basic Info - Step 1 of 4</UiText>
                 <div  className={b('publish-horizontal-line')}/>
 
                     <FormGroup orientation={Orientation.Vertical}>

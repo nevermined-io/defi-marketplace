@@ -28,7 +28,7 @@ export const PricesStep = (props: PricesProps) => {
      
             <UiLayout type='container'>
 
-                    <UiText type="h2" wrapper="h2">Price & Subscription</UiText>
+                    <UiText type="h2" wrapper="h2">Price & Subscription - Step 4 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>
                     
                     <FormGroup orientation={Orientation.Vertical}>

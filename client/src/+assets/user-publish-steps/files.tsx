@@ -53,7 +53,7 @@ export const FilesStep = (props: FilesProps) => {
      
             <UiLayout type='container'>
 
-                    <UiText type="h2" wrapper="h2">Storage</UiText>
+                    <UiText type="h2" wrapper="h2">Storage - Step 3 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>
             
                     <FormGroup orientation={Orientation.Vertical}>
