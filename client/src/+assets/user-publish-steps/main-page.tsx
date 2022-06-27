@@ -8,7 +8,7 @@ import styles from './user-publish.module.scss'
 import { MetaData, Nevermined } from "@nevermined-io/nevermined-sdk-js"
 import AssetRewards from "@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards";
 import BigNumber from "bignumber.js";
-import { networkArray, categories, protocols, assetTypes, Nft721ContractAddress, gatewayURL } from 'src/config'
+import { networkArray, categories, protocols, assetTypes, Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress, gatewayURL } from 'src/config'
 import axios from "axios";
 import { BasicInfoStep } from './basic-info'
 import { DetailsStep } from './details'
@@ -154,6 +154,16 @@ export const UserPublishMultiStep: NextPage = () => {
     }
 
 
+    const getNftTierAddress = (): string => {
+
+        switch(userPublish.tier) {
+            case "Tier 1": return tier1NftContractAddress 
+            case "Tier 2": return tier2NftContractAddress
+            case "Tier 3": return tier3NftContractAddress
+            default: return Nft721ContractAddress
+        }
+    }
+
     const onSubmitUserPublish = async() => {
         try {
                 
@@ -189,13 +199,14 @@ export const UserPublishMultiStep: NextPage = () => {
                 metadata,
                 user_account,
                 assetRewards,
-                Nft721ContractAddress
+                getNftTierAddress()
             )
 
             if (ddo) {
                 console.log("Asset Published with DID: " + ddo.id)
                 alert("Asset Published with DID: " + ddo.id)
             }
+           
         
             setIsUpated(true)
             setSuccessMessage('Your Asset has been published successfully')
