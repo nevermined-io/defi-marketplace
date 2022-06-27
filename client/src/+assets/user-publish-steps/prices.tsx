@@ -12,10 +12,13 @@ interface PricesProps {
     handleChange: any
     prevStep: any
     submit: any
+    isPublished: any
+    successMessage: any
+
  }
 
 export const PricesStep = (props: PricesProps) => {
-    const {values, handleChange, prevStep, submit } = props;    
+    const {values, handleChange, prevStep, submit, isPublished, successMessage } = props;    
     const [inputError, setInputError] = useState('') 
     
 
@@ -23,6 +26,16 @@ export const PricesStep = (props: PricesProps) => {
         e.preventDefault();
         prevStep();
       }
+      /*
+<div className={b('profile-submit-container')}>
+                        <div className={b('profile-submit-container', ['updated-message'])}>
+                            {(isUpdated) ? <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> : null}
+                        </div>
+                        <div className={b('profile-submit-container', ['submit'])}>
+                            <UiButton onClick={onSubmitUserProfile}>Update Profile</UiButton>
+                        </div>
+                    </div>
+      */
 
     return (
      
@@ -53,11 +66,23 @@ export const PricesStep = (props: PricesProps) => {
 
                     <UiDivider/>
                     <FormGroup orientation={Orientation.Vertical}>
-                        <UiButton onClick={Previous}>&lt;</UiButton>
-                        <UiButton onClick={submit}>Publish Asset</UiButton>
+                            
+                            {
+                                (isPublished) ?  <div className={b('user-publish-submit-container', ['updated-message'])}>
+                                                <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> 
+                                                </div>
+                                                : 
+                                                <div className={b('user-publish-submit-container',['submit'])}>
+                                                <UiButton onClick={Previous}>&lt;</UiButton>
+                                                <UiButton onClick={submit}>Publish Asset</UiButton>
+                                                </div>
+                            }
+                    
                     </FormGroup>
              
             </UiLayout>
+
+            
        
     )
 }

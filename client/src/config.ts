@@ -65,6 +65,7 @@ export const networkArray = [
 export const categories = ['None','Borrows', 'Deposits', 'Liquidations', 'Repays', 'Redeems', 'Flashloans', 'Trades', 'Liquidity']
 export const protocols = ['None','Aave', 'Compound', 'Kashi', 'Balancer', 'Bancor', 'SushiSwap', 'Dodoex', 'Ubeswap', 'Pancakeswap', 'Pangolin', 'Traderjoe']
 export const assetTypes = ['dataset', 'report', 'notebook', 'dashboard']
+export const networks = ['None'].concat(networkArray)
 
 export const graphUrl =
   process.env.NEXT_PUBLIC_ACCESS_CONDITION_URI ||

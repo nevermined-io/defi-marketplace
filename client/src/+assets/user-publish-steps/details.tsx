@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
 import { Form, FormSelect, FormGroup, FormInput, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
 import styles from './user-publish.module.scss'
-import { networkArray, categories, protocols, assetTypes } from 'src/config'
+import { networks, categories, protocols, assetTypes } from 'src/config'
 
 
 
@@ -111,7 +111,7 @@ export const DetailsStep = (props: DetailsProps) => {
                     <FormSelect
                         value={values.network}
                         onChange={e => handleChange(e, 'network')}
-                        options={networkArray}
+                        options={networks}
                         className={b('publish-form-select')}
                         label='Network'
                         inputError={networkInputError}

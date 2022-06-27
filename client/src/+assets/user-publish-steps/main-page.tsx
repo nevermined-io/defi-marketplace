@@ -8,7 +8,7 @@ import styles from './user-publish.module.scss'
 import { MetaData, Nevermined } from "@nevermined-io/nevermined-sdk-js"
 import AssetRewards from "@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards";
 import BigNumber from "bignumber.js";
-import { networkArray, categories, protocols, assetTypes, Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress, gatewayURL } from 'src/config'
+import {  Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress, gatewayURL } from 'src/config'
 import axios from "axios";
 import { BasicInfoStep } from './basic-info'
 import { DetailsStep } from './details'
@@ -44,7 +44,7 @@ export const UserPublishMultiStep: NextPage = () => {
     const [inputError, setInputError] = useState('') 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
-    const [isUpdated, setIsUpated] = useState(false)
+    const [isPublished, setIsPublished] = useState(false)
     const popupRef = useRef<UiPopupHandlers>()
 
     const [userId, setUserId] = useState('')
@@ -58,7 +58,7 @@ export const UserPublishMultiStep: NextPage = () => {
         protocol: 'None',
         file_id: '',
         sample_file_id: '',
-        network: '',
+        network: 'None',
         price: 0,
         tier: 'Tier 1',
         file_name: '',
@@ -99,7 +99,6 @@ export const UserPublishMultiStep: NextPage = () => {
         //   pending
         // contentlength and filename if filecoin id
         // ojo checksum and key set in gateway
-
         const metadata = {
             main: {
                 name: userPublish.name,
@@ -153,7 +152,6 @@ export const UserPublishMultiStep: NextPage = () => {
         console.log("file_type: " + userPublish.file_type)
     }
 
-
     const getNftTierAddress = (): string => {
 
         switch(userPublish.tier) {
@@ -206,10 +204,12 @@ export const UserPublishMultiStep: NextPage = () => {
                 console.log("Asset Published with DID: " + ddo.id)
                 alert("Asset Published with DID: " + ddo.id)
             }
-           
         
-            setIsUpated(true)
-            setSuccessMessage('Your Asset has been published successfully')
+            const did = ddo.id
+            //const did = "did:nv:123445xxx"
+        
+            setIsPublished(true)
+            setSuccessMessage('Your Asset has been published successfully. DID: ' + did)
             setInputError('')
         } catch (error: any ) {
             if(error.message.includes('"statusCode":401')) {
@@ -368,6 +368,8 @@ export const UserPublishMultiStep: NextPage = () => {
                          handleChange={ handleChange }
                          values={ values }
                          submit = { onSubmitUserPublish }
+                         isPublished = {isPublished}
+                         successMessage={successMessage}
                     />
                 </Form>
             </UiLayout>
