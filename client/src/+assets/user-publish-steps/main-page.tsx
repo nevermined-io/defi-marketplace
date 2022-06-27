@@ -157,14 +157,12 @@ export const UserPublishMultiStep: NextPage = () => {
     const onSubmitUserPublish = async() => {
         try {
                 
-            /**
-             * if file_id && !fileSelected
-             *      validate is valid filecoin id
-             *      get file_name, file_size and file_type from filecoin and update userPublish
-             */
-
             if (userPublish.file_id && !fileSelected){
                 console.log("using file ID")
+                /* TODO - Get info from Filecoin??
+                validate is valid filecoin id
+                get file_name, file_size and file_type from filecoin?
+                */
                 userPublish.file_name= "Filecoin File.csv"
                 userPublish.file_size = "500"
                 userPublish.file_type = "text/csv"
@@ -176,7 +174,7 @@ export const UserPublishMultiStep: NextPage = () => {
                 alert("FILE UPLOADED TO FILECOIN!! CID: " + url)
             }          
 
-            printUserPublish()
+            //printUserPublish()
 
             const metadata = generateMetadata()
             console.log(JSON.stringify(metadata))
@@ -185,7 +183,6 @@ export const UserPublishMultiStep: NextPage = () => {
             const accounts = await sdk.accounts.list()
             const user_account = await accounts[0]
             const user_address = user_account.getId() 
-            
             
             const assetRewards = new AssetRewards(user_address, new BigNumber(userPublish.price))
             const ddo = await sdk.nfts.create721(
