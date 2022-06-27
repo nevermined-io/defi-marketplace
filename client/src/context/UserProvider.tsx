@@ -1,4 +1,4 @@
-import React, { PureComponent, } from 'react'
+import React, { PureComponent } from 'react'
 import Web3 from 'web3'
 import { Nevermined, Account, DDO, Profile, Bookmark } from '@nevermined-io/nevermined-sdk-js'
 import { User } from '.'
