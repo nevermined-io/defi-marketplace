@@ -8,7 +8,7 @@ import styles from './user-publish.module.scss'
 import { MetaData, Nevermined } from "@nevermined-io/nevermined-sdk-js"
 import AssetRewards from "@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards";
 import BigNumber from "bignumber.js";
-import {  Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress, gatewayURL } from 'src/config'
+import {  Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress, gatewayURL, filecoinUploadUri } from 'src/config'
 import axios from "axios";
 import { BasicInfoStep } from './basic-info'
 import { DetailsStep } from './details'
@@ -96,9 +96,6 @@ export const UserPublishMultiStep: NextPage = () => {
 
     const generateMetadata = () => {
 
-        //   pending
-        // contentlength and filename if filecoin id
-        // ojo checksum and key set in gateway
         const metadata = {
             main: {
                 name: userPublish.name,
@@ -164,6 +161,8 @@ export const UserPublishMultiStep: NextPage = () => {
 
     const onSubmitUserPublish = async() => {
         try {
+
+            let filecoin_url
                 
             if (userPublish.file_id && !fileSelected){
                 console.log("using file ID")
@@ -172,14 +171,13 @@ export const UserPublishMultiStep: NextPage = () => {
                 get file_name, file_size and file_type from filecoin?
                 */
                 userPublish.file_name= "Filecoin File.csv"
-                userPublish.file_size = "500"
+                userPublish.file_size = "0"
                 userPublish.file_type = "text/csv"
             }else {
-                const url:string = await uploadFileToFilecoin()
-                userPublish.file_id = url
+                filecoin_url = await uploadFileToFilecoin()
+                userPublish.file_id = filecoin_url
 
-                console.log("Filecoin URL: " + url)
-                alert("FILE UPLOADED TO FILECOIN!! CID: " + url)
+                console.log("Filecoin URL: " + filecoin_url)
             }          
 
             //printUserPublish()
@@ -200,16 +198,19 @@ export const UserPublishMultiStep: NextPage = () => {
                 getNftTierAddress()
             )
 
+            let did
+
             if (ddo) {
-                console.log("Asset Published with DID: " + ddo.id)
-                alert("Asset Published with DID: " + ddo.id)
+                did = ddo.id
+                console.log("Asset Published with DID: " + did)
+                alert("Asset Published with DID: " + did)
             }
         
-            const did = ddo.id
-            //const did = "did:nv:123445xxx"
-        
             setIsPublished(true)
-            setSuccessMessage('Your Asset has been published successfully. DID: ' + did)
+            var message = 'Your Asset has been published successfully. DID: ' + did 
+            if (fileSelected) 
+                message = message.concat(" - Filecoin ID: " + filecoin_url)
+            setSuccessMessage(message)
             setInputError('')
         } catch (error: any ) {
             if(error.message.includes('"statusCode":401')) {
@@ -254,27 +255,20 @@ export const UserPublishMultiStep: NextPage = () => {
         if (fileSelected) {
             
             /*
+            Refactor skd. ReadableStream not convertible to ReadStream
             const stream = fileSelected.stream()
             const url = (await sdk.files.uploadFilecoin(stream)).url
             */
 
             const form = new FormData()
             form.append('file', fileSelected)
-            /** 
-             const gatewayUploadUrl = sdk.gateway.getUploadFilecoinEndpoint()
-             returns a weird string:
-             "function _default() {
-                return runtimeConfig;
-                    }/api/v1/gateway/services/upload/filecoin"
-            const gatewayUploadUrl = sdk.gateway.getUploadFilecoinEndpoint()
-            */
-
-            const gatewayUploadUrl = gatewayURL + "/api/v1/gateway/services/upload/filecoin"
+        
+            const gatewayUploadUrl = gatewayURL + filecoinUploadUri
             console.log("gatewayUpload url: " + gatewayUploadUrl)
 
             const response = await handlePostRequest(gatewayUploadUrl, form)    
             const url = response.url;
-            //const url = "cid://bafkreihli7bq6ikp3kfpdsd35s3edxkx7jakcdth6chjadwjw5ujg35tja"      
+              
             console.log("response url:" + url )
             return url
         }
