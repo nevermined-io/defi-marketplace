@@ -129,22 +129,6 @@ export const UserPublishMultiStep: NextPage = () => {
         return metadata
     }
 
-    const printUserPublish = () => {
-        console.log("author: " +userPublish.author)
-        console.log("name: " +userPublish.name)
-        console.log("description: " +userPublish.description)
-        console.log("type: " +userPublish.type)
-        console.log("category: " +userPublish.category)
-        console.log("protocol: " +userPublish.protocol)
-        console.log("network: " +userPublish.network)
-        console.log("price: " +userPublish.price)
-        console.log("tier: " + userPublish.tier)
-        console.log("file ID: " +userPublish.file_id)
-        console.log("file name: " + userPublish.file_name)
-        console.log("file size: " + userPublish.file_size)
-        console.log("file_type: " + userPublish.file_type)
-    }
-
     const getNftTierAddress = (): string => {
 
         switch(userPublish.tier) {
@@ -161,7 +145,6 @@ export const UserPublishMultiStep: NextPage = () => {
             let filecoin_url
                 
             if (userPublish.file_id && !fileSelected){
-                console.log("using file ID")
                 /* TODO - Get info from Filecoin??
                 validate is valid filecoin id
                 get file_name, file_size and file_type from filecoin?
@@ -173,7 +156,6 @@ export const UserPublishMultiStep: NextPage = () => {
                 filecoin_url = await uploadFileToFilecoin()
                 userPublish.file_id = filecoin_url
 
-                console.log("Filecoin URL: " + filecoin_url)
             }          
 
             //printUserPublish()
@@ -195,11 +177,8 @@ export const UserPublishMultiStep: NextPage = () => {
             )
 
             let did
-
             if (ddo) {
                 did = ddo.id
-                console.log("Asset Published with DID: " + did)
-                alert("Asset Published with DID: " + did)
             }
         
             setIsPublished(true)
@@ -260,12 +239,8 @@ export const UserPublishMultiStep: NextPage = () => {
             form.append('file', fileSelected)
         
             const gatewayUploadUrl = gatewayURL + filecoinUploadUri
-            console.log("gatewayUpload url: " + gatewayUploadUrl)
-
             const response = await handlePostRequest(gatewayUploadUrl, form)    
             const url = response.url;
-              
-            console.log("response url:" + url )
             return url
         }
 
