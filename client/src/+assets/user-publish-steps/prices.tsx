@@ -26,17 +26,7 @@ export const PricesStep = (props: PricesProps) => {
         e.preventDefault();
         prevStep();
       }
-      /*
-<div className={b('profile-submit-container')}>
-                        <div className={b('profile-submit-container', ['updated-message'])}>
-                            {(isUpdated) ? <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> : null}
-                        </div>
-                        <div className={b('profile-submit-container', ['submit'])}>
-                            <UiButton onClick={onSubmitUserProfile}>Update Profile</UiButton>
-                        </div>
-                    </div>
-      */
-
+   
     return (
      
             <UiLayout type='container'>
