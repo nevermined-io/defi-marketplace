@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import Image from 'next/image'
 
 import { UiText, UiButton } from '@nevermined-io/styles'
 import { UiHeader, UiHeaderLink} from 'ui'

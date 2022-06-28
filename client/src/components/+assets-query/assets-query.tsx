@@ -1,5 +1,6 @@
 import React, { ReactNode, useContext, useState, useEffect, useCallback } from 'react'
 import { DDO, Bookmark } from '@nevermined-io/nevermined-sdk-js'
+import Catalog from '@nevermined-io/components-catalog'
 import { SearchQuery } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 
 import { BEM, Loader } from '@nevermined-io/styles'
@@ -20,8 +21,8 @@ interface AssetsQueryProps {
 const b = BEM('assets-query', styles)
 // loads all the asset then filters them looking at the variables defined in the user context
 export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = false }: AssetsQueryProps) {
-  const { assets, sdk, searchInputText, fromDate, toDate, selectedCategories, selectedNetworks, selectedPrice, setSelectedPriceRange, setSelectedNetworks, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText, setBookmarks, bookmarks, userProfile } = useContext(User)
-
+  const { assets, searchInputText, fromDate, toDate, selectedCategories, selectedNetworks, selectedPrice, setSelectedPriceRange, setSelectedNetworks, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText, setBookmarks, bookmarks, userProfile } = useContext(User)
+  const { sdk } = useContext(Catalog.NeverminedContext)
   const [totalPages, setTotalPages] = useState<number>(1)
   const [page, setPage] = useState<number>(1)
   const [loading, setLoading] = useState<boolean>(false)

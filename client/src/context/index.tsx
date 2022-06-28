@@ -15,19 +15,12 @@ export const User = React.createContext({
     userBundles: [] as Bundle[],
     userProfile: {} as Profile,
     web3: {} as Web3,
-    sdk: {} as Nevermined,
     balance: {
         eth: 0,
         nevermined: 0
     },
     network: '',
-    requestFromFaucet: () => {
-        /* empty */
-    },
     loginMetamask: () => {
-        /* empty */
-    },
-    loginBurnerWallet: () => {
         /* empty */
     },
     loginMarketplaceAPI: (sdk: Nevermined, account: Account) => {

@@ -3,6 +3,7 @@ import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { DDO, AdditionalInformation } from '@nevermined-io/nevermined-sdk-js'
+import Catalog from '@nevermined-io/components-catalog'
 import styles from './details.module.scss'
 import { BEM, UiText, UiIcon, UiLayout, UiDivider, UiButton, UiPopupHandlers, UiPopup } from '@nevermined-io/styles'
 import { XuiTokenName, XuiTokenPrice } from 'ui'
@@ -30,7 +31,8 @@ export const AssetDetails: NextPage = () => {
   const [asset, setAsset] = useState<DDO | false>()
   const [isConnected, setIsConnected] = useState(false)
   const [ownAsset, setOwnAsset] = useState(false)
-  const { sdk, addToBasket, loginMetamask,switchToCorrectNetwork,  isLogged, userBundles, web3 } = useContext(User)
+  const { addToBasket, loginMetamask,switchToCorrectNetwork,  isLogged, userBundles, web3 } = useContext(User)
+  const { sdk, assets } = useContext(Catalog.NeverminedContext)
   const popupRef = createRef<UiPopupHandlers>()
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
@@ -64,8 +66,8 @@ export const AssetDetails: NextPage = () => {
   }, [page])
 
   const getProvenanceInfo = async () => {
-    const published = await loadPublishedEvent(didZeroX(did), web3)
-    const bundlesPuchased = await getBundlesWithDataset(did)
+    const published = await loadPublishedEvent(didZeroX(String(did)), web3)
+    const bundlesPuchased = await getBundlesWithDataset(String(did))
 
     const provenance = bundlesPuchased.map(bundle => ({
       id: bundle.did,
@@ -105,7 +107,7 @@ export const AssetDetails: NextPage = () => {
       setIsConnected(isLogged)
 
       try {
-        let ddo = await sdk.assets.resolve(String(did))
+        const ddo = await assets.getSingle(String(did))
         setAsset(ddo)
       } catch (error) {
         console.log(error)

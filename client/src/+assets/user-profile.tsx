@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
+import Catalog from '@nevermined-io/components-catalog'
 import { User } from '../context'
 import { UiForm, UiFormGroup, UiFormInput, UiFormAddItem, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, NotificationPopup, BEM } from '@nevermined-io/styles'
 import { NextPage } from 'next'
@@ -19,7 +20,8 @@ interface UserProfileParams {
 }
 
 export const UserProfile: NextPage = () => {
-    const {sdk, account, loginMarketplaceAPI, web3 } = useContext(User)
+    const { account, loginMarketplaceAPI, web3 } = useContext(User)
+    const { sdk } = useContext(Catalog.NeverminedContext)
     const [inputError, setInputError] = useState('') 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
