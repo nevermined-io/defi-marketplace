@@ -15,10 +15,10 @@ export const secretStoreUri = process.env.NEXT_PUBLIC_SECRET_STORE_URI || 'http:
 export const artifactsFolder =
   process.env.NEXT_PUBLIC_ARTIFACTS_FOLDER_URL || `http://localhost:3000/artifacts`
 
-export const tier1NftContractAddress = '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
-export const tier2NftContractAddress = '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
-export const tier3NftContractAddress = '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
-export const Nft721ContractAddress = '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
+export const tier1NftContractAddress = process.env.TIER1_NFT_ADDRESS || '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
+export const tier2NftContractAddress = process.env.TIER1_NFT_ADDRESS || '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
+export const tier3NftContractAddress = process.env.TIER1_NFT_ADDRESS || '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
+export const Nft721ContractAddress =  process.env.DEFAULT_NFT721_ADDRESS || '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
 
 //
 // APP CONFIG
