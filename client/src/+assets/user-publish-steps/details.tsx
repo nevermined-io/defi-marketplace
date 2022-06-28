@@ -1,6 +1,5 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
-import { FormSelect} from 'ui'
-import { UiFormGroup, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM } from '@nevermined-io/styles'
+import { UiFormGroup, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
 import { networks, categories, protocols, assetTypes } from 'src/config'
 import {UserPublishParams} from './main-page'
@@ -67,7 +66,7 @@ export const DetailsStep = (props: DetailsProps) => {
                     <div  className={b('publish-horizontal-line')}/>
 
                     <UiFormGroup orientation={Orientation.Vertical}>               
-                        <FormSelect
+                        <UiFormSelect
                             value={values.type}
                             onChange={e => handleChange(e, 'type')}
                             options={assetTypes}
@@ -78,7 +77,7 @@ export const DetailsStep = (props: DetailsProps) => {
                     </UiFormGroup>
 
                     <UiFormGroup orientation={Orientation.Vertical}>               
-                        <FormSelect
+                        <UiFormSelect
                             value={values.category}
                             onChange={e => handleChange(e, 'category')}
                             options={categories}
@@ -89,7 +88,7 @@ export const DetailsStep = (props: DetailsProps) => {
                     </UiFormGroup>
                 
                     <UiFormGroup orientation={Orientation.Vertical}>
-                        <FormSelect
+                        <UiFormSelect
                             value={values.protocol}
                             onChange={e => handleChange(e, 'protocol')}
                             options={protocols}
@@ -100,7 +99,7 @@ export const DetailsStep = (props: DetailsProps) => {
                     </UiFormGroup>
 
                     <UiFormGroup orientation={Orientation.Vertical}>
-                    <FormSelect
+                    <UiFormSelect
                         value={values.network}
                         onChange={e => handleChange(e, 'network')}
                         options={networks}

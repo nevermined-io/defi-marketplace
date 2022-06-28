@@ -1,6 +1,5 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
-import { FormSelect} from 'ui'
-import { UiForm, UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM } from '@nevermined-io/styles'
+import { UiForm, UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
 import {UserPublishParams} from './main-page'
 
@@ -34,7 +33,7 @@ export const PricesStep = (props: PricesProps) => {
                     <div  className={b('publish-horizontal-line')}/>
                     
                     <UiFormGroup orientation={Orientation.Vertical}>
-                    <FormSelect
+                    <UiFormSelect
                         value={values.tier}
                         onChange={e => handleChange(e, 'tier')}
                         options={tiers}
