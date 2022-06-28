@@ -13,7 +13,7 @@ export const gatewayAddress =   process.env.NEXT_PUBLIC_GATEWAY_ADDRESS || '0x06
 export const nodeUri = process.env.NEXT_PUBLIC_NODE_URI || 'http://localhost:8545'
 export const secretStoreUri = process.env.NEXT_PUBLIC_SECRET_STORE_URI || 'http://localhost:12001'
 export const artifactsFolder =
-  process.env.NEXT_PUBLIC_ARTIFACTS_FOLDER_URL || `http://localhost:3000/artifacts`
+  process.env.NEXT_PUBLIC_ARTIFACTS_FOLDER_URL || `http://localhost:3000/artifacts2`
 
 export const tier1NftContractAddress = '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
 export const tier2NftContractAddress = '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
