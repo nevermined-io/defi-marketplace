@@ -1,5 +1,5 @@
 import React, { createRef } from 'react'
-import { BEM, UiText, UiPopup, UiPopupHandlers, UiButton } from 'ui'
+import { BEM, UiText, UiPopup, UiPopupHandlers, UiButton } from '@nevermined-io/styles'
 import styles from './added-to-basket-popup.module.scss'
 import Router from 'next/router'
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
-import { Form, FormSelect, FormGroup, FormInput, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
+import { FormSelect} from 'ui'
+import { UiFormGroup, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
 import { networks, categories, protocols, assetTypes } from 'src/config'
 import {UserPublishParams} from './main-page'
@@ -65,7 +66,7 @@ export const DetailsStep = (props: DetailsProps) => {
                     <UiText type="h2" wrapper="h2">Details - Step 2 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>
 
-                    <FormGroup orientation={Orientation.Vertical}>               
+                    <UiFormGroup orientation={Orientation.Vertical}>               
                         <FormSelect
                             value={values.type}
                             onChange={e => handleChange(e, 'type')}
@@ -74,9 +75,9 @@ export const DetailsStep = (props: DetailsProps) => {
                             label='Type'
                             inputError={typeInputError}
                         /> 
-                    </FormGroup>
+                    </UiFormGroup>
 
-                    <FormGroup orientation={Orientation.Vertical}>               
+                    <UiFormGroup orientation={Orientation.Vertical}>               
                         <FormSelect
                             value={values.category}
                             onChange={e => handleChange(e, 'category')}
@@ -85,9 +86,9 @@ export const DetailsStep = (props: DetailsProps) => {
                             label='Category'
                             inputError={categoryInputError}
                         /> 
-                    </FormGroup>
+                    </UiFormGroup>
                 
-                    <FormGroup orientation={Orientation.Vertical}>
+                    <UiFormGroup orientation={Orientation.Vertical}>
                         <FormSelect
                             value={values.protocol}
                             onChange={e => handleChange(e, 'protocol')}
@@ -96,9 +97,9 @@ export const DetailsStep = (props: DetailsProps) => {
                             label='Protocol'
                             inputError={protocolInputError}
                         /> 
-                    </FormGroup>
+                    </UiFormGroup>
 
-                    <FormGroup orientation={Orientation.Vertical}>
+                    <UiFormGroup orientation={Orientation.Vertical}>
                     <FormSelect
                         value={values.network}
                         onChange={e => handleChange(e, 'network')}
@@ -107,14 +108,14 @@ export const DetailsStep = (props: DetailsProps) => {
                         label='Network'
                         inputError={networkInputError}
                     /> 
-                    </FormGroup>
+                    </UiFormGroup>
     
                     <UiDivider/>
 
-                    <FormGroup orientation={Orientation.Vertical}>
+                    <UiFormGroup orientation={Orientation.Vertical}>
                         <UiButton onClick={Previous}>&lt;</UiButton>
                         <UiButton onClick={Continue}>&gt;</UiButton>
-                    </FormGroup>
+                    </UiFormGroup>
             </UiLayout>
        
     )

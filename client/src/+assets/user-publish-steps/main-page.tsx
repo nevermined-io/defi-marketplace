@@ -1,9 +1,8 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
 import { User } from '../../context'
-import { Form, FormSelect, FormGroup, FormInput, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
+import { UiForm, UiButton, UiLayout, UiText, UiPopupHandlers, NotificationPopup, BEM } from '@nevermined-io/styles'
 import { NextPage } from 'next'
 import { newLogin, StoreItemTypes } from '../../shared'
-import { NotificationPopup } from '../../components'
 import styles from './user-publish.module.scss'
 import { MetaData, Nevermined } from "@nevermined-io/nevermined-sdk-js"
 import AssetRewards from "@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards";
@@ -284,7 +283,7 @@ export const UserPublishMultiStep: NextPage = () => {
             </UiLayout>
            
             <UiLayout type='container'>
-                <Form className=''>
+                <UiForm className=''>
 
                     <BasicInfoStep
                         nextStep={ nextStep }
@@ -292,7 +291,7 @@ export const UserPublishMultiStep: NextPage = () => {
                         values={ userPublish }
                     />
 
-                </Form>
+                </UiForm>
             </UiLayout>
         </UiLayout>
           )
@@ -306,7 +305,7 @@ export const UserPublishMultiStep: NextPage = () => {
             </UiLayout>
            
             <UiLayout type='container'>
-                <Form className=''>
+                <UiForm className=''>
 
                     <DetailsStep
                          prevStep={ prevStep}
@@ -315,7 +314,7 @@ export const UserPublishMultiStep: NextPage = () => {
                          values={ userPublish }
                     />
 
-                </Form>
+                </UiForm>
             </UiLayout>
         </UiLayout>
           )
@@ -329,7 +328,7 @@ export const UserPublishMultiStep: NextPage = () => {
             </UiLayout>
            
             <UiLayout type='container'>
-                <Form className=''>
+                <UiForm className=''>
    
                     <FilesStep
                          prevStep={ prevStep}
@@ -339,7 +338,7 @@ export const UserPublishMultiStep: NextPage = () => {
                          handleFileChange = {handleFileChange}
                     />
 
-                </Form>
+                </UiForm>
             </UiLayout>
         </UiLayout>
           )
@@ -353,7 +352,7 @@ export const UserPublishMultiStep: NextPage = () => {
             </UiLayout>
            
             <UiLayout type='container'>
-                <Form className=''>
+                <UiForm className=''>
                     <PricesStep
                          prevStep={ prevStep}
                          handleChange={ handleChange }
@@ -362,7 +361,7 @@ export const UserPublishMultiStep: NextPage = () => {
                          isPublished = {isPublished}
                          successMessage={successMessage}
                     />
-                </Form>
+                </UiForm>
             </UiLayout>
         </UiLayout>
           )

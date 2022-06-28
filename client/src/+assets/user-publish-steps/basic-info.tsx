@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState, useRef, InputHTMLAttributes } from 'react'
-import { Form, FormSelect, FormGroup, FormInput, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
+import { UiFormGroup, UiFormInput, UiFormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
 import {UserPublishParams} from './main-page'
 
@@ -56,26 +56,26 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
                 <UiText type="h2" wrapper="h2">Basic Info - Step 1 of 4</UiText>
                 <div  className={b('publish-horizontal-line')}/>
 
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
+                    <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormInput
                             className={b('publish-form-input')}
                             label='Author'
                             inputError={authorInputError}
                             value={values.author} onChange={e => handleChange(e.target.value, 'author')}
                             placeholder='Type the author'
                         />
-                    </FormGroup>
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
+                    </UiFormGroup>
+                    <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormInput
                             className={b('publish-form-input')}
                             label='Name *'
                             inputError={nameInputError}
                             value={values.name} onChange={e => handleChange(e.target.value, 'name')}
                             placeholder='Type a name for the Asset'
                         />
-                    </FormGroup>       
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormTextarea
+                    </UiFormGroup>       
+                    <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormTextarea
                             className={b('publish-form-input')}
                             label='Description *'
                             inputError={descriptionInputError}
@@ -83,13 +83,13 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
                             onChange={e => handleChange(e.target.value, 'description')}
                             placeholder='Type a description'
                         />
-                    </FormGroup>
+                    </UiFormGroup>
 
                     <UiDivider/>
 
-                    <FormGroup orientation={Orientation.Vertical}>
+                    <UiFormGroup orientation={Orientation.Vertical}>
                         <UiButton onClick={Continue}>&gt;</UiButton>
-                    </FormGroup>
+                    </UiFormGroup>
 
             </UiLayout>
        

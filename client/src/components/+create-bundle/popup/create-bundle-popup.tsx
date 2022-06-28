@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { DDO, OrderProgressStep } from '@nevermined-io/nevermined-sdk-js'
-import { BEM, UiText, UiDivider, UiLayout, UiButton, UiIcon, UiCircleProgress } from 'ui'
+import { BEM, UiText, UiDivider, UiLayout, UiButton, UiIcon, UiCircleProgress, CircleSpinner } from '@nevermined-io/styles'
 import { User } from '../../../context'
 import styles from './create-bundle-popup.module.scss'
 import { createBundle, checkBundleStatus } from 'src/shared'
 import { BUNDLE_MAX_RETRYS, BUNDLE_STATUS_COMPLETED, BUNDLE_RETRY_TIMEOUT } from 'src/config'
 import { MetamaskErrorCodes, MetamaskCustomErrors } from '../../../shared/constants'
 import Router from 'next/router'
-import { CircleSpinner } from 'ui/loaders/circle-spinner'
 import Image from 'next/image'
 
 

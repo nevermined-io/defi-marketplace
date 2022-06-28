@@ -3,7 +3,8 @@ import type { NextPage } from 'next'
 import Image from 'next/image'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 
-import { UiText, UiLayout, XuiAssetsQuery } from 'ui'
+import { UiText, UiLayout } from '@nevermined-io/styles'
+import {XuiAssetsQuery} from 'ui'
 import { User } from '../context'
 import { AssetsList } from './assets-list'
 

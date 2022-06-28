@@ -1,8 +1,10 @@
-import '../src/styles/globals.scss'
+import '@nevermined-io/styles/lib/esm/styles/globals.scss'
+import '@nevermined-io/styles/lib/esm/index.css'
 import React from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
-import { UiHeader, UiHeaderLink, UiFooter, UiDivider } from 'ui'
+import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
+import { UiDivider } from '@nevermined-io/styles'
 
 import UserProvider from '../src/context/UserProvider'
 import { docsUrl } from 'src/config'

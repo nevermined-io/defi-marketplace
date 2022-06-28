@@ -1,5 +1,5 @@
 import React from 'react'
-import { BEM, UiButton} from 'ui'
+import { BEM, UiButton} from '@nevermined-io/styles'
 import { User } from '../../context'
 import { correctNetworkName } from '../../config'
 import styles from './wallet.module.scss'

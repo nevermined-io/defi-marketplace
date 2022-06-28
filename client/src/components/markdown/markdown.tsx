@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { BEM } from "ui"
+import { BEM } from "@nevermined-io/styles"
 import styles from './markdown.module.scss'
 
 const b = BEM('markdown', styles)
@@ -10,7 +10,7 @@ interface MarkdownProps {
   disableCopy?: boolean
 }
 
-export function Markdown({ code, height, disableCopy }: MarkdownProps) {
+export const Markdown: React.FC<MarkdownProps>= ({ code, height, disableCopy }: MarkdownProps) => {
 
   const [navigatorInstance, setNavigatorInstance] = useState<any>(null);
 
@@ -29,8 +29,8 @@ export function Markdown({ code, height, disableCopy }: MarkdownProps) {
     <div className="markdown" style={{ margin: "20px 0" }}>
       <div className={b('header')}>
         <div style={disableCopy ? { visibility: 'hidden' } : {}}>
-          <img onClick={copyToClipboard(code)} src="/assets/copy_logo.png" />
-          <div onClick={copyToClipboard(code)} className={b('copy-text')}>Copy</div>
+          <img onClick={() => copyToClipboard(code)} src="/assets/copy_logo.png" />
+          <div onClick={() => copyToClipboard(code)} className={b('copy-text')}>Copy</div>
         </div>
       </div>
       <div className={b('content')} style={{ height: height }}>

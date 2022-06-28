@@ -1,7 +1,8 @@
 import type { NextPage } from 'next'
 import Image from 'next/image'
 
-import { UiHeader, UiText, UiButton, UiHeaderLink } from 'ui'
+import { UiText, UiButton } from '@nevermined-io/styles'
+import { UiHeader, UiHeaderLink} from 'ui'
 
 const Styles: NextPage = () => {
   return (

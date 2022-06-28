@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import React from 'react'
 
-import { UiText, UiDivider, UiLayout, BEM } from 'ui'
+import { UiText, UiDivider, UiLayout, BEM } from '@nevermined-io/styles'
 import styles from './about.module.scss'
 import { Diagram } from './diagram'
 

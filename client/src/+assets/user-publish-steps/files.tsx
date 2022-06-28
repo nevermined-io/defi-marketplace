@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
-import { Form, FormSelect, FormGroup, FormInput, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
+import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
 import {UserPublishParams} from './main-page'
 
@@ -50,38 +50,38 @@ export const FilesStep = (props: FilesProps) => {
                     <UiText type="h2" wrapper="h2">Storage - Step 3 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>
             
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
+                    <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormInput
                             className={b('publish-form-input')}
                             label='File ID *'
                             value={values.file_id} onChange={e=>handleChange(e.target.value, 'file_id')}
                             placeholder='Type the filecoin id for the file'
                             inputError={inputError}
                         />
-                    </FormGroup>
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
+                    </UiFormGroup>
+                    <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormInput
                             className={b('publish-form-input')}
                             label='Sample File ID'
                             value={values.sample_file_id} onChange={e=> handleChange(e.target.value, 'sample_file_id')}
                             placeholder='Type the filecoin id for the sample file'
                         />
-                    </FormGroup>
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
+                    </UiFormGroup>
+                    <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormInput
                             className={b('publish-form-input')}
                             type = "file"
                             label='File'
                             onChange={e=> handleFileChange(e)}
                             placeholder='Select the file'
                         />
-                    </FormGroup>
+                    </UiFormGroup>
                     
                     <UiDivider/>
-                    <FormGroup orientation={Orientation.Vertical}>
+                    <UiFormGroup orientation={Orientation.Vertical}>
                         <UiButton onClick={Previous}>&lt;</UiButton>
                         <UiButton onClick={Continue}>&gt;</UiButton>
-                    </FormGroup>
+                    </UiFormGroup>
 
             </UiLayout>
        

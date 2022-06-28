@@ -1,9 +1,8 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
 import { User } from '../context'
-import { Form, FormGroup, FormInput, FormAddItem, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
+import { UiForm, UiFormGroup, UiFormInput, UiFormAddItem, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, NotificationPopup, BEM } from '@nevermined-io/styles'
 import { NextPage } from 'next'
 import { newLogin, StoreItemTypes } from '../shared'
-import { NotificationPopup } from '../components'
 import styles from './user-profile.module.scss'
 
 const b = BEM('user-profile', styles)
@@ -151,42 +150,42 @@ export const UserProfile: NextPage = () => {
             <UiDivider/>
             <UiLayout type='container'>
                 <div  className={b('profile-horizontal-line')}/>
-                <Form>
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
+                <UiForm>
+                    <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormInput
                             className={b('profile-form-input')}
                             label='Nickname *'
                             inputError={inputError}
                             value={userProfile.nickname} onChange={(e) => setUserProfile({...userProfile, nickname: e.target.value})}
                             placeholder='Type your nickname'
                         />
-                    </FormGroup>
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
+                    </UiFormGroup>
+                    <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormInput
                             className={b('profile-form-input')}
                             label='Name'
                             value={userProfile.name} onChange={(e) => setUserProfile({...userProfile, name: e.target.value})}
                             placeholder='Type your name'
                         />
-                    </FormGroup>
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
+                    </UiFormGroup>
+                    <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormInput
                             className={b('profile-form-input')}
                             label='Email'
                             value={userProfile.email}
                             onChange={(e) => setUserProfile({...userProfile, email: e.target.value})}
                             placeholder='Type your email'
                         />
-                    </FormGroup>
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
+                    </UiFormGroup>
+                    <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormInput
                             className={b('profile-form-input')}
                             label='Link Profile'
                             placeholder='Type your link profile'
                             value={(userProfile.additionalInformation as AdditionalInformation)?.linkedinProfile} onChange={(e) => setUserProfile({...userProfile, additionalInformation: {
                             linkedinProfile: e.target.value
                         }})}/>
-                    </FormGroup>
+                    </UiFormGroup>
                     <div className={b('profile-submit-container')}>
                         <div className={b('profile-submit-container', ['updated-message'])}>
                             {(isUpdated) ? <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> : null}
@@ -195,12 +194,12 @@ export const UserProfile: NextPage = () => {
                             <UiButton onClick={onSubmitUserProfile}>Update Profile</UiButton>
                         </div>
                     </div>
-                </Form>
+                </UiForm>
             </UiLayout>
             <UiLayout type='container' className={b('profile-addresses')}>
                 <UiText type="h2" wrapper="h2">Addresses</UiText>
                 <div  className={b('profile-horizontal-line')}/>
-                <Form>                  
+                <UiForm>                  
                     <div>
                         <UiText type='h3'>Current Addresses</UiText>
                     </div>
@@ -218,14 +217,14 @@ export const UserProfile: NextPage = () => {
                     
 
                     {newAddress && 
-                        <FormGroup orientation={Orientation.Vertical} className={b('profile-add-address')}>
-                            <FormAddItem
+                        <UiFormGroup orientation={Orientation.Vertical} className={b('profile-add-address')}>
+                            <UiFormAddItem
                                 label='Add new address'
                                 value={newAddress}
                                 onClick={onAddAddress}
                                 disabled={true}
                             />
-                        </FormGroup>
+                        </UiFormGroup>
                     }
 
                     <div className={b('profile-submit-container')}>
@@ -233,7 +232,7 @@ export const UserProfile: NextPage = () => {
                             {(isAddressAdded) ? <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> : null}
                         </div>
                     </div>
-                </Form>
+                </UiForm>
             </UiLayout>
         </UiLayout>
     )

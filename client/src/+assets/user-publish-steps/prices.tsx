@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
-import { Form, FormSelect, FormGroup, FormInput, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
-import { NotificationPopup } from '../../components'
+import { FormSelect} from 'ui'
+import { UiForm, UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
 import {UserPublishParams} from './main-page'
 
@@ -33,7 +33,7 @@ export const PricesStep = (props: PricesProps) => {
                     <UiText type="h2" wrapper="h2">Subscription & Price - Step 4 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>
                     
-                    <FormGroup orientation={Orientation.Vertical}>
+                    <UiFormGroup orientation={Orientation.Vertical}>
                     <FormSelect
                         value={values.tier}
                         onChange={e => handleChange(e, 'tier')}
@@ -42,19 +42,19 @@ export const PricesStep = (props: PricesProps) => {
                         label='Tier'
                         inputError={inputError}
                     /> 
-                    </FormGroup>
+                    </UiFormGroup>
 
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
+                    <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormInput
                             className={b('publish-form-input')}
                             label='Set Your Price'
                             value={values.price} onChange={e=>handleChange(e.target.value, 'price')}
                         />
-                    </FormGroup>
+                    </UiFormGroup>
                     
 
                     <UiDivider/>
-                    <FormGroup orientation={Orientation.Vertical}>
+                    <UiFormGroup orientation={Orientation.Vertical}>
                             
                             {
                                 (isPublished) ?  <div className={b('user-publish-submit-container', ['updated-message'])}>
@@ -67,7 +67,7 @@ export const PricesStep = (props: PricesProps) => {
                                                 </div>
                             }
                     
-                    </FormGroup>
+                    </UiFormGroup>
              
             </UiLayout>
        

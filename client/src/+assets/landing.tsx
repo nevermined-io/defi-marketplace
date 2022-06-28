@@ -3,7 +3,7 @@ import Router from 'next/router'
 import type { NextPage } from 'next'
 import Image from 'next/image'
 
-import { UiText, UiLayout, UiButton, UiDivider, BEM, UiIcon } from 'ui'
+import { UiText, UiLayout, UiButton, UiDivider, BEM, UiIcon } from '@nevermined-io/styles'
 
 import styles from './landing.module.scss'
 import { UiBanner } from 'ui/banner/banner'

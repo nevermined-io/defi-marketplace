@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import { useRouter } from "next/router";
-import { BEM, UiDivider, UiLayout, UiButton, UiText, XuiWallet } from "ui"
+import { XuiWallet } from "ui"
+import {BEM, UiDivider, UiLayout, UiText,} from '@nevermined-io/styles'
 import Link from "next/link"
 import Image from "next/image"
 

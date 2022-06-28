@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useContext, useEffect } from 'react'
 import { OrderProgressStep } from '@nevermined-io/nevermined-sdk-js'
-import { CircleSpinner } from 'ui/loaders/circle-spinner'
-import { BEM, UiText, UiDivider, UiLayout, UiButton, UiCircleProgress, UiIcon } from 'ui'
+import { BEM, UiText, UiDivider, UiLayout, UiButton, UiCircleProgress, UiIcon, CircleSpinner } from '@nevermined-io/styles'
 import { User } from '../../../context'
 
 import styles from './buy-asset-popup.module.scss'
