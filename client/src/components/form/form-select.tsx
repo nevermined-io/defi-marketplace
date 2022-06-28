@@ -1,5 +1,3 @@
-// https://stackoverflow.com/questions/66738941/how-to-type-a-custom-react-select-component-using-typescript
-
 import React, { InputHTMLAttributes } from 'react'
 import { UiText } from 'ui'
 
@@ -9,8 +7,6 @@ type BaseProps<Value> = {
   value: Value;
   onChange: (newValue: Value) => void;
   options: readonly Value[];
-  mapOptionToLabel?: (option: Value) => Allowed;
-  mapOptionToValue?: (option: Value) => Allowed;
   className?: string;
   label: string;
   inputError: string;
@@ -31,24 +27,16 @@ export function FormSelect<Value>({
   value,
   onChange,
   options,
-  mapOptionToLabel,
-  mapOptionToValue,
   className,
   label,
   inputError
 }: Props<Value>) {
   const toLabel = (option: Value): Allowed => {
-    if (mapOptionToLabel) {
-      return mapOptionToLabel(option);
-    }
     // if our props are provided correctly, this should never be false
     return isAllowed(option) ? option : String(option);
   };
 
   const toValue = (option: Value): Allowed => {
-    if (mapOptionToValue) {
-      return mapOptionToValue(option);
-    }
     return isAllowed(option) ? option : String(option);
   };
 
