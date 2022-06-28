@@ -72,7 +72,7 @@ export const FilesStep = (props: FilesProps) => {
                             className={b('publish-form-input')}
                             type = "file"
                             label='File'
-                            onChange={e=> handleFileChange(e)}
+                            onChange={handleFileChange}
                             placeholder='Select the file'
                         />
                     </UiFormGroup>
