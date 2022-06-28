@@ -2,19 +2,18 @@ import React, { useEffect, useContext, useState, useRef } from 'react'
 import { Form, FormSelect, FormGroup, FormInput, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
 import { NotificationPopup } from '../../components'
 import styles from './user-publish.module.scss'
+import {UserPublishParams} from './main-page'
 
 const b = BEM('user-publish', styles)
 const tiers: string[] = ["Tier 1", "Tier 2", "Tier 3"]
 
-
 interface PricesProps {
-    values: any
-    handleChange: any
-    prevStep: any
-    submit: any
-    isPublished: any
-    successMessage: any
-
+    values: UserPublishParams
+    handleChange: (value: string, field: string) => void
+    prevStep: () => void
+    submit: () => void
+    isPublished: boolean
+    successMessage: string
  }
 
 export const PricesStep = (props: PricesProps) => {
@@ -71,8 +70,6 @@ export const PricesStep = (props: PricesProps) => {
                     </FormGroup>
              
             </UiLayout>
-
-            
        
     )
 }

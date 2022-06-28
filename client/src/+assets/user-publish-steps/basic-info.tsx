@@ -1,14 +1,15 @@
 import React, { useEffect, useContext, useState, useRef, InputHTMLAttributes } from 'react'
 import { Form, FormSelect, FormGroup, FormInput, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
 import styles from './user-publish.module.scss'
+import {UserPublishParams} from './main-page'
 
 
 const b = BEM('user-publish', styles)
 
 interface BasicInfoProps {
-   values: any
-   handleChange: any
-   nextStep: any
+   values: UserPublishParams
+   handleChange: (value: string, field: string) => void
+   nextStep: () => void
 }
 
 
@@ -19,12 +20,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
     const [nameInputError, setNameInputError] = useState('') 
     const [descriptionInputError, setDescriptionInputError] = useState('') 
 
-
     const checkValues = (): Boolean => {
-
-        console.log("author: " + values.author)
-        console.log("name: " + values.name)
-        console.log("description: " + values.description)
 
         if (!values.author) {
             setAuthorInputError('Author is required')
@@ -42,7 +38,6 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
         }
 
         return true
-
     }
 
     const Continue = (e: React.FormEvent<HTMLFormElement>) => {

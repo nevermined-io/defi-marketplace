@@ -20,7 +20,7 @@ const b = BEM('user-publish', styles)
 const tiers: string[] = ["Tier 1", "Tier 2", "Tier 3"]
 
 
-interface UserPublishParams {
+export interface UserPublishParams {
     step: number
     name: string
     author: string
@@ -81,12 +81,9 @@ export const UserPublishMultiStep: NextPage = () => {
     }
 
     // Handle fields change
-    const handleChange =   function (value: string, input:any) {
+    const handleChange =   function (value: string, input:string) {
         setUserPublish({ ...userPublish, [input]: value });
     }
-
-    const  { step, name, author, description, type, category, protocol, file_id, sample_file_id, network, price, tier, file_name, file_size, file_type} = userPublish
-    const values = { name, author, description, type, category, protocol, file_id, sample_file_id, network, price, tier, file_name, file_size, file_type}
     
     const closePopup = (event: any) => {
         popupRef.current?.close()
@@ -276,7 +273,7 @@ export const UserPublishMultiStep: NextPage = () => {
         return userPublish.file_id
     };
 
-    switch(step) {
+    switch(userPublish.step) {
         case 1: 
           return (
             <UiLayout type='container'>
@@ -292,7 +289,7 @@ export const UserPublishMultiStep: NextPage = () => {
                     <BasicInfoStep
                         nextStep={ nextStep }
                         handleChange={ handleChange }
-                        values={ values }
+                        values={ userPublish }
                     />
 
                 </Form>
@@ -315,7 +312,7 @@ export const UserPublishMultiStep: NextPage = () => {
                          prevStep={ prevStep}
                          nextStep={ nextStep }
                          handleChange={ handleChange }
-                         values={ values }
+                         values={ userPublish }
                     />
 
                 </Form>
@@ -338,7 +335,7 @@ export const UserPublishMultiStep: NextPage = () => {
                          prevStep={ prevStep}
                          nextStep={ nextStep }
                          handleChange={ handleChange }
-                         values={ values }
+                         values={ userPublish }
                          handleFileChange = {handleFileChange}
                     />
 
@@ -360,7 +357,7 @@ export const UserPublishMultiStep: NextPage = () => {
                     <PricesStep
                          prevStep={ prevStep}
                          handleChange={ handleChange }
-                         values={ values }
+                         values={ userPublish }
                          submit = { onSubmitUserPublish }
                          isPublished = {isPublished}
                          successMessage={successMessage}

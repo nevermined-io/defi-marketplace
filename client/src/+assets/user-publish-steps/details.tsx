@@ -2,17 +2,15 @@ import React, { useEffect, useContext, useState, useRef } from 'react'
 import { Form, FormSelect, FormGroup, FormInput, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
 import styles from './user-publish.module.scss'
 import { networks, categories, protocols, assetTypes } from 'src/config'
-
-
+import {UserPublishParams} from './main-page'
 
 const b = BEM('user-publish', styles)
 
-
 interface DetailsProps {
-    values: any
-    handleChange: any
-    prevStep: any
-    nextStep: any
+   values: UserPublishParams
+   handleChange: (value: string, field: string) => void
+   prevStep: () => void
+   nextStep: () => void   
  }
 
 export const DetailsStep = (props: DetailsProps) => {
@@ -23,14 +21,8 @@ export const DetailsStep = (props: DetailsProps) => {
     const [protocolInputError, setProtocolInputError] = useState('') 
     const [networkInputError, setNetworkInputError] = useState('')  
 
-
     const checkValues = (): Boolean => {
 
-        console.log("type: " + values.type)
-        console.log("category: " + values.category)
-        console.log("protocol: " + values.protocol)
-        console.log("networl: " + values.network)
-        
         if (!values.type) {
             setTypeInputError('Type is required')
             return false
@@ -50,7 +42,6 @@ export const DetailsStep = (props: DetailsProps) => {
         }
 
         return true
-
     }
 
 

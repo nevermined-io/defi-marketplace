@@ -1,17 +1,16 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
 import { Form, FormSelect, FormGroup, FormInput, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
 import styles from './user-publish.module.scss'
-
-
+import {UserPublishParams} from './main-page'
 
 const b = BEM('user-publish', styles)
 
 interface FilesProps {
-    values: any
-    handleChange: any
-    handleFileChange:any
-    prevStep: any
-    nextStep: any
+    values: UserPublishParams
+    handleChange: (value: string, field: string) => void
+    prevStep: () => void
+    nextStep: () => void 
+    handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
  }
 
 
@@ -22,17 +21,12 @@ export const FilesStep = (props: FilesProps) => {
 
     const checkValues = (): Boolean => {
 
-        console.log("file_id: " + values.file_id)
-        console.log("sample_id: " + values.sample_file_id)
-        console.log("file name: " + values.file_name)
-
         if (!values.file_id && !values.file_name) {
             setInputError('Local File  or Filecoin URL is required')
             return false
         }
 
-        return true
-       
+        return true      
     }
 
     
