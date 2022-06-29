@@ -158,8 +158,6 @@ export const UserPublishMultiStep: NextPage = () => {
 
             }          
 
-            //printUserPublish()
-
             const metadata = generateMetadata()
             console.log(JSON.stringify(metadata))
 
@@ -229,19 +227,12 @@ export const UserPublishMultiStep: NextPage = () => {
     const uploadFileToFilecoin = async () => {
         if (fileSelected) {
             
-            /*
-            Refactor skd. ReadableStream not convertible to ReadStream
-            const stream = fileSelected.stream()
-            const url = (await sdk.files.uploadFilecoin(stream)).url
-            */
-
             const form = new FormData()
             form.append('file', fileSelected)
         
             const gatewayUploadUrl = gatewayURL + filecoinUploadUri
             const response = await handlePostRequest(gatewayUploadUrl, form)    
-            const url = response.url;
-            return url
+            return response.url;
         }
 
         return userPublish.file_id

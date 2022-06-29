@@ -59,7 +59,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormInput
                             className={b('publish-form-input')}
-                            label='Author'
+                            label='Author *'
                             inputError={authorInputError}
                             value={values.author} onChange={e => handleChange(e.target.value, 'author')}
                             placeholder='Type the author'
