@@ -1,23 +1,68 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
-import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM } from '@nevermined-io/styles'
+import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM, UiFormAddItem } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
-import {UserPublishParams} from './main-page'
+import {UserPublishParams, FileType, AssetFile} from './main-page'
+import { assetTypes } from 'src/config'
 
 const b = BEM('user-publish', styles)
 
 interface FilesProps {
     values: UserPublishParams
-    handleChange: (value: string, field: string) => void
     prevStep: () => void
     nextStep: () => void 
-    handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    updateFilesAdded: (assetFiles: AssetFile) => void
  }
 
 
 export const FilesStep = (props: FilesProps) => {
     
-    const {values, handleChange, handleFileChange, prevStep, nextStep } = props;    
+    const {values,  updateFilesAdded, prevStep, nextStep } = props;    
     const [inputError, setInputError] = useState('') 
+    const [successMessage, setSuccessMessage] = useState('')
+    const [newFilecoinID, setNewFilecoinID] = useState('')
+    const [isFileAdded, setIsFileAdded] = useState(false)
+
+
+    const handleNewFile = function (e: React.ChangeEvent<HTMLInputElement>) {
+        console.log("handle file")
+        const fileList = e.target.files;
+         if (!fileList || !fileList[0]){
+             alert("no files")
+             return;
+         } 
+        
+        const file = fileList[0]
+        const assetFile:AssetFile = {
+            type: FileType.Local,
+            name: file.name,
+            label: file.name,
+            size: String(file.size),
+            content_type: file.type
+        }
+
+        setIsFileAdded(true) 
+        updateFilesAdded(assetFile)
+        
+      };
+
+    const addFilecoinID = function() {
+
+        if (!newFilecoinID)
+            return
+        // TODO: Check file exists
+
+        const assetFile:AssetFile = {
+            type: FileType.FilecoinID,
+            label: newFilecoinID,
+            filecoin_id: newFilecoinID
+        }
+
+        setIsFileAdded(true)    
+        setNewFilecoinID('')
+
+        updateFilesAdded(assetFile)
+
+    }
 
     const checkValues = (): Boolean => {
 
@@ -28,7 +73,6 @@ export const FilesStep = (props: FilesProps) => {
 
         return true      
     }
-
     
     const Continue = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -51,14 +95,18 @@ export const FilesStep = (props: FilesProps) => {
                     <div  className={b('publish-horizontal-line')}/>
             
                     <UiFormGroup orientation={Orientation.Vertical}>
-                        <UiFormInput
-                            className={b('publish-form-input')}
-                            label='File ID *'
-                            value={values.file_id} onChange={e=>handleChange(e.target.value, 'file_id')}
-                            placeholder='Type the filecoin id for the file'
-                            inputError={inputError}
+                       
+                        <UiFormAddItem
+                                label='Add new file from Filecoin'
+                                value={newFilecoinID}
+                                onClick={addFilecoinID}
+                                onChange={(e) => setNewFilecoinID(e.target.value)}
+                                placeholder='Type the filecoin id for the file'
+                                disabled={false}
                         />
                     </UiFormGroup>
+
+                    {/*
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormInput
                             className={b('publish-form-input')}
@@ -67,15 +115,33 @@ export const FilesStep = (props: FilesProps) => {
                             placeholder='Type the filecoin id for the sample file'
                         />
                     </UiFormGroup>
+                    */}
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormInput
                             className={b('publish-form-input')}
                             type = "file"
                             label='File'
-                            onChange={handleFileChange}
+                            onChange={handleNewFile}
                             placeholder='Select the file'
                         />
                     </UiFormGroup>
+
+                    <div  className={b('profile-horizontal-line')}/>
+                             
+                    <div>
+                        <UiText type='h3'>Asset Files</UiText>
+                    </div>
+                    <div>
+                        <UiText variants={['detail']}>Introduce a Filecoin ID or Upload a file from your computer to Filecoin </UiText>
+                    </div>
+
+                    <div className={b('publish-current-files-container')}>
+                        {values.asset_files.map(assetfile => 
+                            <div key={assetfile.label} className={b('publish-current-files')}>
+                                {assetfile.label}
+                            </div>    
+                        )}
+                    </div>
                     
                     <UiDivider/>
                     <UiFormGroup orientation={Orientation.Vertical}>

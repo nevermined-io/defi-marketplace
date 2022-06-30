@@ -32,4 +32,18 @@
     &__publish-add-address {
         margin-top: 20px;
     }
+
+    &__publish-current-files-container {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    &__publish-current-files {
+        border: 2px solid gc(gM);
+        flex-basis: 40%;
+        text-align: center;
+        margin: 30px 50px 0 0;
+        padding: 20px;
+    }
 }

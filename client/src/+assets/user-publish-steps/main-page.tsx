@@ -35,6 +35,22 @@ export interface UserPublishParams {
     file_name: string
     file_size: string
     file_type: string
+    asset_files: AssetFile[]
+}
+
+export enum FileType {
+    FilecoinID = "Filecoin",
+    Local =  "Local"
+}
+
+export interface AssetFile {
+    type: FileType
+    label: string
+    name?: string
+    size?:string
+    content_type?: string
+    file?: File
+    filecoin_id?: string
 }
 
 export const UserPublishMultiStep: NextPage = () => {
@@ -62,10 +78,12 @@ export const UserPublishMultiStep: NextPage = () => {
         tier: 'Tier 1',
         file_name: '',
         file_size: '',
-        file_type: ''
+        file_type: '',
+        asset_files: []
     })
 
     const [fileSelected, setFileSelected] = useState<File>()
+    const [assetfiles, setAssetFiles] = useState<AssetFile[]>([])
 
     // go back to previous step
     const prevStep = () => {
@@ -238,6 +256,11 @@ export const UserPublishMultiStep: NextPage = () => {
         return userPublish.file_id
     };
 
+    const updateFilesAdded = (assetFile: AssetFile) => {
+        const arrayFiles = userPublish.asset_files
+        setUserPublish({...userPublish, asset_files: [...arrayFiles, assetFile] })
+    }
+   
     switch(userPublish.step) {
         case 1: 
           return (
@@ -299,9 +322,8 @@ export const UserPublishMultiStep: NextPage = () => {
                     <FilesStep
                          prevStep={ prevStep}
                          nextStep={ nextStep }
-                         handleChange={ handleChange }
                          values={ userPublish }
-                         handleFileChange = {handleFileChange}
+                         updateFilesAdded = {updateFilesAdded}
                     />
 
                 </UiForm>
