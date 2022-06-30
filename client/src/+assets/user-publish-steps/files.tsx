@@ -66,6 +66,7 @@ export const FilesStep = (props: FilesProps) => {
 
         setIsFileAdded(true) 
         updateFilesAdded(assetFile)
+        setInputError('')
         
       };
 
@@ -85,6 +86,7 @@ export const FilesStep = (props: FilesProps) => {
         setNewFilecoinID('')
 
         updateFilesAdded(assetFile)
+        setInputError('')
 
     }
 
