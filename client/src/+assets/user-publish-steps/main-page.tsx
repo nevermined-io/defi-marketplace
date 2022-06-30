@@ -257,8 +257,23 @@ export const UserPublishMultiStep: NextPage = () => {
     };
 
     const updateFilesAdded = (assetFile: AssetFile) => {
-        const arrayFiles = userPublish.asset_files
+        const arrayFiles: AssetFile[] = userPublish.asset_files
         setUserPublish({...userPublish, asset_files: [...arrayFiles, assetFile] })
+    }
+
+    const removeFile = (label: string) => {
+        const arrayFiles: AssetFile[] = userPublish.asset_files
+
+        const indexOfObject = arrayFiles.findIndex((assetFile) => {
+            return assetFile.label === label;
+          });
+
+        if (indexOfObject !== -1) {
+            arrayFiles.splice(indexOfObject, 1);
+            setUserPublish({...userPublish, asset_files: [...arrayFiles] })
+          }
+
+       
     }
    
     switch(userPublish.step) {
@@ -324,6 +339,7 @@ export const UserPublishMultiStep: NextPage = () => {
                          nextStep={ nextStep }
                          values={ userPublish }
                          updateFilesAdded = {updateFilesAdded}
+                         removeFile = {removeFile}
                     />
 
                 </UiForm>
