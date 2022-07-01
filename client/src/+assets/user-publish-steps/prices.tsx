@@ -13,10 +13,11 @@ interface PricesProps {
     submit: () => void
     isPublished: boolean
     successMessage: string
+    filesUploadedMessage: string[]
  }
 
 export const PricesStep = (props: PricesProps) => {
-    const {values, handleChange, prevStep, submit, isPublished, successMessage } = props;    
+    const {values, handleChange, prevStep, submit, isPublished, successMessage, filesUploadedMessage } = props;    
     const [inputError, setInputError] = useState('') 
     
 
@@ -58,6 +59,11 @@ export const PricesStep = (props: PricesProps) => {
                             {
                                 (isPublished) ?  <div className={b('user-publish-submit-container', ['updated-message'])}>
                                                 <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> 
+                                                {filesUploadedMessage.map( (message, index) => 
+                                                    <div key={index}>
+                                                        <UiText type="h3" wrapper="h3" variants={['success']}>{message}</UiText>
+                                                    </div>
+                                                )}
                                                 </div>
                                                 : 
                                                 <div className={b('user-publish-submit-container',['submit'])}>

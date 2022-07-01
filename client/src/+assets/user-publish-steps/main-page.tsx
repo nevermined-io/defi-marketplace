@@ -8,16 +8,14 @@ import { MetaData, Nevermined } from "@nevermined-io/nevermined-sdk-js"
 import AssetRewards from "@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards";
 import BigNumber from "bignumber.js";
 import {  Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress, gatewayURL, filecoinUploadUri } from 'src/config'
-import axios from "axios";
 import { BasicInfoStep } from './basic-info'
 import { DetailsStep } from './details'
 import { PricesStep } from './prices'
 import { FilesStep } from './files'
+import {FileType, AssetFile, handleAssetFiles} from './files-handler'
 
 
 const b = BEM('user-publish', styles)
-const tiers: string[] = ["Tier 1", "Tier 2", "Tier 3"]
-
 
 export interface UserPublishParams {
     step: number
@@ -27,30 +25,10 @@ export interface UserPublishParams {
     type: string
     category: string
     protocol: string
-    file_id: string
-    sample_file_id?: string
     network: string
     price: number
     tier: string
-    file_name: string
-    file_size: string
-    file_type: string
     asset_files: AssetFile[]
-}
-
-export enum FileType {
-    FilecoinID = "Filecoin",
-    Local =  "Local"
-}
-
-export interface AssetFile {
-    type: FileType
-    label: string
-    name?: string
-    size?:string
-    content_type?: string
-    file?: File
-    filecoin_id?: string
 }
 
 export const UserPublishMultiStep: NextPage = () => {
@@ -59,6 +37,7 @@ export const UserPublishMultiStep: NextPage = () => {
     const [inputError, setInputError] = useState('') 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
+    const [filesUploadedMessage, setFilesUploadedMessage] = useState<string[]>([])
     const [isPublished, setIsPublished] = useState(false)
     const popupRef = useRef<UiPopupHandlers>()
 
@@ -71,18 +50,12 @@ export const UserPublishMultiStep: NextPage = () => {
         type: 'dataset',
         category: 'None',
         protocol: 'None',
-        file_id: '',
-        sample_file_id: '',
         network: 'None',
         price: 0,
         tier: 'Tier 1',
-        file_name: '',
-        file_size: '',
-        file_type: '',
         asset_files: []
     })
 
-    const [fileSelected, setFileSelected] = useState<File>()
     const [assetfiles, setAssetFiles] = useState<AssetFile[]>([])
 
     // go back to previous step
@@ -107,6 +80,33 @@ export const UserPublishMultiStep: NextPage = () => {
         event.preventDefault()
     }
 
+    interface FileMetadata {
+        index: number
+        contentType: string
+        url: string
+        contentLength:string
+    }
+
+    const generateFilesMetadata = () => {
+
+        const files: FileMetadata[] = []
+
+        userPublish.asset_files.forEach((assetFile: AssetFile, i: number) => {
+
+            const file:FileMetadata = {
+                index: i+1,
+                contentType: assetFile.content_type?assetFile.content_type:'',
+                url: assetFile.filecoin_id?assetFile.filecoin_id:'',
+                contentLength: assetFile.size?assetFile.size:'',
+            }
+
+            files.push(file)
+            
+        });
+
+        return files
+        
+    }
 
     const generateMetadata = () => {
 
@@ -120,14 +120,7 @@ export const UserPublishMultiStep: NextPage = () => {
                 datePublished: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
                 type: userPublish.type,
                 network: userPublish.network,
-                files: [
-                    {
-                        index: 1,
-                        contentType: userPublish.file_type,
-                        url: userPublish.file_id,
-                        contentLength: userPublish.file_size,
-                    }
-                ]
+                files: generateFilesMetadata()
             },
             additionalInformation: {
                 description: userPublish.description,
@@ -140,7 +133,7 @@ export const UserPublishMultiStep: NextPage = () => {
                 blockchain: userPublish.network,
                 version: "v1",
                 source: "filecoin",
-                file_name: userPublish.file_name
+                //file_name: userPublish.file_name??
             }
         } as MetaData
     
@@ -157,24 +150,23 @@ export const UserPublishMultiStep: NextPage = () => {
         }
     }
 
+    const generateFilesUploadedMessage = (assetFiles: AssetFile[]) => {
+
+        const messages: string[] = []
+        for (const assetFile of assetFiles){
+            const isLocalFile: boolean = assetFile.type === FileType.Local
+            if (isLocalFile)
+                messages.push(`- File ${assetFile.name} uploaded to Filecoin with ID: ${assetFile.filecoin_id}`)
+        }
+        return messages        
+    }
+
     const onSubmitUserPublish = async() => {
         try {
 
-            let filecoin_url
-                
-            if (userPublish.file_id && !fileSelected){
-                /* TODO - Get info from Filecoin??
-                validate is valid filecoin id
-                get file_name, file_size and file_type from filecoin?
-                */
-                userPublish.file_name= "Filecoin File.csv"
-                userPublish.file_size = "0"
-                userPublish.file_type = "text/csv"
-            }else {
-                filecoin_url = await uploadFileToFilecoin()
-                userPublish.file_id = filecoin_url
 
-            }          
+            await handleAssetFiles(userPublish.asset_files)
+            setFilesUploadedMessage(generateFilesUploadedMessage(userPublish.asset_files))
 
             const metadata = generateMetadata()
             console.log(JSON.stringify(metadata))
@@ -195,12 +187,10 @@ export const UserPublishMultiStep: NextPage = () => {
             let did
             if (ddo) {
                 did = ddo.id
-            }
+            }   
         
             setIsPublished(true)
-            var message = 'Your Asset has been published successfully. DID: ' + did 
-            if (fileSelected) 
-                message = message.concat(" - Filecoin ID: " + filecoin_url)
+            var message = 'Your Asset has been published successfully with DID: ' + did 
             setSuccessMessage(message)
             setInputError('')
         } catch (error: any ) {
@@ -215,47 +205,6 @@ export const UserPublishMultiStep: NextPage = () => {
         }
     }
    
-    const handleFileChange = function (e: React.ChangeEvent<HTMLInputElement>) {
-        const fileList = e.target.files;
-         if (!fileList || !fileList[0]){
-             setFileSelected(undefined)
-             return;
-         } 
-        
-        const file = fileList[0]
-        setFileSelected(file);
-
-        userPublish.file_name = file.name
-        userPublish.file_size = String(file.size)
-        userPublish.file_type = file.type  
-        
-      };
-
-     
-    const handlePostRequest = async (url:string, formData: FormData) => {
-            
-        const response = await axios.post(url, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        return response.data
-      };
-    
-    const uploadFileToFilecoin = async () => {
-        if (fileSelected) {
-            
-            const form = new FormData()
-            form.append('file', fileSelected)
-        
-            const gatewayUploadUrl = gatewayURL + filecoinUploadUri
-            const response = await handlePostRequest(gatewayUploadUrl, form)    
-            return response.url;
-        }
-
-        return userPublish.file_id
-    };
-
     const updateFilesAdded = (assetFile: AssetFile) => {
         const arrayFiles: AssetFile[] = userPublish.asset_files
         setUserPublish({...userPublish, asset_files: [...arrayFiles, assetFile] })
@@ -272,7 +221,6 @@ export const UserPublishMultiStep: NextPage = () => {
             arrayFiles.splice(indexOfObject, 1);
             setUserPublish({...userPublish, asset_files: [...arrayFiles] })
           }
-
        
     }
    
@@ -364,6 +312,7 @@ export const UserPublishMultiStep: NextPage = () => {
                          submit = { onSubmitUserPublish }
                          isPublished = {isPublished}
                          successMessage={successMessage}
+                         filesUploadedMessage = {filesUploadedMessage}
                     />
                 </UiForm>
             </UiLayout>

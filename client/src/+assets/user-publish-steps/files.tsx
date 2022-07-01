@@ -1,8 +1,9 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
 import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM, UiFormAddItem } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
-import {UserPublishParams, FileType, AssetFile} from './main-page'
+import {UserPublishParams} from './main-page'
 import { assetTypes } from 'src/config'
+import {FileType, AssetFile} from './files-handler'
 
 const b = BEM('user-publish', styles)
 
@@ -19,7 +20,6 @@ export const FilesStep = (props: FilesProps) => {
     
     const {values,  updateFilesAdded, removeFile, prevStep, nextStep } = props;    
     const [inputError, setInputError] = useState('') 
-    const [successMessage, setSuccessMessage] = useState('')
     const [newFilecoinID, setNewFilecoinID] = useState('')
     const [isFileAdded, setIsFileAdded] = useState(false)
 
@@ -48,20 +48,15 @@ export const FilesStep = (props: FilesProps) => {
 
 
     const handleNewFile = function (e: React.ChangeEvent<HTMLInputElement>) {
-        console.log("handle file")
-        const fileList = e.target.files;
-         if (!fileList || !fileList[0]){
-             alert("no files")
-             return;
-         } 
-        
-        const file = fileList[0]
+       
+        const file = e.target.files[0]
         const assetFile:AssetFile = {
             type: FileType.Local,
             name: file.name,
             label: file.name,
             size: String(file.size),
-            content_type: file.type
+            content_type: file.type,
+            file: file
         }
 
         setIsFileAdded(true) 
@@ -75,6 +70,7 @@ export const FilesStep = (props: FilesProps) => {
         if (!newFilecoinID)
             return
         // TODO: Check file exists
+        ///get file_name, file_size and file_type from filecoin?
 
         const assetFile:AssetFile = {
             type: FileType.FilecoinID,
@@ -94,7 +90,7 @@ export const FilesStep = (props: FilesProps) => {
      
             <UiLayout type='container'>
 
-                    <UiText type="h2" wrapper="h2">Storage - Step 3 of 4</UiText>
+                    <UiText type="h2" wrapper="h2">FILES - Step 3 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>
 
                     <div  className={b('profile-horizontal-line')}/>
