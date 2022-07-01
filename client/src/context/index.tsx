@@ -10,7 +10,7 @@ export const User = React.createContext({
     isBurner: false,
     isWeb3Capable: false,
     isLoading: false,
-    account: '',
+    walletAddress: '',
     bookmarks: [] as Bookmark[],
     userBundles: [] as Bundle[],
     userProfile: {} as Profile,
@@ -29,6 +29,7 @@ export const User = React.createContext({
     switchToCorrectNetwork: () => {
         /* empty */
     },
+    sdk: {} as Nevermined,
     message: '',
     tokenSymbol: '',
     tokenDecimals: 6,

@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from 'components-catalog-nvm-test'
 import { User } from '../context'
 import { UiForm, UiFormGroup, UiFormInput, UiFormAddItem, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, NotificationPopup, BEM } from '@nevermined-io/styles'
 import { NextPage } from 'next'
@@ -20,8 +20,7 @@ interface UserProfileParams {
 }
 
 export const UserProfile: NextPage = () => {
-    const { account, loginMarketplaceAPI, web3 } = useContext(User)
-    const { sdk } = useContext(Catalog.NeverminedContext)
+    const { walletAddress, loginMarketplaceAPI, sdk } = useContext(User)
     const [inputError, setInputError] = useState('') 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
@@ -105,11 +104,11 @@ export const UserProfile: NextPage = () => {
     useEffect(() => {
         (async () => {
             try {
-                if(!account) {
+                if(!walletAddress) {
                     return
                 }
                 
-                const userProfileData = await sdk.profiles.findOneByAddress(account);
+                const userProfileData = await sdk.profiles.findOneByAddress(walletAddress);
                 setUserId(userProfileData.userId)
 
                 if(userProfileData.addresses.some(a => a.toLowerCase() === newAddress)) {
@@ -140,7 +139,7 @@ export const UserProfile: NextPage = () => {
                 }
             }
         })()
-    }, [sdk.profiles, account])
+    }, [sdk.profiles, walletAddress])
 
     return (
         <UiLayout type='container'>

@@ -13,7 +13,7 @@ import { correctNetworkName } from '../config'
 
 const b = BEM('checkout', styles)
 export const Checkout: NextPage = () => {
-  const { assets: contextAssets, basket, network, isLogged, account, removeFromBasket, switchToCorrectNetwork, loginMetamask } = useContext(User)
+  const { assets: contextAssets, basket, network, isLogged, walletAddress, removeFromBasket, switchToCorrectNetwork, loginMetamask } = useContext(User)
 
   const assets = contextAssets.filter(asset => basket.includes(asset.id))
   const totalPrice = assets.map(
@@ -96,7 +96,7 @@ export const Checkout: NextPage = () => {
             </UiLayout>
             <UiDivider />
             {
-              !(isLogged && account) ?
+              !(isLogged && walletAddress) ?
                 <UiButton cover onClick={loginMetamask}>Connect Wallet</UiButton>
                 :
                 (network === correctNetworkName && assets.length && isLogged) ?

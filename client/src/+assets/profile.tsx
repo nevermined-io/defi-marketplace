@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState, useCallback, useRef } from 'react'
 import type { NextPage } from 'next'
 import Image from "next/image"
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from 'components-catalog-nvm-test'
 import { User } from '../context'
 import styles from './profile.module.scss'
 import { XuiAssetsQuery } from 'ui'
@@ -29,8 +29,7 @@ interface ExtendedBundle extends Bundle {
 const BUNDLES_PER_PAGE = 5
 const b = BEM('profile', styles)
 export const Profile: NextPage = () => {
-  const { account, userBundles } = useContext(User)
-  const { sdk } = useContext(Catalog.NeverminedContext)
+  const { walletAddress, userBundles, sdk } = useContext(User)
   const [assets, setAssets] = useState<ExtendedBundle[]>([])
 
   // const [all, setAll] = useState<boolean>(false) TBI
@@ -180,7 +179,7 @@ export const Profile: NextPage = () => {
 
           <UiLayout type="container">
             <UiText wrapper="h1" type="h1" variants={['heading']}>Profile</UiText>
-            <UiText type="h2" wrapper="h2"> {`${account.substr(0, 6)}...${account.substr(-4)}`}</UiText>
+            <UiText type="h2" wrapper="h2"> {`${walletAddress.substr(0, 6)}...${walletAddress.substr(-4)}`}</UiText>
           </UiLayout>
           <UiDivider type="l" />
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { BEM, UiButton} from '@nevermined-io/styles'
 import { User } from '../../context'
+import Catalog from 'components-catalog-nvm-test'
 import { correctNetworkName } from '../../config'
 import styles from './wallet.module.scss'
 import Link from 'next/link'
@@ -12,9 +13,9 @@ interface WalletProps {
 const b = BEM('wallet', styles)
 
 export function XuiWallet(props: WalletProps) {
-  const { isLogged, account, network, basket, loginMetamask } = React.useContext(User)
+  const { isLogged, walletAddress, network, basket, loginMetamask } = React.useContext(User)
 
-  return !(isLogged && account)
+  return !(isLogged && walletAddress)
     ? (
       <UiButton onClick={loginMetamask}>
         Connect wallet
@@ -33,7 +34,7 @@ export function XuiWallet(props: WalletProps) {
 
         <div className={b('block')}>
           <span className={b('logged')} />
-          {`${account.substr(0, 6)}...${account.substr(-4)}`}
+          {`${walletAddress.substr(0, 6)}...${walletAddress.substr(-4)}`}
         </div>
 
         <div className={b('block', ['network'])}>

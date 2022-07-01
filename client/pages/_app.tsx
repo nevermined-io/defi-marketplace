@@ -4,7 +4,7 @@ import '../src/styles/styles.scss'
 import React from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from 'components-catalog-nvm-test'
 import Web3 from 'web3';
 import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
 import { UiDivider } from '@nevermined-io/styles'
@@ -18,8 +18,10 @@ import { docsUrl,
     secretStoreUri,
     verbose,
     graphUrl,
-    artifactsFolder
+    artifactsFolder,
+    correctNetworkId
 } from 'src/config'
+import chainConfig from 'src/chainConfig'
 
 const appConfig = {
     web3Provider: new Web3(new Web3.providers.HttpProvider(nodeUri)),
@@ -36,42 +38,47 @@ const appConfig = {
 }
 
 function App({ Component, pageProps }: AppProps) {
+  const correctNetworkIdHex = correctNetworkId.replace('0x', '')
+  const chainId = parseInt(correctNetworkIdHex, 16);
+
   return (
     <Catalog.NeverminedProvider config={appConfig}>
-      <UserProvider>
-        <Head>
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-11ZZZNJ4Q5"></script>
-          <script dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments)}
-              gtag('js', new Date());
+      <Catalog.WalletProvider chainConfig={chainConfig} nodeUri={appConfig.nodeUri} correctNetworkId={chainId.toString()}>
+          <UserProvider>
+            <Head>
+              <script async src="https://www.googletagmanager.com/gtag/js?id=G-11ZZZNJ4Q5"></script>
+              <script dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments)}
+                  gtag('js', new Date());
 
-              gtag('config', 'G-11ZZZNJ4Q5');
-            `
-          }}>
-          </script>
-          <title>Nevermined DeFi Marketplace</title>
-          <meta name="description" content="Nevermined DeFi Marketplace" />
-          <link rel="icon" href="/favicon.ico" />
+                  gtag('config', 'G-11ZZZNJ4Q5');
+                `
+              }}>
+              </script>
+              <title>Nevermined DeFi Marketplace</title>
+              <meta name="description" content="Nevermined DeFi Marketplace" />
+              <link rel="icon" href="/favicon.ico" />
 
-        </Head>
+            </Head>
 
-        <div>
-          <UiHeader>
-            <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
-            <UiHeaderLink href="/profile">Profile</UiHeaderLink>
-            <UiHeaderLink href="/user-profile">Account</UiHeaderLink>
-            <UiHeaderLink href="/about">About</UiHeaderLink>
-            <UiHeaderLink href={docsUrl} target='_blank'>Docs</UiHeaderLink>
-          </UiHeader>
+            <div>
+              <UiHeader>
+                <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
+                <UiHeaderLink href="/profile">Profile</UiHeaderLink>
+                <UiHeaderLink href="/user-profile">Account</UiHeaderLink>
+                <UiHeaderLink href="/about">About</UiHeaderLink>
+                <UiHeaderLink href={docsUrl} target='_blank'>Docs</UiHeaderLink>
+              </UiHeader>
 
-          <Component {...pageProps} />
-        </div>
+              <Component {...pageProps} />
+            </div>
 
-        <UiDivider flex />
-        <UiFooter />
-    </UserProvider>
+            <UiDivider flex />
+            <UiFooter />
+        </UserProvider>
+      </Catalog.WalletProvider>
     </Catalog.NeverminedProvider>
   )
 }

@@ -1,15 +1,21 @@
 import React, { useContext, useEffect, useState, useRef, ReactNode } from 'react'
 import Web3 from 'web3'
 import { Nevermined, Account, DDO, Profile, Bookmark, State } from '@nevermined-io/nevermined-sdk-js'
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from 'components-catalog-nvm-test'
 import { User } from '.'
-import MarketProvider from './MarketProvider'
-import { MetamaskProvider } from './MetamaskProvider'
 import { correctNetworkId, correctNetworkName } from '../config';
 import { getAllUserBundlers, Bundle } from '../shared/api';
 
 import {
+    gatewayUri,
+    marketplaceUri,
+    gatewayAddress,
+    faucetUri,
     nodeUri,
+    secretStoreUri,
+    verbose,
+    graphUrl,
+    artifactsFolder
 } from '../config'
 
 const window = global.window || {} as any
@@ -34,16 +40,9 @@ const UserProvider = (props: UserProviderProps) => {
         nevermined: 0
     })
     const [userBundles, setUserBundles ] = useState<Bundle[]>([])
-    const [userProfile, setUserProfile ] = useState<Profile>({
-        nickname: '',
-        userId: '',
-        isListed: false,
-        addresses: [],
-        state: State.Disabled
-    })
+    const [userProfile, setUserProfile ] = useState<Profile>({} as Profile)
     const [network, setNetwork] = useState('')
     const [web3, setWeb3] = useState<Web3>(DEFAULT_WEB3)
-    const [account, setAccount] = useState('')
     const [message, setMessage] = useState('Connecting to Autonomies...')
     const [tokenSymbol, setTokenSymbol] = useState('')
     const [tokenDecimals, setTokenDecimals] = useState<number>(6)
@@ -55,7 +54,8 @@ const UserProvider = (props: UserProviderProps) => {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([])
     const [selectedNetworks, setSelectedNetworks] = useState<string[]>([])
     const [selectedPrice, setSelectedPrice] = useState<number>(0)
-    const { sdk, isLoadingSDK } = useContext(Catalog.NeverminedContext)
+    const { sdk, updateSDK, isLoadingSDK } = useContext(Catalog.NeverminedContext)
+    const { loginMetamask, walletAddress, getProvider, isAvailable, checkIsLogged, switchChainsOrRegisterSupportedChain } = useContext(Catalog.WalletContext)
     const prevBasket = useRef<string[]>()
     const userProviderMounted = useRef()
 
@@ -66,90 +66,63 @@ const UserProvider = (props: UserProviderProps) => {
         // setAllUserBundles: (account: string): Promise<void> => this.fetchAllUserBundlers(account),
         // setBookmarks: (bookmarks: Bookmark[]): void => this.setBookmarks(bookmarks)
 
-    useEffect(() => {
-        if(!isLoadingSDK) {
-            return
-        }
-
-        (async() => {
-            if (!userProviderMounted) {
-                window?.ethereum?.on('accountsChanged', async () => {
-                    fetchAccounts()
-                })
-        
-                window?.ethereum?.on('chainChanged', async () => {
-                    //not sure if fetchNetwork makes sense.
-                    //chainChanged event has chainId as a parameter.
-                    await fetchNetwork()
-                })
-            } else {
-                await bootstrap()
-                window?.ethereum?.on('accountsChanged', async () => {
-                    fetchAccounts()
-                })
-
-                window?.ethereum?.on('chainChanged', async (chainId: any) => {
-                    if (chainId === correctNetworkId) {
-                        const metamaskProvider = new MetamaskProvider()
-                        await metamaskProvider.switchChain()
-                        getProviderAndLoadNevermined(metamaskProvider)
-                    } else {
-                        loadNevermined()
-                    }
-
-                })
+        useEffect(() => {
+            if(!isLoadingSDK) {
+                return
             }
-
-        })()
-    }, [isLoadingSDK])
+    
+            (async() => {
+                if (!userProviderMounted) {
+                    window?.ethereum?.on('accountsChanged', async () => {
+                        fetchBalance()
+                    })
+            
+                    window?.ethereum?.on('chainChanged', async () => {
+                        //not sure if fetchNetwork makes sense.
+                        //chainChanged event has chainId as a parameter.
+                        await fetchNetwork()
+                    })
+                } else {
+                    await bootstrap()
+    
+                    window?.ethereum?.on('chainChanged', async (chainId: any) => {
+                        loadNevermined()
+                    })
+                }
+    
+            })()
+        }, [isLoadingSDK])
 
     useEffect(() => {
         prevBasket.current = basket
         
     }, [basket])
 
-    const loginMetamask = async () => {
-        if (!window.ethereum) {
-            alert('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
-        }
-
-        const metamaskProvider = new MetamaskProvider()
-        await metamaskProvider.startLogin()
-        getProviderAndLoadNevermined(metamaskProvider)
-    }
-
-    const getProviderAndLoadNevermined = (metamaskProvider: any) => {
-        const web3 = metamaskProvider.getProvider()
-        setIslogged(true)
-        setIsBurner(false)
-        setWeb3(web3)
-        loadNevermined()
-    }
-
-    const switchToCorrectNetwork = async () => {
-        const metamaskProvider = new MetamaskProvider()
-        await metamaskProvider.switchChain()
-        getProviderAndLoadNevermined(metamaskProvider)
-    }
-
-    let accountsInterval: any = null
-
     let networkInterval: any = null
-
-    const initAccountsPoll = (): void => {
-        if (!accountsInterval) {
-            accountsInterval = setInterval(
-                fetchAccounts,
-                POLL_ACCOUNTS
-            )
-        }
-    }
 
     const initNetworkPoll = (): void => {
         if (!networkInterval) {
             networkInterval = setInterval(fetchNetwork, POLL_NETWORK)
         }
     }
+
+    const reloadSdk = async() => {
+        const config = {
+            web3Provider: getProvider(),
+            nodeUri: network,
+            marketplaceUri,
+            gatewayUri,
+            faucetUri,
+            gatewayAddress,
+            secretStoreUri,
+            verbose,
+            marketplaceAuthToken: localStorage.getItem('marketplaceApiToken') || '',
+            artifactsFolder,
+            graphHttpUri: graphUrl
+        }
+
+        updateSDK(config)
+    } 
 
     const loadDefaultWeb3 = async (): Promise<void> => {
         setIslogged(true)
@@ -160,7 +133,7 @@ const UserProvider = (props: UserProviderProps) => {
 
     const fetchTokenSymbol = async (): Promise<void> => {
         let tokenSymbolState = 'Unknown'
-        if (sdk.keeper && sdk.keeper.token) {
+        if (sdk?.keeper && sdk.keeper.token) {
             tokenSymbolState = await sdk.token.getSymbol()
         }
         tokenSymbol !== tokenSymbol && setTokenSymbol(tokenSymbolState)
@@ -175,18 +148,18 @@ const UserProvider = (props: UserProviderProps) => {
     }
 
     const loadNevermined = async (): Promise<void> => {
+        await reloadSdk()
         window?.ethereum?.on('accountsChanged', async (accounts: string[]) => {
             await fetchUserProfile(accounts[0])      
         })
 
         setIsLoading(false)
-        const network = await sdk.keeper?.getNetworkName();
+        const network = await sdk?.keeper?.getNetworkName();
         initNetworkPoll()
-        initAccountsPoll()
-        fetchNetwork()
-        await fetchAccounts()
-        await fetchAllUserBundlers(account)
-        await fetchUserProfile(account)
+        await fetchNetwork()
+        await fetchBalance()
+        await fetchAllUserBundlers(walletAddress)
+        await fetchUserProfile(walletAddress)
         if (network === correctNetworkName) {
             fetchTokenSymbol()
         }
@@ -195,13 +168,12 @@ const UserProvider = (props: UserProviderProps) => {
 
     const bootstrap = async (): Promise<void> => {
         const logType = localStorage.getItem('logType')
-        const metamaskProvider = new MetamaskProvider()
 
         if (
-            (await metamaskProvider.isAvailable()) &&
-            (await metamaskProvider.isLogged())
+            (isAvailable()) &&
+            (await checkIsLogged())
         ) {
-            const web3 = metamaskProvider.getProvider()
+            const web3 = getProvider()
             setIslogged(true)
             setWeb3(web3)
             loadNevermined()
@@ -212,51 +184,16 @@ const UserProvider = (props: UserProviderProps) => {
         }         
     }
 
-    const fetchAccounts = async () => {
-        if (isLogged) {
-            let accounts
-
-            // Modern dapp browsers
-            if (window.ethereum && !isLogged) {
-                // simply set to empty, and have user click a button somewhere
-                // to initiate account unlocking
-                accounts = []
-
-                // alternatively, automatically prompt for account unlocking
-                // await unlockAccounts()
-            }
-
-            console.log(sdk)
-            accounts = await sdk.accounts.list()
-
-            if (accounts.length) {
-                const account = await accounts[0].getId()
-
-                if (account !== account) {
-                    if(!localStorage.getItem('marketplaceApiToken'))
-                    marketplaceLogin(sdk, accounts[0])
-
-                    setAccount(account)
-                    setIslogged(true)
-                    // requestFromFaucet: async () => { }
-
-                    await fetchBalance(accounts[0])
-                }
-            } else {
-                if(!isLogged) {
-                    setIslogged(false)
-                    setAccount('')
-                }
-            }
-        }
-    }
-
-    const fetchBalance = async (account: Account) => {
+    const fetchBalance = async () => {
         try {
-            const balance = await account.getBalance()
-            const { eth, nevermined } = balance
-            if (eth !== balance.eth || nevermined !== balance.nevermined) {
-                setBalance({eth, nevermined})
+            const account = (await sdk.accounts.list())?.find(a => a.getId() === walletAddress)
+
+            if (account) {
+                const balance = await account.getBalance()
+                const { eth, nevermined } = balance
+                if (eth !== balance.eth || nevermined !== balance.nevermined) {
+                    setBalance({eth, nevermined})
+                }
             }
         } catch (error) {
             console.log(error)
@@ -265,17 +202,17 @@ const UserProvider = (props: UserProviderProps) => {
 
     const fetchNetwork = async () => {
         let networkState = 'Unknown'
-        if (sdk.keeper) {
+        if (sdk?.keeper) {
             networkState = await sdk.keeper.getNetworkName()
         }
-        network !== networkState && setNetwork(network)
+        if(network !== networkState) setNetwork(network)
     }
 
     const fetchUserProfile = async (address: string): Promise<void> => {
 
         try {
-            const userProfileState = await sdk.profiles.findOneByAddress(address)
-            setUserProfile(userProfile)
+            const userProfileState = await sdk?.profiles.findOneByAddress(address)
+            setUserProfile(userProfileState)
         } catch (error: any) {
             console.error(error.message)
         }
@@ -317,7 +254,8 @@ const UserProvider = (props: UserProviderProps) => {
             userProfile,
             network,
             web3,
-            account,
+            sdk,
+            walletAddress,
             message,
             tokenSymbol,
             tokenDecimals,
@@ -335,11 +273,9 @@ const UserProvider = (props: UserProviderProps) => {
             setAllUserBundles: (account: string): Promise<void> => fetchAllUserBundlers(account),
             loginMetamask: (): Promise<any> => loginMetamask(),
             loginMarketplaceAPI: (sdk: Nevermined, account: Account): Promise<void> => marketplaceLogin(sdk, account),
-            switchToCorrectNetwork: (): Promise<any> => switchToCorrectNetwork(),
+            switchToCorrectNetwork: (): Promise<any> => switchChainsOrRegisterSupportedChain(),
         }}>
-            <MarketProvider nevermined={sdk}>
-                {props.children}
-            </MarketProvider>
+            {props.children}
         </User.Provider>
     )
     

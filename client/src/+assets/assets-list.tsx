@@ -1,6 +1,5 @@
 import React, { useRef, Fragment, useContext, useEffect, useState } from 'react'
-import { DDO, Bookmark } from '@nevermined-io/nevermined-sdk-js'
-import Catalog from '@nevermined-io/components-catalog'
+import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import Link from "next/link"
 
 import {
@@ -24,8 +23,7 @@ interface AssetsListProps {
 
 const b = BEM('assets-list', styles)
 export function AssetsList({ assets }: AssetsListProps) {
-  const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles, userProfile, loginMarketplaceAPI, bookmarks, setBookmarks } = useContext(User)
-  const { sdk } = useContext(Catalog.NeverminedContext);
+  const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles, userProfile, loginMarketplaceAPI, bookmarks, setBookmarks, sdk } = useContext(User)
   const [errorMessage, setErrorMessage] = useState('')
   const [batchActive, setBatchActive] = useState<boolean>(false)
   const [batchSelected, setBatchSelected] = useState<string[]>([])
