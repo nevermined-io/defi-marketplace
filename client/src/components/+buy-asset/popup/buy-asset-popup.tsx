@@ -106,7 +106,7 @@ export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
         <div className={b('confirm')} style={{ height: '480px' }}>
           <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
           <UiText block type="h3" className={b('text')}>Purchase Successful!</UiText>
-          <CircleSpinner width="150" height="150" />
+          <CircleSpinner width="150" height="150" circleSpimmerSrc='/assets/circle-loadspinner.svg'/>
           <UiText block className={b('text', ['content'])}>Plase sign the message and the datasets will be downloaded shortly. You can always download this dataset from you profile page.</UiText>
           <UiDivider type="l" />
         </div>

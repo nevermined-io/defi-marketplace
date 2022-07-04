@@ -1,0 +1,20 @@
+@import '~@nevermined-io/styles/lib/cjs/styles/index.scss';
+// @import '../src/styles/index';
+
+
+.progress-popup {
+
+  &__popup-text {
+    color: #132D43;
+    font-size: 18px;
+    line-height: 32px;
+  }
+
+  &__popup-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    width: 100%;
+  }
+
+}

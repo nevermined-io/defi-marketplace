@@ -1,9 +1,10 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
-import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM, UiFormAddItem } from '@nevermined-io/styles'
+import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM, UiFormAddItem, UiPopupHandlers } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
 import {UserPublishParams} from './main-page'
 import { assetTypes } from 'src/config'
 import {FileType, AssetFile, checkFilecoinIdExists} from './files-handler'
+import {ProgressPopup} from './progress-popup' 
 
 const b = BEM('user-publish', styles)
 
@@ -15,13 +16,14 @@ interface FilesProps {
     removeFile: (label:string) => void
  }
 
-
 export const FilesStep = (props: FilesProps) => {
     
-    const {values,  updateFilesAdded, removeFile, prevStep, nextStep } = props;    
+    const {values, updateFilesAdded, removeFile, prevStep, nextStep } = props;    
     const [inputError, setInputError] = useState('') 
     const [newFilecoinID, setNewFilecoinID] = useState('')
     const [isFileAdded, setIsFileAdded] = useState(false)
+    const [popupMesssage, setPopupMessage] = useState('')
+    const popupRef = useRef<UiPopupHandlers>()
 
 
     const checkValues = (): Boolean => {
@@ -62,33 +64,38 @@ export const FilesStep = (props: FilesProps) => {
         setIsFileAdded(true) 
         updateFilesAdded(assetFile)
         setInputError('')
-        
       };
 
     const addFilecoinID = async() => {
 
         if (!newFilecoinID)
             return
+
+        setPopupMessage("Getting info from Filecoin...")
+        popupRef.current?.open()
+        await new Promise(f => setTimeout(f, 500));
            
         const result = await checkFilecoinIdExists(newFilecoinID)
         if (!result[0]){
             setInputError('The filecoin ID was not found')
+            popupRef.current?.close()
             return
         }
 
-        const assetFile:AssetFile = result[1]
-
-        setIsFileAdded(true)    
+        const assetFile:AssetFile = result[1] 
         setNewFilecoinID('')
 
         updateFilesAdded(assetFile)
         setInputError('')
+
+        popupRef.current?.close()
 
     }
 
     return (
      
             <UiLayout type='container'>
+                    <ProgressPopup  message={popupMesssage} popupRef={popupRef}/>
 
                     <UiText type="h2" wrapper="h2">FILES - Step 3 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>

@@ -40,6 +40,7 @@ export const UserPublishMultiStep: NextPage = () => {
     const [filesUploadedMessage, setFilesUploadedMessage] = useState<string[]>([])
     const [isPublished, setIsPublished] = useState(false)
     const popupRef = useRef<UiPopupHandlers>()
+    const fileUploadPopupRef = useRef<UiPopupHandlers>()
 
     const [userId, setUserId] = useState('')
     const [userPublish, setUserPublish] = useState<UserPublishParams>({
@@ -164,8 +165,14 @@ export const UserPublishMultiStep: NextPage = () => {
     const onSubmitUserPublish = async() => {
         try {
 
-            await handleAssetFiles(userPublish.asset_files)
-            setFilesUploadedMessage(generateFilesUploadedMessage(userPublish.asset_files))
+            const findLocal = userPublish.asset_files.find(file => file.type === FileType.Local)
+
+            if (findLocal != undefined){
+                fileUploadPopupRef.current?.open()
+                await handleAssetFiles(userPublish.asset_files)
+                setFilesUploadedMessage(generateFilesUploadedMessage(userPublish.asset_files))
+                fileUploadPopupRef.current?.close()
+            }
 
             const metadata = generateMetadata()
             console.log(JSON.stringify(metadata))
@@ -312,6 +319,7 @@ export const UserPublishMultiStep: NextPage = () => {
                          isPublished = {isPublished}
                          successMessage={successMessage}
                          filesUploadedMessage = {filesUploadedMessage}
+                         fileUploadPopupRef = {fileUploadPopupRef}
                     />
                 </UiForm>
             </UiLayout>

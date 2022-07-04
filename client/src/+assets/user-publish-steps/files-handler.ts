@@ -81,6 +81,16 @@ export const checkFilecoinIdExists = async (id: string): Promise<[boolean, Asset
     id = id.replace('cid://', '')
     const url =  `${ipfsGatewayUri}\\ipfs\\${id}`
 
+    axiosRetry(axios, {
+        retries: 2,
+        shouldResetTimeout: true,
+        retryDelay: (retryCount) => {
+            console.log(`retry attempt: ${retryCount}`);
+            return retryCount * 1000; // time interval between retries
+          },
+        retryCondition: (error) => {return error?.response?.status != 503;} // retry no matter what
+      });
+
     const assetFile:AssetFile = {
         type: FileType.FilecoinID,
         label: id,

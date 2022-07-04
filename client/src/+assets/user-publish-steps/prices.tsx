@@ -1,7 +1,9 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
-import { UiForm, UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, BEM } from '@nevermined-io/styles'
+import { UiForm, UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, UiPopupHandlers, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
+import { UiHeaderLink} from 'ui'
 import {UserPublishParams} from './main-page'
+import {ProgressPopup} from './progress-popup' 
 
 const b = BEM('user-publish', styles)
 const tiers: string[] = ["Tier 1", "Tier 2", "Tier 3"]
@@ -13,13 +15,15 @@ interface PricesProps {
     submit: () => void
     isPublished: boolean
     successMessage: string
-    filesUploadedMessage: string[]
+    filesUploadedMessage: string[],
+    fileUploadPopupRef: React.RefObject<UiPopupHandlers>
  }
 
 export const PricesStep = (props: PricesProps) => {
-    const {values, handleChange, prevStep, submit, isPublished, successMessage, filesUploadedMessage } = props;    
+    const {values, handleChange, prevStep, submit, isPublished, successMessage, filesUploadedMessage, fileUploadPopupRef } = props;    
     const [inputError, setInputError] = useState('') 
-    
+    const popupMesssage = "Uploading local files to Filecoin..."
+
 
     const Previous = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -29,11 +33,16 @@ export const PricesStep = (props: PricesProps) => {
     return (
      
             <UiLayout type='container'>
-
+                    <ProgressPopup  message={popupMesssage} popupRef={fileUploadPopupRef}/>
+                    {(isPublished) ? 
+                    <UiText type="h2" wrapper="h2">Asset Published</UiText>
+                    :
                     <UiText type="h2" wrapper="h2">Subscription & Price - Step 4 of 4</UiText>
+                    }
                     <div  className={b('publish-horizontal-line')}/>
                     
                     <UiFormGroup orientation={Orientation.Vertical}>
+                    {(isPublished) ? <div/> :
                     <UiFormSelect
                         value={values.tier}
                         onChange={e => handleChange(e, 'tier')}
@@ -42,8 +51,9 @@ export const PricesStep = (props: PricesProps) => {
                         label='Tier'
                         inputError={inputError}
                     /> 
+                    }
                     </UiFormGroup>
-
+                    {(isPublished) ? <div/> :
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormInput
                             className={b('publish-form-input')}
@@ -51,7 +61,7 @@ export const PricesStep = (props: PricesProps) => {
                             value={values.price} onChange={e=>handleChange(e.target.value, 'price')}
                         />
                     </UiFormGroup>
-                    
+                    }
 
                     <UiDivider/>
                     <UiFormGroup orientation={Orientation.Vertical}>
