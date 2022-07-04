@@ -3,7 +3,7 @@ import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDi
 import styles from './user-publish.module.scss'
 import {UserPublishParams} from './main-page'
 import { assetTypes } from 'src/config'
-import {FileType, AssetFile} from './files-handler'
+import {FileType, AssetFile, checkFilecoinIdExists} from './files-handler'
 
 const b = BEM('user-publish', styles)
 
@@ -65,18 +65,18 @@ export const FilesStep = (props: FilesProps) => {
         
       };
 
-    const addFilecoinID = function() {
+    const addFilecoinID = async() => {
 
         if (!newFilecoinID)
             return
-        // TODO: Check file exists
-        ///get file_name, file_size and file_type from filecoin?
-
-        const assetFile:AssetFile = {
-            type: FileType.FilecoinID,
-            label: newFilecoinID,
-            filecoin_id: newFilecoinID
+           
+        const result = await checkFilecoinIdExists(newFilecoinID)
+        if (!result[0]){
+            setInputError('The filecoin ID was not found')
+            return
         }
+
+        const assetFile:AssetFile = result[1]
 
         setIsFileAdded(true)    
         setNewFilecoinID('')
@@ -133,16 +133,6 @@ export const FilesStep = (props: FilesProps) => {
                         />
                     </UiFormGroup>
 
-                    {/*
-                    <UiFormGroup orientation={Orientation.Vertical}>
-                        <UiFormInput
-                            className={b('publish-form-input')}
-                            label='Sample File ID'
-                            value={values.sample_file_id} onChange={e=> handleChange(e.target.value, 'sample_file_id')}
-                            placeholder='Type the filecoin id for the sample file'
-                        />
-                    </UiFormGroup>
-                    */}
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormInput
                             className={b('publish-form-input')}

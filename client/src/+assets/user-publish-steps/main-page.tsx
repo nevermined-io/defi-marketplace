@@ -133,7 +133,7 @@ export const UserPublishMultiStep: NextPage = () => {
                 blockchain: userPublish.network,
                 version: "v1",
                 source: "filecoin",
-                //file_name: userPublish.file_name??
+                //file_name: userPublish.file_name??      
             }
         } as MetaData
     
@@ -164,7 +164,6 @@ export const UserPublishMultiStep: NextPage = () => {
     const onSubmitUserPublish = async() => {
         try {
 
-
             await handleAssetFiles(userPublish.asset_files)
             setFilesUploadedMessage(generateFilesUploadedMessage(userPublish.asset_files))
 
@@ -175,7 +174,7 @@ export const UserPublishMultiStep: NextPage = () => {
             const accounts = await sdk.accounts.list()
             const user_account = await accounts[0]
             const user_address = user_account.getId() 
-            
+           
             const assetRewards = new AssetRewards(user_address, new BigNumber(userPublish.price))
             const ddo = await sdk.nfts.create721(
                 metadata,
@@ -188,7 +187,7 @@ export const UserPublishMultiStep: NextPage = () => {
             if (ddo) {
                 did = ddo.id
             }   
-        
+
             setIsPublished(true)
             var message = 'Your Asset has been published successfully with DID: ' + did 
             setSuccessMessage(message)

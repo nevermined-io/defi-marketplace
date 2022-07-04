@@ -1,6 +1,6 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry'
-import {gatewayURL, filecoinUploadUri } from 'src/config'
+import {gatewayURL, filecoinUploadUri, ipfsGatewayUri } from 'src/config'
 
 export enum FileType {
     FilecoinID = "Filecoin",
@@ -16,6 +16,7 @@ export interface AssetFile {
     file?: File
     filecoin_id?: string
 }
+
 
 
 const handlePostRequest = async (url:string, formData: FormData, retries: number = 3) => {
@@ -71,6 +72,37 @@ export const handleAssetFiles = async (assetFiles: AssetFile[]) => {
             assetFile.filecoin_id = await(uploadFileToFilecoin(assetFile.file))
             console.log ("asset File: " + JSON.stringify(assetFile)) 
         }
+    }
+
+}
+
+export const checkFilecoinIdExists = async (id: string): Promise<[boolean, AssetFile]> => {
+
+    id = id.replace('cid://', '')
+    const url =  `${ipfsGatewayUri}\\ipfs\\${id}`
+
+    const assetFile:AssetFile = {
+        type: FileType.FilecoinID,
+        label: id,
+        filecoin_id: id
+    }
+
+    try{
+        const {data, status, headers} = await axios.get(url);
+
+        if (status == 200){
+            assetFile.content_type = headers['content-type']
+            assetFile.size = headers['content-length']
+
+            return [true, assetFile]
+        }
+
+        return [false, assetFile]
+    }
+    catch(e){
+        console.error("Error getting Filecoin info for " + id);
+        console.error(e);
+        return [false, assetFile]
     }
 
 }
