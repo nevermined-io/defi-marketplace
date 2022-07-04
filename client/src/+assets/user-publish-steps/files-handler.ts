@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios from 'axios';
+import axiosRetry from 'axios-retry'
 import {gatewayURL, filecoinUploadUri } from 'src/config'
 
 export enum FileType {
@@ -17,14 +18,33 @@ export interface AssetFile {
 }
 
 
-const handlePostRequest = async (url:string, formData: FormData) => {
+const handlePostRequest = async (url:string, formData: FormData, retries: number = 3) => {
+
+    axiosRetry(axios, {
+        retries: retries,
+        shouldResetTimeout: true,
+        retryDelay: (retryCount) => {
+            console.log(`retry attempt: ${retryCount}`);
+            return retryCount * 2000; // time interval between retries
+          },
+        retryCondition: (_error) => true // retry no matter what
+      });
             
-    const response = await axios.post(url, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    return response.data
+    let response 
+    
+    try {
+        response = await axios.post(url, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+        });
+    }
+    catch (e) {
+        console.error(e);
+        throw e;
+    }
+    return response?.data
+
   };
 
 const uploadFileToFilecoin = async (file: File) => {
