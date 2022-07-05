@@ -3,7 +3,7 @@ import Web3 from 'web3'
 import { Nevermined, Account, DDO, Profile, Bookmark, State } from '@nevermined-io/nevermined-sdk-js'
 import Catalog from 'components-catalog-nvm-test'
 import { User } from '.'
-import { correctNetworkId, correctNetworkName } from '../config';
+import { correctNetworkName } from '../config';
 import { getAllUserBundlers, Bundle } from '../shared/api';
 
 import {
@@ -54,8 +54,8 @@ const UserProvider = (props: UserProviderProps) => {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([])
     const [selectedNetworks, setSelectedNetworks] = useState<string[]>([])
     const [selectedPrice, setSelectedPrice] = useState<number>(0)
-    const { sdk, updateSDK, isLoadingSDK } = useContext(Catalog.NeverminedContext)
-    const { loginMetamask, walletAddress, getProvider, isAvailable, checkIsLogged, switchChainsOrRegisterSupportedChain } = useContext(Catalog.WalletContext)
+    const { sdk, updateSDK, isLoadingSDK } = Catalog.useNevermined()
+    const { loginMetamask, walletAddress, getProvider, isAvailable, checkIsLogged, switchChainsOrRegisterSupportedChain, w3 } = useContext(Catalog.WalletContext)
     const prevBasket = useRef<string[]>()
     const userProviderMounted = useRef()
 
@@ -67,7 +67,7 @@ const UserProvider = (props: UserProviderProps) => {
         // setBookmarks: (bookmarks: Bookmark[]): void => this.setBookmarks(bookmarks)
 
         useEffect(() => {
-            if(!isLoadingSDK) {
+            if(!isLoadingSDK || !sdk.keeper) {
                 return
             }
     
@@ -91,20 +91,20 @@ const UserProvider = (props: UserProviderProps) => {
                 }
     
             })()
-        }, [isLoadingSDK])
+        }, [isLoadingSDK, sdk.accounts])
 
     useEffect(() => {
         prevBasket.current = basket
         
     }, [basket])
 
-    let networkInterval: any = null
+    // let networkInterval: any = null
 
-    const initNetworkPoll = (): void => {
-        if (!networkInterval) {
-            networkInterval = setInterval(fetchNetwork, POLL_NETWORK)
-        }
-    }
+    // const initNetworkPoll = (): void => {
+    //     if (!networkInterval) {
+    //         networkInterval = setInterval(fetchNetwork, POLL_NETWORK)
+    //     }
+    // }
 
     const reloadSdk = async() => {
         const config = {
@@ -116,7 +116,7 @@ const UserProvider = (props: UserProviderProps) => {
             gatewayAddress,
             secretStoreUri,
             verbose,
-            marketplaceAuthToken: localStorage.getItem('marketplaceApiToken') || '',
+            marketplaceAuthToken: Catalog.fetchMarketplaceApiTokenFromLocalStorage().token || '',
             artifactsFolder,
             graphHttpUri: graphUrl
         }
@@ -148,14 +148,18 @@ const UserProvider = (props: UserProviderProps) => {
     }
 
     const loadNevermined = async (): Promise<void> => {
-        await reloadSdk()
         window?.ethereum?.on('accountsChanged', async (accounts: string[]) => {
-            await fetchUserProfile(accounts[0])      
+            await fetchUserProfile(accounts[0])
         })
 
         setIsLoading(false)
+        const chainId = await w3.current?.eth.net.getId();
+        const chainIdSdk = await sdk?.keeper?.getNetworkId();
+        console.log(chainId)
+        console.log(chainIdSdk)
+        
         const network = await sdk?.keeper?.getNetworkName();
-        initNetworkPoll()
+        // initNetworkPoll()
         await fetchNetwork()
         await fetchBalance()
         await fetchAllUserBundlers(walletAddress)
@@ -163,12 +167,11 @@ const UserProvider = (props: UserProviderProps) => {
         if (network === correctNetworkName) {
             fetchTokenSymbol()
         }
+        // reloadSdk()
     
     }
 
     const bootstrap = async (): Promise<void> => {
-        const logType = localStorage.getItem('logType')
-
         if (
             (isAvailable()) &&
             (await checkIsLogged())
@@ -205,7 +208,7 @@ const UserProvider = (props: UserProviderProps) => {
         if (sdk?.keeper) {
             networkState = await sdk.keeper.getNetworkName()
         }
-        if(network !== networkState) setNetwork(network)
+        setNetwork(networkState)
     }
 
     const fetchUserProfile = async (address: string): Promise<void> => {

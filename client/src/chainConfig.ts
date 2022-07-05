@@ -1,14 +1,13 @@
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 
-const acceptedChainIdHex = zeroX((1337).toString(16))
-const spreeChainId = zeroX((8996).toString(16))
+const spreeChainId = zeroX((1337).toString(16))
 const polygonLocalnetChainId = zeroX((8997).toString(16))
 const mumbaiChainId = zeroX((80001).toString(16))
 const mainnetChainId = zeroX((137).toString(16))
 
 const ChainConfig = {
   development: {
-    chainId: acceptedChainIdHex === spreeChainId ? spreeChainId : polygonLocalnetChainId,
+    chainId: spreeChainId,
     chainName: 'Localhost development',
     nativeCurrency: {
       name: 'Ethereum',

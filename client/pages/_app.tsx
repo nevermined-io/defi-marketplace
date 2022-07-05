@@ -32,18 +32,15 @@ const appConfig = {
     gatewayAddress,
     secretStoreUri,
     verbose,
-    marketplaceAuthToken: typeof window !== 'undefined' ?  localStorage.getItem('marketplaceApiToken') || '' : '',
+    marketplaceAuthToken: typeof window !== 'undefined' ? Catalog.fetchMarketplaceApiTokenFromLocalStorage().token : '',
     artifactsFolder,
     graphHttpUri: graphUrl
 }
 
 function App({ Component, pageProps }: AppProps) {
-  const correctNetworkIdHex = correctNetworkId.replace('0x', '')
-  const chainId = parseInt(correctNetworkIdHex, 16);
-
   return (
     <Catalog.NeverminedProvider config={appConfig}>
-      <Catalog.WalletProvider chainConfig={chainConfig} nodeUri={appConfig.nodeUri} correctNetworkId={chainId.toString()}>
+      <Catalog.WalletProvider chainConfig={chainConfig} nodeUri={appConfig.nodeUri} correctNetworkId={correctNetworkId}>
           <UserProvider>
             <Head>
               <script async src="https://www.googletagmanager.com/gtag/js?id=G-11ZZZNJ4Q5"></script>
