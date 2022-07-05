@@ -22,7 +22,8 @@ theme:
     code: Roboto Mono
   palette:
     scheme: defimkt
-  extra_css:
+
+extra_css:
     - stylesheets/extra.css
 
   # Necessary for search to work properly
