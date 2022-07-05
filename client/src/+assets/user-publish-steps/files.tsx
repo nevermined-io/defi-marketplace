@@ -95,7 +95,7 @@ export const FilesStep = (props: FilesProps) => {
     return (
      
             <UiLayout type='container'>
-                    <ProgressPopup  message={popupMesssage} popupRef={popupRef} icon="search"/>
+                    <ProgressPopup  message={popupMesssage} popupRef={popupRef}/>
 
                     <UiText type="h2" wrapper="h2">FILES - Step 3 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>

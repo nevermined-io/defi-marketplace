@@ -4,6 +4,7 @@ import styles from './user-publish.module.scss'
 import { UiHeaderLink} from 'ui'
 import {UserPublishParams} from './main-page'
 import {ProgressPopup} from './progress-popup' 
+import {ConfirmPopup} from './confirm-popup'
 
 const b = BEM('user-publish', styles)
 const tiers: string[] = ["Tier 1", "Tier 2", "Tier 3"]
@@ -23,18 +24,34 @@ interface PricesProps {
 export const PricesStep = (props: PricesProps) => {
     const {values, handleChange, prevStep, submit, reset, isPublished, successMessage, filesUploadedMessage, fileUploadPopupRef } = props;    
     const [inputError, setInputError] = useState('') 
-    const popupMesssage = "Uploading local files to Filecoin..."
+    const UploadPopupMesssage = "Uploading local files to Filecoin..."
+    const confirmPopupMesssage = "Press Confirm to Publish the new Asset"
+    const confirmPopupRef = useRef<UiPopupHandlers>()
 
 
     const Previous = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         prevStep();
       }
+
+    const confirm = () => {
+        confirmPopupRef.current?.close()
+        submit()
+    }
+
+    const cancel = () => { 
+        confirmPopupRef.current?.close()
+    }
+
+    const showConfirm = () => {
+        confirmPopupRef.current?.open()
+    }
    
     return (
      
             <UiLayout type='container'>
-                    <ProgressPopup  message={popupMesssage} popupRef={fileUploadPopupRef} icon="file"/>
+                    <ProgressPopup  message={UploadPopupMesssage} popupRef={fileUploadPopupRef}/>
+                    <ConfirmPopup  message={confirmPopupMesssage} popupRef={confirmPopupRef} confirm = {confirm} cancel = {cancel}/>
                     {(isPublished) ? 
                     <UiText type="h2" wrapper="h2">Asset Published</UiText>
                     :
@@ -82,7 +99,7 @@ export const PricesStep = (props: PricesProps) => {
                                                 : 
                                                 <div className={b('user-publish-submit-container',['submit'])}>
                                                 <UiButton onClick={Previous}>&lt;</UiButton>
-                                                <UiButton onClick={submit}>Publish Asset</UiButton>
+                                                <UiButton onClick={showConfirm}>Publish Asset</UiButton>
                                                 </div>
                             }
                     
