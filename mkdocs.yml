@@ -21,9 +21,9 @@ theme:
     text: Roboto
     code: Roboto Mono
   palette:
-    scheme: default
-    primary: black
-    accent: indigo
+    scheme: defimkt
+  extra_css:
+    - stylesheets/extra.css
 
   # Necessary for search to work properly
   include_search_page: false
