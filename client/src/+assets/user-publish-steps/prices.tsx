@@ -13,6 +13,7 @@ interface PricesProps {
     handleChange: (value: string, field: string) => void
     prevStep: () => void
     submit: () => void
+    reset: () => void
     isPublished: boolean
     successMessage: string
     filesUploadedMessage: string[],
@@ -20,7 +21,7 @@ interface PricesProps {
  }
 
 export const PricesStep = (props: PricesProps) => {
-    const {values, handleChange, prevStep, submit, isPublished, successMessage, filesUploadedMessage, fileUploadPopupRef } = props;    
+    const {values, handleChange, prevStep, submit, reset, isPublished, successMessage, filesUploadedMessage, fileUploadPopupRef } = props;    
     const [inputError, setInputError] = useState('') 
     const popupMesssage = "Uploading local files to Filecoin..."
 
@@ -74,6 +75,9 @@ export const PricesStep = (props: PricesProps) => {
                                                         <UiText type="h3" wrapper="h3" variants={['success']}>{message}</UiText>
                                                     </div>
                                                 )}
+                                                <UiDivider/>
+                                                <UiDivider/>
+                                                 <UiButton onClick={reset}>Publish New Asset</UiButton>
                                                 </div>
                                                 : 
                                                 <div className={b('user-publish-submit-container',['submit'])}>

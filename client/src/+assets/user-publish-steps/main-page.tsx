@@ -59,6 +59,29 @@ export const UserPublishMultiStep: NextPage = () => {
 
     const [assetfiles, setAssetFiles] = useState<AssetFile[]>([])
 
+    const reset = () => {
+        setUserPublish({
+            step: 1,
+            name: '',
+            author: '',
+            description: '',
+            type: 'dataset',
+            category: 'None',
+            protocol: 'None',
+            network: 'None',
+            price: 0,
+            tier: 'Tier 1',
+            asset_files: []
+        })
+
+        setIsPublished(false)
+        setFilesUploadedMessage([])
+        setAssetFiles([])
+        setSuccessMessage('')
+        setErrorMessage('')
+
+    }
+
     // go back to previous step
     const prevStep = () => {
         const { step } = userPublish;
@@ -91,22 +114,17 @@ export const UserPublishMultiStep: NextPage = () => {
     const generateFilesMetadata = () => {
 
         const files: FileMetadata[] = []
-
         userPublish.asset_files.forEach((assetFile: AssetFile, i: number) => {
-
             const file:FileMetadata = {
                 index: i+1,
                 contentType: assetFile.content_type?assetFile.content_type:'',
                 url: assetFile.filecoin_id?assetFile.filecoin_id:'',
                 contentLength: assetFile.size?assetFile.size:'',
             }
-
-            files.push(file)
-            
+            files.push(file)    
         });
 
-        return files
-        
+        return files        
     }
 
     const generateMetadata = () => {
@@ -313,6 +331,7 @@ export const UserPublishMultiStep: NextPage = () => {
                 <UiForm className=''>
                     <PricesStep
                          prevStep={ prevStep}
+                         reset = {reset}
                          handleChange={ handleChange }
                          values={ userPublish }
                          submit = { onSubmitUserPublish }
