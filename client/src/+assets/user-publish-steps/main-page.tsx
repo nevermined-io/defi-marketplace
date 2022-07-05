@@ -157,8 +157,7 @@ export const UserPublishMultiStep: NextPage = () => {
                 ],
                 blockchain: userPublish.network,
                 version: "v1",
-                source: "filecoin",
-                //file_name: userPublish.file_name??      
+                source: "filecoin"   
             }
         } as MetaData
     
@@ -199,8 +198,7 @@ export const UserPublishMultiStep: NextPage = () => {
             }
 
             const metadata = generateMetadata()
-            console.log(JSON.stringify(metadata))
-
+    
              // variable account in UserProvider stores only the address!
             const accounts = await sdk.accounts.list()
             const user_account = await accounts[0]
