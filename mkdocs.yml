@@ -24,7 +24,7 @@ theme:
     scheme: defimkt
 
 extra_css:
-    - stylesheets/extra.css
+  - stylesheets/extra.css
 
   # Necessary for search to work properly
   include_search_page: false
