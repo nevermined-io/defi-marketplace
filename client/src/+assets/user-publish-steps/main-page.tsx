@@ -29,6 +29,8 @@ export interface UserPublishParams {
     price: number
     tier: string
     asset_files: AssetFile[]
+    notebook_language: string
+    notebook_format: string
 }
 
 export const UserPublishMultiStep: NextPage = () => {
@@ -54,7 +56,9 @@ export const UserPublishMultiStep: NextPage = () => {
         network: 'None',
         price: 0,
         tier: 'Tier 1',
-        asset_files: []
+        asset_files: [],
+        notebook_language: '',
+        notebook_format: ''
     })
 
     const [assetfiles, setAssetFiles] = useState<AssetFile[]>([])
@@ -71,7 +75,9 @@ export const UserPublishMultiStep: NextPage = () => {
             network: 'None',
             price: 0,
             tier: 'Tier 1',
-            asset_files: []
+            asset_files: [],
+            notebook_language: '',
+            notebook_format: ''
         })
 
         setIsPublished(false)

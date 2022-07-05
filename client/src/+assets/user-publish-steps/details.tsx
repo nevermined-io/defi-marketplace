@@ -20,6 +20,8 @@ export const DetailsStep = (props: DetailsProps) => {
     const [categoryInputError, setCategoryInputError] = useState('')
     const [protocolInputError, setProtocolInputError] = useState('')
     const [networkInputError, setNetworkInputError] = useState('')
+    const notebookLanguages = ['Python', 'Java', 'Scala', 'R', 'SQL', 'Other' ]
+    const notebookFormats = ['Jupyter', 'Source code','Json', 'Zip', 'PDF' ]
 
     const checkValues = (): Boolean => {
 
@@ -76,6 +78,36 @@ export const DetailsStep = (props: DetailsProps) => {
                             inputError={typeInputError}
                         />
                     </UiFormGroup>
+
+                    {
+                        values.type === "notebook" ?
+                        <div>
+                        <UiFormGroup orientation={Orientation.Vertical}>
+                            <UiFormSelect
+                                value={values.notebook_language}
+                                onChange={e => handleChange(e, 'notebook_language')}
+                                options={notebookLanguages}
+                                className={b('publish-form-select')}
+                                label='Language'
+                                inputError={typeInputError}
+                            />
+                        </UiFormGroup>
+
+                        <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormSelect
+                            value={values.notebook_format}
+                            onChange={e => handleChange(e, 'notebook_format')}
+                            options={notebookFormats}
+                            className={b('publish-form-select')}
+                            label='Format'
+                            inputError={typeInputError}
+                        />
+                    </UiFormGroup>
+                    </div>
+                        :null
+                    }
+
+                    <div  className={b('publish-horizontal-line')}/>
 
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
