@@ -32,4 +32,15 @@
     &__publish-add-address {
         margin-top: 20px;
     }
+
+    &__form-input {
+      select, input, textarea{
+        color: #8AAABE;
+      }
+      option{
+        background-color: #2B465C;
+      }
+    }
+
+
 }

@@ -16,22 +16,23 @@ interface PricesProps {
  }
 
 export const PricesStep = (props: PricesProps) => {
-    const {values, handleChange, prevStep, submit, isPublished, successMessage } = props;    
-    const [inputError, setInputError] = useState('') 
-    
+    const {values, handleChange, prevStep, submit, isPublished, successMessage } = props;
+    const [inputError, setInputError] = useState('')
+
 
     const Previous = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         prevStep();
       }
-   
+
     return (
-     
+
             <UiLayout type='container'>
 
                     <UiText type="h2" wrapper="h2">Subscription & Price - Step 4 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>
-                    
+
+                    <div className={b('form-input')}>
                     <UiFormGroup orientation={Orientation.Vertical}>
                     <UiFormSelect
                         value={values.tier}
@@ -40,7 +41,7 @@ export const PricesStep = (props: PricesProps) => {
                         className={b('publish-form-select')}
                         label='Tier'
                         inputError={inputError}
-                    /> 
+                    />
                     </UiFormGroup>
 
                     <UiFormGroup orientation={Orientation.Vertical}>
@@ -50,25 +51,25 @@ export const PricesStep = (props: PricesProps) => {
                             value={values.price} onChange={e=>handleChange(e.target.value, 'price')}
                         />
                     </UiFormGroup>
-                    
+
 
                     <UiDivider/>
                     <UiFormGroup orientation={Orientation.Vertical}>
-                            
+
                             {
                                 (isPublished) ?  <div className={b('user-publish-submit-container', ['updated-message'])}>
-                                                <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> 
+                                                <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText>
                                                 </div>
-                                                : 
+                                                :
                                                 <div className={b('user-publish-submit-container',['submit'])}>
                                                 <UiButton onClick={Previous}>&lt;</UiButton>
                                                 <UiButton onClick={submit}>Publish Asset</UiButton>
                                                 </div>
                             }
-                    
+
                     </UiFormGroup>
-             
+                  </div>
             </UiLayout>
-       
+
     )
 }
