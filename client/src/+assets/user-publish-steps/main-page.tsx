@@ -192,8 +192,7 @@ export const UserPublishMultiStep: NextPage = () => {
             }
 
             const metadata = generateMetadata()
-            console.log(JSON.stringify(metadata))
-
+    
              // variable account in UserProvider stores only the address!
             const accounts = await sdk.accounts.list()
             const user_account = await accounts[0]
