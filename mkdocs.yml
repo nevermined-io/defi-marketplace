@@ -23,9 +23,6 @@ theme:
   palette:
     scheme: defimkt
 
-extra_css:
-  - stylesheets/extra.css
-
   # Necessary for search to work properly
   include_search_page: false
   search_index_only: true
@@ -33,6 +30,9 @@ extra_css:
   # Default values, taken from mkdocs_theme.yml
   language: en
 
+extra_css:
+  - stylesheets/extra.css
+  
 # Plugins
 plugins:
   - search
