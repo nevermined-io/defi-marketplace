@@ -5,18 +5,19 @@ import styles from './progress-popup.module.scss'
 interface ProgressPopupProps {
   message: string,
   popupRef :React.RefObject<UiPopupHandlers>
+  icon: string
 }
 
 const b = BEM('progress-popup', styles)
 
-export const ProgressPopup: React.FC<ProgressPopupProps> = ({message, popupRef}: ProgressPopupProps) => {
+export const ProgressPopup: React.FC<ProgressPopupProps> = ({message, popupRef, icon}: ProgressPopupProps) => {
 
   return (
     <>
       <UiPopup ref={popupRef}>
 
       <div className={b('confirm')} style={{ height: '480px' }}>
-          <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
+          <UiIcon className={b('icon', ['success'])} icon={icon} size="xxl" />
           <UiText block type="h3" className={b('text')}>{message}</UiText>
           <CircleSpinner width="150" height="150" circleSpimmerSrc='/assets/circle-loadspinner.svg'/>
           <UiDivider type="l" />

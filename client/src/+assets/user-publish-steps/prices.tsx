@@ -34,7 +34,7 @@ export const PricesStep = (props: PricesProps) => {
     return (
      
             <UiLayout type='container'>
-                    <ProgressPopup  message={popupMesssage} popupRef={fileUploadPopupRef}/>
+                    <ProgressPopup  message={popupMesssage} popupRef={fileUploadPopupRef} icon="file"/>
                     {(isPublished) ? 
                     <UiText type="h2" wrapper="h2">Asset Published</UiText>
                     :
