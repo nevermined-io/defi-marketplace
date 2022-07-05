@@ -2,6 +2,7 @@
   --md-primary-fg-color: #1a2d43;
   --md-primary-fg-color--light: #1a2d43;
   --md-primary-fg-color--dark: #1a2d43;
+  --md-footer-bg-color--dark: #1a2d43;
 }
 
 :root>* {
@@ -9,4 +10,5 @@
   --md-primary-fg-color--light: #1a2d43;
   --md-primary-fg-color--dark: #1a2d43;
   --md-footer-bg-color: #1a2d43;
+  --md-footer-bg-color--dark: #1a2d43;
 }
