@@ -66,11 +66,9 @@ export const handleAssetFiles = async (assetFiles: AssetFile[]) => {
     for (const assetFile of assetFiles){
         
         const isLocalFile: boolean = assetFile.type.match(FileType.Local) != null
-        // assetFile.type === FileType.Local is not working
     
         if (isLocalFile && assetFile.file){         
             assetFile.filecoin_id = await(uploadFileToFilecoin(assetFile.file))
-            console.log ("asset File: " + JSON.stringify(assetFile)) 
         }
     }
 

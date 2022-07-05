@@ -151,8 +151,7 @@ export const UserPublishMultiStep: NextPage = () => {
                 ],
                 blockchain: userPublish.network,
                 version: "v1",
-                source: "filecoin",
-                //file_name: userPublish.file_name??      
+                source: "filecoin"   
             }
         } as MetaData
     
