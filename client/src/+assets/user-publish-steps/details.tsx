@@ -10,16 +10,16 @@ interface DetailsProps {
    values: UserPublishParams
    handleChange: (value: string, field: string) => void
    prevStep: () => void
-   nextStep: () => void   
+   nextStep: () => void
  }
 
 export const DetailsStep = (props: DetailsProps) => {
 
-    const {values, handleChange, prevStep, nextStep } = props;    
+    const {values, handleChange, prevStep, nextStep } = props;
     const [typeInputError, setTypeInputError] = useState('')
-    const [categoryInputError, setCategoryInputError] = useState('') 
-    const [protocolInputError, setProtocolInputError] = useState('') 
-    const [networkInputError, setNetworkInputError] = useState('')  
+    const [categoryInputError, setCategoryInputError] = useState('')
+    const [protocolInputError, setProtocolInputError] = useState('')
+    const [networkInputError, setNetworkInputError] = useState('')
 
     const checkValues = (): Boolean => {
 
@@ -27,7 +27,7 @@ export const DetailsStep = (props: DetailsProps) => {
             setTypeInputError('Type is required')
             return false
         }
-        
+
         if (!values.category) {
             setCategoryInputError('Category is required')
             return false
@@ -47,25 +47,26 @@ export const DetailsStep = (props: DetailsProps) => {
 
     const Continue = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!checkValues()) 
-            return  
+        if (!checkValues())
+            return
         nextStep();
       }
-    
+
     const Previous = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         prevStep();
       }
 
-    
+
     return (
-     
+
             <UiLayout type='container'>
-               
+
                     <UiText type="h2" wrapper="h2">Details - Step 2 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>
 
-                    <UiFormGroup orientation={Orientation.Vertical}>               
+                    <div className={b('form-input')}>
+                    <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
                             value={values.type}
                             onChange={e => handleChange(e, 'type')}
@@ -73,10 +74,10 @@ export const DetailsStep = (props: DetailsProps) => {
                             className={b('publish-form-select')}
                             label='Type'
                             inputError={typeInputError}
-                        /> 
+                        />
                     </UiFormGroup>
 
-                    <UiFormGroup orientation={Orientation.Vertical}>               
+                    <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
                             value={values.category}
                             onChange={e => handleChange(e, 'category')}
@@ -84,9 +85,9 @@ export const DetailsStep = (props: DetailsProps) => {
                             className={b('publish-form-select')}
                             label='Category'
                             inputError={categoryInputError}
-                        /> 
+                        />
                     </UiFormGroup>
-                
+
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
                             value={values.protocol}
@@ -95,7 +96,7 @@ export const DetailsStep = (props: DetailsProps) => {
                             className={b('publish-form-select')}
                             label='Protocol'
                             inputError={protocolInputError}
-                        /> 
+                        />
                     </UiFormGroup>
 
                     <UiFormGroup orientation={Orientation.Vertical}>
@@ -106,16 +107,17 @@ export const DetailsStep = (props: DetailsProps) => {
                         className={b('publish-form-select')}
                         label='Network'
                         inputError={networkInputError}
-                    /> 
+                    />
                     </UiFormGroup>
-    
+
                     <UiDivider/>
 
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiButton onClick={Previous}>&lt;</UiButton>
                         <UiButton onClick={Continue}>&gt;</UiButton>
                     </UiFormGroup>
+                    </div>
             </UiLayout>
-       
+
     )
 }

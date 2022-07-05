@@ -9,15 +9,15 @@ interface FilesProps {
     values: UserPublishParams
     handleChange: (value: string, field: string) => void
     prevStep: () => void
-    nextStep: () => void 
+    nextStep: () => void
     handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
  }
 
 
 export const FilesStep = (props: FilesProps) => {
-    
-    const {values, handleChange, handleFileChange, prevStep, nextStep } = props;    
-    const [inputError, setInputError] = useState('') 
+
+    const {values, handleChange, handleFileChange, prevStep, nextStep } = props;
+    const [inputError, setInputError] = useState('')
 
     const checkValues = (): Boolean => {
 
@@ -26,17 +26,17 @@ export const FilesStep = (props: FilesProps) => {
             return false
         }
 
-        return true      
+        return true
     }
 
-    
+
     const Continue = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!checkValues())
             return;
         nextStep();
       }
-    
+
     const Previous = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         prevStep();
@@ -44,12 +44,13 @@ export const FilesStep = (props: FilesProps) => {
 
 
     return (
-     
+
             <UiLayout type='container'>
 
                     <UiText type="h2" wrapper="h2">Storage - Step 3 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>
-            
+
+                    <div className={b('form-input')}>
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormInput
                             className={b('publish-form-input')}
@@ -76,14 +77,14 @@ export const FilesStep = (props: FilesProps) => {
                             placeholder='Select the file'
                         />
                     </UiFormGroup>
-                    
+
                     <UiDivider/>
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiButton onClick={Previous}>&lt;</UiButton>
                         <UiButton onClick={Continue}>&gt;</UiButton>
                     </UiFormGroup>
-
+                    </div>
             </UiLayout>
-       
+
     )
 }
