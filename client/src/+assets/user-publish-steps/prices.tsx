@@ -58,6 +58,7 @@ export const PricesStep = (props: PricesProps) => {
                     <UiText type="h2" wrapper="h2">Subscription & Price - Step 4 of 4</UiText>
                     }
                     <div  className={b('publish-horizontal-line')}/>
+                    <div className={b('form-input')}>
                     
                     <UiFormGroup orientation={Orientation.Vertical}>
                     {(isPublished) ? <div/> :
@@ -104,7 +105,7 @@ export const PricesStep = (props: PricesProps) => {
                             }
                     
                     </UiFormGroup>
-             
+              </div>
             </UiLayout>
        
     )

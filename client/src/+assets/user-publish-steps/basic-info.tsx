@@ -15,10 +15,10 @@ interface BasicInfoProps {
 
 export const BasicInfoStep = (props: BasicInfoProps) => {
 
-    const {values, handleChange, nextStep } = props;    
-    const [authorInputError, setAuthorInputError] = useState('') 
-    const [nameInputError, setNameInputError] = useState('') 
-    const [descriptionInputError, setDescriptionInputError] = useState('') 
+    const {values, handleChange, nextStep } = props;
+    const [authorInputError, setAuthorInputError] = useState('')
+    const [nameInputError, setNameInputError] = useState('')
+    const [descriptionInputError, setDescriptionInputError] = useState('')
 
     const checkValues = (): Boolean => {
 
@@ -31,7 +31,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
             setNameInputError('Name is required')
             return false
         }
-        
+
         if (!values.description) {
             setDescriptionInputError('Description is required')
             return false
@@ -43,19 +43,20 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
     const Continue = (e: React.FormEvent<HTMLFormElement>) => {
 
         e.preventDefault();
-        if (!checkValues()) 
-            return  
-        
+        if (!checkValues())
+            return
+
         nextStep();
       }
-    
+
     return (
-     
+
             <UiLayout type='container'>
 
                 <UiText type="h2" wrapper="h2">Basic Info - Step 1 of 4</UiText>
                 <div  className={b('publish-horizontal-line')}/>
 
+                <div  className={b('form-input')}>
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormInput
                             className={b('publish-form-input')}
@@ -73,7 +74,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
                             value={values.name} onChange={e => handleChange(e.target.value, 'name')}
                             placeholder='Type a name for the Asset'
                         />
-                    </UiFormGroup>       
+                    </UiFormGroup>
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormTextarea
                             className={b('publish-form-input')}
@@ -90,8 +91,8 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiButton onClick={Continue}>&gt;</UiButton>
                     </UiFormGroup>
-
+                    </div>
             </UiLayout>
-       
+
     )
 }

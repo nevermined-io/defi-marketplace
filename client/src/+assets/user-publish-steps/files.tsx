@@ -14,6 +14,7 @@ interface FilesProps {
     nextStep: () => void 
     updateFilesAdded: (assetFiles: AssetFile) => void
     removeFile: (label:string) => void
+
  }
 
 export const FilesStep = (props: FilesProps) => {
@@ -25,7 +26,6 @@ export const FilesStep = (props: FilesProps) => {
     const [popupMesssage, setPopupMessage] = useState('')
     const popupRef = useRef<UiPopupHandlers>()
 
-
     const checkValues = (): Boolean => {
 
         if (!values.asset_files || values.asset_files.length == 0) {
@@ -33,16 +33,16 @@ export const FilesStep = (props: FilesProps) => {
             return false
         }
 
-        return true      
+        return true
     }
-    
+
     const Continue = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!checkValues())
             return;
         nextStep();
       }
-    
+
     const Previous = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         prevStep();
@@ -93,14 +93,16 @@ export const FilesStep = (props: FilesProps) => {
     }
 
     return (
-     
+
             <UiLayout type='container'>
                     <ProgressPopup  message={popupMesssage} popupRef={popupRef}/>
 
                     <UiText type="h2" wrapper="h2">FILES - Step 3 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>
 
+                  
                     <div  className={b('profile-horizontal-line')}/>
+                    <div className={b('form-input')}>
                                
                      <div>
                         <UiText type='h3'>Asset Files</UiText>
@@ -127,39 +129,14 @@ export const FilesStep = (props: FilesProps) => {
                     <UiDivider></UiDivider>
                     <UiDivider></UiDivider>
             
-                    <UiFormGroup orientation={Orientation.Vertical}>
-                       
-                        <UiFormAddItem
-                                className={b('publish-form-input')}
-                                label='Add New File from Filecoin'
-                                value={newFilecoinID}
-                                onClick={addFilecoinID}
-                                onChange={(e) => setNewFilecoinID(e.target.value)}
-                                placeholder='Type the Filecoin or IPFS ID of the file'
-                                disabled={false}
-                        />
-                    </UiFormGroup>
 
-                    <UiFormGroup orientation={Orientation.Vertical}>
-                        <UiFormInput
-                            className={b('publish-form-input')}
-                            type = "file"
-                            label='Upload from your computer'
-                            onChange={handleNewFile}
-                            placeholder='Select the file'
-                            inputError = {inputError}
-                        />
-                    </UiFormGroup>
-
-                  
-                    
                     <UiDivider/>
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiButton onClick={Previous}>&lt;</UiButton>
                         <UiButton onClick={Continue}>&gt;</UiButton>
                     </UiFormGroup>
-
+                    </div>
             </UiLayout>
-       
+
     )
 }
