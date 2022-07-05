@@ -153,10 +153,6 @@ const UserProvider = (props: UserProviderProps) => {
         })
 
         setIsLoading(false)
-        const chainId = await w3.current?.eth.net.getId();
-        const chainIdSdk = await sdk?.keeper?.getNetworkId();
-        console.log(chainId)
-        console.log(chainIdSdk)
         
         const network = await sdk?.keeper?.getNetworkName();
         // initNetworkPoll()
@@ -167,7 +163,7 @@ const UserProvider = (props: UserProviderProps) => {
         if (network === correctNetworkName) {
             fetchTokenSymbol()
         }
-        // reloadSdk()
+        reloadSdk()
     
     }
 
