@@ -203,8 +203,8 @@ export const UserPublishMultiStep: NextPage = () => {
             const accounts = await sdk.accounts.list()
             const user_account = await accounts[0]
             const user_address = user_account.getId() 
-           
             const assetRewards = new AssetRewards(user_address, new BigNumber(userPublish.price))
+            console.log("Before creating DDO...")
             const ddo = await sdk.nfts.create721(
                 metadata,
                 user_account,
@@ -212,11 +212,12 @@ export const UserPublishMultiStep: NextPage = () => {
                 getNftTierAddress()
             )
 
+            console.log("CReated DDO with did: " + ddo.id)
+
             let did
             if (ddo) {
                 did = ddo.id
             }   
-
             setIsPublished(true)
             var message = 'Your Asset has been published successfully with DID: ' + did 
             setSuccessMessage(message)
@@ -227,6 +228,7 @@ export const UserPublishMultiStep: NextPage = () => {
                 setErrorMessage('Your login is expired. Please first sign with your wallet and after try again')
             } else {
                 setErrorMessage(error.message)
+                console.log("Error: " + error.message)
             }
             
             popupRef.current?.open()

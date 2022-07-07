@@ -76,7 +76,7 @@ export const PricesStep = (props: PricesProps) => {
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormInput
                             className={b('publish-form-input')}
-                            label='Set Your Price'
+                            label='Set Your Price (USDC)'
                             value={values.price} onChange={e=>handleChange(e.target.value, 'price')}
                         />
                     </UiFormGroup>
