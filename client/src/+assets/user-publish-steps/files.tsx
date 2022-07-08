@@ -21,10 +21,9 @@ export const FilesStep = (props: FilesProps) => {
     const {values, updateFilesAdded, removeFile, prevStep, nextStep } = props;    
     const [inputError, setInputError] = useState('') 
     const [newFilecoinID, setNewFilecoinID] = useState('')
-    const [isFileAdded, setIsFileAdded] = useState(false)
     const [popupMesssage, setPopupMessage] = useState('')
     const popupRef = useRef<UiPopupHandlers>()
-
+    const filecoinImage = '/assets/logos/filecoin_grey.svg'
 
     const checkValues = (): Boolean => {
 
@@ -60,8 +59,6 @@ export const FilesStep = (props: FilesProps) => {
             content_type: file.type,
             file: file
         }
-
-        setIsFileAdded(true) 
         updateFilesAdded(assetFile)
         setInputError('')
       };
@@ -84,7 +81,6 @@ export const FilesStep = (props: FilesProps) => {
 
         const assetFile:AssetFile = result[1] 
         setNewFilecoinID('')
-
         updateFilesAdded(assetFile)
         setInputError('')
 
@@ -95,7 +91,7 @@ export const FilesStep = (props: FilesProps) => {
     return (
      
             <UiLayout type='container'>
-                    <ProgressPopup  message={popupMesssage} popupRef={popupRef}/>
+                    <ProgressPopup  message={popupMesssage} image={filecoinImage} popupRef={popupRef}/>
 
                     <UiText type="h2" wrapper="h2">FILES - Step 3 of 4</UiText>
                     <div  className={b('publish-horizontal-line')}/>
