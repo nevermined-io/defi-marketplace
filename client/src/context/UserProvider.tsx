@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useRef, ReactNode } from 'react'
 import Web3 from 'web3'
-import { Nevermined, Account, DDO, Profile, Bookmark  } from '@nevermined-io/nevermined-sdk-js'
+import { DDO, Bookmark  } from '@nevermined-io/nevermined-sdk-js'
 import Catalog from '@nevermined-io/components-catalog'
 import { User } from '.'
 import { correctNetworkName } from '../config';
