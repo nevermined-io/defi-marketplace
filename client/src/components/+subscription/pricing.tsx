@@ -15,14 +15,14 @@ export function Pricing({ tiers }: PricingProps) {
   return (
     <div className={b("pricing")}>
       {tiers.map(tier =>
-        <div className={b("price_card")}>
+        <div key={tier.name} className={b("price_card")}>
           <div className={b("header")}>
             <span className={b("price")}>{tier.price}</span>
             <span className={b("name")}>{tier.name}</span>
           </div>
           <ul className={b("features")}>
-            {tier.features.map(feat =>
-              <li>{feat}</li>
+            {tier.features.map((feat, i) =>
+              <li key={i}>{feat}</li>
             )}
           </ul>
           <button className={b("add-to-cart")} >Add to cart</button>
