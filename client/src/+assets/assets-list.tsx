@@ -47,12 +47,10 @@ export function AssetsList({ assets }: AssetsListProps) {
 
   const checkAuth = async () => {
     if(!account.isTokenValid()) {
-      await account.generateToken()
       setErrorMessage('Your login is expired. Please first sign with your wallet and after try again')
-      return
+      popupRef.current?.open()
+      await account.generateToken()
     }
-    
-    popupRef.current?.open()
   }
 
   const onAddBookmark = async (did: string, description: string) => {

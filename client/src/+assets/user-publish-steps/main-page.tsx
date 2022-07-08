@@ -31,7 +31,6 @@ export interface UserPublishParams {
 
 export const UserPublishMultiStep: NextPage = () => {
     const {sdk, account} = Catalog.useNevermined()
-    const [inputError, setInputError] = useState('') 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
     const [filesUploadedMessage, setFilesUploadedMessage] = useState<string[]>([])
@@ -198,6 +197,7 @@ export const UserPublishMultiStep: NextPage = () => {
             const assetRewards = new AssetRewards(user_address, new BigNumber(userPublish.price))
             if(!account.isTokenValid()) {
                 setErrorMessage('Your login is expired. Please first sign with your wallet and after try again')
+                popupRef.current?.open()
                 await account.generateToken()
             }
 
@@ -221,7 +221,6 @@ export const UserPublishMultiStep: NextPage = () => {
                 }
             )
         
-            setInputError('')
             setIsPublished(true)
           
         } catch (error: any ) {
