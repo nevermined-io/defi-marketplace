@@ -78,7 +78,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = 
         return
       } 
 
-      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId as string)
+      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
 
       setBookmarks([...bookmarksData.results])
     })()

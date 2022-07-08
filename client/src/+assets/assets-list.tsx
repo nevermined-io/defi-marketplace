@@ -1,5 +1,5 @@
 import React, { useRef, Fragment, useContext, useEffect, useState } from 'react'
-import { DDO } from '@nevermined-io/nevermined-sdk-js'
+import { DDO, Profile } from '@nevermined-io/nevermined-sdk-js'
 import Link from "next/link"
 
 import {
@@ -24,8 +24,9 @@ interface AssetsListProps {
 const b = BEM('assets-list', styles)
 export function AssetsList({ assets }: AssetsListProps) {
   const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles, bookmarks, setBookmarks } = useContext(User)
-  const { userProfile } = Catalog.useUserProfile()
+  const { walletAddress } = Catalog.useWallet()
   const { sdk, account } = Catalog.useNevermined()
+  const [ userProfile, setUserProfile ] = useState<Profile>({} as Profile)
   const [errorMessage, setErrorMessage] = useState('')
   const [batchActive, setBatchActive] = useState<boolean>(false)
   const [batchSelected, setBatchSelected] = useState<string[]>([])
@@ -58,7 +59,7 @@ export function AssetsList({ assets }: AssetsListProps) {
       await checkAuth()
       const bookmark = await sdk.bookmarks.create({
         did,
-        userId: userProfile.userId as string,
+        userId: userProfile.userId,
         description,
       });
   
@@ -92,16 +93,22 @@ export function AssetsList({ assets }: AssetsListProps) {
   }
 
   useEffect(() => {
-    if(!userProfile?.userId) {
+    if(!sdk?.profiles) {
       return
     }
 
-    (async () => {
-      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId as string)
+    (async() => {
+      const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
+      if(!userProfile?.userId) {
+        return
+      }
 
+      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
+      
       setBookmarks([...bookmarksData.results])
+      setUserProfile(userProfile)
     })()
-  }, [userProfile])
+  }, [sdk])
 
   return (
     <div className={b()}>
