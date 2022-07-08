@@ -47,15 +47,6 @@ export const calculateStartEndPage = (page: number, itemsPerPage: number) => {
   return { start, end }
 }
 
-export const newLogin = async (
-  sdk: Nevermined,
-  loginMarketplaceAPI: (sdk: Nevermined, account: Account) => void
-) => {
-  localStorage.removeItem('marketplaceApiToken')
-  const accounts = await sdk.accounts.list()
-  loginMarketplaceAPI(sdk, accounts[0])
-}
-
 export const calculatePages = (totalItems: number, itemsPerPage: number) => {
   return Math.ceil(totalItems / itemsPerPage)
 }

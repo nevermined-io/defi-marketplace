@@ -1,7 +1,7 @@
 import React, { ReactNode, useContext, useState, useEffect, useCallback } from 'react'
 import { DDO, Bookmark } from '@nevermined-io/nevermined-sdk-js'
-import Catalog from 'components-catalog-nvm-test'
-import { SearchQuery } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
+import Catalog from '@nevermined-io/components-catalog'
+import { SearchQuery } from '@nevermined-io/nevermined-sdk-js'
 
 import { BEM, Loader } from '@nevermined-io/styles'
 import { User } from '../../context'
@@ -21,7 +21,9 @@ interface AssetsQueryProps {
 const b = BEM('assets-query', styles)
 // loads all the asset then filters them looking at the variables defined in the user context
 export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = false }: AssetsQueryProps) {
-  const { assets, searchInputText, fromDate, toDate, selectedCategories, selectedNetworks, selectedPrice, setSelectedPriceRange, setSelectedNetworks, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText, setBookmarks, bookmarks, userProfile, sdk } = useContext(User)
+  const { assets, searchInputText, fromDate, toDate, selectedCategories, selectedNetworks, selectedPrice, setSelectedPriceRange, setSelectedNetworks, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText, setBookmarks, bookmarks } = useContext(User)
+  const { sdk } = Catalog.useNevermined()
+  const { walletAddress } = Catalog.useWallet()
   const [totalPages, setTotalPages] = useState<number>(1)
   const [page, setPage] = useState<number>(1)
   const [loading, setLoading] = useState<boolean>(false)
@@ -66,16 +68,21 @@ export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = 
   }
 
   useEffect(() => {
-    if(!userProfile?.userId) {
+    if(!sdk?.profiles) {
       return
     }
 
     (async() => {
-      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
+      const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
+      if(!userProfile?.userId) {
+        return
+      } 
+
+      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId as string)
 
       setBookmarks([...bookmarksData.results])
     })()
-  }, [userProfile])
+  }, [sdk])
 
 
   //this happen when the page is loaded to get the query string

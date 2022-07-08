@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import type { NextPage } from 'next'
 
 import { UiText, UiLayout, UiDivider, UiIcon, BEM, UiButton } from '@nevermined-io/styles'
+import Catalog from '@nevermined-io/components-catalog'
 import { XuiTokenPrice, XuiTokenName } from 'ui'
 import { User } from '../context'
 import { getDdoTokenAddress, getDefiInfo, toDate } from '../shared'
@@ -13,7 +14,8 @@ import { correctNetworkName } from '../config'
 
 const b = BEM('checkout', styles)
 export const Checkout: NextPage = () => {
-  const { assets: contextAssets, basket, network, isLogged, walletAddress, removeFromBasket, switchToCorrectNetwork, loginMetamask } = useContext(User)
+  const { assets: contextAssets, basket, network, isLogged, removeFromBasket } = useContext(User)
+  const { walletAddress, loginMetamask, switchChainsOrRegisterSupportedChain } = Catalog.useWallet()
 
   const assets = contextAssets.filter(asset => basket.includes(asset.id))
   const totalPrice = assets.map(
@@ -21,7 +23,7 @@ export const Checkout: NextPage = () => {
   ).reduce((partialSum, a) => partialSum + a, 0);
 
   const handleChangeNetwork = () => {
-    switchToCorrectNetwork()
+    switchChainsOrRegisterSupportedChain()
   }
 
   return (

@@ -3,7 +3,7 @@ import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { DDO, AdditionalInformation } from '@nevermined-io/nevermined-sdk-js'
-import Catalog from 'components-catalog-nvm-test'
+import Catalog from '@nevermined-io/components-catalog'
 import styles from './details.module.scss'
 import { BEM, UiText, UiIcon, UiLayout, UiDivider, UiButton, UiPopupHandlers, UiPopup } from '@nevermined-io/styles'
 import { XuiTokenName, XuiTokenPrice } from 'ui'
@@ -31,8 +31,9 @@ export const AssetDetails: NextPage = () => {
   const [asset, setAsset] = useState<DDO | false>()
   const [isConnected, setIsConnected] = useState(false)
   const [ownAsset, setOwnAsset] = useState(false)
-  const { addToBasket, loginMetamask,switchToCorrectNetwork,  isLogged, userBundles, web3, sdk } = useContext(User)
-  const { assets } = useContext(Catalog.NeverminedContext)
+  const { addToBasket, isLogged, userBundles } = useContext(User)
+  const { assets, sdk } = Catalog.useNevermined()
+  const { getProvider, loginMetamask, switchChainsOrRegisterSupportedChain } = Catalog.useWallet()
   const popupRef = createRef<UiPopupHandlers>()
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
@@ -66,7 +67,7 @@ export const AssetDetails: NextPage = () => {
   }, [page])
 
   const getProvenanceInfo = async () => {
-    const published = await loadPublishedEvent(didZeroX(String(did)), web3)
+    const published = await loadPublishedEvent(didZeroX(String(did)), getProvider())
     const bundlesPuchased = await getBundlesWithDataset(String(did))
 
     const provenance = bundlesPuchased.map(bundle => ({
@@ -95,7 +96,7 @@ export const AssetDetails: NextPage = () => {
 
   useEffect(() => {
     getProvenanceInfo()
-  }, [web3])
+  }, [])
 
 
   useEffect(() => {
@@ -178,7 +179,7 @@ export const AssetDetails: NextPage = () => {
             <>
               <UiText style={{ padding: '10px' }} alert>Please,  switch to {correctNetworkName} to see the details</UiText>
               <UiButton style={{ margin: '10px', padding: '10px', background: "#2E405A", textTransform: "none" }}
-                onClick={async () => await switchToCorrectNetwork()}>
+                onClick={async () => await switchChainsOrRegisterSupportedChain()}>
                 switch to {correctNetworkName} network
               </UiButton>
             </>

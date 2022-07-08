@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { DDO, OrderProgressStep } from '@nevermined-io/nevermined-sdk-js'
+import Catalog from '@nevermined-io/components-catalog'
 import { BEM, UiText, UiDivider, UiLayout, UiButton, UiIcon, UiCircleProgress, CircleSpinner } from '@nevermined-io/styles'
 import { User } from '../../../context'
 import styles from './create-bundle-popup.module.scss'
@@ -27,7 +28,8 @@ const b = BEM('create-bundle-popup', styles)
 
 export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
   const { close, assets, price } = props
-  const { sdk, setAllUserBundles } = useContext(User)
+  const { setAllUserBundles } = useContext(User)
+  const { sdk } = Catalog.useNevermined()
   const [error, setError] = useState<string | undefined>(undefined)
   const [bundleId, setBundleId] = useState<string | undefined>(undefined)
   const [did, setDID] = useState<string>("")

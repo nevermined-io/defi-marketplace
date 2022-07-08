@@ -1,13 +1,12 @@
 import React, { useEffect, useContext, useState } from 'react'
 import type { NextPage } from 'next'
-import styles from './status.module.scss'
+import Catalog from '@nevermined-io/components-catalog'
 
-import { BEM, UiText, UiLayout, UiDivider, CircleSpinner } from '@nevermined-io/styles'
-import { User } from '../context'
+import { UiText, UiLayout, UiDivider, CircleSpinner } from '@nevermined-io/styles'
 import { PlatformVersions } from '@nevermined-io/nevermined-sdk-js'
 
 export const Status: NextPage = () => {
-  const { sdk } = useContext(User)
+  const { sdk } = Catalog.useNevermined()
   const [versions, setVersions] = useState<PlatformVersions>()
 
   useEffect(() => {

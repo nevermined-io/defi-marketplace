@@ -12,18 +12,20 @@ import {
   NotificationPopup,
 } from '@nevermined-io/styles'
 import { XuiTokenName, XuiTokenPrice} from 'ui'
-import { toDate, getDefiInfo, getDdoTokenAddress, newLogin } from '../shared'
+import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
 import { AddedToBasketPopup } from './added-to-basket-popup'
-
+import Catalog from '@nevermined-io/components-catalog'
 interface AssetsListProps {
   assets: DDO[]
 }
 
 const b = BEM('assets-list', styles)
 export function AssetsList({ assets }: AssetsListProps) {
-  const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles, userProfile, loginMarketplaceAPI, bookmarks, setBookmarks, sdk } = useContext(User)
+  const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles, bookmarks, setBookmarks } = useContext(User)
+  const { userProfile } = Catalog.useUserProfile()
+  const { sdk, account } = Catalog.useNevermined()
   const [errorMessage, setErrorMessage] = useState('')
   const [batchActive, setBatchActive] = useState<boolean>(false)
   const [batchSelected, setBatchSelected] = useState<string[]>([])
@@ -43,12 +45,11 @@ export function AssetsList({ assets }: AssetsListProps) {
     setBatchSelected(batchSelected.concat(...dids.filter(did => !batchSelected.includes(did))))
   }
 
-  const checkError = (message: string) => {
-    if(message.includes('"statusCode":401')) {
-      newLogin(sdk, loginMarketplaceAPI)
+  const checkAuth = async () => {
+    if(!account.isTokenValid()) {
+      await !account.generateToken()
       setErrorMessage('Your login is expired. Please first sign with your wallet and after try again')
-    } else {
-      setErrorMessage(message)
+      return
     }
     
     popupRef.current?.open()
@@ -56,15 +57,17 @@ export function AssetsList({ assets }: AssetsListProps) {
 
   const onAddBookmark = async (did: string, description: string) => {
     try {
+      await checkAuth()
       const bookmark = await sdk.bookmarks.create({
         did,
-        userId: userProfile.userId,
+        userId: userProfile.userId as string,
         description,
       });
   
       setBookmarks([...bookmarks, bookmark])
     } catch (error: any) {
-      checkError(error.message)
+      setErrorMessage(error.message)
+      popupRef.current?.open()
     }
   }
 
@@ -73,12 +76,14 @@ export function AssetsList({ assets }: AssetsListProps) {
       const bookmark = bookmarks.find(item => item.did === did );
 
       if (bookmark?.id) {
+        await checkAuth()
         await sdk.bookmarks.deleteOneById(bookmark.id);
         setBookmarks(bookmarks.filter(item => item.id !== bookmark.id))
       }
 
     } catch (error: any) {
-      checkError(error.message)
+      setErrorMessage(error.message)
+      popupRef.current?.open()
     }
   }
 
@@ -94,7 +99,7 @@ export function AssetsList({ assets }: AssetsListProps) {
     }
 
     (async () => {
-      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
+      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId as string)
 
       setBookmarks([...bookmarksData.results])
     })()

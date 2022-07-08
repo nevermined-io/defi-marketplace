@@ -4,7 +4,7 @@ import '../src/styles/styles.scss'
 import React from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
-import Catalog from 'components-catalog-nvm-test'
+import Catalog from '@nevermined-io/components-catalog'
 import Web3 from 'web3';
 import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
 import { UiDivider } from '@nevermined-io/styles'
@@ -24,7 +24,7 @@ import { docsUrl,
 import chainConfig from 'src/chainConfig'
 
 const appConfig = {
-    web3Provider: new Web3(new Web3.providers.HttpProvider(nodeUri)),
+    web3Provider: typeof window !== 'undefined' ? new Web3(window.ethereum) : new Web3(new Web3.providers.HttpProvider(nodeUri)),
     nodeUri,
     marketplaceUri,
     gatewayUri,
@@ -40,7 +40,10 @@ const appConfig = {
 function App({ Component, pageProps }: AppProps) {
   return (
     <Catalog.NeverminedProvider config={appConfig}>
-      <Catalog.WalletProvider chainConfig={chainConfig} nodeUri={appConfig.nodeUri} correctNetworkId={correctNetworkId}>
+      <Catalog.WalletProvider 
+        chainConfig={chainConfig}
+        nodeUri={appConfig.nodeUri}
+        correctNetworkId={correctNetworkId}>
           <UserProvider>
             <Head>
               <script async src="https://www.googletagmanager.com/gtag/js?id=G-11ZZZNJ4Q5"></script>

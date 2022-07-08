@@ -1,19 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BEM, UiButton} from '@nevermined-io/styles'
+import Catalog from '@nevermined-io/components-catalog'
 import { User } from '../../context'
-import Catalog from 'components-catalog-nvm-test'
-import { correctNetworkName } from '../../config'
 import styles from './wallet.module.scss'
 import Link from 'next/link'
 import Image from "next/image"
 
-interface WalletProps {
-}
-
 const b = BEM('wallet', styles)
 
-export function XuiWallet(props: WalletProps) {
-  const { isLogged, walletAddress, network, basket, loginMetamask } = React.useContext(User)
+export function XuiWallet() {
+  const { network, basket, isLogged } = React.useContext(User)
+  const { walletAddress, loginMetamask } = Catalog.useWallet()
 
   return !(isLogged && walletAddress)
     ? (
