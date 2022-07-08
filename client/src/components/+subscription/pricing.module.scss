@@ -1,0 +1,65 @@
+@import '~@nevermined-io/styles/lib/cjs/styles/index.scss';
+
+.pricing {
+  &__pricing {
+    width: 989px;
+    margin: 100px auto;
+  }
+
+  &__price_card{
+    width: 300px;
+    background: rgb(81, 98, 146);
+    display: inline-table;
+    top: 0;
+  }
+
+  &__price_card:not(:last-child){
+    margin-right: 40px;
+  }
+
+  &__price{
+    width: 100%;
+    font-size: 60px;
+    font-weight: 300;
+    display: block;
+    text-align: center;
+    padding: 30px 0 10px;
+  }
+
+  &__name{
+    width: 100%;
+    font-size: 15px;
+    font-weight: 700;
+    display: block;
+    text-align: center;
+    padding: 0 0 30px;
+  }
+
+  &__features{
+      list-style: none;
+      text-align: center;
+      color: rgb(138, 138, 138);
+      margin: 0;
+      padding: 0;
+      height: 390px;
+
+      li{
+        margin: 0 35px;
+        padding: 20px 15px;
+        width: 200px;
+      }
+  }
+
+  &__add-to-cart{
+    background: linear-gradient(92.67deg, #7834F9 0%, #67CFF9 100%);
+    border: 0;
+    border-radius: 5px;
+    height: 40px;
+    width: 200px;
+    display: block;
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    margin: 20px auto 35px;
+  }
+}

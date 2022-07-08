@@ -13,6 +13,7 @@
     "@nevermined-io/styles": "0.1.1",
     "@nevermined-io/components-catalog": "0.0.76",
     "axios": "^0.25.0",
+    "axios-retry":"^3.3.1", 
     "bn.js": "^5.2.0",
     "next": "11.1.1",
     "react": "17.0.2",

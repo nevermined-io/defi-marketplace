@@ -63,14 +63,16 @@ function App({ Component, pageProps }: AppProps) {
 
             </Head>
 
-            <div>
-              <UiHeader>
-                <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
-                <UiHeaderLink href="/profile">Profile</UiHeaderLink>
-                <UiHeaderLink href="/user-profile">Account</UiHeaderLink>
-                <UiHeaderLink href="/about">About</UiHeaderLink>
-                <UiHeaderLink href={docsUrl} target='_blank'>Docs</UiHeaderLink>
-              </UiHeader>
+          <div>
+            <UiHeader>
+              <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
+              <UiHeaderLink href="/profile">Profile</UiHeaderLink>
+              <UiHeaderLink href="/user-profile">Account</UiHeaderLink>
+              <UiHeaderLink href="/user-publish">Publish</UiHeaderLink>
+              <UiHeaderLink href="/subscription">Pricing</UiHeaderLink>
+              <UiHeaderLink href="/about">About</UiHeaderLink>
+              <UiHeaderLink href={docsUrl} target='_blank'>Docs</UiHeaderLink>
+            </UiHeader>
 
               <Component {...pageProps} />
             </div>

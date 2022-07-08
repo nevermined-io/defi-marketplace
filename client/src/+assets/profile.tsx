@@ -144,24 +144,34 @@ export const Profile: NextPage = () => {
 
   const setFormat = (filename: string) => {
     const parts = filename.replace('_', '-').split('-')
-    let date = parts[4]
-      .slice(0, 8)
-      .split('')
 
-    date.splice(4, 0, ':')
-    date.splice(7, 0, ':')
+    if (parts.length > 2) {
+      let date = parts[4]
+        .slice(0, 8)
+        .split('')
 
-    return (
-      <>
-        <span className={b('asset-detail')}>Protocol:</span><span className={b('asset-detail-value')}> {parts[0]}</span>
-        <span className={b('asset-detail')}>Version:</span> <span className={b('asset-detail-value')}> {parts[1]}</span>
-        <span className={b('asset-detail')}>Entity:</span> <span className={b('asset-detail-value')}> {entitesNames[parts[2]]}</span>
-        <span className={b('asset-detail')}>Blockchain:</span> <span className={b('asset-detail-value')}> {parts[3].toUpperCase()}</span>
-        <span className={b('asset-detail')}>Date:</span> <span className={b('asset-detail-value')}>
-          {date.join('')}
-        </span>
-      </>
-    )
+      date.splice(4, 0, ':')
+      date.splice(7, 0, ':')
+
+      return (
+        <>
+          <span className={b('asset-detail')}>Protocol:</span><span className={b('asset-detail-value')}> {parts[0]}</span>
+          <span className={b('asset-detail')}>Version:</span> <span className={b('asset-detail-value')}> {parts[1]}</span>
+          <span className={b('asset-detail')}>Entity:</span> <span className={b('asset-detail-value')}> {entitesNames[parts[2]]}</span>
+          <span className={b('asset-detail')}>Blockchain:</span> <span className={b('asset-detail-value')}> {parts[3].toUpperCase()}</span>
+         <span className={b('asset-detail')}>Date:</span> <span className={b('asset-detail-value')}>
+            {date.join('')}
+          </span>
+        </>
+      )
+      } 
+
+      return (
+          <>
+            <span className={b('asset-detail')}>File:</span><span className={b('asset-detail-value')}> {filename}</span> 
+          </>
+      )
+      
   }
 
   const closeDownloadPopup = (event: any) => {

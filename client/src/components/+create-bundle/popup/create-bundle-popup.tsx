@@ -235,7 +235,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
           <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
           <UiText block type="h3" className={b('text')}>Purchase Successful!</UiText>
           <CircleSpinner width="150" height="150" />
-          <UiText block className={b('text', ['content'])}>Plase sign the message and the datasets will be downloaded shortly. You can always download this dataset from you profile page.</UiText>
+          <UiText block className={b('text', ['content'])}>Please sign the message and the datasets will be downloaded shortly. You can always download this dataset from you profile page.</UiText>
           <UiDivider type="l" />
         </div>
       </>
