@@ -13,7 +13,7 @@ import { DetailsStep } from './details'
 import { PricesStep } from './prices'
 import { FilesStep } from './files'
 import {FileType, AssetFile, handleAssetFiles} from './files-handler'
-
+import { SubscribablePromise } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 
 const b = BEM('user-publish', styles)
 
@@ -33,7 +33,7 @@ export interface UserPublishParams {
 
 export const UserPublishMultiStep: NextPage = () => {
 
-    const {sdk, account, userProfile, loginMarketplaceAPI, web3 } = useContext(User)
+    const {sdk, account, loginMarketplaceAPI} = useContext(User)
     const [inputError, setInputError] = useState('') 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
@@ -41,8 +41,8 @@ export const UserPublishMultiStep: NextPage = () => {
     const [isPublished, setIsPublished] = useState(false)
     const popupRef = useRef<UiPopupHandlers>()
     const fileUploadPopupRef = useRef<UiPopupHandlers>()
-
-    const [userId, setUserId] = useState('')
+    const txPopupRef = useRef<UiPopupHandlers>()
+    const [txErrorMessage, setTxErrorMessage] = useState('')
     const [userPublish, setUserPublish] = useState<UserPublishParams>({
         step: 1,
         name: '',
@@ -56,8 +56,6 @@ export const UserPublishMultiStep: NextPage = () => {
         tier: 'Tier 1',
         asset_files: []
     })
-
-    const [assetfiles, setAssetFiles] = useState<AssetFile[]>([])
 
     const reset = () => {
         setUserPublish({
@@ -76,9 +74,9 @@ export const UserPublishMultiStep: NextPage = () => {
 
         setIsPublished(false)
         setFilesUploadedMessage([])
-        setAssetFiles([])
         setSuccessMessage('')
         setErrorMessage('')
+        setTxErrorMessage('')
 
     }
 
@@ -192,6 +190,8 @@ export const UserPublishMultiStep: NextPage = () => {
             }
 
             const metadata = generateMetadata()
+
+            txPopupRef.current?.open()
     
              // variable account in UserProvider stores only the address!
             const accounts = await sdk.accounts.list()
@@ -199,22 +199,29 @@ export const UserPublishMultiStep: NextPage = () => {
             const user_address = user_account.getId() 
            
             const assetRewards = new AssetRewards(user_address, new BigNumber(userPublish.price))
-            const ddo = await sdk.nfts.create721(
+            sdk.nfts.create721(
                 metadata,
                 user_account,
                 assetRewards,
                 getNftTierAddress()
             )
-
-            let did
-            if (ddo) {
-                did = ddo.id
-            }   
-
-            setIsPublished(true)
-            var message = 'Your Asset has been published successfully with DID: ' + did 
-            setSuccessMessage(message)
+            .then((ddo) =>
+                {
+                    setSuccessMessage("The assets has been sucessfully published. DID: " + ddo.id)
+                    setTxErrorMessage("")
+                    txPopupRef.current?.close()
+                }
+            )
+            .catch((error) => { 
+                    setTxErrorMessage("There was an error publishing the Asset:  " + error.message)
+                    setSuccessMessage("")
+                    txPopupRef.current?.close()
+                }
+            )
+        
             setInputError('')
+            setIsPublished(true)
+          
         } catch (error: any ) {
             if(error.message.includes('"statusCode":401')) {
                 newLogin(sdk, loginMarketplaceAPI)
@@ -252,19 +259,16 @@ export const UserPublishMultiStep: NextPage = () => {
             <UiLayout type='container'>
             <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef}/>
             <UiLayout type='container'>
-                <UiText wrapper="h1" type="h1" variants={['heading']}>Publish new asset</UiText>
-               
+                <UiText wrapper="h1" type="h1" variants={['heading']}>Publish new asset</UiText>        
             </UiLayout>
            
             <UiLayout type='container'>
                 <UiForm className=''>
-
                     <BasicInfoStep
                         nextStep={ nextStep }
                         handleChange={ handleChange }
                         values={ userPublish }
                     />
-
                 </UiForm>
             </UiLayout>
         </UiLayout>
@@ -275,19 +279,15 @@ export const UserPublishMultiStep: NextPage = () => {
             <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef}/>
             <UiLayout type='container'>
                 <UiText wrapper="h1" type="h1" variants={['heading']}>Publish new asset</UiText>
-               
             </UiLayout>
-           
             <UiLayout type='container'>
                 <UiForm className=''>
-
                     <DetailsStep
                          prevStep={ prevStep}
                          nextStep={ nextStep }
                          handleChange={ handleChange }
                          values={ userPublish }
                     />
-
                 </UiForm>
             </UiLayout>
         </UiLayout>
@@ -298,12 +298,10 @@ export const UserPublishMultiStep: NextPage = () => {
             <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef}/>
             <UiLayout type='container'>
                 <UiText wrapper="h1" type="h1" variants={['heading']}>Publish new asset</UiText>
-               
             </UiLayout>
            
             <UiLayout type='container'>
                 <UiForm className=''>
-   
                     <FilesStep
                          prevStep={ prevStep}
                          nextStep={ nextStep }
@@ -311,7 +309,6 @@ export const UserPublishMultiStep: NextPage = () => {
                          updateFilesAdded = {updateFilesAdded}
                          removeFile = {removeFile}
                     />
-
                 </UiForm>
             </UiLayout>
         </UiLayout>
@@ -322,7 +319,6 @@ export const UserPublishMultiStep: NextPage = () => {
             <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef}/>
             <UiLayout type='container'>
                 <UiText wrapper="h1" type="h1" variants={['heading']}>Publish new asset</UiText>
-               
             </UiLayout>
            
             <UiLayout type='container'>
@@ -335,8 +331,10 @@ export const UserPublishMultiStep: NextPage = () => {
                          submit = { onSubmitUserPublish }
                          isPublished = {isPublished}
                          successMessage={successMessage}
+                         txErrorMessage={txErrorMessage}
                          filesUploadedMessage = {filesUploadedMessage}
                          fileUploadPopupRef = {fileUploadPopupRef}
+                         txPopupRef = {txPopupRef}
                     />
                 </UiForm>
             </UiLayout>

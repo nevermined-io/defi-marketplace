@@ -17,15 +17,21 @@ interface PricesProps {
     reset: () => void
     isPublished: boolean
     successMessage: string
+    txErrorMessage: string
     filesUploadedMessage: string[],
-    fileUploadPopupRef: React.RefObject<UiPopupHandlers>
+    fileUploadPopupRef: React.RefObject<UiPopupHandlers>,
+    txPopupRef:  React.RefObject<UiPopupHandlers>
  }
 
 export const PricesStep = (props: PricesProps) => {
-    const {values, handleChange, prevStep, submit, reset, isPublished, successMessage, filesUploadedMessage, fileUploadPopupRef } = props;    
+    const {values, handleChange, prevStep, submit, reset, isPublished, successMessage, txErrorMessage, filesUploadedMessage, fileUploadPopupRef, txPopupRef } = props;    
     const [inputError, setInputError] = useState('') 
     const UploadPopupMesssage = "Uploading local files to Filecoin..."
-    const confirmPopupMesssage = "Press Confirm to Publish the new Asset"
+    const txPopupMesssage = "Sending transaction to register the Asset in the network..."
+    const txAdditionalMessage = 'The transaction has been sent correctly. It could take some time to complete. You can close this window and visit your profile later to check the status of the new Asset.'            
+    const confirmPopupMessage = "Press Confirm to Publish the new Asset"
+    const uploadImage = '/assets/logos/filecoin_grey.svg'
+    const txImage = '/assets/nevermined-color.svg'
     const confirmPopupRef = useRef<UiPopupHandlers>()
 
 
@@ -46,12 +52,13 @@ export const PricesStep = (props: PricesProps) => {
     const showConfirm = () => {
         confirmPopupRef.current?.open()
     }
-   
+
     return (
      
             <UiLayout type='container'>
-                    <ProgressPopup  message={UploadPopupMesssage} popupRef={fileUploadPopupRef}/>
-                    <ConfirmPopup  message={confirmPopupMesssage} popupRef={confirmPopupRef} confirm = {confirm} cancel = {cancel}/>
+                    <ProgressPopup  message={UploadPopupMesssage} popupRef={fileUploadPopupRef} image= {uploadImage}/>
+                    <ProgressPopup  message={txPopupMesssage} popUpHeight='780px' additionalMessage={txAdditionalMessage}  showCloseButton={true} popupRef={txPopupRef} image= {txImage}/>
+                    <ConfirmPopup  message={confirmPopupMessage} popupRef={confirmPopupRef} confirm = {confirm} cancel = {cancel}/>
                     {(isPublished) ? 
                     <UiText type="h2" wrapper="h2">Asset Published</UiText>
                     :
@@ -88,6 +95,7 @@ export const PricesStep = (props: PricesProps) => {
                             {
                                 (isPublished) ?  <div className={b('user-publish-submit-container', ['updated-message'])}>
                                                 <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> 
+                                                <UiText type="h3" wrapper="h3" variants={['error']}>{txErrorMessage}</UiText>                                                 
                                                 {filesUploadedMessage.map( (message, index) => 
                                                     <div key={index}>
                                                         <UiText type="h3" wrapper="h3" variants={['success']}>{message}</UiText>
