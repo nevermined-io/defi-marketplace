@@ -1,19 +1,17 @@
-import React, { useEffect, useContext, useState, useRef } from 'react'
-import { User } from '../../context'
-import { UiForm, UiButton, UiLayout, UiText, UiPopupHandlers, NotificationPopup, BEM } from '@nevermined-io/styles'
+import React, { useState, useRef } from 'react'
+import { UiForm, UiLayout, UiText, UiPopupHandlers, NotificationPopup, BEM } from '@nevermined-io/styles'
+import Catalog from '@nevermined-io/components-catalog'
 import { NextPage } from 'next'
-import { newLogin, StoreItemTypes } from '../../shared'
 import styles from './user-publish.module.scss'
 import { MetaData, Nevermined } from "@nevermined-io/nevermined-sdk-js"
 import AssetRewards from "@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards";
 import BigNumber from "bignumber.js";
-import {  Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress, gatewayURL, filecoinUploadUri } from 'src/config'
+import {  Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress } from 'src/config'
 import { BasicInfoStep } from './basic-info'
 import { DetailsStep } from './details'
 import { PricesStep } from './prices'
 import { FilesStep } from './files'
 import {FileType, AssetFile, handleAssetFiles} from './files-handler'
-import { SubscribablePromise } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 
 const b = BEM('user-publish', styles)
 
@@ -32,8 +30,7 @@ export interface UserPublishParams {
 }
 
 export const UserPublishMultiStep: NextPage = () => {
-
-    const {sdk, account, loginMarketplaceAPI} = useContext(User)
+    const {sdk, account} = Catalog.useNevermined()
     const [inputError, setInputError] = useState('') 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
@@ -199,6 +196,11 @@ export const UserPublishMultiStep: NextPage = () => {
             const user_address = user_account.getId() 
            
             const assetRewards = new AssetRewards(user_address, new BigNumber(userPublish.price))
+            if(!account.isTokenValid()) {
+                setErrorMessage('Your login is expired. Please first sign with your wallet and after try again')
+                await account.generateToken()
+            }
+
             sdk.nfts.create721(
                 metadata,
                 user_account,
@@ -223,13 +225,7 @@ export const UserPublishMultiStep: NextPage = () => {
             setIsPublished(true)
           
         } catch (error: any ) {
-            if(error.message.includes('"statusCode":401')) {
-                newLogin(sdk, loginMarketplaceAPI)
-                setErrorMessage('Your login is expired. Please first sign with your wallet and after try again')
-            } else {
-                setErrorMessage(error.message)
-            }
-            
+            setErrorMessage(error.message)
             popupRef.current?.open()
         }
     }

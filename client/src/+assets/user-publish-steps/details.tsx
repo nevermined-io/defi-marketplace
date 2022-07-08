@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { UiFormGroup, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
 import { networks, categories, protocols, assetTypes } from 'src/config'
