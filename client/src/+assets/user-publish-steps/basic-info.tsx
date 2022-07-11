@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useRef, InputHTMLAttributes } from 'react'
+import React, { useState } from 'react'
 import { UiFormGroup, UiFormInput, UiFormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
 import {UserPublishParams} from './main-page'

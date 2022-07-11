@@ -1,5 +1,5 @@
 import React, { useRef, Fragment, useContext, useEffect, useState } from 'react'
-import { DDO, Bookmark } from '@nevermined-io/nevermined-sdk-js'
+import { DDO, Profile } from '@nevermined-io/nevermined-sdk-js'
 import Link from "next/link"
 
 import {
@@ -12,18 +12,21 @@ import {
   NotificationPopup,
 } from '@nevermined-io/styles'
 import { XuiTokenName, XuiTokenPrice} from 'ui'
-import { toDate, getDefiInfo, getDdoTokenAddress, newLogin } from '../shared'
+import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
 import { AddedToBasketPopup } from './added-to-basket-popup'
-
+import Catalog from '@nevermined-io/components-catalog'
 interface AssetsListProps {
   assets: DDO[]
 }
 
 const b = BEM('assets-list', styles)
 export function AssetsList({ assets }: AssetsListProps) {
-  const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles, sdk, userProfile, loginMarketplaceAPI, bookmarks, setBookmarks } = useContext(User)
+  const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles, bookmarks, setBookmarks } = useContext(User)
+  const { walletAddress } = Catalog.useWallet()
+  const { sdk, account } = Catalog.useNevermined()
+  const [ userProfile, setUserProfile ] = useState<Profile>({} as Profile)
   const [errorMessage, setErrorMessage] = useState('')
   const [batchActive, setBatchActive] = useState<boolean>(false)
   const [batchSelected, setBatchSelected] = useState<string[]>([])
@@ -43,19 +46,17 @@ export function AssetsList({ assets }: AssetsListProps) {
     setBatchSelected(batchSelected.concat(...dids.filter(did => !batchSelected.includes(did))))
   }
 
-  const checkError = (message: string) => {
-    if(message.includes('"statusCode":401')) {
-      newLogin(sdk, loginMarketplaceAPI)
+  const checkAuth = async () => {
+    if(!account.isTokenValid()) {
       setErrorMessage('Your login is expired. Please first sign with your wallet and after try again')
-    } else {
-      setErrorMessage(message)
+      popupRef.current?.open()
+      await account.generateToken()
     }
-    
-    popupRef.current?.open()
   }
 
   const onAddBookmark = async (did: string, description: string) => {
     try {
+      await checkAuth()
       const bookmark = await sdk.bookmarks.create({
         did,
         userId: userProfile.userId,
@@ -64,7 +65,8 @@ export function AssetsList({ assets }: AssetsListProps) {
   
       setBookmarks([...bookmarks, bookmark])
     } catch (error: any) {
-      checkError(error.message)
+      setErrorMessage(error.message)
+      popupRef.current?.open()
     }
   }
 
@@ -73,12 +75,14 @@ export function AssetsList({ assets }: AssetsListProps) {
       const bookmark = bookmarks.find(item => item.did === did );
 
       if (bookmark?.id) {
+        await checkAuth()
         await sdk.bookmarks.deleteOneById(bookmark.id);
         setBookmarks(bookmarks.filter(item => item.id !== bookmark.id))
       }
 
     } catch (error: any) {
-      checkError(error.message)
+      setErrorMessage(error.message)
+      popupRef.current?.open()
     }
   }
 
@@ -89,16 +93,22 @@ export function AssetsList({ assets }: AssetsListProps) {
   }
 
   useEffect(() => {
-    if(!userProfile?.userId) {
+    if(!sdk?.profiles) {
       return
     }
 
-    (async () => {
-      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
+    (async() => {
+      const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
+      if(!userProfile?.userId) {
+        return
+      }
 
+      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
+      
       setBookmarks([...bookmarksData.results])
+      setUserProfile(userProfile)
     })()
-  }, [userProfile])
+  }, [sdk])
 
   return (
     <div className={b()}>

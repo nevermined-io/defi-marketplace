@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useContext, useEffect } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { OrderProgressStep } from '@nevermined-io/nevermined-sdk-js'
+import Catalog from '@nevermined-io/components-catalog'
 import { BEM, UiText, UiDivider, UiLayout, UiButton, UiCircleProgress, UiIcon, CircleSpinner } from '@nevermined-io/styles'
-import { User } from '../../../context'
 
 import styles from './buy-asset-popup.module.scss'
 import { MetamaskErrorCodes, MetamaskCustomErrors } from '../../../shared/constants'
@@ -22,7 +22,7 @@ const b = BEM('buy-asset-popup', styles)
 
 export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
   const { close, asset } = props
-  const { sdk } = useContext(User)
+  const { sdk } = Catalog.useNevermined()
   const [view, setView] = useState<0 | 1 | 2>(0)
   const [step, setStep] = useState<OrderProgressStep>(0)
   const [error, setError] = useState<string | undefined>(undefined)

@@ -21,9 +21,7 @@ theme:
     text: Roboto
     code: Roboto Mono
   palette:
-    scheme: default
-    primary: black
-    accent: indigo
+    scheme: defimkt
 
   # Necessary for search to work properly
   include_search_page: false
@@ -32,6 +30,9 @@ theme:
   # Default values, taken from mkdocs_theme.yml
   language: en
 
+extra_css:
+  - stylesheets/extra.css
+  
 # Plugins
 plugins:
   - search

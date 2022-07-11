@@ -5,11 +5,16 @@ const faucetUrl = process.env.NEXT_PUBLIC_FAUCET_URI || "http://localhost:3001"
 
 module.exports = {
   reactStrictMode: true,
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, webpack }) => {
     // Fixes npm packages that depend on `fs` module
     if (!isServer) {
       config.resolve.fallback.fs = false;
     }
+    config.plugins.push(
+			new webpack.IgnorePlugin({
+				resourceRegExp: /^electron$/,
+			})
+		);
     return config
   },
   typescript: {

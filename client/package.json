@@ -9,14 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@nevermined-io/nevermined-sdk-js": "0.20.0",
+    "@nevermined-io/nevermined-sdk-js": "0.21.1",
     "@nevermined-io/styles": "0.1.2",
-    "axios": "^0.27.2",
+    "@nevermined-io/components-catalog": "0.0.76",
+    "axios": "^0.25.0",
     "axios-retry":"^3.3.1", 
     "bn.js": "^5.2.0",
     "next": "11.1.1",
     "react": "17.0.2",
-    "react-dom": "^17.0.2",
+    "react-dom": "17.0.2",
     "web3": "^1.5.2"
   },
   "devDependencies": {

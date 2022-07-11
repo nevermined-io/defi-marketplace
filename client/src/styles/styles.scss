@@ -1,0 +1,10 @@
+body {  
+    @supports (background-blend-mode: lighten) {
+      background-color: gc(bg);
+      background-image: url('/assets/bg-blur.jpg'), url('/assets/bg-footer.jpg');
+      background-position: 50% -180px, 100% 100%;
+      background-repeat: no-repeat;
+      background-size: 1800px, min(1800px, 100%);
+      background-blend-mode: lighten;
+    }
+  }
