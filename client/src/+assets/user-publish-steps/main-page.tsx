@@ -176,6 +176,7 @@ export const UserPublishMultiStep: NextPage = () => {
     const onSubmitUserPublish = async() => {
         try {
 
+            setIsPublished(true)
             const findLocal = userPublish.asset_files.find(file => file.type === FileType.Local)
 
             if (findLocal != undefined){
@@ -220,8 +221,6 @@ export const UserPublishMultiStep: NextPage = () => {
                     txPopupRef.current?.close()
                 }
             )
-        
-            setIsPublished(true)
           
         } catch (error: any ) {
             setErrorMessage(error.message)
