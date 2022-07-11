@@ -179,7 +179,7 @@ export const UserPublishMultiStep: NextPage = () => {
             setIsPublished(true)
             const findLocal = userPublish.asset_files.find(file => file.type === FileType.Local)
 
-            if (findLocal != undefined){
+            if (findLocal){
                 fileUploadPopupRef.current?.open()
                 await handleAssetFiles(userPublish.asset_files)
                 setFilesUploadedMessage(generateFilesUploadedMessage(userPublish.asset_files))
