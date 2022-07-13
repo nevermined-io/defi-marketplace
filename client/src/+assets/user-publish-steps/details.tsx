@@ -21,8 +21,8 @@ export const DetailsStep = (props: DetailsProps) => {
     const [protocolInputError, setProtocolInputError] = useState('')
     const [networkInputError, setNetworkInputError] = useState('')
     const notebookLanguages = ['Python', 'Java', 'Scala', 'R', 'SQL', 'Other' ]
-    const notebookFormats = ['Source code', 'Jupyter (.ipynb)', 'Zeppelin (.json)', 'Zip', 'PDF', 'Other' ]
-    const reportTypes = ['Aggregation', 'Merge', 'Transformation', 'Enrichment', 'Other']
+    const notebookFormats = ['Source code', 'Jupyter (.ipynb)', 'PDF', 'Zeppelin (.json)', 'Zip', 'Other' ]
+    const reportTypes = ['Aggregation', 'Enrichment', 'Merge','Transformation', 'Other']
     const reportFormats = ['CSV', 'Excel', 'PDF', 'Other']
 
     const checkValues = (): Boolean => {
@@ -76,21 +76,21 @@ export const DetailsStep = (props: DetailsProps) => {
                             onChange={e => handleChange(e, 'type')}
                             options={assetTypes}
                             className={b('publish-form-select')}
-                            label='Type'
+                            label='Asset Type'
                             inputError={typeInputError}
                         />
                     </UiFormGroup>
 
                     {
                         values.type === "notebook" ?
-                        <div>
+                        <div className={b('form-input')}>
                         <UiFormGroup orientation={Orientation.Vertical}>
                             <UiFormSelect
                                 value={values.notebook_language}
                                 onChange={e => handleChange(e, 'notebook_language')}
                                 options={notebookLanguages}
                                 className={b('publish-form-select')}
-                                label='Language *'
+                                label='Language'
                                 inputError={typeInputError}
                             />
                         </UiFormGroup>
@@ -101,18 +101,18 @@ export const DetailsStep = (props: DetailsProps) => {
                             onChange={e => handleChange(e, 'notebook_format')}
                             options={notebookFormats}
                             className={b('publish-form-select')}
-                            label='Format *'
+                            label='Format'
                             inputError={typeInputError}
                         />
                     </UiFormGroup>
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormTextarea
                             className={b('publish-form-input')}
-                            label='Dependencies'
+                            label='Requirements'
                             inputError={typeInputError}
-                            value={values.notebook_dependencies}
+                            value={values.notebook_requirements}
                             onChange={e => handleChange(e.target.value, 'notebook_dependencies')}
-                            placeholder='Put here the dependendencies or requirements in order to run the notebook'
+                            placeholder='Put here the requirements, dependencies or conditions needed in order to run the notebook'
                         />
                     </UiFormGroup>
                     </div>
@@ -128,7 +128,7 @@ export const DetailsStep = (props: DetailsProps) => {
                                 onChange={e => handleChange(e, 'report_type')}
                                 options={reportTypes}
                                 className={b('publish-form-select')}
-                                label='Type *'
+                                label='Report Type'
                                 inputError={typeInputError}
                             />
                             <UiFormSelect
@@ -136,7 +136,7 @@ export const DetailsStep = (props: DetailsProps) => {
                                 onChange={e => handleChange(e, 'report_format')}
                                 options={reportFormats}
                                 className={b('publish-form-select')}
-                                label='Format *'
+                                label='Format'
                                 inputError={typeInputError}
                             />
                         </UiFormGroup>

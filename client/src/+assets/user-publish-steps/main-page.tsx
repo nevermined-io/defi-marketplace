@@ -27,7 +27,7 @@ export interface UserPublishParams {
     price: number
     tier: string
     notebook_language: string
-    notebook_dependencies: string,
+    notebook_requirements: string,
     notebook_format: string,
     report_type: string,
     report_format: string,
@@ -56,11 +56,11 @@ export const UserPublishMultiStep: NextPage = () => {
         price: 0,
         tier: 'Tier 1',
         asset_files: [],
-        notebook_language: '',
-        notebook_dependencies: '',
-        notebook_format: '',
-        report_type: '',
-        report_format: ''
+        notebook_language: 'Python',
+        notebook_requirements: '',
+        notebook_format: 'Source code',
+        report_type: 'Aggregation',
+        report_format: 'CSV'
     })
 
     const reset = () => {
@@ -76,11 +76,11 @@ export const UserPublishMultiStep: NextPage = () => {
             price: 0,
             tier: 'Tier 1',
             asset_files: [],
-            notebook_language: '',
-            notebook_dependencies: '',
-            notebook_format: '',
-            report_type: '',
-            report_format: ''    
+            notebook_language: 'Python',
+            notebook_requirements: '',
+            notebook_format: 'Source code',
+            report_type: 'Aggregation',
+            report_format: 'CSV'   
         })
 
         setIsPublished(false)
@@ -146,7 +146,7 @@ export const UserPublishMultiStep: NextPage = () => {
                 license: 'No License Specified', 
                 price: String(userPublish.price),
                 datePublished: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
-                type: userPublish.type === 'notebook'?"algorithm":"dataset",
+                type: "dataset",
                 network: userPublish.network,
                 files: generateFilesMetadata()
             },
@@ -165,21 +165,21 @@ export const UserPublishMultiStep: NextPage = () => {
         } as MetaData
 
         switch ( userPublish.type) {
-            case "notebook":  metadata.additionalInformation!.customData = [
-                {  
-                    "subtype": userPublish.type,
-                    "notebook_language": userPublish.notebook_language, 
-                    "notebook_dependencies": userPublish.notebook_dependencies,
-                    "notebook_format": userPublish.notebook_format
-                }
-            ]
-            case "report":  [
-                {  
+            
+            case "report":  metadata.additionalInformation!.customData = {  
                     "subtype": userPublish.type,
                     "report_type": userPublish.report_type, 
                     "report_format": userPublish.report_format
-                }
-            ]
+                }; 
+                break;
+            case "notebook":  metadata.additionalInformation!.customData = {  
+                    "subtype": userPublish.type,
+                    "notebook_language": userPublish.notebook_language, 
+                    "notebook_requirements": userPublish.notebook_requirements,
+                    "notebook_format": userPublish.notebook_format
+                };
+                break;
+            default: break;
         }
 
         return metadata
@@ -220,10 +220,10 @@ export const UserPublishMultiStep: NextPage = () => {
             }
 
             const metadata = generateMetadata()
-
             txPopupRef.current?.open()
     
              // variable account in UserProvider stores only the address!
+            
             const accounts = await sdk.accounts.list()
             const user_account = await accounts[0]
             const user_address = user_account.getId() 
@@ -234,6 +234,7 @@ export const UserPublishMultiStep: NextPage = () => {
                 popupRef.current?.open()
                 await account.generateToken()
             }
+
 
             sdk.nfts.create721(
                 metadata,
@@ -253,8 +254,7 @@ export const UserPublishMultiStep: NextPage = () => {
                     setSuccessMessage("")
                     txPopupRef.current?.close()
                 }
-            )
-          
+            )          
         } catch (error: any ) {
             setErrorMessage(error.message)
             popupRef.current?.open()
