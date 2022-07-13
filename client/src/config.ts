@@ -86,7 +86,7 @@ export const protocols = [
   'Pangolin',
   'Traderjoe'
 ]
-export const assetTypes = ['dataset', 'report', 'notebook', 'dashboard']
+export const assetTypes = ['dataset', 'report', 'notebook']
 export const networks = ['None'].concat(networkArray)
 
 export const graphUrl =

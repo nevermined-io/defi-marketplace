@@ -3,7 +3,7 @@ import { UiForm, UiLayout, UiText, UiPopupHandlers, NotificationPopup, BEM } fro
 import Catalog from '@nevermined-io/components-catalog'
 import { NextPage } from 'next'
 import styles from './user-publish.module.scss'
-import { MetaData, Nevermined } from "@nevermined-io/nevermined-sdk-js"
+import { MetaData} from "@nevermined-io/nevermined-sdk-js"
 import AssetRewards from "@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards";
 import BigNumber from "bignumber.js";
 import {  Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress } from 'src/config'
@@ -26,6 +26,11 @@ export interface UserPublishParams {
     network: string
     price: number
     tier: string
+    notebook_language: string
+    notebook_dependencies: string,
+    notebook_format: string,
+    report_type: string,
+    report_format: string,
     asset_files: AssetFile[]
 }
 
@@ -52,7 +57,10 @@ export const UserPublishMultiStep: NextPage = () => {
         tier: 'Tier 1',
         asset_files: [],
         notebook_language: '',
-        notebook_format: ''
+        notebook_dependencies: '',
+        notebook_format: '',
+        report_type: '',
+        report_format: ''
     })
 
     const reset = () => {
@@ -69,7 +77,10 @@ export const UserPublishMultiStep: NextPage = () => {
             tier: 'Tier 1',
             asset_files: [],
             notebook_language: '',
-            notebook_format: ''
+            notebook_dependencies: '',
+            notebook_format: '',
+            report_type: '',
+            report_format: ''    
         })
 
         setIsPublished(false)
@@ -127,15 +138,15 @@ export const UserPublishMultiStep: NextPage = () => {
 
     const generateMetadata = () => {
 
-        const metadata = {
+        const metadata: MetaData = {
             main: {
                 name: userPublish.name,
                 dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
                 author: userPublish.author,
-                license: 'CC0: Public Domain', // ??
+                license: 'No License Specified', 
                 price: String(userPublish.price),
                 datePublished: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
-                type: userPublish.type,
+                type: userPublish.type === 'notebook'?"algorithm":"dataset",
                 network: userPublish.network,
                 files: generateFilesMetadata()
             },
@@ -149,10 +160,28 @@ export const UserPublishMultiStep: NextPage = () => {
                 ],
                 blockchain: userPublish.network,
                 version: "v1",
-                source: "filecoin"   
+                source: "filecoin"
             }
         } as MetaData
-    
+
+        switch ( userPublish.type) {
+            case "notebook":  metadata.additionalInformation!.customData = [
+                {  
+                    "subtype": userPublish.type,
+                    "notebook_language": userPublish.notebook_language, 
+                    "notebook_dependencies": userPublish.notebook_dependencies,
+                    "notebook_format": userPublish.notebook_format
+                }
+            ]
+            case "report":  [
+                {  
+                    "subtype": userPublish.type,
+                    "report_type": userPublish.report_type, 
+                    "report_format": userPublish.report_format
+                }
+            ]
+        }
+
         return metadata
     }
 

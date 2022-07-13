@@ -1,5 +1,5 @@
-import React, { ReactNode, useContext, useState, useEffect, useCallback } from 'react'
-import { DDO, Bookmark } from '@nevermined-io/nevermined-sdk-js'
+import React, { ReactNode, useContext, useState, useEffect} from 'react'
+import { DDO} from '@nevermined-io/nevermined-sdk-js'
 import Catalog from '@nevermined-io/components-catalog'
 import { SearchQuery } from '@nevermined-io/nevermined-sdk-js'
 

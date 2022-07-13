@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { UiFormGroup, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, BEM } from '@nevermined-io/styles'
+import { UiFormGroup, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, UiFormTextarea, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
 import { networks, categories, protocols, assetTypes } from 'src/config'
 import {UserPublishParams} from './main-page'
@@ -21,7 +21,9 @@ export const DetailsStep = (props: DetailsProps) => {
     const [protocolInputError, setProtocolInputError] = useState('')
     const [networkInputError, setNetworkInputError] = useState('')
     const notebookLanguages = ['Python', 'Java', 'Scala', 'R', 'SQL', 'Other' ]
-    const notebookFormats = ['Jupyter', 'Source code','Json', 'Zip', 'PDF' ]
+    const notebookFormats = ['Source code', 'Jupyter (.ipynb)', 'Zeppelin (.json)', 'Zip', 'PDF', 'Other' ]
+    const reportTypes = ['Aggregation', 'Merge', 'Transformation', 'Enrichment', 'Other']
+    const reportFormats = ['CSV', 'Excel', 'PDF', 'Other']
 
     const checkValues = (): Boolean => {
 
@@ -88,7 +90,7 @@ export const DetailsStep = (props: DetailsProps) => {
                                 onChange={e => handleChange(e, 'notebook_language')}
                                 options={notebookLanguages}
                                 className={b('publish-form-select')}
-                                label='Language'
+                                label='Language *'
                                 inputError={typeInputError}
                             />
                         </UiFormGroup>
@@ -99,10 +101,45 @@ export const DetailsStep = (props: DetailsProps) => {
                             onChange={e => handleChange(e, 'notebook_format')}
                             options={notebookFormats}
                             className={b('publish-form-select')}
-                            label='Format'
+                            label='Format *'
                             inputError={typeInputError}
                         />
                     </UiFormGroup>
+                    <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormTextarea
+                            className={b('publish-form-input')}
+                            label='Dependencies'
+                            inputError={typeInputError}
+                            value={values.notebook_dependencies}
+                            onChange={e => handleChange(e.target.value, 'notebook_dependencies')}
+                            placeholder='Put here the dependendencies or requirements in order to run the notebook'
+                        />
+                    </UiFormGroup>
+                    </div>
+                        :null
+                    }
+
+                    {
+                        values.type === "report" ?
+                        <div>
+                        <UiFormGroup orientation={Orientation.Vertical}>
+                            <UiFormSelect
+                                value={values.report_type}
+                                onChange={e => handleChange(e, 'report_type')}
+                                options={reportTypes}
+                                className={b('publish-form-select')}
+                                label='Type *'
+                                inputError={typeInputError}
+                            />
+                            <UiFormSelect
+                                value={values.report_format}
+                                onChange={e => handleChange(e, 'report_format')}
+                                options={reportFormats}
+                                className={b('publish-form-select')}
+                                label='Format *'
+                                inputError={typeInputError}
+                            />
+                        </UiFormGroup>
                     </div>
                         :null
                     }
