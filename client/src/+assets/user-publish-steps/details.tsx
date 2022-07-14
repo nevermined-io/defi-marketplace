@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { UiFormGroup, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, UiFormTextarea, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
-import { networks, categories, protocols, assetTypes } from 'src/config'
+import { networks, categories, protocols, assetTypes, notebookLanguages, notebookFormats, reportTypes, reportFormats} from 'src/config'
 import {UserPublishParams} from './main-page'
 
 const b = BEM('user-publish', styles)
@@ -20,11 +20,7 @@ export const DetailsStep = (props: DetailsProps) => {
     const [categoryInputError, setCategoryInputError] = useState('')
     const [protocolInputError, setProtocolInputError] = useState('')
     const [networkInputError, setNetworkInputError] = useState('')
-    const notebookLanguages = ['Python', 'Java', 'Scala', 'R', 'SQL', 'Other' ]
-    const notebookFormats = ['Source code', 'Jupyter (.ipynb)', 'PDF', 'Zeppelin (.json)', 'Zip', 'Other' ]
-    const reportTypes = ['Aggregation', 'Enrichment', 'Merge','Transformation', 'Other']
-    const reportFormats = ['CSV', 'Excel', 'PDF', 'Other']
-
+    
     const checkValues = (): Boolean => {
 
         if (!values.type) {
