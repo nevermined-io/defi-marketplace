@@ -1,42 +1,41 @@
 import React, { useState } from 'react'
-import { UiFormGroup, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, BEM } from '@nevermined-io/styles'
+import { UiFormGroup, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, UiFormTextarea, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
-import { networks, categories, protocols, assetTypes } from 'src/config'
-import {UserPublishParams} from './main-page'
+import { networks, categories, protocols, assetTypes, notebookLanguages, notebookFormats, reportTypes, reportFormats} from 'src/config'
+import Catalog from 'components-catalog-nvm-test'
 
 const b = BEM('user-publish', styles)
 
 interface DetailsProps {
-   values: UserPublishParams
-   handleChange: (value: string, field: string) => void
    prevStep: () => void
    nextStep: () => void
  }
 
 export const DetailsStep = (props: DetailsProps) => {
 
-    const {values, handleChange, prevStep, nextStep } = props;
+    const { prevStep, nextStep } = props;
+    const { userPublish, handleChange } = Catalog.useAssetPublish()
     const [typeInputError, setTypeInputError] = useState('')
     const [categoryInputError, setCategoryInputError] = useState('')
     const [protocolInputError, setProtocolInputError] = useState('')
     const [networkInputError, setNetworkInputError] = useState('')
-
+    
     const checkValues = (): Boolean => {
 
-        if (!values.type) {
+        if (!userPublish.type) {
             setTypeInputError('Type is required')
             return false
         }
 
-        if (!values.category) {
+        if (!userPublish.category) {
             setCategoryInputError('Category is required')
             return false
         }
-        if (!values.protocol) {
+        if (!userPublish.protocol) {
             setProtocolInputError('Protocol is required')
             return false
         }
-        if (!values.network) {
+        if (!userPublish.network) {
             setNetworkInputError('Network is required')
             return false
         }
@@ -68,18 +67,83 @@ export const DetailsStep = (props: DetailsProps) => {
                     <div className={b('form-input')}>
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
-                            value={values.type}
+                            value={userPublish.type}
                             onChange={e => handleChange(e, 'type')}
                             options={assetTypes}
                             className={b('publish-form-select')}
-                            label='Type'
+                            label='Asset Type'
                             inputError={typeInputError}
                         />
                     </UiFormGroup>
 
+                    {
+                        userPublish.type === "notebook" ?
+                        <div className={b('form-input')}>
+                        <UiFormGroup orientation={Orientation.Vertical}>
+                            <UiFormSelect
+                                value={userPublish.notebook_language}
+                                onChange={e => handleChange(e, 'notebook_language')}
+                                options={notebookLanguages}
+                                className={b('publish-form-select')}
+                                label='Language'
+                                inputError={typeInputError}
+                            />
+                        </UiFormGroup>
+
+                        <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormSelect
+                            value={userPublish.notebook_format}
+                            onChange={e => handleChange(e, 'notebook_format')}
+                            options={notebookFormats}
+                            className={b('publish-form-select')}
+                            label='Format'
+                            inputError={typeInputError}
+                        />
+                    </UiFormGroup>
+                    <UiFormGroup orientation={Orientation.Vertical}>
+                        <UiFormTextarea
+                            className={b('publish-form-input')}
+                            label='Requirements'
+                            inputError={typeInputError}
+                            value={userPublish.notebook_requirements}
+                            onChange={e => handleChange(e.target.value, 'notebook_requirements')}
+                            placeholder='Put here the requirements, dependencies or conditions needed in order to run the notebook'
+                        />
+                    </UiFormGroup>
+                    </div>
+                        :null
+                    }
+
+                    {
+                        userPublish.type === "report" ?
+                        <div>
+                        <UiFormGroup orientation={Orientation.Vertical}>
+                            <UiFormSelect
+                                value={userPublish.report_type}
+                                onChange={e => handleChange(e, 'report_type')}
+                                options={reportTypes}
+                                className={b('publish-form-select')}
+                                label='Report Type'
+                                inputError={typeInputError}
+                            />
+                            <UiFormSelect
+                                value={userPublish.report_format}
+                                onChange={e => handleChange(e, 'report_format')}
+                                options={reportFormats}
+                                className={b('publish-form-select')}
+                                label='Format'
+                                inputError={typeInputError}
+                            />
+                        </UiFormGroup>
+                    </div>
+                        :null
+                    }
+
+                    <div  className={b('publish-horizontal-line')}/>
+
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
-                            value={values.category}
+                            value={userPublish.category}
                             onChange={e => handleChange(e, 'category')}
                             options={categories}
                             className={b('publish-form-select')}
@@ -90,7 +154,7 @@ export const DetailsStep = (props: DetailsProps) => {
 
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
-                            value={values.protocol}
+                            value={userPublish.protocol}
                             onChange={e => handleChange(e, 'protocol')}
                             options={protocols}
                             className={b('publish-form-select')}
@@ -101,7 +165,7 @@ export const DetailsStep = (props: DetailsProps) => {
 
                     <UiFormGroup orientation={Orientation.Vertical}>
                     <UiFormSelect
-                        value={values.network}
+                        value={userPublish.network}
                         onChange={e => handleChange(e, 'network')}
                         options={networks}
                         className={b('publish-form-select')}

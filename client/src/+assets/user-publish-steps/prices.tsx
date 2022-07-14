@@ -1,30 +1,30 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
 import { UiForm, UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, UiPopupHandlers, BEM } from '@nevermined-io/styles'
+import {  Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress } from 'src/config'
 import styles from './user-publish.module.scss'
-import { UiHeaderLink} from 'ui'
-import {UserPublishParams} from './main-page'
+import Catalog from 'components-catalog-nvm-test'
 import {ProgressPopup} from './progress-popup' 
 import {ConfirmPopup} from './confirm-popup'
+import { Tier } from '../../shared'
 
 const b = BEM('user-publish', styles)
 const tiers: string[] = ["Tier 1", "Tier 2", "Tier 3"]
 
 interface PricesProps {
-    values: UserPublishParams
     handleChange: (value: string, field: string) => void
     prevStep: () => void
-    submit: () => void
-    reset: () => void
-    isPublished: boolean
+    resetStepAndTier: () => void
+    tier: Tier,
     successMessage: string
     txErrorMessage: string
     filesUploadedMessage: string[],
-    fileUploadPopupRef: React.RefObject<UiPopupHandlers>,
-    txPopupRef:  React.RefObject<UiPopupHandlers>
+    fileUploadPopupRef: React.MutableRefObject<UiPopupHandlers | undefined>,
+    txPopupRef:  React.MutableRefObject<UiPopupHandlers | undefined>
  }
 
 export const PricesStep = (props: PricesProps) => {
-    const {values, handleChange, prevStep, submit, reset, isPublished, successMessage, txErrorMessage, filesUploadedMessage, fileUploadPopupRef, txPopupRef } = props;    
+    const {handleChange, prevStep, successMessage, txErrorMessage, filesUploadedMessage, fileUploadPopupRef, txPopupRef, tier } = props;
+    const { isPublished, onSubmitUserPublish, reset, userPublish } = Catalog.useAssetPublish();
     const [inputError, setInputError] = useState('') 
     const UploadPopupMesssage = "Uploading local files to Filecoin..."
     const txPopupMesssage = "Sending transaction to register the Asset in the network..."
@@ -34,6 +34,15 @@ export const PricesStep = (props: PricesProps) => {
     const txImage = '/assets/nevermined-color.svg'
     const confirmPopupRef = useRef<UiPopupHandlers>()
 
+    const getNftTierAddress = (): string => {
+
+        switch(tier) {
+            case Tier.One: return tier1NftContractAddress 
+            case Tier.Two: return tier2NftContractAddress
+            case Tier.Three: return tier3NftContractAddress
+            default: return Nft721ContractAddress
+        }
+    }
 
     const Previous = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -42,7 +51,7 @@ export const PricesStep = (props: PricesProps) => {
 
     const confirm = () => {
         confirmPopupRef.current?.close()
-        submit()
+        onSubmitUserPublish({ nftAddress: getNftTierAddress()})
     }
 
     const cancel = () => { 
@@ -70,7 +79,7 @@ export const PricesStep = (props: PricesProps) => {
                     <UiFormGroup orientation={Orientation.Vertical}>
                     {(isPublished) ? <div/> :
                     <UiFormSelect
-                        value={values.tier}
+                        value={tier}
                         onChange={e => handleChange(e, 'tier')}
                         options={tiers}
                         className={b('publish-form-select')}
@@ -83,8 +92,8 @@ export const PricesStep = (props: PricesProps) => {
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormInput
                             className={b('publish-form-input')}
-                            label='Set Your Price'
-                            value={values.price} onChange={e=>handleChange(e.target.value, 'price')}
+                            label='Set Your Price (USDC)'
+                            value={userPublish.price} onChange={e=>handleChange(e.target.value, 'price')}
                         />
                     </UiFormGroup>
                     }

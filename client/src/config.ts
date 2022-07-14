@@ -86,8 +86,12 @@ export const protocols = [
   'Pangolin',
   'Traderjoe'
 ]
-export const assetTypes = ['dataset', 'report', 'notebook', 'dashboard']
+export const assetTypes = ['dataset', 'report', 'notebook']
 export const networks = ['None'].concat(networkArray)
+export const notebookLanguages = ['Python', 'Java', 'Scala', 'R', 'SQL', 'Other' ]
+export const notebookFormats = ['Source code', 'Jupyter (.ipynb)', 'PDF', 'Zeppelin (.json)', 'Zip', 'Other' ]
+export const reportTypes = ['Aggregation', 'Enrichment', 'Merge','Transformation', 'Other']
+export const reportFormats = ['CSV', 'Excel', 'PDF', 'Other']
 
 export const graphUrl =
   process.env.NEXT_PUBLIC_ACCESS_CONDITION_URI ||

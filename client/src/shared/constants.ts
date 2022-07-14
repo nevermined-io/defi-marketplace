@@ -45,3 +45,9 @@ export enum State {
   Unconfirmed = 'unconfirmed',
   Confirmed = 'confirmed'
 }
+
+export enum Tier {
+  One = 'Tier 1',
+  Two = 'Tier 2',
+  Three = 'Tier 3'
+}
