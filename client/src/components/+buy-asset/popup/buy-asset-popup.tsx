@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { OrderProgressStep } from '@nevermined-io/nevermined-sdk-js'
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from 'components-catalog-nvm-test'
 import { BEM, UiText, UiDivider, UiLayout, UiButton, UiCircleProgress, UiIcon, CircleSpinner } from '@nevermined-io/styles'
 
 import styles from './buy-asset-popup.module.scss'

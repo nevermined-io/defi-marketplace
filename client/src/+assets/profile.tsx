@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState, useCallback, useRef } from 'react'
 import type { NextPage } from 'next'
 import Image from "next/image"
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from 'components-catalog-nvm-test'
 import { User } from '../context'
 import styles from './profile.module.scss'
 import { XuiAssetsQuery } from 'ui'

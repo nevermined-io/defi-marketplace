@@ -4,7 +4,7 @@ import '../src/styles/styles.scss'
 import React from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from 'components-catalog-nvm-test'
 import Web3 from 'web3';
 import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
 import { UiDivider } from '@nevermined-io/styles'
@@ -19,7 +19,9 @@ import { docsUrl,
     verbose,
     graphUrl,
     artifactsFolder,
-    correctNetworkId
+    correctNetworkId,
+    ipfsGatewayUri,
+    filecoinUploadUri
 } from 'src/config'
 import chainConfig from 'src/chainConfig'
 
@@ -34,7 +36,9 @@ const appConfig = {
     verbose,
     marketplaceAuthToken: typeof window !== 'undefined' ? Catalog.fetchMarketplaceApiTokenFromLocalStorage().token : '',
     artifactsFolder,
-    graphHttpUri: graphUrl
+    graphHttpUri: graphUrl,
+    ipfsGatewayUri,
+    filecoinUploadUri,
 }
 
 function App({ Component, pageProps }: AppProps) {
