@@ -111,7 +111,7 @@ export const DetailsStep = (props: DetailsProps) => {
                             label='Requirements'
                             inputError={typeInputError}
                             value={values.notebook_requirements}
-                            onChange={e => handleChange(e.target.value, 'notebook_dependencies')}
+                            onChange={e => handleChange(e.target.value, 'notebook_requirements')}
                             placeholder='Put here the requirements, dependencies or conditions needed in order to run the notebook'
                         />
                     </UiFormGroup>
