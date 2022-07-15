@@ -11,7 +11,7 @@
   "dependencies": {
     "@nevermined-io/nevermined-sdk-js": "0.21.1",
     "@nevermined-io/styles": "0.1.2",
-    "components-catalog-nvm-test": "0.0.119",
+    "components-catalog-nvm-test": "0.0.126",
     "axios": "^0.25.0",
     "axios-retry":"^3.3.1", 
     "bn.js": "^5.2.0",

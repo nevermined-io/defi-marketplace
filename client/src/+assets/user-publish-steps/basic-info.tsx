@@ -1,38 +1,38 @@
 import React, { useState } from 'react'
 import { UiFormGroup, UiFormInput, UiFormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
-import {UserPublishParams} from './main-page'
+import Catalog from 'components-catalog-nvm-test'
+import { AssetType } from '../../shared';
 
 
 const b = BEM('user-publish', styles)
 
 interface BasicInfoProps {
-   values: UserPublishParams
-   handleChange: (value: string, field: string) => void
    nextStep: () => void
 }
 
 
 export const BasicInfoStep = (props: BasicInfoProps) => {
 
-    const {values, handleChange, nextStep } = props;
+    const { nextStep } = props;
+    const { assetPublish, handleChange } = Catalog.useAssetPublish()
     const [authorInputError, setAuthorInputError] = useState('')
     const [nameInputError, setNameInputError] = useState('')
     const [descriptionInputError, setDescriptionInputError] = useState('')
 
     const checkValues = (): Boolean => {
 
-        if (!values.author) {
+        if (!assetPublish.author) {
             setAuthorInputError('Author is required')
             return false
         }
 
-        if (!values.name) {
+        if (!assetPublish.name) {
             setNameInputError('Name is required')
             return false
         }
 
-        if (!values.description) {
+        if (!assetPublish.description) {
             setDescriptionInputError('Description is required')
             return false
         }
@@ -62,7 +62,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
                             className={b('publish-form-input')}
                             label='Author *'
                             inputError={authorInputError}
-                            value={values.author} onChange={e => handleChange(e.target.value, 'author')}
+                            value={assetPublish.author} onChange={e => handleChange(e.target.value, 'author')}
                             placeholder='Type the author'
                         />
                     </UiFormGroup>
@@ -71,7 +71,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
                             className={b('publish-form-input')}
                             label='Name *'
                             inputError={nameInputError}
-                            value={values.name} onChange={e => handleChange(e.target.value, 'name')}
+                            value={assetPublish.name} onChange={e => handleChange(e.target.value, 'name')}
                             placeholder='Type a name for the Asset'
                         />
                     </UiFormGroup>
@@ -80,7 +80,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
                             className={b('publish-form-input')}
                             label='Description *'
                             inputError={descriptionInputError}
-                            value={values.description}
+                            value={assetPublish.description}
                             onChange={e => handleChange(e.target.value, 'description')}
                             placeholder='Type a description'
                         />

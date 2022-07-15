@@ -51,3 +51,12 @@ export enum Tier {
   Two = 'Tier 2',
   Three = 'Tier 3'
 }
+
+export type AssetType =
+  | 'dataset'
+  | 'algorithm'
+  | 'compute'
+  | 'workflow'
+  | 'compute'
+  | 'report'
+  | 'notebook'

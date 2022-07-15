@@ -7,14 +7,13 @@ import Catalog from 'components-catalog-nvm-test'
 const b = BEM('user-publish', styles)
 
 interface DetailsProps {
-   prevStep: () => void
-   nextStep: () => void
+    prevStep: () => void
+    nextStep: () => void
  }
 
 export const DetailsStep = (props: DetailsProps) => {
-
     const { prevStep, nextStep } = props;
-    const { userPublish, handleChange } = Catalog.useAssetPublish()
+    const { handleChange, assetPublish } = Catalog.useAssetPublish()
     const [typeInputError, setTypeInputError] = useState('')
     const [categoryInputError, setCategoryInputError] = useState('')
     const [protocolInputError, setProtocolInputError] = useState('')
@@ -22,20 +21,20 @@ export const DetailsStep = (props: DetailsProps) => {
     
     const checkValues = (): Boolean => {
 
-        if (!userPublish.type) {
+        if (!assetPublish.type) {
             setTypeInputError('Type is required')
             return false
         }
 
-        if (!userPublish.category) {
+        if (!assetPublish.category) {
             setCategoryInputError('Category is required')
             return false
         }
-        if (!userPublish.protocol) {
+        if (!assetPublish.protocol) {
             setProtocolInputError('Protocol is required')
             return false
         }
-        if (!userPublish.network) {
+        if (!assetPublish.network) {
             setNetworkInputError('Network is required')
             return false
         }
@@ -67,7 +66,7 @@ export const DetailsStep = (props: DetailsProps) => {
                     <div className={b('form-input')}>
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
-                            value={userPublish.type}
+                            value={assetPublish.type}
                             onChange={e => handleChange(e, 'type')}
                             options={assetTypes}
                             className={b('publish-form-select')}
@@ -77,11 +76,11 @@ export const DetailsStep = (props: DetailsProps) => {
                     </UiFormGroup>
 
                     {
-                        userPublish.type === "notebook" ?
+                        assetPublish.type === "notebook" ?
                         <div className={b('form-input')}>
                         <UiFormGroup orientation={Orientation.Vertical}>
                             <UiFormSelect
-                                value={userPublish.notebook_language}
+                                value={assetPublish.notebook_language}
                                 onChange={e => handleChange(e, 'notebook_language')}
                                 options={notebookLanguages}
                                 className={b('publish-form-select')}
@@ -92,7 +91,7 @@ export const DetailsStep = (props: DetailsProps) => {
 
                         <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
-                            value={userPublish.notebook_format}
+                            value={assetPublish.notebook_format}
                             onChange={e => handleChange(e, 'notebook_format')}
                             options={notebookFormats}
                             className={b('publish-form-select')}
@@ -105,7 +104,7 @@ export const DetailsStep = (props: DetailsProps) => {
                             className={b('publish-form-input')}
                             label='Requirements'
                             inputError={typeInputError}
-                            value={userPublish.notebook_requirements}
+                            value={assetPublish.notebook_requirements}
                             onChange={e => handleChange(e.target.value, 'notebook_requirements')}
                             placeholder='Put here the requirements, dependencies or conditions needed in order to run the notebook'
                         />
@@ -115,11 +114,11 @@ export const DetailsStep = (props: DetailsProps) => {
                     }
 
                     {
-                        userPublish.type === "report" ?
+                        assetPublish.type === "report" ?
                         <div>
                         <UiFormGroup orientation={Orientation.Vertical}>
                             <UiFormSelect
-                                value={userPublish.report_type}
+                                value={assetPublish.report_type}
                                 onChange={e => handleChange(e, 'report_type')}
                                 options={reportTypes}
                                 className={b('publish-form-select')}
@@ -127,7 +126,7 @@ export const DetailsStep = (props: DetailsProps) => {
                                 inputError={typeInputError}
                             />
                             <UiFormSelect
-                                value={userPublish.report_format}
+                                value={assetPublish.report_format}
                                 onChange={e => handleChange(e, 'report_format')}
                                 options={reportFormats}
                                 className={b('publish-form-select')}
@@ -143,7 +142,7 @@ export const DetailsStep = (props: DetailsProps) => {
 
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
-                            value={userPublish.category}
+                            value={assetPublish.category}
                             onChange={e => handleChange(e, 'category')}
                             options={categories}
                             className={b('publish-form-select')}
@@ -154,7 +153,7 @@ export const DetailsStep = (props: DetailsProps) => {
 
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
-                            value={userPublish.protocol}
+                            value={assetPublish.protocol}
                             onChange={e => handleChange(e, 'protocol')}
                             options={protocols}
                             className={b('publish-form-select')}
@@ -165,7 +164,7 @@ export const DetailsStep = (props: DetailsProps) => {
 
                     <UiFormGroup orientation={Orientation.Vertical}>
                     <UiFormSelect
-                        value={userPublish.network}
+                        value={assetPublish.network}
                         onChange={e => handleChange(e, 'network')}
                         options={networks}
                         className={b('publish-form-select')}

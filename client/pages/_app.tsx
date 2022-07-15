@@ -48,42 +48,44 @@ function App({ Component, pageProps }: AppProps) {
         chainConfig={chainConfig}
         nodeUri={appConfig.nodeUri}
         correctNetworkId={correctNetworkId}>
-          <UserProvider>
-            <Head>
-              <script async src="https://www.googletagmanager.com/gtag/js?id=G-11ZZZNJ4Q5"></script>
-              <script dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments)}
-                  gtag('js', new Date());
+          <Catalog.AssetPublishProvider>
+            <UserProvider>
+              <Head>
+                <script async src="https://www.googletagmanager.com/gtag/js?id=G-11ZZZNJ4Q5"></script>
+                <script dangerouslySetInnerHTML={{
+                  __html: `
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments)}
+                    gtag('js', new Date());
 
-                  gtag('config', 'G-11ZZZNJ4Q5');
-                `
-              }}>
-              </script>
-              <title>Nevermined DeFi Marketplace</title>
-              <meta name="description" content="Nevermined DeFi Marketplace" />
-              <link rel="icon" href="/favicon.ico" />
+                    gtag('config', 'G-11ZZZNJ4Q5');
+                  `
+                }}>
+                </script>
+                <title>Nevermined DeFi Marketplace</title>
+                <meta name="description" content="Nevermined DeFi Marketplace" />
+                <link rel="icon" href="/favicon.ico" />
 
-            </Head>
+              </Head>
 
-          <div>
-            <UiHeader>
-              <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
-              <UiHeaderLink href="/profile">Profile</UiHeaderLink>
-              <UiHeaderLink href="/user-profile">Account</UiHeaderLink>
-              <UiHeaderLink href="/user-publish">Publish</UiHeaderLink>
-              <UiHeaderLink href="/subscription">Pricing</UiHeaderLink>
-              <UiHeaderLink href="/about">About</UiHeaderLink>
-              <UiHeaderLink href={docsUrl} target='_blank'>Docs</UiHeaderLink>
-            </UiHeader>
+            <div>
+              <UiHeader>
+                <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
+                <UiHeaderLink href="/profile">Profile</UiHeaderLink>
+                <UiHeaderLink href="/user-profile">Account</UiHeaderLink>
+                <UiHeaderLink href="/user-publish">Publish</UiHeaderLink>
+                <UiHeaderLink href="/subscription">Pricing</UiHeaderLink>
+                <UiHeaderLink href="/about">About</UiHeaderLink>
+                <UiHeaderLink href={docsUrl} target='_blank'>Docs</UiHeaderLink>
+              </UiHeader>
 
-              <Component {...pageProps} />
-            </div>
+                <Component {...pageProps} />
+              </div>
 
-            <UiDivider flex />
-            <UiFooter />
-        </UserProvider>
+              <UiDivider flex />
+              <UiFooter />
+          </UserProvider>
+        </Catalog.AssetPublishProvider>
       </Catalog.WalletProvider>
     </Catalog.NeverminedProvider>
   )

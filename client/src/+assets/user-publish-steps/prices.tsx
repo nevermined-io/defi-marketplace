@@ -3,28 +3,23 @@ import { UiForm, UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiTe
 import {  Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress } from 'src/config'
 import styles from './user-publish.module.scss'
 import Catalog from 'components-catalog-nvm-test'
+import { AssetPublishParams } from 'components-catalog-nvm-test/dist/node/types'
 import {ProgressPopup} from './progress-popup' 
 import {ConfirmPopup} from './confirm-popup'
-import { Tier } from '../../shared'
+import { Tier, AssetType } from '../../shared'
 
 const b = BEM('user-publish', styles)
 const tiers: string[] = ["Tier 1", "Tier 2", "Tier 3"]
 
 interface PricesProps {
-    handleChange: (value: string, field: string) => void
     prevStep: () => void
-    resetStepAndTier: () => void
-    tier: Tier,
-    successMessage: string
-    txErrorMessage: string
     filesUploadedMessage: string[],
     fileUploadPopupRef: React.MutableRefObject<UiPopupHandlers | undefined>,
-    txPopupRef:  React.MutableRefObject<UiPopupHandlers | undefined>
  }
 
 export const PricesStep = (props: PricesProps) => {
-    const {handleChange, prevStep, successMessage, txErrorMessage, filesUploadedMessage, fileUploadPopupRef, txPopupRef, tier } = props;
-    const { isPublished, onSubmitUserPublish, reset, userPublish } = Catalog.useAssetPublish();
+    const { prevStep, filesUploadedMessage, fileUploadPopupRef } = props;
+    const { isPublished, onSubmitAssetPublish, reset, errorAssetMessage, assetMesssage, assetPublish, handleChange } = Catalog.useAssetPublish();
     const [inputError, setInputError] = useState('') 
     const UploadPopupMesssage = "Uploading local files to Filecoin..."
     const txPopupMesssage = "Sending transaction to register the Asset in the network..."
@@ -33,10 +28,11 @@ export const PricesStep = (props: PricesProps) => {
     const uploadImage = '/assets/logos/filecoin_grey.svg'
     const txImage = '/assets/nevermined-color.svg'
     const confirmPopupRef = useRef<UiPopupHandlers>()
+    const txPopupRef = useRef<UiPopupHandlers>()
 
     const getNftTierAddress = (): string => {
 
-        switch(tier) {
+        switch(assetPublish.tier) {
             case Tier.One: return tier1NftContractAddress 
             case Tier.Two: return tier2NftContractAddress
             case Tier.Three: return tier3NftContractAddress
@@ -51,7 +47,7 @@ export const PricesStep = (props: PricesProps) => {
 
     const confirm = () => {
         confirmPopupRef.current?.close()
-        onSubmitUserPublish({ nftAddress: getNftTierAddress()})
+        onSubmitAssetPublish({ nftAddress: getNftTierAddress()})
     }
 
     const cancel = () => { 
@@ -61,6 +57,15 @@ export const PricesStep = (props: PricesProps) => {
     const showConfirm = () => {
         confirmPopupRef.current?.open()
     }
+
+    useEffect(() => {
+
+        if(filesUploadedMessage){
+            fileUploadPopupRef.current?.open()
+        } else {
+            fileUploadPopupRef.current?.close()
+        }
+    }, [filesUploadedMessage])
 
     return (
      
@@ -79,7 +84,7 @@ export const PricesStep = (props: PricesProps) => {
                     <UiFormGroup orientation={Orientation.Vertical}>
                     {(isPublished) ? <div/> :
                     <UiFormSelect
-                        value={tier}
+                        value={assetPublish.tier}
                         onChange={e => handleChange(e, 'tier')}
                         options={tiers}
                         className={b('publish-form-select')}
@@ -93,7 +98,7 @@ export const PricesStep = (props: PricesProps) => {
                         <UiFormInput
                             className={b('publish-form-input')}
                             label='Set Your Price (USDC)'
-                            value={userPublish.price} onChange={e=>handleChange(e.target.value, 'price')}
+                            value={assetPublish.price} onChange={e=>handleChange(e.target.value, 'price')}
                         />
                     </UiFormGroup>
                     }
@@ -103,8 +108,8 @@ export const PricesStep = (props: PricesProps) => {
                             
                             {
                                 (isPublished) ?  <div className={b('user-publish-submit-container', ['updated-message'])}>
-                                                <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> 
-                                                <UiText type="h3" wrapper="h3" variants={['error']}>{txErrorMessage}</UiText>                                                 
+                                                <UiText type="h3" wrapper="h3" variants={['success']}>{assetMesssage}</UiText> 
+                                                <UiText type="h3" wrapper="h3" variants={['error']}>{errorAssetMessage}</UiText>                                                 
                                                 {filesUploadedMessage.map( (message, index) => 
                                                     <div key={index}>
                                                         <UiText type="h3" wrapper="h3" variants={['success']}>{message}</UiText>

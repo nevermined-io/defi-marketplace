@@ -1,26 +1,18 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { UiForm, UiLayout, UiText, UiPopupHandlers, NotificationPopup, BEM } from '@nevermined-io/styles'
 import Catalog from 'components-catalog-nvm-test'
 import { NextPage } from 'next'
-import styles from './user-publish.module.scss'
 import { BasicInfoStep } from './basic-info'
 import { DetailsStep } from './details'
 import { PricesStep } from './prices'
 import { FilesStep } from './files'
-import { Tier } from '../../shared';
+import { Tier } from '../../shared'
 
 export const UserPublishMultiStep: NextPage = () => {
-    const { updateFilesAdded, removeFile, onSubmitUserPublish, assetMesssage, errorAssetMessage, filesUploadedMessage, userPublish, isPublished, reset, handleChange} = Catalog.useAssetPublish()
+    const { errorAssetMessage, filesUploadedMessage, setAssetPublish, assetPublish } = Catalog.useAssetPublish()
     const [step, setStep] = useState<number>(1)
-    const [tier, setTier] = useState<Tier>(Tier.One)
     const popupRef = useRef<UiPopupHandlers>()
     const fileUploadPopupRef = useRef<UiPopupHandlers>()
-    const txPopupRef = useRef<UiPopupHandlers>()
-
-    const resetStepAndTier = () => {
-        setStep(1)
-        setTier(Tier.One)
-    }
 
     const prevStep = () => {
         setStep(step - 1)
@@ -34,6 +26,14 @@ export const UserPublishMultiStep: NextPage = () => {
         popupRef.current?.close()
         event.preventDefault()
     }
+
+    useEffect(() => {
+        if(errorAssetMessage) {
+            popupRef.current?.open()
+        } else {
+            popupRef.current?.close()
+        }
+    }, [errorAssetMessage])
    
     switch(step) {
         case 1: 
@@ -48,8 +48,6 @@ export const UserPublishMultiStep: NextPage = () => {
                 <UiForm className=''>
                     <BasicInfoStep
                         nextStep={ nextStep }
-                        handleChange={ handleChange }
-                        values={ userPublish }
                     />
                 </UiForm>
             </UiLayout>
@@ -65,8 +63,8 @@ export const UserPublishMultiStep: NextPage = () => {
             <UiLayout type='container'>
                 <UiForm className=''>
                     <DetailsStep
-                         prevStep={ prevStep}
-                         nextStep={ nextStep }
+                        prevStep={ prevStep}
+                        nextStep={ nextStep }
                     />
                 </UiForm>
             </UiLayout>
@@ -83,11 +81,8 @@ export const UserPublishMultiStep: NextPage = () => {
             <UiLayout type='container'>
                 <UiForm className=''>
                     <FilesStep
-                         prevStep={ prevStep}
-                         nextStep={ nextStep }
-                         values={ userPublish }
-                         updateFilesAdded = {updateFilesAdded}
-                         removeFile = {removeFile}
+                        prevStep={ prevStep}
+                        nextStep={ nextStep }
                     />
                 </UiForm>
             </UiLayout>
@@ -104,15 +99,9 @@ export const UserPublishMultiStep: NextPage = () => {
             <UiLayout type='container'>
                 <UiForm className=''>
                     <PricesStep
-                         prevStep={ prevStep }
-                         resetStepAndTier= { resetStepAndTier }
-                         handleChange={ handleChange }
-                         tier={tier}
-                         successMessage={assetMesssage}
-                         txErrorMessage={errorAssetMessage}
-                         filesUploadedMessage = {filesUploadedMessage}
-                         fileUploadPopupRef = {fileUploadPopupRef}
-                         txPopupRef = {txPopupRef}
+                        prevStep={ prevStep }
+                        filesUploadedMessage = {filesUploadedMessage}
+                        fileUploadPopupRef = {fileUploadPopupRef}
                     />
                 </UiForm>
             </UiLayout>
