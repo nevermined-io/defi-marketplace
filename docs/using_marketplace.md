@@ -89,11 +89,11 @@ This section of the formulary consist in text input fields where you can place b
 - Name. A name for the Asset
 - Description. A brief description of the contents include in your Asset
 
-### Step 2 - Details
+### Step 2 - Details
 
 In this section you can add additional information for the Asset
 
-#### Asset Type. 
+#### Asset Type 
 
 Select one of the options that best suits  your asset:
 
@@ -103,7 +103,7 @@ Select one of the options that best suits  your asset:
 
 If you select notebook or report types, the application will show additional fields related to these specific types.
 
-#### Defi specific information
+#### Defi specific information
 
 The rest of the fields of this step, Category, Protocol and Network,  are related with Defi Protocols. Select one option for each field. If your asset can’t be associated with any of the options showed, or fits more than one, just select None
 
