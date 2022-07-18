@@ -40,7 +40,7 @@ const appConfig = {
 function App({ Component, pageProps }: AppProps) {
   return (
     <Catalog.NeverminedProvider config={appConfig}>
-      <Catalog.WalletProvider 
+      <Catalog.WalletProvider
         chainConfig={chainConfig}
         nodeUri={appConfig.nodeUri}
         correctNetworkId={correctNetworkId}>
@@ -66,9 +66,6 @@ function App({ Component, pageProps }: AppProps) {
           <div>
             <UiHeader>
               <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
-              <UiHeaderLink href="/profile">Profile</UiHeaderLink>
-              <UiHeaderLink href="/user-profile">Account</UiHeaderLink>
-              <UiHeaderLink href="/user-publish">Publish</UiHeaderLink>
               <UiHeaderLink href="/subscription">Pricing</UiHeaderLink>
               <UiHeaderLink href="/about">About</UiHeaderLink>
               <UiHeaderLink href={docsUrl} target='_blank'>Docs</UiHeaderLink>

@@ -1,0 +1,25 @@
+@import '~@nevermined-io/styles/lib/cjs/styles/index.scss';
+
+.account {
+  @include component;
+
+  &__row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__columnleft {
+    width: 20%;
+  }
+
+  &__pointer {
+    &--active {
+      color: #FEFEFE;
+    }
+    cursor: pointer;
+  }
+
+  &__columnright {
+    width: 85%;
+  }
+}
