@@ -71,3 +71,67 @@ After the payment is done, the assets are available to download. To download it 
 ![banner](./assets/sign_message.png)
 
 After signing these messages your datasets will appear to download shortly.
+
+
+## Publishing a new Asset
+
+This section allows you to publish your own assets in the Defi Marketplace and monetize your data, source code and insights. 
+
+[Explain here reward and fee policies]
+
+Before you start the process to publish a new asset, make sure you have connected Metamask  and selected the address you want to use.
+
+### Step 1 - Basic information of your Asset
+
+This section of the formulary consist in text input fields where you can place basic information of your Asset:
+
+- Author. The original author of the data you want to publish
+- Name. A name for the Asset
+- Description. A brief description of the contents include in your Asset
+
+### Step 2 - Details
+
+In this section you can add additional information for the Asset
+
+#### Asset Type. 
+
+Select one of the options that best suits  your asset:
+
+- Dataset. Raw data of  Defi protocol(s)
+- Report. Data obtained by processing Defi data using some sort of transformations and/or aggregations.		
+- Notebook. Source code in form of notebook that allows to process defi data
+
+If you select notebook or report types, the application will show additional fields related to these specific types.
+
+#### Defi specific information
+
+The rest of the fields of this step, Category, Protocol and Network,  are related with Defi Protocols. Select one option for each field. If your asset can’t be associated with any of the options showed, or fits more than one, just select None
+
+### Step 3 - Files
+
+In this section you can add one or multiple files for your asset. You can use filecoin/ipfs CIDs or upload files from your computer.
+
+In case you want to upload files for your computer, it’s important to remark that the file won’t be stored in any kind of  centralized storage nor Nevermined will keep a copy. 
+
+The file will be uploaded to filecoin, and the CID returned will be encrypted and included as part of the DDO that represents your asset.
+
+When you finish the publishing process, you will be able to see the CIDs of the files you have uploaded from your computer.
+
+
+### Step 4 - Tier Subscription and Price
+
+In this last section you can set the subscription Tier you want to associate with your Asset. Take into account that you can only set the same level, or lower, than your own subscription Tier.
+
+Depending on the complexity of the insights gained by the transformations applied, it could be potentially more valuable than a Dataset, so you could associate this kind of asset to a higher subscription Tier
+
+[
+Explain here what would be the criteria to associate to the higher level possible or with a lower one.
+
+For instance, If the asset corresponds to a dataset of raw data, maybe only make sense to put it in the first Tier, regardless of the subscription of the user, because it wouldn’t have enough value to associate with a higher Tier
+]
+
+You can also select if you want your Asset to be available for direct purchase. In that case, you can put a price for the Asset (in USDC).
+
+
+
+
