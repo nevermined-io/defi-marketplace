@@ -1,23 +1,25 @@
 import { graphUrl } from 'src/config'
-import { subgraphs } from '@nevermined-io/nevermined-sdk-js'
+import { Nevermined, subgraphs } from '@nevermined-io/nevermined-sdk-js'
 import Web3 from 'web3';
 
 interface FullfilledOrders {
   documentId: string;
 }
 
-export const loadFullfilledEvents = async (account: string): Promise<FullfilledOrders[]> => {
-  const fullfilled = await subgraphs.AccessCondition.getFulfilleds(
-    `${graphUrl}/AccessCondition`,
+export const loadFullfilledEvents = async (sdk: Nevermined, account: string): Promise<FullfilledOrders[]> => {
+
+  const fullfilled = await sdk.keeper.conditions.accessCondition.events.getPastEvents(
     {
-      where: {
-        _grantee: account,
+      methodName: 'getFulfilleds',
+      filterSubgraph: {
+        where: {
+          _grantee: account,
+        },
       },
-    },
-    {
-      _documentId: true
-    }
-  )
+      result: {
+        _documentId: true
+      },
+    })
 
   return fullfilled.map(doc => { return { documentId: doc._documentId } })
 
@@ -55,4 +57,27 @@ export const loadPublishedEvent = async (asset: string, web3: Web3): Promise<Reg
       registeredAt: new Date(Number(tx.timestamp) * 1000)
     }
   }
+}
+
+
+export const loadUserPublished = async (sdk: Nevermined, owner: string): Promise<any | undefined> => {
+
+  const registered = await sdk.keeper.didRegistry.events.getPastEvents(
+    {
+      methodName: 'getDIDAttributeRegistereds',
+      filterSubgraph: {
+        where: {
+          _owner: owner
+        },
+      },
+      result: {
+        _did: true,
+        _owner: true,
+        _lastUpdatedBy: true,
+        _blockNumberUpdated: true
+      },
+    }
+  );
+
+  return registered
 }

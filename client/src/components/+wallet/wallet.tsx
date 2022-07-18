@@ -5,6 +5,8 @@ import { User } from '../../context'
 import styles from './wallet.module.scss'
 import Link from 'next/link'
 import Image from "next/image"
+import Router from 'next/router'
+
 
 const b = BEM('wallet', styles)
 
@@ -29,7 +31,7 @@ export function XuiWallet() {
           </Link>
         </div>
 
-        <div className={b('block')}>
+        <div className={b('block', ['address'])} onClick={() => Router.push('/account')}>
           <span className={b('logged')} />
           {`${walletAddress.substr(0, 6)}...${walletAddress.substr(-4)}`}
         </div>
