@@ -1,12 +1,12 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
-import { UiForm, UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, UiPopupHandlers, BEM } from '@nevermined-io/styles'
+import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, UiPopupHandlers, BEM } from '@nevermined-io/styles'
 import {  Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress } from 'src/config'
 import styles from './user-publish.module.scss'
 import Catalog from 'components-catalog-nvm-test'
-import { AssetPublishParams } from 'components-catalog-nvm-test/dist/node/types'
 import {ProgressPopup} from './progress-popup' 
 import {ConfirmPopup} from './confirm-popup'
 import { Tier, AssetType } from '../../shared'
+import { States } from '../../shared/constants'
 
 const b = BEM('user-publish', styles)
 const tiers: string[] = ["Tier 1", "Tier 2", "Tier 3"]
@@ -19,16 +19,34 @@ interface PricesProps {
 
 export const PricesStep = (props: PricesProps) => {
     const { prevStep, filesUploadedMessage, fileUploadPopupRef } = props;
-    const { isPublished, onSubmitAssetPublish, reset, errorAssetMessage, assetMesssage, assetPublish, handleChange } = Catalog.useAssetPublish();
+    const { isPublished, onSubmitAssetPublish, reset, errorAssetMessage, assetMesssage, setAssetErrorMessage, setAssetMessage, assetPublish, handleChange } = Catalog.useAssetPublish();
     const [inputError, setInputError] = useState('') 
     const UploadPopupMesssage = "Uploading local files to Filecoin..."
-    const txPopupMesssage = "Sending transaction to register the Asset in the network..."
     const txAdditionalMessage = 'The transaction has been sent correctly. It could take some time to complete. You can close this window and visit your profile later to check the status of the new Asset.'            
     const confirmPopupMessage = "Press Confirm to Publish the new Asset"
     const uploadImage = '/assets/logos/filecoin_grey.svg'
     const txImage = '/assets/nevermined-color.svg'
     const confirmPopupRef = useRef<UiPopupHandlers>()
     const txPopupRef = useRef<UiPopupHandlers>()
+
+    const handleCleanMessages = (messageStates: States) => {
+        setTimeout(() => {
+          messageStates.forEach((ms) => {
+            if(ms[0]) {
+              ms[1]('')
+            }        
+          })
+        }, 5000);
+    }
+    
+    const messageStates: States = [
+        [assetMesssage, setAssetMessage],
+        [errorAssetMessage, setAssetErrorMessage],
+    ]
+
+    useEffect(() => {
+        handleCleanMessages(messageStates)
+    }, [assetMesssage, errorAssetMessage, filesUploadedMessage])
 
     const getNftTierAddress = (): string => {
 
@@ -59,19 +77,26 @@ export const PricesStep = (props: PricesProps) => {
     }
 
     useEffect(() => {
-
-        if(filesUploadedMessage){
+        if(!filesUploadedMessage?.length && isPublished){
             fileUploadPopupRef.current?.open()
         } else {
             fileUploadPopupRef.current?.close()
         }
-    }, [filesUploadedMessage])
+
+        if(assetMesssage) {
+            txPopupRef.current?.open()
+        } else {
+            txPopupRef.current?.close()
+        }
+    }, [filesUploadedMessage, assetMesssage])
+
+    
 
     return (
      
             <UiLayout type='container'>
                     <ProgressPopup  message={UploadPopupMesssage} popupRef={fileUploadPopupRef} image= {uploadImage}/>
-                    <ProgressPopup  message={txPopupMesssage} popUpHeight='780px' additionalMessage={txAdditionalMessage}  showCloseButton={true} popupRef={txPopupRef} image= {txImage}/>
+                    <ProgressPopup  message={assetMesssage} popUpHeight='780px' additionalMessage={txAdditionalMessage}  showCloseButton={true} popupRef={txPopupRef} image= {txImage}/>
                     <ConfirmPopup  message={confirmPopupMessage} popupRef={confirmPopupRef} confirm = {confirm} cancel = {cancel}/>
                     {(isPublished) ? 
                     <UiText type="h2" wrapper="h2">Asset Published</UiText>

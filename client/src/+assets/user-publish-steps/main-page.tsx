@@ -6,7 +6,6 @@ import { BasicInfoStep } from './basic-info'
 import { DetailsStep } from './details'
 import { PricesStep } from './prices'
 import { FilesStep } from './files'
-import { Tier } from '../../shared'
 
 export const UserPublishMultiStep: NextPage = () => {
     const { errorAssetMessage, filesUploadedMessage, setAssetPublish, assetPublish } = Catalog.useAssetPublish()

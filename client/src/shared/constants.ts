@@ -4,6 +4,8 @@ export enum Category {
 }
 export const categories = Object.keys(Category)
 
+export type States = [string, React.Dispatch<React.SetStateAction<string>>][]
+
 export enum Subcategory {
   Trades = 'Trades',
   Borrows = 'Borrows',
