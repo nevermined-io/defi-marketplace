@@ -4,11 +4,11 @@ import styles from './popup.module.scss'
 
 interface ProgressPopupProps {
   message: string,
-  additionalMessage: string
-  showCloseButton: boolean
-  image: string,
-  popUpHeight: string,
-  popupRef :React.RefObject<UiPopupHandlers>
+  additionalMessage?: string
+  showCloseButton?: boolean
+  image?: string,
+  popUpHeight?: string,
+  popupRef :React.MutableRefObject<UiPopupHandlers | undefined>
 }
 
 const b = BEM('popup', styles)

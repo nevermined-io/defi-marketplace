@@ -105,6 +105,7 @@ export const Landing: NextPage = () => {
 
             {networkArray.map((network: string) =>
               <img
+                key={network}
                 onClick={() => Router.push(`/list?selectedNetworks=${network}`)}
                 src={`/assets/logos/${network}.svg`}
                 style={{ cursor: 'pointer' }}

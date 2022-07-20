@@ -5,17 +5,17 @@ import Link from 'next/link'
 import { DDO, AdditionalInformation } from '@nevermined-io/nevermined-sdk-js'
 import Catalog from '@nevermined-io/components-catalog'
 import styles from './details.module.scss'
-import { BEM, UiText, UiIcon, UiLayout, UiDivider, UiButton, UiPopupHandlers, UiPopup } from '@nevermined-io/styles'
+import { BEM, UiText, UiIcon, UiLayout, UiDivider, UiButton, UiPopupHandlers } from '@nevermined-io/styles'
 import { XuiTokenName, XuiTokenPrice } from 'ui'
 import { Loader } from '@nevermined-io/styles'
 import { User } from '../context'
-import { toDate, getDdoTokenAddress, calculateStartEndPage, calculatePages, getBundlesWithDataset, getSampleURL } from '../shared'
+import { toDate, getDdoTokenAddress, calculateStartEndPage, calculatePages, getBundlesWithDataset, Provenance } from '../shared'
 import { Markdown } from 'ui/markdown/markdown'
 import { AddedToBasketPopup } from './added-to-basket-popup'
 import Image from "next/image"
 import { XuiPagination } from 'ui/+assets-query/pagination'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
-import { loadPublishedEvent, RegisteredAsset } from 'src/shared/graphql'
+import { loadPublishedEvent } from 'src/shared/graphql'
 import { correctNetworkId, correctNetworkName, EVENT_PREFIX, PROTOCOL_PREFIX } from 'src/config'
 
 
@@ -37,7 +37,7 @@ export const AssetDetails: NextPage = () => {
   const popupRef = createRef<UiPopupHandlers>()
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
-  const [provenance, setProvenance] = useState([]);
+  const [provenance, setProvenance] = useState<Provenance[]>([]);
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(true);
 
   const dateOptions: Intl.DateTimeFormatOptions = {

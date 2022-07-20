@@ -13,8 +13,8 @@ interface PricesProps {
     submit: () => void
     reset: () => void
     filesUploadedMessage: string[],
-    fileUploadPopupRef: React.RefObject<UiPopupHandlers>,
-    txPopupRef:  React.RefObject<UiPopupHandlers>
+    fileUploadPopupRef: React.MutableRefObject<UiPopupHandlers | undefined>,
+    txPopupRef: React.MutableRefObject<UiPopupHandlers | undefined>
  }
 
 export const PricesStep = (props: PricesProps) => {
@@ -58,8 +58,8 @@ export const PricesStep = (props: PricesProps) => {
     return (
      
             <UiLayout type='container'>
-                    <ProgressPopup  message={UploadPopupMesssage} popupRef={fileUploadPopupRef} image= {uploadImage}/>
-                    <ProgressPopup  message={txPopupMesssage} popUpHeight='780px' additionalMessage={txAdditionalMessage}  showCloseButton={true} popupRef={txPopupRef} image= {txImage}/>
+                    <ProgressPopup message={UploadPopupMesssage} popupRef={fileUploadPopupRef} image= {uploadImage}/>
+                    <ProgressPopup message={txPopupMesssage} popUpHeight='780px' additionalMessage={txAdditionalMessage}  showCloseButton={true} popupRef={txPopupRef} image= {txImage}/>
                     <ConfirmPopup  message={confirmPopupMessage} popupRef={confirmPopupRef} confirm = {confirm} cancel = {cancel}/>
                     {(!showForm) ? 
                     <UiText type="h2" wrapper="h2">Asset Published</UiText>
@@ -73,7 +73,7 @@ export const PricesStep = (props: PricesProps) => {
                     {(!showForm) ? <div/> :
                     <UiFormSelect
                         value={assetPublish.tier}
-                        onChange={e => handleChange(e, 'tier')}
+                        onChange={e => handleChange(e as string, 'tier')}
                         options={tiers}
                         className={b('publish-form-select')}
                         label='Tier'

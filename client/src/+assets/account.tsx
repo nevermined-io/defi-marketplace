@@ -30,7 +30,7 @@ export const Account: NextPage = () => {
 
     const published = await loadUserPublished(sdk, walletAddress)
 
-    const publishedDDO = await Promise.all(
+    const publishedDDO: DDO[] = await Promise.all(
       published.map((asset: any) => sdk.assets.resolve(asset._did))
     )
 

@@ -45,3 +45,12 @@ export enum State {
   Unconfirmed = 'unconfirmed',
   Confirmed = 'confirmed'
 }
+
+export interface Provenance {
+  id: string
+  action: string
+  date: Date
+  account: string
+  price: number
+  currency: string
+}

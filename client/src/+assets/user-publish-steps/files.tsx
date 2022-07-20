@@ -46,7 +46,10 @@ export const FilesStep = (props: FilesProps) => {
     }
 
     const handleNewFile = function (e: React.ChangeEvent<HTMLInputElement>) {
-       
+        if(!e.target?.files?.length) {
+            return
+        }
+
         const file = e.target.files[0]
         const assetFile:AssetFile = {
             type: FileType.Local,
@@ -109,7 +112,7 @@ export const FilesStep = (props: FilesProps) => {
                                 <UiFormAddItem
                                     value={assetfile.label}
                                     onClick={(e) => removeFile(assetfile.label)}
-                                    disable={true}
+                                    disabled={true}
                                     readOnly={true}
                                     onChange={()=>{}}
                                 />  

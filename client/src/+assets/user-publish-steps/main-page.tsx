@@ -16,7 +16,6 @@ import { handleAssetFiles, FileType} from './files-handler'
 const b = BEM('user-publish', styles)
 
 export const UserPublishMultiStep: NextPage = () => {
-    const {sdk} = Catalog.useNevermined()
     const { errorAssetMessage, setAssetErrorMessage, assetPublish, setAssetPublish, reset, onAssetPublish } = Catalog.useAssetPublish()
     const [filesUploadedMessage, setFilesUploadedMessage] = useState<string[]>([])
     const popupRef = useRef<UiPopupHandlers>()
@@ -303,7 +302,9 @@ export const UserPublishMultiStep: NextPage = () => {
         </UiLayout>
           )
           default: 
-          // do nothing
+            return (
+                <></>
+            )
     }
     
 }

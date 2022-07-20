@@ -69,7 +69,7 @@ export const DetailsStep = (props: DetailsProps) => {
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
                             value={assetPublish.type}
-                            onChange={e => handleChange(e, 'type')}
+                            onChange={e => handleChange(e as string, 'type')}
                             options={assetTypes}
                             className={b('publish-form-select')}
                             label='Asset Type'
@@ -83,7 +83,7 @@ export const DetailsStep = (props: DetailsProps) => {
                         <UiFormGroup orientation={Orientation.Vertical}>
                             <UiFormSelect
                                 value={assetPublish.notebook_language}
-                                onChange={e => handleChange(e, 'notebook_language')}
+                                onChange={e => handleChange(e as string, 'notebook_language')}
                                 options={notebookLanguages}
                                 className={b('publish-form-select')}
                                 label='Language'
@@ -94,7 +94,7 @@ export const DetailsStep = (props: DetailsProps) => {
                         <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
                             value={assetPublish.notebook_format}
-                            onChange={e => handleChange(e, 'notebook_format')}
+                            onChange={e => handleChange(e as string, 'notebook_format')}
                             options={notebookFormats}
                             className={b('publish-form-select')}
                             label='Format'
@@ -121,7 +121,7 @@ export const DetailsStep = (props: DetailsProps) => {
                         <UiFormGroup orientation={Orientation.Vertical}>
                             <UiFormSelect
                                 value={assetPublish.report_type}
-                                onChange={e => handleChange(e, 'report_type')}
+                                onChange={e => handleChange(e as string, 'report_type')}
                                 options={reportTypes}
                                 className={b('publish-form-select')}
                                 label='Report Type'
@@ -129,7 +129,7 @@ export const DetailsStep = (props: DetailsProps) => {
                             />
                             <UiFormSelect
                                 value={assetPublish.report_format}
-                                onChange={e => handleChange(e, 'report_format')}
+                                onChange={e => handleChange(e as string, 'report_format')}
                                 options={reportFormats}
                                 className={b('publish-form-select')}
                                 label='Format'
@@ -145,7 +145,7 @@ export const DetailsStep = (props: DetailsProps) => {
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
                             value={assetPublish.category}
-                            onChange={e => handleChange(e, 'category')}
+                            onChange={e => handleChange(e as string, 'category')}
                             options={categories}
                             className={b('publish-form-select')}
                             label='Category'
@@ -156,7 +156,7 @@ export const DetailsStep = (props: DetailsProps) => {
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormSelect
                             value={assetPublish.protocol}
-                            onChange={e => handleChange(e, 'protocol')}
+                            onChange={e => handleChange(e as string, 'protocol')}
                             options={protocols}
                             className={b('publish-form-select')}
                             label='Protocol'
@@ -167,7 +167,7 @@ export const DetailsStep = (props: DetailsProps) => {
                     <UiFormGroup orientation={Orientation.Vertical}>
                     <UiFormSelect
                         value={assetPublish.network}
-                        onChange={e => handleChange(e, 'network')}
+                        onChange={e => handleChange(e as string, 'network')}
                         options={networks}
                         className={b('publish-form-select')}
                         label='Network'

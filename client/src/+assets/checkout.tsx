@@ -72,7 +72,7 @@ export const Checkout: NextPage = () => {
                             <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice>
                             {' '}
                             <UiText variants={['detail']}>
-                              <XuiTokenName address={getDdoTokenAddress(asset)} />
+                              <XuiTokenName address={getDdoTokenAddress(asset)?.toString()} />
                             </UiText>
                           </UiText>
                         </UiLayout>
@@ -109,7 +109,7 @@ export const Checkout: NextPage = () => {
                   assets.length ? <UiButton cover onClick={handleChangeNetwork}>Switch Network & Purchase</UiButton> : <></>
             }
             <UiDivider />
-            <UiButton cover type="alt " onClick={() => Router.push('/list')}>Back To Marketplace</UiButton>
+            <UiButton cover type="alt" onClick={() => Router.push('/list')}>Back To Marketplace</UiButton>
           </div>
         </UiLayout>
       </UiLayout>
