@@ -1,20 +1,11 @@
 import axios from 'axios'
 import axiosRetry from 'axios-retry'
 import { gatewayUri, filecoinUploadUri, ipfsGatewayUri } from 'src/config'
+import  {AssetFile} from 'components-catalog-nvm-test/dist/node/types'
 
 export enum FileType {
   FilecoinID = 'Filecoin',
   Local = 'Local'
-}
-
-export interface AssetFile {
-  type: FileType
-  label: string
-  name?: string
-  size?: string
-  content_type?: string
-  file?: File
-  filecoin_id?: string
 }
 
 const handlePostRequest = async (url: string, formData: FormData, retries: number = 3) => {
