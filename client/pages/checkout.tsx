@@ -1,3 +1,3 @@
-import { Checkout } from '/src/+assets/checkout'
+import { Checkout } from 'src/+assets/checkout'
 
 export default Checkout

@@ -11,11 +11,11 @@ const b = BEM('header', styles)
 
 interface HeaderLinkProps {
   href: string
-  children: string,
+  children: React.ReactNode
   target?: string
 }
 
-export function UiHeaderLink({ href, target, children }: HeaderLinkProps) {
+export const UiHeaderLink: React.FC<HeaderLinkProps> = ({ href, target, children }: HeaderLinkProps) => {
   const router = useRouter();
   const active = router.pathname === href;
 
@@ -61,7 +61,7 @@ export function UiHeaderLink({ href, target, children }: HeaderLinkProps) {
 
 interface HeaderProps {
   logoHref?: string
-  children?: (typeof UiHeaderLink)[]
+  children: React.ReactNode
 }
 
 export function UiHeader({ logoHref, children }: HeaderProps) {

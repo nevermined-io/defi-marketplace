@@ -1,3 +1,3 @@
-import { Status } from '/src/+status/status'
+import { Status } from 'src/+status/status'
 
 export default Status
