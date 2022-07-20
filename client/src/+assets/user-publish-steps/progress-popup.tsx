@@ -1,5 +1,5 @@
 import React from 'react'
-import { BEM, UiText, UiPopup, UiPopupHandlers, UiButton, UiIcon, CircleSpinner, UiDivider } from '@nevermined-io/styles'
+import { BEM, UiText, UiPopup, UiPopupHandlers, UiButton, CircleSpinner, UiDivider } from '@nevermined-io/styles'
 import styles from './popup.module.scss'
 
 interface ProgressPopupProps {

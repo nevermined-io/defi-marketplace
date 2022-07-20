@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { BEM, UiButton} from '@nevermined-io/styles'
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from 'components-catalog-nvm-test'
 import { User } from '../../context'
 import styles from './wallet.module.scss'
 import Link from 'next/link'

@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import type { NextPage } from 'next'
 
 import { UiText, UiLayout, UiDivider, UiIcon, BEM, UiButton } from '@nevermined-io/styles'
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from 'components-catalog-nvm-test'
 import { XuiTokenPrice, XuiTokenName } from 'ui'
 import { User } from '../context'
 import { getDdoTokenAddress, getDefiInfo, toDate } from '../shared'
