@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import Catalog from 'components-catalog-nvm-test'
+import Catalog from '@nevermined-io/components-catalog'
 import { UiForm, UiFormGroup, UiFormInput, UiFormAddItem, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, NotificationPopup, BEM } from '@nevermined-io/styles'
 import { NextPage } from 'next'
 import styles from './user-profile.module.scss'

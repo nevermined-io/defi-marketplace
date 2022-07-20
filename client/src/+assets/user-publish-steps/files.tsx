@@ -3,8 +3,8 @@ import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDi
 import styles from './user-publish.module.scss'
 import {FileType, checkFilecoinIdExists} from './files-handler'
 import {ProgressPopup} from './progress-popup' 
-import  Catalog from 'components-catalog-nvm-test'
-import  {AssetFile} from 'components-catalog-nvm-test/dist/node/types'
+import  Catalog from '@nevermined-io/components-catalog'
+import  {AssetFile} from '@nevermined-io/components-catalog/dist/node/types'
 
 const b = BEM('user-publish', styles)
 
@@ -26,7 +26,7 @@ export const FilesStep = (props: FilesProps) => {
 
     const checkValues = (): Boolean => {
 
-        if (!assetPublish.asset_files || assetPublish.asset_files.length == 0) {
+        if (!assetPublish.assetFiles || assetPublish.assetFiles.length == 0) {
             setInputError('Local File  or Filecoin URL is required')
             return false
         }
@@ -103,7 +103,7 @@ export const FilesStep = (props: FilesProps) => {
                     <div className={b('form-input')}>
          
                     <div className={b('publish-current-files-container')}>
-                        {assetPublish.asset_files.map(assetfile => 
+                        {assetPublish.assetFiles.map(assetfile => 
                             <div className={b('publish-current-files')} key={assetfile.label}>
                                       
                                 <UiFormAddItem

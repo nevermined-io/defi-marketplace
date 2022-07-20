@@ -16,7 +16,7 @@ import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
 import { AddedToBasketPopup } from './added-to-basket-popup'
-import Catalog from 'components-catalog-nvm-test'
+import Catalog from '@nevermined-io/components-catalog'
 interface AssetsListProps {
   assets: DDO[],
   disableBatchSelect?: boolean

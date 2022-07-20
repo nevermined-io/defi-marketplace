@@ -4,7 +4,7 @@ import '../src/styles/styles.scss'
 import React from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
-import Catalog from 'components-catalog-nvm-test'
+import Catalog from '@nevermined-io/components-catalog'
 import Web3 from 'web3';
 import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
 import { UiDivider } from '@nevermined-io/styles'

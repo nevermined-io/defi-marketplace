@@ -3,7 +3,7 @@ import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDi
 import styles from './user-publish.module.scss'
 import {ProgressPopup} from './progress-popup' 
 import {ConfirmPopup} from './confirm-popup'
-import  Catalog from 'components-catalog-nvm-test'
+import  Catalog from '@nevermined-io/components-catalog'
 
 const b = BEM('user-publish', styles)
 const tiers: string[] = ["Tier 1", "Tier 2", "Tier 3"]
