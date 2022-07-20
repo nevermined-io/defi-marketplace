@@ -1,30 +1,26 @@
-import React, { useEffect, useContext, useState, useRef } from 'react'
-import { UiForm, UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, UiPopupHandlers, BEM } from '@nevermined-io/styles'
+import React, { useEffect, useState, useRef } from 'react'
+import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, UiPopupHandlers, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
-import { UiHeaderLink} from 'ui'
-import {UserPublishParams} from './main-page'
 import {ProgressPopup} from './progress-popup' 
 import {ConfirmPopup} from './confirm-popup'
+import  Catalog from '@nevermined-io/components-catalog'
 
 const b = BEM('user-publish', styles)
 const tiers: string[] = ["Tier 1", "Tier 2", "Tier 3"]
 
 interface PricesProps {
-    values: UserPublishParams
-    handleChange: (value: string, field: string) => void
     prevStep: () => void
     submit: () => void
     reset: () => void
-    isPublished: boolean
-    successMessage: string
-    txErrorMessage: string
     filesUploadedMessage: string[],
     fileUploadPopupRef: React.RefObject<UiPopupHandlers>,
     txPopupRef:  React.RefObject<UiPopupHandlers>
  }
 
 export const PricesStep = (props: PricesProps) => {
-    const {values, handleChange, prevStep, submit, reset, isPublished, successMessage, txErrorMessage, filesUploadedMessage, fileUploadPopupRef, txPopupRef } = props;    
+
+    const { assetPublish, handleChange, isProcessing, isPublished, assetMessage, errorAssetMessage } = Catalog.useAssetPublish()
+    const {prevStep, submit, reset, filesUploadedMessage, fileUploadPopupRef, txPopupRef } = props;    
     const [inputError, setInputError] = useState('') 
     const UploadPopupMesssage = "Uploading local files to Filecoin..."
     const txPopupMesssage = "Sending transaction to register the Asset in the network..."
@@ -33,7 +29,13 @@ export const PricesStep = (props: PricesProps) => {
     const uploadImage = '/assets/logos/filecoin_grey.svg'
     const txImage = '/assets/nevermined-color.svg'
     const confirmPopupRef = useRef<UiPopupHandlers>()
+    const [showForm, setShowForm] = useState(true) 
 
+    useEffect(() => {
+        if (isProcessing == true){
+            setShowForm(false)
+        }
+    }, [isProcessing])
 
     const Previous = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -59,7 +61,7 @@ export const PricesStep = (props: PricesProps) => {
                     <ProgressPopup  message={UploadPopupMesssage} popupRef={fileUploadPopupRef} image= {uploadImage}/>
                     <ProgressPopup  message={txPopupMesssage} popUpHeight='780px' additionalMessage={txAdditionalMessage}  showCloseButton={true} popupRef={txPopupRef} image= {txImage}/>
                     <ConfirmPopup  message={confirmPopupMessage} popupRef={confirmPopupRef} confirm = {confirm} cancel = {cancel}/>
-                    {(isPublished) ? 
+                    {(!showForm) ? 
                     <UiText type="h2" wrapper="h2">Asset Published</UiText>
                     :
                     <UiText type="h2" wrapper="h2">Subscription & Price - Step 4 of 4</UiText>
@@ -68,9 +70,9 @@ export const PricesStep = (props: PricesProps) => {
                     <div className={b('form-input')}>
                     
                     <UiFormGroup orientation={Orientation.Vertical}>
-                    {(isPublished) ? <div/> :
+                    {(!showForm) ? <div/> :
                     <UiFormSelect
-                        value={values.tier}
+                        value={assetPublish.tier}
                         onChange={e => handleChange(e, 'tier')}
                         options={tiers}
                         className={b('publish-form-select')}
@@ -79,12 +81,12 @@ export const PricesStep = (props: PricesProps) => {
                     /> 
                     }
                     </UiFormGroup>
-                    {(isPublished) ? <div/> :
+                    {(!showForm) ? <div/> :
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormInput
                             className={b('publish-form-input')}
                             label='Set Your Price (USDC)'
-                            value={values.price} onChange={e=>handleChange(e.target.value, 'price')}
+                            value={assetPublish.price} onChange={e=>handleChange(e.target.value, 'price')}
                         />
                     </UiFormGroup>
                     }
@@ -93,9 +95,9 @@ export const PricesStep = (props: PricesProps) => {
                     <UiFormGroup orientation={Orientation.Vertical}>
                             
                             {
-                                (isPublished) ?  <div className={b('user-publish-submit-container', ['updated-message'])}>
-                                                <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> 
-                                                <UiText type="h3" wrapper="h3" variants={['error']}>{txErrorMessage}</UiText>                                                 
+                                (!showForm) ?  <div className={b('user-publish-submit-container', ['updated-message'])}>
+                                                <UiText type="h3" wrapper="h3" variants={['success']}>{assetMessage}</UiText> 
+                                                <UiText type="h3" wrapper="h3" variants={['error']}>{errorAssetMessage}</UiText>                                                 
                                                 {filesUploadedMessage.map( (message, index) => 
                                                     <div key={index}>
                                                         <UiText type="h3" wrapper="h3" variants={['success']}>{message}</UiText>

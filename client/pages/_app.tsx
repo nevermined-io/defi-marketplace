@@ -44,6 +44,7 @@ function App({ Component, pageProps }: AppProps) {
         chainConfig={chainConfig}
         nodeUri={appConfig.nodeUri}
         correctNetworkId={correctNetworkId}>
+        <Catalog.AssetPublishProvider>
           <UserProvider>
             <Head>
               <script async src="https://www.googletagmanager.com/gtag/js?id=G-11ZZZNJ4Q5"></script>
@@ -77,6 +78,7 @@ function App({ Component, pageProps }: AppProps) {
             <UiDivider flex />
             <UiFooter />
         </UserProvider>
+        </Catalog.AssetPublishProvider>
       </Catalog.WalletProvider>
     </Catalog.NeverminedProvider>
   )

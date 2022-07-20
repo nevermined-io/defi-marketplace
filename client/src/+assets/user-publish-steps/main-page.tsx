@@ -1,71 +1,49 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { UiForm, UiLayout, UiText, UiPopupHandlers, NotificationPopup, BEM } from '@nevermined-io/styles'
-import Catalog from '@nevermined-io/components-catalog'
+import  Catalog from '@nevermined-io/components-catalog'
+import  {AssetFile} from '@nevermined-io/components-catalog/dist/node/types'
+
 import { NextPage } from 'next'
 import styles from './user-publish.module.scss'
 import { MetaData} from "@nevermined-io/nevermined-sdk-js"
-import AssetRewards from "@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards";
-import BigNumber from "bignumber.js";
 import {  Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress } from 'src/config'
 import { BasicInfoStep } from './basic-info'
 import { DetailsStep } from './details'
 import { PricesStep } from './prices'
 import { FilesStep } from './files'
-import {FileType, AssetFile, handleAssetFiles} from './files-handler'
+import { handleAssetFiles, FileType} from './files-handler'
 
 const b = BEM('user-publish', styles)
 
-export interface UserPublishParams {
-    step: number
-    name: string
-    author: string
-    description: string
-    type: string
-    category: string
-    protocol: string
-    network: string
-    price: number
-    tier: string
-    notebook_language: string
-    notebook_requirements: string,
-    notebook_format: string,
-    report_type: string,
-    report_format: string,
-    asset_files: AssetFile[]
-}
-
 export const UserPublishMultiStep: NextPage = () => {
-    const {sdk, account} = Catalog.useNevermined()
-    const [errorMessage, setErrorMessage] = useState('')
-    const [successMessage, setSuccessMessage] = useState('')
+    const {sdk} = Catalog.useNevermined()
+    const { errorAssetMessage, setAssetErrorMessage, assetPublish, setAssetPublish, reset, onAssetPublish } = Catalog.useAssetPublish()
     const [filesUploadedMessage, setFilesUploadedMessage] = useState<string[]>([])
-    const [isPublished, setIsPublished] = useState(false)
     const popupRef = useRef<UiPopupHandlers>()
     const fileUploadPopupRef = useRef<UiPopupHandlers>()
     const txPopupRef = useRef<UiPopupHandlers>()
-    const [txErrorMessage, setTxErrorMessage] = useState('')
-    const [userPublish, setUserPublish] = useState<UserPublishParams>({
-        step: 1,
-        name: '',
-        author: '',
-        description: '',
-        type: 'dataset',
-        category: 'None',
-        protocol: 'None',
-        network: 'None',
-        price: 0,
-        tier: 'Tier 1',
-        asset_files: [],
-        notebook_language: 'Python',
-        notebook_requirements: '',
-        notebook_format: 'Source code',
-        report_type: 'Aggregation',
-        report_format: 'CSV'
-    })
+    const [step, setStep] = useState<number>(1)    
 
-    const reset = () => {
-        setUserPublish({
-            step: 1,
+    useEffect(() => {
+        setAssetPublish({
+            ...assetPublish,
+            category: 'None',
+            protocol: 'None',
+            network: 'None',
+            price: 0,
+            tier: 'Tier 1',
+            notebook_language: 'Python',
+            notebook_requirements: '',
+            notebook_format: 'Source code',
+            report_type: 'Aggregation',
+            report_format: 'CSV'
+        })
+    }, [])
+
+    const resetValues = () => {
+
+        setStep(1)
+        setAssetPublish({
             name: '',
             author: '',
             description: '',
@@ -75,37 +53,24 @@ export const UserPublishMultiStep: NextPage = () => {
             network: 'None',
             price: 0,
             tier: 'Tier 1',
-            asset_files: [],
+            assetFiles: [],
             notebook_language: 'Python',
             notebook_requirements: '',
             notebook_format: 'Source code',
             report_type: 'Aggregation',
             report_format: 'CSV'   
         })
-
-        setIsPublished(false)
         setFilesUploadedMessage([])
-        setSuccessMessage('')
-        setErrorMessage('')
-        setTxErrorMessage('')
-
     }
 
     // go back to previous step
     const prevStep = () => {
-        const { step } = userPublish;
-        setUserPublish({ ...userPublish, step: step - 1 });
+        setStep(step - 1)
     }
 
     // proceed to the next step
     const nextStep = () => {
-        const { step } = userPublish;
-        setUserPublish({ ...userPublish, step: step  + 1 });
-    }
-
-    // Handle fields change
-    const handleChange =   function (value: string, input:string) {
-        setUserPublish({ ...userPublish, [input]: value });
+        setStep(step + 1)
     }
     
     const closePopup = (event: any) => {
@@ -123,7 +88,7 @@ export const UserPublishMultiStep: NextPage = () => {
     const generateFilesMetadata = () => {
 
         const files: FileMetadata[] = []
-        userPublish.asset_files.forEach((assetFile: AssetFile, i: number) => {
+        assetPublish.assetFiles.forEach((assetFile: AssetFile, i: number) => {
             const file:FileMetadata = {
                 index: i+1,
                 contentType: assetFile.content_type?assetFile.content_type:'',
@@ -140,43 +105,43 @@ export const UserPublishMultiStep: NextPage = () => {
 
         const metadata: MetaData = {
             main: {
-                name: userPublish.name,
+                name: assetPublish.name,
                 dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
-                author: userPublish.author,
+                author: assetPublish.author,
                 license: 'No License Specified', 
-                price: String(userPublish.price),
+                price: String(assetPublish.price),
                 datePublished: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
                 type: "dataset",
-                network: userPublish.network,
+                network: assetPublish.network,
                 files: generateFilesMetadata()
             },
             additionalInformation: {
-                description: userPublish.description,
-                categories: [`ProtocolType:${userPublish.category}`,
-                `EventType:${userPublish.protocol}`,
-                `Blockchain:${userPublish.network}`,
+                description: assetPublish.description,
+                categories: [`ProtocolType:${assetPublish.category}`,
+                `EventType:${assetPublish.protocol}`,
+                `Blockchain:${assetPublish.network}`,
                 `UseCase:defi-datasets`,
                 `Version:v1`
                 ],
-                blockchain: userPublish.network,
+                blockchain: assetPublish.network,
                 version: "v1",
                 source: "filecoin"
             }
         } as MetaData
 
-        switch ( userPublish.type) {
+        switch ( assetPublish.type) {
             
             case "report":  metadata.additionalInformation!.customData = {  
-                    "subtype": userPublish.type,
-                    "report_type": userPublish.report_type, 
-                    "report_format": userPublish.report_format
+                    "subtype": assetPublish.type,
+                    "report_type": assetPublish.report_type, 
+                    "report_format": assetPublish.report_format
                 }; 
                 break;
             case "notebook":  metadata.additionalInformation!.customData = {  
-                    "subtype": userPublish.type,
-                    "notebook_language": userPublish.notebook_language, 
-                    "notebook_requirements": userPublish.notebook_requirements,
-                    "notebook_format": userPublish.notebook_format
+                    "subtype": assetPublish.type,
+                    "notebook_language": assetPublish.notebook_language, 
+                    "notebook_requirements": assetPublish.notebook_requirements,
+                    "notebook_format": assetPublish.notebook_format
                 };
                 break;
             default: break;
@@ -187,7 +152,7 @@ export const UserPublishMultiStep: NextPage = () => {
 
     const getNftTierAddress = (): string => {
 
-        switch(userPublish.tier) {
+        switch(assetPublish.tier) {
             case "Tier 1": return tier1NftContractAddress 
             case "Tier 2": return tier2NftContractAddress
             case "Tier 3": return tier3NftContractAddress
@@ -206,68 +171,48 @@ export const UserPublishMultiStep: NextPage = () => {
         return messages        
     }
 
+    const uploadFiles = async() => {
+        const findLocal = assetPublish.assetFiles.find(file => file.type === FileType.Local)
+
+        if (findLocal){
+            fileUploadPopupRef.current?.open()
+            await handleAssetFiles(assetPublish.assetFiles)
+            setFilesUploadedMessage(generateFilesUploadedMessage(assetPublish.assetFiles))
+            fileUploadPopupRef.current?.close()
+        }
+    }
+
     const onSubmitUserPublish = async() => {
         try {
-
-            setIsPublished(true)
-            const findLocal = userPublish.asset_files.find(file => file.type === FileType.Local)
-
-            if (findLocal){
-                fileUploadPopupRef.current?.open()
-                await handleAssetFiles(userPublish.asset_files)
-                setFilesUploadedMessage(generateFilesUploadedMessage(userPublish.asset_files))
-                fileUploadPopupRef.current?.close()
-            }
-
-            const metadata = generateMetadata()
+            await uploadFiles()
             txPopupRef.current?.open()
-    
-             // variable account in UserProvider stores only the address!
-            
-            const accounts = await sdk.accounts.list()
-            const user_account = await accounts[0]
-            const user_address = user_account.getId() 
-           
-            const assetRewards = new AssetRewards(user_address, new BigNumber(userPublish.price))
-            if(!account.isTokenValid()) {
-                setErrorMessage('Your login is expired. Please first sign with your wallet and after try again')
-                popupRef.current?.open()
-                await account.generateToken()
-            }
-
-
-            sdk.nfts.create721(
-                metadata,
-                user_account,
-                assetRewards,
-                getNftTierAddress()
-            )
+         
+            onAssetPublish({nftAddress: getNftTierAddress(), metadata: generateMetadata()})
             .then((ddo) =>
                 {
-                    setSuccessMessage("The assets has been sucessfully published. DID: " + ddo.id)
-                    setTxErrorMessage("")
                     txPopupRef.current?.close()
                 }
             )
             .catch((error) => { 
-                    setTxErrorMessage("There was an error publishing the Asset:  " + error.message)
-                    setSuccessMessage("")
                     txPopupRef.current?.close()
+                    if (error.message.includes("Transaction was not mined within 50 blocks")){
+                        setAssetErrorMessage("Transaction was not mined within 50 blocks, but it might still be mined. Check later your profile to see the Assets already published")
+                    }
                 }
-            )          
+            )               
         } catch (error: any ) {
-            setErrorMessage(error.message)
+            setAssetErrorMessage(error.message)
             popupRef.current?.open()
         }
     }
    
     const updateFilesAdded = (assetFile: AssetFile) => {
-        const arrayFiles: AssetFile[] = userPublish.asset_files
-        setUserPublish({...userPublish, asset_files: [...arrayFiles, assetFile] })
+        const arrayFiles: AssetFile[] = assetPublish.assetFiles
+        setAssetPublish({...assetPublish, assetFiles: [...arrayFiles, assetFile] })
     }
 
     const removeFile = (label: string) => {
-        const arrayFiles: AssetFile[] = userPublish.asset_files
+        const arrayFiles: AssetFile[] = assetPublish.assetFiles
 
         const indexOfObject = arrayFiles.findIndex((assetFile) => {
             return assetFile.label === label;
@@ -275,16 +220,16 @@ export const UserPublishMultiStep: NextPage = () => {
 
         if (indexOfObject !== -1) {
             arrayFiles.splice(indexOfObject, 1);
-            setUserPublish({...userPublish, asset_files: [...arrayFiles] })
+            setAssetPublish({...assetPublish, assetFiles: [...arrayFiles] })
           }
        
     }
    
-    switch(userPublish.step) {
+    switch(step) {
         case 1: 
           return (
             <UiLayout type='container'>
-            <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef}/>
+            <NotificationPopup closePopup={closePopup} message={errorAssetMessage} popupRef={popupRef}/>
             <UiLayout type='container'>
                 <UiText wrapper="h1" type="h1" variants={['heading']}>Publish new asset</UiText>        
             </UiLayout>
@@ -293,8 +238,6 @@ export const UserPublishMultiStep: NextPage = () => {
                 <UiForm className=''>
                     <BasicInfoStep
                         nextStep={ nextStep }
-                        handleChange={ handleChange }
-                        values={ userPublish }
                     />
                 </UiForm>
             </UiLayout>
@@ -303,7 +246,7 @@ export const UserPublishMultiStep: NextPage = () => {
         case 2: 
           return (
             <UiLayout type='container'>
-            <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef}/>
+            <NotificationPopup closePopup={closePopup} message={errorAssetMessage} popupRef={popupRef}/>
             <UiLayout type='container'>
                 <UiText wrapper="h1" type="h1" variants={['heading']}>Publish new asset</UiText>
             </UiLayout>
@@ -312,8 +255,6 @@ export const UserPublishMultiStep: NextPage = () => {
                     <DetailsStep
                          prevStep={ prevStep}
                          nextStep={ nextStep }
-                         handleChange={ handleChange }
-                         values={ userPublish }
                     />
                 </UiForm>
             </UiLayout>
@@ -322,7 +263,7 @@ export const UserPublishMultiStep: NextPage = () => {
         case 3: 
           return (
             <UiLayout type='container'>
-            <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef}/>
+            <NotificationPopup closePopup={closePopup} message={errorAssetMessage} popupRef={popupRef}/>
             <UiLayout type='container'>
                 <UiText wrapper="h1" type="h1" variants={['heading']}>Publish new asset</UiText>
             </UiLayout>
@@ -332,7 +273,6 @@ export const UserPublishMultiStep: NextPage = () => {
                     <FilesStep
                          prevStep={ prevStep}
                          nextStep={ nextStep }
-                         values={ userPublish }
                          updateFilesAdded = {updateFilesAdded}
                          removeFile = {removeFile}
                     />
@@ -343,7 +283,7 @@ export const UserPublishMultiStep: NextPage = () => {
         case 4: 
           return (
             <UiLayout type='container'>
-            <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef}/>
+            <NotificationPopup closePopup={closePopup} message={errorAssetMessage} popupRef={popupRef}/>
             <UiLayout type='container'>
                 <UiText wrapper="h1" type="h1" variants={['heading']}>Publish new asset</UiText>
             </UiLayout>
@@ -352,13 +292,8 @@ export const UserPublishMultiStep: NextPage = () => {
                 <UiForm className=''>
                     <PricesStep
                          prevStep={ prevStep}
-                         reset = {reset}
-                         handleChange={ handleChange }
-                         values={ userPublish }
+                         reset = {resetValues}
                          submit = { onSubmitUserPublish }
-                         isPublished = {isPublished}
-                         successMessage={successMessage}
-                         txErrorMessage={txErrorMessage}
                          filesUploadedMessage = {filesUploadedMessage}
                          fileUploadPopupRef = {fileUploadPopupRef}
                          txPopupRef = {txPopupRef}
