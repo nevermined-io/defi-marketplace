@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, useRef, ReactNode } from 'react'
 import Web3 from 'web3'
 import { DDO, Bookmark  } from '@nevermined-io/nevermined-sdk-js'
-import Catalog from 'components-catalog-nvm-test'
+import Catalog from '@nevermined-io/components-catalog'
 import { User } from '.'
 import { correctNetworkName } from '../config';
 import { getAllUserBundlers, Bundle } from '../shared/api';

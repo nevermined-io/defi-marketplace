@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext, useState, useEffect} from 'react'
 import { DDO} from '@nevermined-io/nevermined-sdk-js'
-import Catalog from 'components-catalog-nvm-test'
+import Catalog from '@nevermined-io/components-catalog'
 import { SearchQuery } from '@nevermined-io/nevermined-sdk-js'
 
 import { BEM, Loader } from '@nevermined-io/styles'

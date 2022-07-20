@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react'
 import type { NextPage } from 'next'
-import Catalog from 'components-catalog-nvm-test'
+import Catalog from '@nevermined-io/components-catalog'
 
 import { UiText, UiLayout, UiDivider, CircleSpinner } from '@nevermined-io/styles'
 import { PlatformVersions } from '@nevermined-io/nevermined-sdk-js'

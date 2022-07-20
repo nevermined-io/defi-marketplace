@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { UiFormGroup, UiFormInput, UiFormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
-import  Catalog from 'components-catalog-nvm-test'
+import  Catalog from '@nevermined-io/components-catalog'
 
 const b = BEM('user-publish', styles)
 

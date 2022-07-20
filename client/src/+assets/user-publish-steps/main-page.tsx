@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { UiForm, UiLayout, UiText, UiPopupHandlers, NotificationPopup, BEM } from '@nevermined-io/styles'
-import  Catalog from 'components-catalog-nvm-test'
-import  {AssetFile} from 'components-catalog-nvm-test/dist/node/types'
+import  Catalog from '@nevermined-io/components-catalog'
+import  {AssetFile} from '@nevermined-io/components-catalog/dist/node/types'
 
 import { NextPage } from 'next'
 import styles from './user-publish.module.scss'
@@ -53,7 +53,7 @@ export const UserPublishMultiStep: NextPage = () => {
             network: 'None',
             price: 0,
             tier: 'Tier 1',
-            asset_files: [],
+            assetFiles: [],
             notebook_language: 'Python',
             notebook_requirements: '',
             notebook_format: 'Source code',
@@ -88,7 +88,7 @@ export const UserPublishMultiStep: NextPage = () => {
     const generateFilesMetadata = () => {
 
         const files: FileMetadata[] = []
-        assetPublish.asset_files.forEach((assetFile: AssetFile, i: number) => {
+        assetPublish.assetFiles.forEach((assetFile: AssetFile, i: number) => {
             const file:FileMetadata = {
                 index: i+1,
                 contentType: assetFile.content_type?assetFile.content_type:'',
@@ -172,12 +172,12 @@ export const UserPublishMultiStep: NextPage = () => {
     }
 
     const uploadFiles = async() => {
-        const findLocal = assetPublish.asset_files.find(file => file.type === FileType.Local)
+        const findLocal = assetPublish.assetFiles.find(file => file.type === FileType.Local)
 
         if (findLocal){
             fileUploadPopupRef.current?.open()
-            await handleAssetFiles(assetPublish.asset_files)
-            setFilesUploadedMessage(generateFilesUploadedMessage(assetPublish.asset_files))
+            await handleAssetFiles(assetPublish.assetFiles)
+            setFilesUploadedMessage(generateFilesUploadedMessage(assetPublish.assetFiles))
             fileUploadPopupRef.current?.close()
         }
     }
@@ -207,12 +207,12 @@ export const UserPublishMultiStep: NextPage = () => {
     }
    
     const updateFilesAdded = (assetFile: AssetFile) => {
-        const arrayFiles: AssetFile[] = assetPublish.asset_files
-        setAssetPublish({...assetPublish, asset_files: [...arrayFiles, assetFile] })
+        const arrayFiles: AssetFile[] = assetPublish.assetFiles
+        setAssetPublish({...assetPublish, assetFiles: [...arrayFiles, assetFile] })
     }
 
     const removeFile = (label: string) => {
-        const arrayFiles: AssetFile[] = assetPublish.asset_files
+        const arrayFiles: AssetFile[] = assetPublish.assetFiles
 
         const indexOfObject = arrayFiles.findIndex((assetFile) => {
             return assetFile.label === label;
@@ -220,7 +220,7 @@ export const UserPublishMultiStep: NextPage = () => {
 
         if (indexOfObject !== -1) {
             arrayFiles.splice(indexOfObject, 1);
-            setAssetPublish({...assetPublish, asset_files: [...arrayFiles] })
+            setAssetPublish({...assetPublish, assetFiles: [...arrayFiles] })
           }
        
     }
