@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { BEM, UiButton} from '@nevermined-io/styles'
 import Catalog from '@nevermined-io/components-catalog'
 import { User } from '../../context'

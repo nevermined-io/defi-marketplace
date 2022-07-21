@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { User } from 'src/context'
 
 import { BEM, UiLayout } from '@nevermined-io/styles'
@@ -6,7 +6,7 @@ import styles from './filter-dropdown.module.scss'
 
 const b = BEM('filter-dropdown', styles)
 interface PriceRangeProps {
-    setPriceRange: Function
+    setPriceRange: (price: number) => void
 }
 export function XuiPriceRangeSelector(props: PriceRangeProps) {
     const { selectedPrice } = useContext(User)

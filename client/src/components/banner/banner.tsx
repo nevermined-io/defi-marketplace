@@ -15,10 +15,6 @@ interface BannerProps {
 export function UiBanner(props: BannerProps) {
   const { fromDate, toDate, selectedCategories, setSearchInputText } = useContext(User)
 
-  const redirectToList = () => {
-    Router.push('/list')
-  }
-
   const onSearch = (searchString: any, priceRange: any) => {
     setSearchInputText(searchString)
     Router.push({

@@ -8,7 +8,7 @@ import { XuiNetworkSelector } from './network-selector'
 import { XuiPriceRangeSelector } from './price-range-selector'
 
 interface FilterDropdownProps {
-  setPriceRange: Function
+  setPriceRange: (price: number) => void
 }
 
 const b = BEM('filter-dropdown', styles)

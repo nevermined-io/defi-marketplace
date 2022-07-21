@@ -9,7 +9,7 @@ import { BEM, UiText, UiIcon, UiLayout, UiDivider, UiButton, UiPopupHandlers } f
 import { XuiTokenName, XuiTokenPrice } from 'ui'
 import { Loader } from '@nevermined-io/styles'
 import { User } from '../context'
-import { toDate, getDdoTokenAddress, calculateStartEndPage, calculatePages, getBundlesWithDataset, Provenance } from '../shared'
+import { toDate, getDdoTokenAddress, calculateStartEndPage, calculatePages, getBundlesWithDataset, Provenance, getSampleURL } from '../shared'
 import { Markdown } from 'ui/markdown/markdown'
 import { AddedToBasketPopup } from './added-to-basket-popup'
 import Image from "next/image"
@@ -280,7 +280,7 @@ export const AssetDetails: NextPage = () => {
             <UiText type="h3" wrapper="h3" variants={['underline']}>Command Line Interface</UiText>
             <UiDivider />
             <UiText type="p" >To download this dataset directly from the CLI run the following command</UiText>
-            <Markdown code={`$ ncli assets get ${asset.id}`} />
+            <Markdown code={`$ ncli assets get ${asset.id}`}/>
           </div>
           <UiDivider vertical />
           <div>
@@ -296,7 +296,7 @@ export const AssetDetails: NextPage = () => {
               <UiIcon color="secondary" icon="file" size="xl" />
               <UiDivider vertical type="s" />
               <UiText block>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>Price:</UiText> <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice> <XuiTokenName address={getDdoTokenAddress(asset)} />
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Price:</UiText> <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice> <XuiTokenName address={getDdoTokenAddress(asset)?.toString()} />
                 <br />
                 <UiText className={b('attr')} type="caps" variants={['bold']}>Files:</UiText> {metadata.main.files?.length}
                 <br />

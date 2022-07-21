@@ -1,4 +1,4 @@
-import React, { Props, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Web3 from 'web3'
 
 import { User } from '../../context'
@@ -31,25 +31,22 @@ class TokenNameGetter {
     }
   }
 
-  static getSymbol(web3: Web3, address?: string) {
+  static async getSymbol(web3: Web3, address?: string) {
     if (!address) {
-      return Promise.resolve(undefined)
+      return;
     }
+    
     if (this.symbols[address]) {
       return this.symbols[address]
     }
 
-    this.symbols[address] = new Promise(async resolve => {
-      const contract = new web3.eth.Contract([ERC20SymbolAbi], address)
-      try {
-        const symbol = await contract.methods.symbol().call()
-        this.symbols[address].value = symbol
-        resolve(symbol)
-      } catch {
-        this.symbols[address].value = null
-        resolve(undefined)
-      }
-    })
+    const contract = new web3.eth.Contract([ERC20SymbolAbi], address)
+    try {
+      const symbol = await contract.methods.symbol().call()
+      this.symbols[address].value = symbol
+    } catch {
+        this.symbols[address].value = null    
+    }
     return this.symbols[address]
   }
 }
@@ -60,7 +57,7 @@ interface TokenNameProps {
 }
 
 export const XuiTokenName = React.memo(function({address}: TokenNameProps) {
-  const {tokenSymbol, web3} = useContext(User)
+  const {tokenSymbol } = useContext(User)
   const instantSymbol = TokenNameGetter.getInstantSymbol(address)
   const initialSymbol = instantSymbol || (instantSymbol === null ? tokenSymbol : '#')
   const [token, setToken] = useState(initialSymbol)
@@ -69,8 +66,8 @@ export const XuiTokenName = React.memo(function({address}: TokenNameProps) {
     if (instantSymbol !== undefined) {
       return
     }
-    TokenNameGetter.getSymbol(web3, address)
-      .then(_ => _ ? setToken(_) : setToken(tokenSymbol))
+    TokenNameGetter.getSymbol(new Web3(window.ethereum), address)
+      .then((_: any) => _ ? setToken(_) : setToken(tokenSymbol))
   }, [address])
 
   return <>{token}</>

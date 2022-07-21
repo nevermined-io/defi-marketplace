@@ -1,5 +1,4 @@
-import React, { Props } from "react"
-import { useRouter } from "next/router";
+import React from "react"
 import { BEM, UiDivider, UiLayout, UiText } from "@nevermined-io/styles"
 import Link from "next/link"
 import Image from "next/image"
@@ -7,10 +6,7 @@ import styles from './footer.module.scss'
 
 const b = BEM('footer', styles)
 
-interface FooterProps {
-}
-
-export function UiFooter(props: FooterProps) {
+export function UiFooter() {
 
   return (
     <footer className={b()}>

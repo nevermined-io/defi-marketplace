@@ -88,7 +88,7 @@ export const Status: NextPage = () => {
         <UiText block wrapper="h1" type="h1" variants={['heading']}>Marketplace Status</UiText>
         <UiText block type="h3" wrapper="h3" variants={['underline']}>Components status</UiText>
         <UiDivider />
-        <CircleSpinner width="150" height="150"/>
+        <CircleSpinner circleSpimmerSrc='/assets/circle-loadspinner.svg' width="150" height="150"/>
       </UiLayout>
   )
 }

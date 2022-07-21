@@ -1,6 +1,11 @@
 {
-  "extends":["next/core-web-vitals"],
+  "extends":["next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"],
   "rules": {
-    "react/display-name": "off"
+    "@typescript-eslint/no-unused-vars": "error",
+    "react/display-name": "off",
+    "react-hooks/exhaustive-deps": "off"
   }
 }

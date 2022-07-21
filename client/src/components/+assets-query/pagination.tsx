@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { BEM, UiButton, UiIcon, UiLayout, UiDivider, UiText } from '@nevermined-io/styles'
-import styles from './assets-query.module.scss'
+import { UiButton, UiIcon, UiLayout, UiDivider, UiText } from '@nevermined-io/styles'
 
 interface PaginationProps {
   totalPages: number;
@@ -9,19 +8,17 @@ interface PaginationProps {
   setPage: (page: number) => void
 }
 
-const b = BEM('assets-query', styles)
-
 export function XuiPagination({ totalPages, page, setPage }: PaginationProps) {
   return (<>
     <UiDivider type="l" />
     <UiLayout justify="center" align="center">
-      <UiButton square type="alt" disabled={page === 1} onClick={() => setPage(page - 1)}>
+      <UiButton square type="alt" area-disabled={page === 1} onClick={() => setPage(page - 1)}>
         <UiIcon icon="arrowLeft" />
       </UiButton>
       <UiDivider vertical />
       <UiText variants={['detail', 'bold']}>{page} / {totalPages}</UiText>
       <UiDivider vertical />
-      <UiButton square type="alt" disabled={page === totalPages} onClick={() => setPage(page + 1)}>
+      <UiButton square type="alt" area-disabled={page === totalPages} onClick={() => setPage(page + 1)}>
         <UiIcon icon="arrowRight" />
       </UiButton>
     </UiLayout>

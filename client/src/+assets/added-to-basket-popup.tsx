@@ -7,7 +7,7 @@ import Router from 'next/router'
 
 interface AddedToBasketPopupProps {
   closePopup : (event:any)=> void,
-  popupRef : RefObject<UiPopupHandlers>
+  popupRef : React.MutableRefObject<UiPopupHandlers | undefined> | React.RefObject<UiPopupHandlers>
 }
 
 

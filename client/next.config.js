@@ -17,6 +17,9 @@ module.exports = {
 		);
     return config
   },
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { User } from 'src/context'
 
 import { BEM } from '@nevermined-io/styles'

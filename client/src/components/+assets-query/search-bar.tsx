@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import Image from "next/image"
 
-import { BEM, UiIcon, UiLayout, UiDivider, UiText, UiButton } from '@nevermined-io/styles'
+import { BEM, UiLayout, UiDivider, UiButton } from '@nevermined-io/styles'
 import { UiDropdown } from '@nevermined-io/styles'
 import { User } from '../../context'
 import styles from './assets-query.module.scss'
@@ -11,12 +11,11 @@ import { XuiFilterDropdown } from 'ui/+assets-query/filter-dropdown/filter-dropd
 interface SearchBarProps {
   search?: 'onsite' | 'search-page'
   onSearch?: (searchString?: any, priceRange?:any) => void
-  showButton?: boolean
 }
 
 const b = BEM('assets-query', styles)
 
-export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
+export function XuiSearchBar({ onSearch }: SearchBarProps) {
   const { fromDate, toDate, selectedCategories, selectedNetworks, selectedPrice, setSelectedCategories, setToDate, setFromDate, setSearchInputText, setSelectedNetworks, setSelectedPriceRange } = useContext(User)
 
   const [textValue, setTextValue] = useState('')
@@ -91,10 +90,7 @@ export function XuiSearchBar({ onSearch, showButton = true }: SearchBarProps) {
           title="Category"
           imgWidth="10px"
         >
-          <XuiCategoryDropdown
-            selectedCategories={selectedCategories}
-            setSelectedCategories={setSelectedCategories}
-          />
+          <XuiCategoryDropdown/>
         </UiDropdown>
         <UiDropdown
           selected={fromDate || toDate || selectedPrice > 0 || selectedNetworks.length ? true : false}

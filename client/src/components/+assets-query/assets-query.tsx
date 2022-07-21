@@ -3,9 +3,8 @@ import { DDO} from '@nevermined-io/nevermined-sdk-js'
 import Catalog from '@nevermined-io/components-catalog'
 import { SearchQuery } from '@nevermined-io/nevermined-sdk-js'
 
-import { BEM, Loader } from '@nevermined-io/styles'
+import { Loader } from '@nevermined-io/styles'
 import { User } from '../../context'
-import styles from './assets-query.module.scss'
 import { networkPrefix, subcategoryPrefix } from '../../shared'
 import { XuiPagination } from './pagination'
 import { XuiSearchBar } from './search-bar'
@@ -18,7 +17,6 @@ interface AssetsQueryProps {
   content: (assets: DDO[]) => ReactNode | undefined;
 }
 
-const b = BEM('assets-query', styles)
 // loads all the asset then filters them looking at the variables defined in the user context
 export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = false }: AssetsQueryProps) {
   const { assets, searchInputText, fromDate, toDate, selectedCategories, selectedNetworks, selectedPrice, setSelectedPriceRange, setSelectedNetworks, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText, setBookmarks, bookmarks } = useContext(User)
@@ -55,9 +53,9 @@ export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = 
   }
 
   const mustArray = [textFilter, datasetCategory, listed]
-  selectedNetworkEvent.length > 0 && mustArray.push(datasetNetwork)
-  dateFilter && mustArray.push(dateFilter)
-  priceRange && mustArray.push(priceRange)
+  selectedNetworkEvent.length > 0 && mustArray.push(datasetNetwork as any)
+  dateFilter && mustArray.push(dateFilter as any)
+  priceRange && mustArray.push(priceRange as any)
 
 
   const query = {
@@ -88,7 +86,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = 
   //this happen when the page is loaded to get the query string
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
-    for (var [key, value] of queryParams.entries()) {
+    for (const [key, value] of queryParams.entries()) {
       switch (key) {
         case 'searchInputText': queryParams.get("searchInputText") ? setSearchInputText(value) : setSearchInputText(searchInputText); break
         case 'selectedCategories': queryParams.get("selectedCategories") ? setSelectedCategories(value.split(",")) : setSelectedCategories(selectedCategories); break
@@ -110,7 +108,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = 
       .query({
         offset: pageSize,
         page,
-        query: query!,
+        query: query! as any,
         sort: {
           created: 'desc'
         }
@@ -133,7 +131,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = 
       {loading && <Loader />}
       {search && (
         <div>
-          <XuiSearchBar showButton={true} />
+          <XuiSearchBar/>
         </div>
       )}
 
