@@ -95,33 +95,19 @@ export const PricesStep = (props: PricesProps) => {
                     </div>
                     : null
                     }
-
                     <UiDivider/>
-                    <UiFormGroup orientation={Orientation.Vertical}>
-                            
+                    <UiFormGroup orientation={Orientation.Vertical}>      
                             {
-                                (!showForm) ? 
-                              
+                                (!showForm) ?   
                                  <div className={b('user-publish-submit-container', ['updated-message'])}>
-                                  <ResultPopup  message={resultOk?assetMessage:errorAssetMessage} additionalMessage={filesUploadedMessage}  popupRef={resultPopupRef} resultOk= {resultOk}/>
-                                    {/*
-                                                <UiText type="h3" wrapper="h3" variants={['success']}>{assetMessage}</UiText> 
-                                                <UiText type="h3" wrapper="h3" variants={['error']}>{errorAssetMessage}</UiText>                                                 
-                                                {filesUploadedMessage.map( (message, index) => 
-                                                    <div key={index}>
-                                                        <UiText type="h3" wrapper="h3" variants={['success']}>{message}</UiText>
-                                                    </div>
-                                                )}
-                                                <UiDivider/>
-                                                <UiDivider/>
-                                    */}           
-                                                 <UiButton onClick={reset}>Publish New Asset</UiButton>
-                                                </div>
-                                                : 
-                                                <div className={b('user-publish-submit-container',['submit'])}>
-                                                <UiButton onClick={Previous}>&lt;</UiButton>
-                                                <UiButton onClick={showConfirm}>Publish Asset</UiButton>
-                                                </div>
+                                    <ResultPopup  message={resultOk?assetMessage:errorAssetMessage} additionalMessage={filesUploadedMessage}  popupRef={resultPopupRef} resultOk= {resultOk}/>   
+                                    <UiButton onClick={reset}>Publish New Asset</UiButton>
+                                </div>
+                                : 
+                                <div className={b('user-publish-submit-container',['submit'])}>
+                                <UiButton onClick={Previous}>&lt;</UiButton>
+                                <UiButton onClick={showConfirm}>Publish Asset</UiButton>
+                                </div>
                             }
                     
                     </UiFormGroup>
