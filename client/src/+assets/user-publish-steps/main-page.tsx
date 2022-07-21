@@ -23,7 +23,6 @@ export const UserPublishMultiStep: NextPage = () => {
     const fileUploadPopupRef = useRef<UiPopupHandlers>()
     const txPopupRef = useRef<UiPopupHandlers>()
     const [step, setStep] = useState<number>(1)    
-
     const [resultOk, setResultOk] = useState(false)
     const resultPopupRef = useRef<UiPopupHandlers>()
 
