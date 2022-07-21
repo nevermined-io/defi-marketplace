@@ -3,6 +3,7 @@ import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDi
 import styles from './user-publish.module.scss'
 import {ProgressPopup} from './progress-popup' 
 import {ConfirmPopup} from './confirm-popup'
+import {ResultPopup} from './result-popup'
 import  Catalog from '@nevermined-io/components-catalog'
 
 const b = BEM('user-publish', styles)
@@ -14,13 +15,15 @@ interface PricesProps {
     reset: () => void
     filesUploadedMessage: string[],
     fileUploadPopupRef: React.RefObject<UiPopupHandlers>,
-    txPopupRef:  React.RefObject<UiPopupHandlers>
+    txPopupRef:  React.RefObject<UiPopupHandlers>,
+    resultOk: boolean,
+    resultPopupRef: React.RefObject<UiPopupHandlers>
  }
 
 export const PricesStep = (props: PricesProps) => {
 
     const { assetPublish, handleChange, isProcessing, isPublished, assetMessage, errorAssetMessage } = Catalog.useAssetPublish()
-    const {prevStep, submit, reset, filesUploadedMessage, fileUploadPopupRef, txPopupRef } = props;    
+    const {prevStep, submit, reset, filesUploadedMessage, fileUploadPopupRef, txPopupRef, resultOk, resultPopupRef } = props;    
     const [inputError, setInputError] = useState('') 
     const UploadPopupMesssage = "Uploading local files to Filecoin..."
     const txPopupMesssage = "Sending transaction to register the Asset in the network..."
@@ -69,8 +72,9 @@ export const PricesStep = (props: PricesProps) => {
                     <div  className={b('publish-horizontal-line')}/>
                     <div className={b('form-input')}>
                     
+                    {(showForm) ? 
+                    <div>
                     <UiFormGroup orientation={Orientation.Vertical}>
-                    {(!showForm) ? <div/> :
                     <UiFormSelect
                         value={assetPublish.tier}
                         onChange={e => handleChange(e, 'tier')}
@@ -79,9 +83,8 @@ export const PricesStep = (props: PricesProps) => {
                         label='Tier'
                         inputError={inputError}
                     /> 
-                    }
+                   
                     </UiFormGroup>
-                    {(!showForm) ? <div/> :
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormInput
                             className={b('publish-form-input')}
@@ -89,13 +92,19 @@ export const PricesStep = (props: PricesProps) => {
                             value={assetPublish.price} onChange={e=>handleChange(e.target.value, 'price')}
                         />
                     </UiFormGroup>
+                    </div>
+                    : null
                     }
 
                     <UiDivider/>
                     <UiFormGroup orientation={Orientation.Vertical}>
                             
                             {
-                                (!showForm) ?  <div className={b('user-publish-submit-container', ['updated-message'])}>
+                                (!showForm) ? 
+                              
+                                 <div className={b('user-publish-submit-container', ['updated-message'])}>
+                                  <ResultPopup  message={resultOk?assetMessage:errorAssetMessage} additionalMessage={filesUploadedMessage}  popupRef={resultPopupRef} resultOk= {resultOk}/>
+                                    {/*
                                                 <UiText type="h3" wrapper="h3" variants={['success']}>{assetMessage}</UiText> 
                                                 <UiText type="h3" wrapper="h3" variants={['error']}>{errorAssetMessage}</UiText>                                                 
                                                 {filesUploadedMessage.map( (message, index) => 
@@ -105,6 +114,7 @@ export const PricesStep = (props: PricesProps) => {
                                                 )}
                                                 <UiDivider/>
                                                 <UiDivider/>
+                                    */}           
                                                  <UiButton onClick={reset}>Publish New Asset</UiButton>
                                                 </div>
                                                 : 

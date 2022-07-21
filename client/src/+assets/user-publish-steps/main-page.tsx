@@ -17,12 +17,15 @@ const b = BEM('user-publish', styles)
 
 export const UserPublishMultiStep: NextPage = () => {
     const {sdk} = Catalog.useNevermined()
-    const { errorAssetMessage, setAssetErrorMessage, assetPublish, setAssetPublish, reset, onAssetPublish } = Catalog.useAssetPublish()
+    const { errorAssetMessage, setAssetErrorMessage, setAssetMessage, assetPublish, setAssetPublish, reset, onAssetPublish } = Catalog.useAssetPublish()
     const [filesUploadedMessage, setFilesUploadedMessage] = useState<string[]>([])
     const popupRef = useRef<UiPopupHandlers>()
     const fileUploadPopupRef = useRef<UiPopupHandlers>()
     const txPopupRef = useRef<UiPopupHandlers>()
     const [step, setStep] = useState<number>(1)    
+
+    const [resultOk, setResultOk] = useState(false)
+    const resultPopupRef = useRef<UiPopupHandlers>()
 
     useEffect(() => {
         setAssetPublish({
@@ -61,6 +64,10 @@ export const UserPublishMultiStep: NextPage = () => {
             report_format: 'CSV'   
         })
         setFilesUploadedMessage([])
+        setAssetErrorMessage('')
+        setAssetMessage('')
+        setResultOk(false)
+
     }
 
     // go back to previous step
@@ -190,14 +197,18 @@ export const UserPublishMultiStep: NextPage = () => {
             onAssetPublish({nftAddress: getNftTierAddress(), metadata: generateMetadata()})
             .then((ddo) =>
                 {
+                    setResultOk(true)
                     txPopupRef.current?.close()
+                    resultPopupRef.current?.open()
                 }
             )
             .catch((error) => { 
                     txPopupRef.current?.close()
+                    setResultOk(false)
                     if (error.message.includes("Transaction was not mined within 50 blocks")){
                         setAssetErrorMessage("Transaction was not mined within 50 blocks, but it might still be mined. Check later your profile to see the Assets already published")
                     }
+                    resultPopupRef.current?.open()
                 }
             )               
         } catch (error: any ) {
@@ -297,6 +308,8 @@ export const UserPublishMultiStep: NextPage = () => {
                          filesUploadedMessage = {filesUploadedMessage}
                          fileUploadPopupRef = {fileUploadPopupRef}
                          txPopupRef = {txPopupRef}
+                         resultOk = {resultOk}
+                         resultPopupRef = {resultPopupRef}
                     />
                 </UiForm>
             </UiLayout>
