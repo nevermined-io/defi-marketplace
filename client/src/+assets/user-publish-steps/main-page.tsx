@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { UiForm, UiLayout, UiText, UiPopupHandlers, NotificationPopup, BEM } from '@nevermined-io/styles'
+import { UiForm, UiLayout, UiText, UiPopupHandlers, NotificationPopup } from '@nevermined-io/styles'
 import  Catalog from '@nevermined-io/components-catalog'
 import  {AssetFile} from '@nevermined-io/components-catalog/dist/node/types'
 
 import { NextPage } from 'next'
-import styles from './user-publish.module.scss'
 import { MetaData} from "@nevermined-io/nevermined-sdk-js"
 import {  Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress } from 'src/config'
 import { BasicInfoStep } from './basic-info'
@@ -13,15 +12,15 @@ import { PricesStep } from './prices'
 import { FilesStep } from './files'
 import { handleAssetFiles, FileType} from './files-handler'
 
-const b = BEM('user-publish', styles)
-
 export const UserPublishMultiStep: NextPage = () => {
-    const { errorAssetMessage, setAssetErrorMessage, assetPublish, setAssetPublish, reset, onAssetPublish } = Catalog.useAssetPublish()
+    const { errorAssetMessage, setAssetErrorMessage, setAssetMessage, assetPublish, setAssetPublish, onAssetPublish } = Catalog.useAssetPublish()
     const [filesUploadedMessage, setFilesUploadedMessage] = useState<string[]>([])
     const popupRef = useRef<UiPopupHandlers>()
     const fileUploadPopupRef = useRef<UiPopupHandlers>()
     const txPopupRef = useRef<UiPopupHandlers>()
     const [step, setStep] = useState<number>(1)    
+    const [resultOk, setResultOk] = useState(false)
+    const resultPopupRef = useRef<UiPopupHandlers>()
 
     useEffect(() => {
         setAssetPublish({
@@ -60,6 +59,10 @@ export const UserPublishMultiStep: NextPage = () => {
             report_format: 'CSV'   
         })
         setFilesUploadedMessage([])
+        setAssetErrorMessage('')
+        setAssetMessage('')
+        setResultOk(false)
+
     }
 
     // go back to previous step
@@ -187,16 +190,20 @@ export const UserPublishMultiStep: NextPage = () => {
             txPopupRef.current?.open()
          
             onAssetPublish({nftAddress: getNftTierAddress(), metadata: generateMetadata()})
-            .then((ddo) =>
+            .then(() =>
                 {
+                    setResultOk(true)
                     txPopupRef.current?.close()
+                    resultPopupRef.current?.open()
                 }
             )
             .catch((error) => { 
                     txPopupRef.current?.close()
+                    setResultOk(false)
                     if (error.message.includes("Transaction was not mined within 50 blocks")){
                         setAssetErrorMessage("Transaction was not mined within 50 blocks, but it might still be mined. Check later your profile to see the Assets already published")
                     }
+                    resultPopupRef.current?.open()
                 }
             )               
         } catch (error: any ) {
@@ -296,6 +303,8 @@ export const UserPublishMultiStep: NextPage = () => {
                          filesUploadedMessage = {filesUploadedMessage}
                          fileUploadPopupRef = {fileUploadPopupRef}
                          txPopupRef = {txPopupRef}
+                         resultOk = {resultOk}
+                         resultPopupRef = {resultPopupRef}
                     />
                 </UiForm>
             </UiLayout>

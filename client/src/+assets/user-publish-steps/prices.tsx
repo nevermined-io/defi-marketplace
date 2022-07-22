@@ -3,6 +3,7 @@ import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDi
 import styles from './user-publish.module.scss'
 import {ProgressPopup} from './progress-popup' 
 import {ConfirmPopup} from './confirm-popup'
+import {ResultPopup} from './result-popup'
 import  Catalog from '@nevermined-io/components-catalog'
 
 const b = BEM('user-publish', styles)
@@ -15,13 +16,15 @@ interface PricesProps {
     filesUploadedMessage: string[],
     fileUploadPopupRef: React.MutableRefObject<UiPopupHandlers | undefined>,
     txPopupRef: React.MutableRefObject<UiPopupHandlers | undefined>
+    resultOk: boolean,
+    resultPopupRef: React.MutableRefObject<UiPopupHandlers | undefined>
  }
 
 export const PricesStep = (props: PricesProps) => {
 
-    const { assetPublish, handleChange, isProcessing, isPublished, assetMessage, errorAssetMessage } = Catalog.useAssetPublish()
-    const {prevStep, submit, reset, filesUploadedMessage, fileUploadPopupRef, txPopupRef } = props;    
-    const [inputError, setInputError] = useState('') 
+    const { assetPublish, handleChange, isProcessing, assetMessage, errorAssetMessage } = Catalog.useAssetPublish()
+    const {prevStep, submit, reset, filesUploadedMessage, fileUploadPopupRef, txPopupRef, resultOk, resultPopupRef } = props;    
+    const [inputError] = useState('') 
     const UploadPopupMesssage = "Uploading local files to Filecoin..."
     const txPopupMesssage = "Sending transaction to register the Asset in the network..."
     const txAdditionalMessage = 'The transaction has been sent correctly. It could take some time to complete. You can close this window and visit your profile later to check the status of the new Asset.'            
@@ -69,8 +72,9 @@ export const PricesStep = (props: PricesProps) => {
                     <div  className={b('publish-horizontal-line')}/>
                     <div className={b('form-input')}>
                     
+                    {(showForm) ? 
+                    <div>
                     <UiFormGroup orientation={Orientation.Vertical}>
-                    {(!showForm) ? <div/> :
                     <UiFormSelect
                         value={assetPublish.tier}
                         onChange={e => handleChange(e as string, 'tier')}
@@ -79,9 +83,8 @@ export const PricesStep = (props: PricesProps) => {
                         label='Tier'
                         inputError={inputError}
                     /> 
-                    }
+                   
                     </UiFormGroup>
-                    {(!showForm) ? <div/> :
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiFormInput
                             className={b('publish-form-input')}
@@ -89,29 +92,22 @@ export const PricesStep = (props: PricesProps) => {
                             value={assetPublish.price} onChange={e=>handleChange(e.target.value, 'price')}
                         />
                     </UiFormGroup>
+                    </div>
+                    : null
                     }
-
                     <UiDivider/>
-                    <UiFormGroup orientation={Orientation.Vertical}>
-                            
+                    <UiFormGroup orientation={Orientation.Vertical}>      
                             {
-                                (!showForm) ?  <div className={b('user-publish-submit-container', ['updated-message'])}>
-                                                <UiText type="h3" wrapper="h3" variants={['success']}>{assetMessage}</UiText> 
-                                                <UiText type="h3" wrapper="h3" variants={['error']}>{errorAssetMessage}</UiText>                                                 
-                                                {filesUploadedMessage.map( (message, index) => 
-                                                    <div key={index}>
-                                                        <UiText type="h3" wrapper="h3" variants={['success']}>{message}</UiText>
-                                                    </div>
-                                                )}
-                                                <UiDivider/>
-                                                <UiDivider/>
-                                                 <UiButton onClick={reset}>Publish New Asset</UiButton>
-                                                </div>
-                                                : 
-                                                <div className={b('user-publish-submit-container',['submit'])}>
-                                                <UiButton onClick={Previous}>&lt;</UiButton>
-                                                <UiButton onClick={showConfirm}>Publish Asset</UiButton>
-                                                </div>
+                                (!showForm) ?   
+                                 <div className={b('user-publish-submit-container', ['updated-message'])}>
+                                    <ResultPopup  message={resultOk?assetMessage:errorAssetMessage} additionalMessage={filesUploadedMessage} popupRef={resultPopupRef} resultOk= {resultOk}/>   
+                                    <UiButton onClick={reset}>Publish New Asset</UiButton>
+                                </div>
+                                : 
+                                <div className={b('user-publish-submit-container',['submit'])}>
+                                <UiButton onClick={Previous}>&lt;</UiButton>
+                                <UiButton onClick={showConfirm}>Publish Asset</UiButton>
+                                </div>
                             }
                     
                     </UiFormGroup>
