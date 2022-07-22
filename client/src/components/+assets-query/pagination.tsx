@@ -12,13 +12,13 @@ export function XuiPagination({ totalPages, page, setPage }: PaginationProps) {
   return (<>
     <UiDivider type="l" />
     <UiLayout justify="center" align="center">
-      <UiButton square type="alt" area-disabled={page === 1} onClick={() => setPage(page - 1)}>
+      <UiButton square type="alt" disabled={page === 1} onClick={() => setPage(page - 1)}>
         <UiIcon icon="arrowLeft" />
       </UiButton>
       <UiDivider vertical />
       <UiText variants={['detail', 'bold']}>{page} / {totalPages}</UiText>
       <UiDivider vertical />
-      <UiButton square type="alt" area-disabled={page === totalPages} onClick={() => setPage(page + 1)}>
+      <UiButton square type="alt" disabled={page === totalPages} onClick={() => setPage(page + 1)}>
         <UiIcon icon="arrowRight" />
       </UiButton>
     </UiLayout>
