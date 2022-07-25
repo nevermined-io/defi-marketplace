@@ -1,6 +1,7 @@
 import React, { ReactNode, useContext, useState, useEffect} from 'react'
 import { DDO} from '@nevermined-io/nevermined-sdk-js'
 import Catalog from '@nevermined-io/components-catalog'
+import { MetaMask } from 'catalog-providers-test'
 import { SearchQuery } from '@nevermined-io/nevermined-sdk-js'
 
 import { Loader } from '@nevermined-io/styles'
@@ -21,7 +22,7 @@ interface AssetsQueryProps {
 export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = false }: AssetsQueryProps) {
   const { assets, searchInputText, fromDate, toDate, selectedCategories, selectedNetworks, selectedPrice, setSelectedPriceRange, setSelectedNetworks, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText, setBookmarks, bookmarks } = useContext(User)
   const { sdk } = Catalog.useNevermined()
-  const { walletAddress } = Catalog.useWallet()
+  const { walletAddress } = MetaMask.useWallet()
   const [totalPages, setTotalPages] = useState<number>(1)
   const [page, setPage] = useState<number>(1)
   const [loading, setLoading] = useState<boolean>(false)

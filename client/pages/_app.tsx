@@ -5,6 +5,7 @@ import React from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import Catalog from '@nevermined-io/components-catalog'
+import { MetaMask } from 'catalog-providers-test';
 import Web3 from 'web3';
 import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
 import { UiDivider } from '@nevermined-io/styles'
@@ -40,7 +41,7 @@ const appConfig = {
 function App({ Component, pageProps }: AppProps) {
   return (
     <Catalog.NeverminedProvider config={appConfig}>
-      <Catalog.WalletProvider
+      <MetaMask.WalletProvider
         chainConfig={chainConfig}
         nodeUri={appConfig.nodeUri}
         correctNetworkId={correctNetworkId}>
@@ -79,7 +80,7 @@ function App({ Component, pageProps }: AppProps) {
             <UiFooter />
         </UserProvider>
         </Catalog.AssetPublishProvider>
-      </Catalog.WalletProvider>
+      </MetaMask.WalletProvider>
     </Catalog.NeverminedProvider>
   )
 }
