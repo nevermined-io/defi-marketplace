@@ -1,6 +1,8 @@
 import { BEM } from '@nevermined-io/styles'
 import styles from './pricing.module.scss'
 const b = BEM('pricing', styles)
+import Catalog from '@nevermined-io/components-catalog'
+import { purchaseSubscription, registerSubscription } from 'src/shared/subscription'
 
 interface Tier {
   name: string
@@ -12,6 +14,17 @@ interface PricingProps {
 }
 
 export function Pricing({ tiers }: PricingProps) {
+
+  const { sdk } = Catalog.useNevermined()
+
+  const purchase = async () => {
+    const accounts = await sdk.accounts.list()
+
+    await registerSubscription(sdk, accounts[0])
+
+  }
+
+
   return (
     <div className={b("pricing")}>
       {tiers.map(tier =>
@@ -25,7 +38,7 @@ export function Pricing({ tiers }: PricingProps) {
               <li key={i}>{feat}</li>
             )}
           </ul>
-          <button className={b("add-to-cart")} >Add to cart</button>
+          <button className={b("add-to-cart")} onClick={() => purchase()}>Add to cart</button>
         </div>
       )}
     </div>
