@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState, useRef, ReactNode } from 'react'
-import Web3 from 'web3'
 import { DDO, Bookmark  } from '@nevermined-io/nevermined-sdk-js'
 import Catalog from '@nevermined-io/components-catalog'
 import { User } from '.'
@@ -56,7 +55,7 @@ const UserProvider = (props: UserProviderProps) => {
                 window?.ethereum?.on('accountsChanged', async () => {
                     fetchBalance()
                 })
-    
+
                 window?.ethereum?.on('chainChanged', async (chainId: any) => {
                     await reloadSdk()
                 })
@@ -79,7 +78,7 @@ const UserProvider = (props: UserProviderProps) => {
           setIsLogged(false)
           return
         }
-    
+
         (async () => {
           const isLoggedState = await checkIsLogged()
           setIsLogged(isLoggedState)
@@ -91,12 +90,12 @@ const UserProvider = (props: UserProviderProps) => {
 
     useEffect(() => {
         prevBasket.current = basket
-        
+
     }, [basket])
 
     const reloadSdk = async() => {
         const config = {
-            web3Provider: new Web3(window.ethereum),
+            web3Provider: window.ethereum,
             nodeUri: network,
             marketplaceUri,
             gatewayUri,
@@ -110,7 +109,7 @@ const UserProvider = (props: UserProviderProps) => {
         }
 
         updateSDK(config)
-    } 
+    }
 
     const fetchTokenSymbol = async (): Promise<void> => {
         let tokenSymbolState = 'Unknown'
@@ -121,7 +120,7 @@ const UserProvider = (props: UserProviderProps) => {
     }
 
     const loadNevermined = async (): Promise<void> => {
-        
+
         const network = await sdk?.keeper?.getNetworkName();
         await fetchBalance()
         await fetchAllUserBundlers(walletAddress)
@@ -172,7 +171,7 @@ const UserProvider = (props: UserProviderProps) => {
     return (
         <User.Provider value={{
             isLogged,
-            bookmarks, 
+            bookmarks,
             setBookmarks,
             balance,
             userBundles,
@@ -194,7 +193,7 @@ const UserProvider = (props: UserProviderProps) => {
             {props.children}
         </User.Provider>
     )
-    
+
 }
 
 export default UserProvider
