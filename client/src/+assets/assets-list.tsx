@@ -16,8 +16,8 @@ import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
 import { AddedToBasketPopup } from './added-to-basket-popup'
-import Catalog from '@nevermined-io/components-catalog'
-import { MetaMask } from 'catalog-providers-test'
+import Catalog from '@nevermined-io/catalog-core'
+import { MetaMask } from '@nevermined-io/catalog-providers'
 
 interface AssetsListProps {
   assets: DDO[],

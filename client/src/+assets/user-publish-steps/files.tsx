@@ -3,8 +3,8 @@ import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDi
 import styles from './user-publish.module.scss'
 import {FileType, checkFilecoinIdExists} from './files-handler'
 import {ProgressPopup} from './progress-popup' 
-import  Catalog from '@nevermined-io/components-catalog'
-import  {AssetFile} from '@nevermined-io/components-catalog/dist/node/types'
+import  Catalog from '@nevermined-io/catalog-core'
+import  {AssetFile} from '@nevermined-io/catalog-core/dist/node/types'
 
 const b = BEM('user-publish', styles)
 

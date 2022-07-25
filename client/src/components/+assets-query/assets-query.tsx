@@ -1,7 +1,7 @@
 import React, { ReactNode, useContext, useState, useEffect} from 'react'
 import { DDO} from '@nevermined-io/nevermined-sdk-js'
-import Catalog from '@nevermined-io/components-catalog'
-import { MetaMask } from 'catalog-providers-test'
+import Catalog from '@nevermined-io/catalog-core'
+import { MetaMask } from '@nevermined-io/catalog-providers'
 import { SearchQuery } from '@nevermined-io/nevermined-sdk-js'
 
 import { Loader } from '@nevermined-io/styles'

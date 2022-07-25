@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { UiFormGroup, Orientation, UiButton, UiLayout, UiText, UiDivider, UiFormSelect, UiFormTextarea, BEM } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
 import { networks, categories, protocols, assetTypes, notebookLanguages, notebookFormats, reportTypes, reportFormats} from 'src/config'
-import  Catalog from '@nevermined-io/components-catalog'
+import  Catalog from '@nevermined-io/catalog-core'
 
 const b = BEM('user-publish', styles)
 
