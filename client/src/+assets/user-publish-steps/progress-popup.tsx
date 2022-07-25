@@ -31,7 +31,7 @@ export const ProgressPopup: React.FC<ProgressPopupProps> = ({message, image, pop
           <UiDivider type="l" />
           { showCloseButton && 
             <div >
-              <UiButton onClick={(e:any) => popupRef.current?.close()}>Close</UiButton>
+              <UiButton onClick={() => popupRef.current?.close()}>Close</UiButton>
             </div>
           }
         </div>

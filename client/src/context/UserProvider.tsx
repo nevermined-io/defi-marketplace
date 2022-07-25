@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState, useRef, ReactNode } from 'react'
 import Web3 from 'web3'
 import { DDO, Bookmark  } from '@nevermined-io/nevermined-sdk-js'
+import { MetaMask } from 'catalog-providers-test'
 import Catalog from '@nevermined-io/components-catalog'
 import { User } from '.'
 import { correctNetworkName } from '../config';
@@ -42,7 +43,7 @@ const UserProvider = (props: UserProviderProps) => {
     const [selectedNetworks, setSelectedNetworks] = useState<string[]>([])
     const [selectedPrice, setSelectedPrice] = useState<number>(0)
     const { sdk, updateSDK, isLoadingSDK } = Catalog.useNevermined()
-    const { loginMetamask, walletAddress, isAvailable, checkIsLogged, switchChainsOrRegisterSupportedChain } = useContext(Catalog.WalletContext)
+    const { walletAddress, isAvailable, checkIsLogged } = useContext(MetaMask.WalletContext)
     const prevBasket = useRef<string[]>()
     const userProviderMounted = useRef()
 
@@ -57,7 +58,7 @@ const UserProvider = (props: UserProviderProps) => {
                     fetchBalance()
                 })
     
-                window?.ethereum?.on('chainChanged', async (chainId: any) => {
+                window?.ethereum?.on('chainChanged', async () => {
                     await reloadSdk()
                 })
             }

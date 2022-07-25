@@ -9,7 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@nevermined-io/components-catalog": "0.0.82",
+    "@nevermined-io/components-catalog": "0.0.85",
+    "catalog-providers-test": "0.0.2",
     "@nevermined-io/nevermined-sdk-js": "0.21.1",
     "@nevermined-io/styles": "0.1.6",
     "@types/bn.js": "^5.1.0",
