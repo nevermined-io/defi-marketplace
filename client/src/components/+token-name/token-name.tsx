@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
-import Web3 from 'web3'
-
+import { MetaMask } from '@nevermined-io/catalog-providers'
+import { ethers } from 'ethers'
 import { User } from '../../context'
 
 
@@ -31,7 +31,7 @@ class TokenNameGetter {
     }
   }
 
-  static async getSymbol(web3: Web3, address?: string) {
+  static async getSymbol(provider: MetaMask.MetamaskProvider, address?: string) {
     if (!address) {
       return;
     }
@@ -40,7 +40,7 @@ class TokenNameGetter {
       return this.symbols[address]
     }
 
-    const contract = new web3.eth.Contract([ERC20SymbolAbi], address)
+    const contract = new ethers.Contract(address, [ERC20SymbolAbi], provider)
     try {
       const symbol = await contract.methods.symbol().call()
       this.symbols[address].value = symbol
@@ -66,7 +66,7 @@ export const XuiTokenName = React.memo(function({address}: TokenNameProps) {
     if (instantSymbol !== undefined) {
       return
     }
-    TokenNameGetter.getSymbol(new Web3(window.ethereum), address)
+    TokenNameGetter.getSymbol(new ethers.providers.Web3Provider(window.ethereum))
       .then((_: any) => _ ? setToken(_) : setToken(tokenSymbol))
   }, [address])
 

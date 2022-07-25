@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { DDO, OrderProgressStep } from '@nevermined-io/nevermined-sdk-js'
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from '@nevermined-io/catalog-core'
 import { BEM, UiText, UiDivider, UiLayout, UiButton, UiIcon, UiCircleProgress, CircleSpinner } from '@nevermined-io/styles'
 import { User } from '../../../context'
 import styles from './create-bundle-popup.module.scss'

@@ -1,6 +1,6 @@
 import React from 'react'
 import { BEM, UiButton} from '@nevermined-io/styles'
-import { MetaMask } from 'catalog-providers-test'
+import { MetaMask } from '@nevermined-io/catalog-providers'
 import { User } from '../../context'
 import styles from './wallet.module.scss'
 import Link from 'next/link'

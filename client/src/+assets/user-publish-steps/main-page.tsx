@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { UiForm, UiLayout, UiText, UiPopupHandlers, NotificationPopup } from '@nevermined-io/styles'
-import  Catalog from '@nevermined-io/components-catalog'
-import  {AssetFile} from '@nevermined-io/components-catalog/dist/node/types'
+import  Catalog from '@nevermined-io/catalog-core'
+import  {AssetFile} from '@nevermined-io/catalog-core/dist/node/types'
 
 import { NextPage } from 'next'
 import { MetaData} from "@nevermined-io/nevermined-sdk-js"

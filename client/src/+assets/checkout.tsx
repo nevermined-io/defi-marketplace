@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import type { NextPage } from 'next'
 
 import { UiText, UiLayout, UiDivider, UiIcon, BEM, UiButton } from '@nevermined-io/styles'
-import { MetaMask } from 'catalog-providers-test'
+import { MetaMask } from '@nevermined-io/catalog-providers'
 import { XuiTokenPrice, XuiTokenName } from 'ui'
 import { User } from '../context'
 import { getDdoTokenAddress, getDefiInfo, toDate } from '../shared'

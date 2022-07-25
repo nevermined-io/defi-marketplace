@@ -1,8 +1,8 @@
-import Web3 from 'web3'
+import { MetaMask } from '@nevermined-io/catalog-providers'
 
 declare global {
   interface Window {
     ethereum: any
-    web3: Web3
+    web3: MetaMask.MetamaskProvider
   }
 }
