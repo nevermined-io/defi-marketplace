@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, useRef, ReactNode } from 'react'
 import { ethers } from 'ethers'
 import { DDO, Bookmark  } from '@nevermined-io/nevermined-sdk-js'
-import { MetaMask } from 'catalog-providers-test'
+import { MetaMask } from '@nevermined-io/catalog-providers'
 import Catalog from '@nevermined-io/catalog-core'
 import { User } from '.'
 import { correctNetworkName } from '../config';
@@ -97,7 +97,7 @@ const UserProvider = (props: UserProviderProps) => {
 
     const reloadSdk = async() => {
         const config = {
-            web3Provider: new ethers.providers.Web3Provider(window.ethereum),
+            web3Provider: window.ethereum,
             nodeUri: network,
             marketplaceUri,
             gatewayUri,

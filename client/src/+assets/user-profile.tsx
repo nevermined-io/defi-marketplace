@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import Catalog from '@nevermined-io/catalog-core'
-import { MetaMask } from 'catalog-providers-test'
+import { MetaMask } from '@nevermined-io/catalog-providers'
 import { UiForm, UiFormGroup, UiFormInput, UiFormAddItem, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, NotificationPopup, BEM } from '@nevermined-io/styles'
 import { NextPage } from 'next'
 import styles from './user-profile.module.scss'
