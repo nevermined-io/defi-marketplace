@@ -1,6 +1,6 @@
 import { graphUrl } from 'src/config'
 import { Nevermined, subgraphs } from '@nevermined-io/nevermined-sdk-js'
-import { MetaMask } from 'catalog-providers-test'
+import { MetaMask } from '@nevermined-io/catalog-providers'
 
 interface FullfilledOrders {
   documentId: string

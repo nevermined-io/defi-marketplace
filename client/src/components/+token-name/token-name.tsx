@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { MetaMask } from 'catalog-providers-test'
+import { MetaMask } from '@nevermined-io/catalog-providers'
 import { ethers } from 'ethers'
 import { User } from '../../context'
 
@@ -53,7 +53,7 @@ export const XuiTokenName = React.memo(function({address}: TokenNameProps) {
     if (instantSymbol !== undefined) {
       return
     }
-    TokenNameGetter.getSymbol(new ethers.providers.Web3Provider(window.ethereum))
+    TokenNameGetter.getSymbol(window.ethereum)
       .then((_: any) => _ ? setToken(_) : setToken(tokenSymbol))
   }, [address])
 

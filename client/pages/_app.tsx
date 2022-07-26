@@ -5,7 +5,7 @@ import React from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import Catalog from '@nevermined-io/catalog-core'
-import { MetaMask } from 'catalog-providers-test';
+import { MetaMask } from '@nevermined-io/catalog-providers';
 import { ethers } from 'ethers';
 import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
 import { UiDivider } from '@nevermined-io/styles'
@@ -25,7 +25,7 @@ import { docsUrl,
 import chainConfig from 'src/chainConfig'
 
 const appConfig = {
-    web3Provider: typeof window !== 'undefined' ? new ethers.providers.Web3Provider(window.ethereum) : new ethers.providers.JsonRpcProvider(nodeUri),
+    web3Provider: typeof window !== 'undefined' ? window.ethereum : new ethers.providers.JsonRpcProvider(nodeUri),
     nodeUri,
     marketplaceUri,
     gatewayUri,
