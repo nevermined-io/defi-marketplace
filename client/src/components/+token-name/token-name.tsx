@@ -4,20 +4,7 @@ import { ethers } from 'ethers'
 import { User } from '../../context'
 
 
-const ERC20SymbolAbi = {
-  constant: true,
-  inputs: [],
-  name: 'symbol',
-  outputs: [
-    {
-      name: '',
-      type: 'string'
-    }
-  ],
-  payable: false,
-  stateMutability: 'view' as const,
-  type: 'function' as const,
-}
+const ERC20SymbolAbi = ["function symbol() view returns (string)"]
 
 class TokenNameGetter {
   private static symbols: any = {}
@@ -40,9 +27,9 @@ class TokenNameGetter {
       return this.symbols[address]
     }
 
-    const contract = new ethers.Contract(address, [ERC20SymbolAbi], provider)
+    const contract = new ethers.Contract(address, ERC20SymbolAbi, provider)
     try {
-      const symbol = await contract.methods.symbol().call()
+      const symbol = await contract.symbol()
       this.symbols[address].value = symbol
     } catch {
         this.symbols[address].value = null    
