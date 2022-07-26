@@ -1,7 +1,7 @@
 import axios from 'axios'
 import axiosRetry from 'axios-retry'
 import { gatewayUri, filecoinUploadUri, ipfsGatewayUri } from 'src/config'
-import  {AssetFile} from '@nevermined-io/components-catalog/dist/node/types'
+import { AssetFile } from '@nevermined-io/components-catalog/dist/node/types'
 
 export enum FileType {
   FilecoinID = 'Filecoin',
