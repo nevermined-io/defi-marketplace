@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, useRef, ReactNode } from 'react'
 import { ethers } from 'ethers'
 import { DDO, Bookmark  } from '@nevermined-io/nevermined-sdk-js'
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { MetaMask } from 'catalog-providers-test'
 import Catalog from '@nevermined-io/catalog-core'
 import { User } from '.'
 import { correctNetworkName } from '../config';

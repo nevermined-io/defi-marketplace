@@ -4,7 +4,7 @@ import { UiText, UiDivider, UiLayout, BEM, UiButton } from '@nevermined-io/style
 import styles from './account.module.scss'
 import { UserProfile } from './user-profile'
 import Catalog from '@nevermined-io/catalog-core'
-import { MetaMask } from '@nevermined-io/catalog-providers';
+import { MetaMask } from 'catalog-providers-test';
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { loadFullfilledEvents, loadUserPublished } from 'src/shared/graphql'
 import { Summary } from 'ui/+account/summary'

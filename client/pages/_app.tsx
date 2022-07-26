@@ -5,7 +5,7 @@ import React from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import Catalog from '@nevermined-io/catalog-core'
-import { MetaMask } from '@nevermined-io/catalog-providers';
+import { MetaMask } from 'catalog-providers-test';
 import { ethers } from 'ethers';
 import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
 import { UiDivider } from '@nevermined-io/styles'

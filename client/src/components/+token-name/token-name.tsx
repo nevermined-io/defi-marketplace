@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { MetaMask } from 'catalog-providers-test'
 import { ethers } from 'ethers'
 import { User } from '../../context'
 
