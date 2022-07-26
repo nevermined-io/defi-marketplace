@@ -4,6 +4,7 @@ import { UiText, UiDivider, UiLayout, BEM, UiButton } from '@nevermined-io/style
 import styles from './account.module.scss'
 import { UserProfile } from './user-profile'
 import Catalog from '@nevermined-io/components-catalog'
+import { MetaMask } from 'catalog-providers-test'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { loadFullfilledEvents, loadUserPublished } from 'src/shared/graphql'
 import { Summary } from 'ui/+account/summary'
@@ -18,7 +19,7 @@ export const Account: NextPage = () => {
   const [published, setPublished] = useState<DDO[]>([])
   const [purchased, setPurchased] = useState<DDO[]>([])
   const { sdk } = Catalog.useNevermined()
-  const { walletAddress } = Catalog.useWallet()
+  const { walletAddress } = MetaMask.useWallet()
 
   const loadUserInfo = async () => {
     const userProfile = await sdk.profiles.findOneByAddress(walletAddress)

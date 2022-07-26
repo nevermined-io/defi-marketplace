@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { DDO, AdditionalInformation } from '@nevermined-io/nevermined-sdk-js'
 import Catalog from '@nevermined-io/components-catalog'
+import { MetaMask } from 'catalog-providers-test'
 import styles from './details.module.scss'
 import { BEM, UiText, UiIcon, UiLayout, UiDivider, UiButton, UiPopupHandlers } from '@nevermined-io/styles'
 import { XuiTokenName, XuiTokenPrice } from 'ui'
@@ -33,7 +34,7 @@ export const AssetDetails: NextPage = () => {
   const [ownAsset, setOwnAsset] = useState(false)
   const { addToBasket, isLogged, userBundles } = useContext(User)
   const { assets, sdk } = Catalog.useNevermined()
-  const { getProvider, loginMetamask, switchChainsOrRegisterSupportedChain } = Catalog.useWallet()
+  const { getProvider, loginMetamask, switchChainsOrRegisterSupportedChain } = MetaMask.useWallet()
   const popupRef = createRef<UiPopupHandlers>()
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
@@ -132,7 +133,6 @@ export const AssetDetails: NextPage = () => {
     const checkNetworkAndSetState = (chainId: any) => {
       if (chainId !== correctNetworkId) {
         setIsCorrectNetwork(false)
-      } else {
       }
     }
 

@@ -1,5 +1,6 @@
 import React, { useRef, Fragment, useContext, useEffect, useState } from 'react'
 import { DDO, Profile } from '@nevermined-io/nevermined-sdk-js'
+import { MetaMask } from 'catalog-providers-test'
 import Link from "next/link"
 
 import {
@@ -25,7 +26,7 @@ interface AssetsListProps {
 const b = BEM('assets-list', styles)
 export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles, bookmarks, setBookmarks } = useContext(User)
-  const { walletAddress } = Catalog.useWallet()
+  const { walletAddress } = MetaMask.useWallet()
   const { sdk, account } = Catalog.useNevermined()
   const [userProfile, setUserProfile] = useState<Profile>({} as Profile)
   const [errorMessage, setErrorMessage] = useState('')
