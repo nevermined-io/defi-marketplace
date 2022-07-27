@@ -6,17 +6,12 @@ import Image from "next/image"
 import styles from './category-dropdown.module.scss'
 import { User } from 'src/context'
 
-interface CategoryDropdownProps {
-  selectedCategories: string[]
-  setSelectedCategories: Function
-}
-
 const b = BEM('category-dropdown', styles)
 
 const lendingCategories = ['Borrows', 'Deposits', 'Liquidations', 'Repays', 'Redeems', 'Flashloans']
 const DEXCategories = ['Trades', 'Liquidity']
 
-export function XuiCategoryDropdown(props: CategoryDropdownProps) {
+export function XuiCategoryDropdown() {
   const { selectedCategories, setSelectedCategories} = useContext(User)
   const [expandLending, setExpandLending] = useState<boolean>(true)
   const [expandDEX, setExpandDEX] = useState<boolean>(false)

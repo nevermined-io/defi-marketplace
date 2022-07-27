@@ -1,39 +1,42 @@
 import { graphUrl } from 'src/config'
 import { Nevermined, subgraphs } from '@nevermined-io/nevermined-sdk-js'
-import Web3 from 'web3';
+import { MetaMask } from '@nevermined-io/catalog-providers'
 
 interface FullfilledOrders {
-  documentId: string;
+  documentId: string
 }
 
-export const loadFullfilledEvents = async (sdk: Nevermined, account: string): Promise<FullfilledOrders[]> => {
+export const loadFullfilledEvents = async (
+  sdk: Nevermined,
+  account: string
+): Promise<FullfilledOrders[]> => {
+  const fullfilled = await sdk.keeper.conditions.accessCondition.events.getPastEvents({
+    methodName: 'getFulfilleds',
+    filterSubgraph: {
+      where: {
+        _grantee: account
+      }
+    },
+    result: {
+      _documentId: true
+    }
+  })
 
-  const fullfilled = await sdk.keeper.conditions.accessCondition.events.getPastEvents(
-    {
-      methodName: 'getFulfilleds',
-      filterSubgraph: {
-        where: {
-          _grantee: account,
-        },
-      },
-      result: {
-        _documentId: true
-      },
-    })
-
-  return fullfilled.map(doc => { return { documentId: doc._documentId } })
-
+  return fullfilled.map((doc) => {
+    return { documentId: doc._documentId }
+  })
 }
-
 
 export interface RegisteredAsset {
-  did: string,
-  owner: string,
+  did: string
+  owner: string
   registeredAt: Date
 }
 
-export const loadPublishedEvent = async (asset: string, web3: Web3): Promise<RegisteredAsset | undefined> => {
-
+export const loadPublishedEvent = async (
+  asset: string,
+  provider: MetaMask.MetamaskProvider
+): Promise<RegisteredAsset | undefined> => {
   const registered = await subgraphs.DIDRegistry.getDIDAttributeRegistereds(
     `${graphUrl}/DIDRegistry`,
     {
@@ -50,7 +53,7 @@ export const loadPublishedEvent = async (asset: string, web3: Web3): Promise<Reg
   )
 
   if (registered.length) {
-    const tx = await web3.eth.getBlock(registered[0]._blockNumberUpdated.toNumber())
+    const tx = await provider.getBlock(registered[0]._blockNumberUpdated.toNumber())
     return {
       did: registered[0]._did,
       owner: registered[0]._owner,
@@ -59,25 +62,24 @@ export const loadPublishedEvent = async (asset: string, web3: Web3): Promise<Reg
   }
 }
 
-
-export const loadUserPublished = async (sdk: Nevermined, owner: string): Promise<any | undefined> => {
-
-  const registered = await sdk.keeper.didRegistry.events.getPastEvents(
-    {
-      methodName: 'getDIDAttributeRegistereds',
-      filterSubgraph: {
-        where: {
-          _owner: owner
-        },
-      },
-      result: {
-        _did: true,
-        _owner: true,
-        _lastUpdatedBy: true,
-        _blockNumberUpdated: true
-      },
+export const loadUserPublished = async (
+  sdk: Nevermined,
+  owner: string
+): Promise<any | undefined> => {
+  const registered = await sdk.keeper.didRegistry.events.getPastEvents({
+    methodName: 'getDIDAttributeRegistereds',
+    filterSubgraph: {
+      where: {
+        _owner: owner
+      }
+    },
+    result: {
+      _did: true,
+      _owner: true,
+      _lastUpdatedBy: true,
+      _blockNumberUpdated: true
     }
-  );
+  })
 
   return registered
 }

@@ -5,8 +5,8 @@ import styles from './markdown.module.scss'
 const b = BEM('markdown', styles)
 
 interface MarkdownProps {
-  code: React.ElementType
-  height: string,
+  code: React.ReactElement | string
+  height?: string,
   disableCopy?: boolean
 }
 
@@ -20,7 +20,7 @@ export const Markdown: React.FC<MarkdownProps>= ({ code, height, disableCopy }: 
     }
   }, []);
 
-  const copyToClipboard = (code: React.ElementType) => {
+  const copyToClipboard = (code: React.ReactElement | string) => {
     const replaced = code.toString().replace("$", "")
     navigatorInstance?.clipboard.writeText(replaced)
   }

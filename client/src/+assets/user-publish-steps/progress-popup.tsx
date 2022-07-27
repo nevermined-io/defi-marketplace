@@ -1,14 +1,14 @@
 import React from 'react'
-import { BEM, UiText, UiPopup, UiPopupHandlers, UiButton, UiIcon, CircleSpinner, UiDivider } from '@nevermined-io/styles'
+import { BEM, UiText, UiPopup, UiPopupHandlers, UiButton, CircleSpinner, UiDivider } from '@nevermined-io/styles'
 import styles from './popup.module.scss'
 
 interface ProgressPopupProps {
   message: string,
-  additionalMessage: string
-  showCloseButton: boolean
-  image: string,
-  popUpHeight: string,
-  popupRef :React.RefObject<UiPopupHandlers>
+  additionalMessage?: string
+  showCloseButton?: boolean
+  image?: string,
+  popUpHeight?: string,
+  popupRef :React.MutableRefObject<UiPopupHandlers | undefined>
 }
 
 const b = BEM('popup', styles)
@@ -31,7 +31,7 @@ export const ProgressPopup: React.FC<ProgressPopupProps> = ({message, image, pop
           <UiDivider type="l" />
           { showCloseButton && 
             <div >
-              <UiButton onClick={(e:any) => popupRef.current?.close()}>Close</UiButton>
+              <UiButton onClick={() => popupRef.current?.close()}>Close</UiButton>
             </div>
           }
         </div>

@@ -1,15 +1,12 @@
 import React from 'react'
 
-import { BEM, UiButton, UiIcon, UiLayout, UiDivider, UiText } from '@nevermined-io/styles'
-import styles from './assets-query.module.scss'
+import { UiButton, UiIcon, UiLayout, UiDivider, UiText } from '@nevermined-io/styles'
 
 interface PaginationProps {
   totalPages: number;
   page: number;
   setPage: (page: number) => void
 }
-
-const b = BEM('assets-query', styles)
 
 export function XuiPagination({ totalPages, page, setPage }: PaginationProps) {
   return (<>

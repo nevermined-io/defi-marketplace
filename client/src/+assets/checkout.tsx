@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import type { NextPage } from 'next'
 
 import { UiText, UiLayout, UiDivider, UiIcon, BEM, UiButton } from '@nevermined-io/styles'
-import Catalog from '@nevermined-io/components-catalog'
+import { MetaMask } from '@nevermined-io/catalog-providers'
 import { XuiTokenPrice, XuiTokenName } from 'ui'
 import { User } from '../context'
 import { getDdoTokenAddress, getDefiInfo, toDate } from '../shared'
@@ -15,7 +15,7 @@ import { correctNetworkName } from '../config'
 const b = BEM('checkout', styles)
 export const Checkout: NextPage = () => {
   const { assets: contextAssets, basket, network, isLogged, removeFromBasket } = useContext(User)
-  const { walletAddress, loginMetamask, switchChainsOrRegisterSupportedChain } = Catalog.useWallet()
+  const { walletAddress, loginMetamask, switchChainsOrRegisterSupportedChain } = MetaMask.useWallet()
 
   const assets = contextAssets.filter(asset => basket.includes(asset.id))
   const totalPrice = assets.map(
@@ -72,7 +72,7 @@ export const Checkout: NextPage = () => {
                             <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice>
                             {' '}
                             <UiText variants={['detail']}>
-                              <XuiTokenName address={getDdoTokenAddress(asset)} />
+                              <XuiTokenName address={getDdoTokenAddress(asset)?.toString()} />
                             </UiText>
                           </UiText>
                         </UiLayout>
@@ -109,7 +109,7 @@ export const Checkout: NextPage = () => {
                   assets.length ? <UiButton cover onClick={handleChangeNetwork}>Switch Network & Purchase</UiButton> : <></>
             }
             <UiDivider />
-            <UiButton cover type="alt " onClick={() => Router.push('/list')}>Back To Marketplace</UiButton>
+            <UiButton cover type="alt" onClick={() => Router.push('/list')}>Back To Marketplace</UiButton>
           </div>
         </UiLayout>
       </UiLayout>

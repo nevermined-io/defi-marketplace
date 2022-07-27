@@ -1,3 +1,3 @@
-import { AssetDetails } from '/src/+assets/details'
+import { AssetDetails } from 'src/+assets/details'
 
 export default AssetDetails

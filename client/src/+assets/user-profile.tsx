@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from '@nevermined-io/catalog-core'
+import { MetaMask } from '@nevermined-io/catalog-providers'
 import { UiForm, UiFormGroup, UiFormInput, UiFormAddItem, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, NotificationPopup, BEM } from '@nevermined-io/styles'
 import { NextPage } from 'next'
 import styles from './user-profile.module.scss'
@@ -11,7 +12,8 @@ interface AdditionalInformation {
 }
 
 export const UserProfile: NextPage = () => {
-    const { errorMessage, successMessage, inputError, isUpdated, isAddressAdded, setUserProfile, userProfile, addresses, newAddress, onSubmitUserProfile, onAddAddress  } = Catalog.useUserProfile();
+    const { walletAddress } = MetaMask.useWallet()
+    const { errorMessage, successMessage, inputError, isUpdated, isAddressAdded, setUserProfile, userProfile, addresses, newAddress, onSubmitUserProfile, onAddAddress  } = Catalog.useUserProfile(walletAddress);
 
     const popupRef = useRef<UiPopupHandlers>()
     

@@ -83,9 +83,8 @@ To connect to the mumbai enviroment the values should be as follows
 
 ```bash
 NEXT_PUBLIC_GATEWAY_ADDRESS=0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0
-NEXT_PUBLIC_BUNDLE_SERVICE_URI="https://defi.marketplace.api.keyko.rocks"
-NEXT_PUBLIC_ACCESS_CONDITION_URI="https://graph-node.mumbai.keyko.rocks/subgraphs/name/neverminedio/AccessCondition"
-NEXT_PUBLIC_METADATA_URI="https://metadata.mumbai.nevermined.rocks"
+NEXT_PUBLIC_BUNDLE_SERVICE_URI="https://defi.v2.marketplace-api.mumbai.nevermined.rocks/"
+NEXT_PUBLIC_ACCESS_CONDITION_URI="https://api.thegraph.com/subgraphs/name/nevermined-io/common"
 NEXT_PUBLIC_GATEWAY_URI="https://gateway.mumbai.nevermined.rocks"
 NEXT_PUBLIC_FAUCET_URI="http://localhost:3001"
 ```
@@ -127,7 +126,7 @@ See the [CHANGELOG.md](./CHANGELOG.md) file. This file is auto-generated during 
 ### License
 
 ```bash
-Copyright 2020 Keyko GmbH
+Copyright 2022 Nevermined AG
 This product includes software developed at
 BigchainDB GmbH and Ocean Protocol (https://www.oceanprotocol.com/)
 

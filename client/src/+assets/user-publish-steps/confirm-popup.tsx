@@ -4,7 +4,7 @@ import styles from './popup.module.scss'
 
 interface ConfirmPopupProps {
   message: string
-  popupRef :React.RefObject<UiPopupHandlers>
+  popupRef :React.MutableRefObject<UiPopupHandlers | undefined>
   confirm: () => void
   cancel: () => void
 }

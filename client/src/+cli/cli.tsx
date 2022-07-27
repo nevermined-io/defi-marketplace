@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
 import React, { useState } from 'react'
-import Link from "next/link"
 import { UiText, UiDivider, UiLayout, BEM } from '@nevermined-io/styles'
 import { Markdown } from 'ui/markdown/markdown'
 import styles from './cli.module.scss'
@@ -100,7 +99,7 @@ export const Cli: NextPage = () => {
           </UiLayout>
           <UiText>To download an asset first we need to know the asset identifier, to do so, we can searh for assets with</UiText>
           <Markdown code='$ncli assets search Aave -n defiMatic' height="111px"></Markdown>
-          <UiText>That will return the list of assets that includes the term "Aave" in the asset name</UiText>
+          <UiText>{'That will return the list of assets that includes the term "Aave" in the asset name'}</UiText>
           <Markdown code={
             <>
               <p>dataset Name: Aave-v2-Ethereum_20210807_00:00.csv - Url: did:nv:c29c3d18d056579203be988e51603288229dfa84b547a29055b98163cbf622d1<br />

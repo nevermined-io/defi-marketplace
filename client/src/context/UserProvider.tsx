@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState, useRef, ReactNode } from 'react'
-import Web3 from 'web3'
+import { ethers } from 'ethers'
 import { DDO, Bookmark  } from '@nevermined-io/nevermined-sdk-js'
-import Catalog from '@nevermined-io/components-catalog'
+import { MetaMask } from '@nevermined-io/catalog-providers'
+import Catalog from '@nevermined-io/catalog-core'
 import { User } from '.'
 import { correctNetworkName } from '../config';
 import { getAllUserBundlers, Bundle } from '../shared/api';
@@ -42,7 +43,7 @@ const UserProvider = (props: UserProviderProps) => {
     const [selectedNetworks, setSelectedNetworks] = useState<string[]>([])
     const [selectedPrice, setSelectedPrice] = useState<number>(0)
     const { sdk, updateSDK, isLoadingSDK } = Catalog.useNevermined()
-    const { loginMetamask, walletAddress, isAvailable, checkIsLogged, switchChainsOrRegisterSupportedChain } = useContext(Catalog.WalletContext)
+    const { walletAddress, isAvailable, checkIsLogged } = useContext(MetaMask.WalletContext)
     const prevBasket = useRef<string[]>()
     const userProviderMounted = useRef()
 
@@ -57,7 +58,7 @@ const UserProvider = (props: UserProviderProps) => {
                     fetchBalance()
                 })
     
-                window?.ethereum?.on('chainChanged', async (chainId: any) => {
+                window?.ethereum?.on('chainChanged', async () => {
                     await reloadSdk()
                 })
             }
@@ -96,7 +97,7 @@ const UserProvider = (props: UserProviderProps) => {
 
     const reloadSdk = async() => {
         const config = {
-            web3Provider: new Web3(window.ethereum),
+            web3Provider: window.ethereum,
             nodeUri: network,
             marketplaceUri,
             gatewayUri,

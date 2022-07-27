@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react'
 import type { NextPage } from 'next'
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from '@nevermined-io/catalog-core'
 
 import { UiText, UiLayout, UiDivider, CircleSpinner } from '@nevermined-io/styles'
 import { PlatformVersions } from '@nevermined-io/nevermined-sdk-js'
@@ -88,7 +88,7 @@ export const Status: NextPage = () => {
         <UiText block wrapper="h1" type="h1" variants={['heading']}>Marketplace Status</UiText>
         <UiText block type="h3" wrapper="h3" variants={['underline']}>Components status</UiText>
         <UiDivider />
-        <CircleSpinner width="150" height="150"/>
+        <CircleSpinner circleSpimmerSrc='/assets/circle-loadspinner.svg' width="150" height="150"/>
       </UiLayout>
   )
 }

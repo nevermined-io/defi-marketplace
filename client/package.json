@@ -1,6 +1,6 @@
 {
   "name": "defi-marketplace",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,24 +9,28 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@nevermined-io/nevermined-sdk-js": "0.21.1",
-    "@nevermined-io/styles": "0.1.2",
-    "@nevermined-io/components-catalog": "0.0.76",
+    "@nevermined-io/catalog-core": "0.0.17",
+    "@nevermined-io/nevermined-sdk-js": "0.22.0",
+    "@nevermined-io/styles": "0.1.6",
+    "@types/bn.js": "^5.1.0",
     "axios": "^0.25.0",
-    "axios-retry":"^3.3.1", 
+    "axios-retry": "^3.3.1",
     "bn.js": "^5.2.0",
+    "@nevermined-io/catalog-providers": "0.0.17",
+    "ethers": "^5.6.9",
     "next": "11.1.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "web3": "^1.5.2"
+    "react-dom": "17.0.2"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.17.12",
     "@types/react": "17.0.19",
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "@typescript-eslint/parser": "^5.30.7",
     "bem-helpers": "^1.1.0",
     "eslint": "7.32.0",
-    "eslint-config-next": "11.1.0",
+    "eslint-config-next": "12.1.1",
     "sass": "^1.38.0",
-    "typescript": "4.3.5"
+    "typescript": "^4.3.5"
   }
 }

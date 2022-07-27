@@ -1,3 +1,3 @@
-import { Account } from '/src/+assets/account'
+import { Account } from 'src/+assets/account'
 
 export default Account

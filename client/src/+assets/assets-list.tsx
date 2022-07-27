@@ -16,7 +16,9 @@ import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
 import { AddedToBasketPopup } from './added-to-basket-popup'
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from '@nevermined-io/catalog-core'
+import { MetaMask } from '@nevermined-io/catalog-providers'
+
 interface AssetsListProps {
   assets: DDO[],
   disableBatchSelect?: boolean
@@ -25,7 +27,7 @@ interface AssetsListProps {
 const b = BEM('assets-list', styles)
 export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   const { selectedNetworks, selectedCategories, addToBasket, setSelectedNetworks, setSelectedCategories, userBundles, bookmarks, setBookmarks } = useContext(User)
-  const { walletAddress } = Catalog.useWallet()
+  const { walletAddress } = MetaMask.useWallet()
   const { sdk, account } = Catalog.useNevermined()
   const [userProfile, setUserProfile] = useState<Profile>({} as Profile)
   const [errorMessage, setErrorMessage] = useState('')
@@ -181,7 +183,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                 >{metadata.main.name}</UiText>
               </Link>
               <UiText className={b('asset-date')} type="small" variants={['detail']}>
-                {toDate(metadata.main.datePublished).replace(/\//g, '.')}
+                {toDate(metadata.main.datePublished as string).replace(/\//g, '.')}
               </UiText>
 
             </div>
@@ -221,7 +223,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                 <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice>
                 {' '}
                 <UiText variants={['detail']}>
-                  <XuiTokenName address={getDdoTokenAddress(asset)} />
+                  <XuiTokenName address={getDdoTokenAddress(asset)?.toString()} />
                 </UiText>
               </UiText>
             </UiLayout>
@@ -248,7 +250,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                 <div className={b('bookmark', ['plus'])}>+</div>
               </UiLayout>
             }
-            <hr size="40" style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
+            <hr style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
             {userBundles.some(bundle => bundle.datasets.some(dataset => dataset.datasetId === asset.id)) ?
               <img alt='download' width="24px" src="assets/added_to_basket.svg" />
               :

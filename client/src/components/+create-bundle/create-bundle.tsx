@@ -1,7 +1,7 @@
-import React, { Props, HTMLAttributes, useContext, createRef } from 'react'
+import React, { Props, HTMLAttributes, createRef } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 
-import { BEM, modList, extendClassName, UiPopup, UiPopupHandlers } from '@nevermined-io/styles'
+import { BEM, extendClassName, UiPopup, UiPopupHandlers } from '@nevermined-io/styles'
 import styles from './create-bundle.module.scss'
 import { XuiCreateBundlePopup } from './popup/create-bundle-popup'
 

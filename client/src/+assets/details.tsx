@@ -3,19 +3,20 @@ import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { DDO, AdditionalInformation } from '@nevermined-io/nevermined-sdk-js'
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from '@nevermined-io/catalog-core'
+import { MetaMask } from '@nevermined-io/catalog-providers'
 import styles from './details.module.scss'
-import { BEM, UiText, UiIcon, UiLayout, UiDivider, UiButton, UiPopupHandlers, UiPopup } from '@nevermined-io/styles'
+import { BEM, UiText, UiIcon, UiLayout, UiDivider, UiButton, UiPopupHandlers } from '@nevermined-io/styles'
 import { XuiTokenName, XuiTokenPrice } from 'ui'
 import { Loader } from '@nevermined-io/styles'
 import { User } from '../context'
-import { toDate, getDdoTokenAddress, calculateStartEndPage, calculatePages, getBundlesWithDataset, getSampleURL } from '../shared'
+import { toDate, getDdoTokenAddress, calculateStartEndPage, calculatePages, getBundlesWithDataset, Provenance, getSampleURL } from '../shared'
 import { Markdown } from 'ui/markdown/markdown'
 import { AddedToBasketPopup } from './added-to-basket-popup'
 import Image from "next/image"
 import { XuiPagination } from 'ui/+assets-query/pagination'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
-import { loadPublishedEvent, RegisteredAsset } from 'src/shared/graphql'
+import { loadPublishedEvent } from 'src/shared/graphql'
 import { correctNetworkId, correctNetworkName, EVENT_PREFIX, PROTOCOL_PREFIX } from 'src/config'
 
 
@@ -33,11 +34,11 @@ export const AssetDetails: NextPage = () => {
   const [ownAsset, setOwnAsset] = useState(false)
   const { addToBasket, isLogged, userBundles } = useContext(User)
   const { assets, sdk } = Catalog.useNevermined()
-  const { getProvider, loginMetamask, switchChainsOrRegisterSupportedChain } = Catalog.useWallet()
+  const { getProvider, loginMetamask, switchChainsOrRegisterSupportedChain } = MetaMask.useWallet()
   const popupRef = createRef<UiPopupHandlers>()
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
-  const [provenance, setProvenance] = useState([]);
+  const [provenance, setProvenance] = useState<Provenance[]>([]);
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(true);
 
   const dateOptions: Intl.DateTimeFormatOptions = {
@@ -132,7 +133,6 @@ export const AssetDetails: NextPage = () => {
     const checkNetworkAndSetState = (chainId: any) => {
       if (chainId !== correctNetworkId) {
         setIsCorrectNetwork(false)
-      } else {
       }
     }
 
@@ -280,7 +280,7 @@ export const AssetDetails: NextPage = () => {
             <UiText type="h3" wrapper="h3" variants={['underline']}>Command Line Interface</UiText>
             <UiDivider />
             <UiText type="p" >To download this dataset directly from the CLI run the following command</UiText>
-            <Markdown code={`$ ncli assets get ${asset.id}`} />
+            <Markdown code={`$ ncli assets get ${asset.id}`}/>
           </div>
           <UiDivider vertical />
           <div>
@@ -296,7 +296,7 @@ export const AssetDetails: NextPage = () => {
               <UiIcon color="secondary" icon="file" size="xl" />
               <UiDivider vertical type="s" />
               <UiText block>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>Price:</UiText> <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice> <XuiTokenName address={getDdoTokenAddress(asset)} />
+                <UiText className={b('attr')} type="caps" variants={['bold']}>Price:</UiText> <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice> <XuiTokenName address={getDdoTokenAddress(asset)?.toString()} />
                 <br />
                 <UiText className={b('attr')} type="caps" variants={['bold']}>Files:</UiText> {metadata.main.files?.length}
                 <br />

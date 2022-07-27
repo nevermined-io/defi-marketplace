@@ -7,7 +7,7 @@ import Router from 'next/router'
 
 interface AddedToBasketPopupProps {
   closePopup : (event:any)=> void,
-  popupRef :React.RefObject<UiPopupHandlers>
+  popupRef : React.MutableRefObject<UiPopupHandlers | undefined> | React.RefObject<UiPopupHandlers>
 }
 
 
@@ -29,7 +29,7 @@ export function AddedToBasketPopup({closePopup, popupRef}: AddedToBasketPopupPro
           </div>
           <div className={b('popup-buttons')}>
             <UiButton cover style={{ padding: '0', width: '170px' }} onClick={closePopup}>Back To Search</UiButton>
-            <UiButton cover style={{ padding: '0', width: '170px' }} type="alt " onClick={() => Router.push('/checkout')}>Go To Basket</UiButton>
+            <UiButton cover style={{ padding: '0', width: '170px' }} type="alt" onClick={() => Router.push('/checkout')}>Go To Basket</UiButton>
           </div>
         </div>
       </UiPopup>

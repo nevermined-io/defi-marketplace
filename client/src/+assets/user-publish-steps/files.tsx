@@ -1,15 +1,14 @@
-import React, { useEffect, useContext, useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { UiFormGroup, UiFormInput, Orientation, UiButton, UiLayout, UiText, UiDivider, BEM, UiFormAddItem, UiPopupHandlers } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
-import {UserPublishParams} from './main-page'
-import { assetTypes } from 'src/config'
-import {FileType, AssetFile, checkFilecoinIdExists} from './files-handler'
+import {FileType, checkFilecoinIdExists} from './files-handler'
 import {ProgressPopup} from './progress-popup' 
+import  Catalog from '@nevermined-io/catalog-core'
+import  {AssetFile} from '@nevermined-io/catalog-core/dist/node/types'
 
 const b = BEM('user-publish', styles)
 
 interface FilesProps {
-    values: UserPublishParams
     prevStep: () => void
     nextStep: () => void 
     updateFilesAdded: (assetFiles: AssetFile) => void
@@ -17,8 +16,8 @@ interface FilesProps {
  }
 
 export const FilesStep = (props: FilesProps) => {
-    
-    const {values, updateFilesAdded, removeFile, prevStep, nextStep } = props;    
+    const { assetPublish } = Catalog.useAssetPublish()
+    const {updateFilesAdded, removeFile, prevStep, nextStep } = props;    
     const [inputError, setInputError] = useState('') 
     const [newFilecoinID, setNewFilecoinID] = useState('')
     const [popupMesssage, setPopupMessage] = useState('')
@@ -27,11 +26,10 @@ export const FilesStep = (props: FilesProps) => {
 
     const checkValues = (): Boolean => {
 
-        if (!values.asset_files || values.asset_files.length == 0) {
+        if (!assetPublish.assetFiles || assetPublish.assetFiles.length == 0) {
             setInputError('Local File  or Filecoin URL is required')
             return false
         }
-
         return true      
     }
     
@@ -47,9 +45,11 @@ export const FilesStep = (props: FilesProps) => {
         prevStep();
     }
 
-
     const handleNewFile = function (e: React.ChangeEvent<HTMLInputElement>) {
-       
+        if(!e.target?.files?.length) {
+            return
+        }
+
         const file = e.target.files[0]
         const assetFile:AssetFile = {
             type: FileType.Local,
@@ -106,13 +106,13 @@ export const FilesStep = (props: FilesProps) => {
                     <div className={b('form-input')}>
          
                     <div className={b('publish-current-files-container')}>
-                        {values.asset_files.map(assetfile => 
+                        {assetPublish.assetFiles.map(assetfile => 
                             <div className={b('publish-current-files')} key={assetfile.label}>
                                       
                                 <UiFormAddItem
                                     value={assetfile.label}
                                     onClick={(e) => removeFile(assetfile.label)}
-                                    disable={true}
+                                    disabled={true}
                                     readOnly={true}
                                     onChange={()=>{}}
                                 />  
@@ -147,8 +147,6 @@ export const FilesStep = (props: FilesProps) => {
                         />
                     </UiFormGroup>
 
-                  
-                    
                     <UiDivider/>
                     <UiFormGroup orientation={Orientation.Vertical}>
                         <UiButton onClick={Previous}>&lt;</UiButton>

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { DDO, OrderProgressStep } from '@nevermined-io/nevermined-sdk-js'
-import Catalog from '@nevermined-io/components-catalog'
+import Catalog from '@nevermined-io/catalog-core'
 import { BEM, UiText, UiDivider, UiLayout, UiButton, UiIcon, UiCircleProgress, CircleSpinner } from '@nevermined-io/styles'
 import { User } from '../../../context'
 import styles from './create-bundle-popup.module.scss'
@@ -166,7 +166,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
         <div className={b('options')}>
           <UiText block type="h3" className={b('text', ['title'])}>multiple asset package being created....</UiText>
           <UiDivider type="s" />
-          <CircleSpinner width="150" height="150" />
+          <CircleSpinner width="150" height="150" circleSpimmerSrc='/assets/circle-loadspinner.svg' />
           <UiText block type="p" className={b('text')} >
             If the package takes too long to create, you can leave this page.
             As soon as the purchase is ready, we will notify you on your profile page.
@@ -234,7 +234,7 @@ export function XuiCreateBundlePopup(props: CreateBundlePopupProps) {
         <div className={b('confirm')} style={{ height: '480px' }}>
           <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
           <UiText block type="h3" className={b('text')}>Purchase Successful!</UiText>
-          <CircleSpinner width="150" height="150" />
+          <CircleSpinner width="150" height="150" circleSpimmerSrc='/assets/circle-loadspinner.svg' />
           <UiText block className={b('text', ['content'])}>Please sign the message and the datasets will be downloaded shortly. You can always download this dataset from you profile page.</UiText>
           <UiDivider type="l" />
         </div>

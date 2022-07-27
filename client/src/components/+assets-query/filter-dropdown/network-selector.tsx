@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
 
 import { BEM } from '@nevermined-io/styles'
 import { networkArray } from 'src/config'
