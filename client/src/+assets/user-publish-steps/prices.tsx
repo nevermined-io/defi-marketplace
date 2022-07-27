@@ -100,7 +100,7 @@ export const PricesStep = (props: PricesProps) => {
                             {
                                 (!showForm) ?   
                                  <div className={b('user-publish-submit-container', ['updated-message'])}>
-                                    <ResultPopup  message={resultOk?assetMessage:errorAssetMessage} additionalMessage={filesUploadedMessage} popupRef={resultPopupRef} resultOk= {resultOk}/>   
+                                    <ResultPopup  message={resultOk ? assetMessage : errorAssetMessage} additionalMessage={filesUploadedMessage} popupRef={resultPopupRef} resultOk= {resultOk}/>   
                                     <UiButton onClick={reset}>Publish New Asset</UiButton>
                                 </div>
                                 : 

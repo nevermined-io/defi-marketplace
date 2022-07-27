@@ -79,7 +79,9 @@ export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = 
 
       const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
 
-      setBookmarks([...bookmarksData.results])
+      const bookmarksDDO = await Promise.all(bookmarksData.results.map(b => sdk.assets.resolve(b.did)))
+
+      setBookmarks([...bookmarksDDO])
     })()
   }, [sdk])
 
@@ -116,7 +118,7 @@ export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = 
       })
       .then(({ results, totalPages }) => {
         if( onlyBookmark ) {
-          results = results.filter(item => bookmarks?.some(bookmark => bookmark.did === item.id))
+          results = results.filter(item => bookmarks?.some(bookmark => bookmark.id === item.id))
         }
 
         setLoading(false)

@@ -6,6 +6,7 @@ import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import Catalog from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers';
+import { Logger } from '@nevermined-io/nevermined-sdk-js';
 import { ethers } from 'ethers';
 import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
 import { UiDivider } from '@nevermined-io/styles'
@@ -39,6 +40,8 @@ const appConfig = {
 }
 
 function App({ Component, pageProps }: AppProps) {
+  Logger.setLevel(3)
+
   return (
     <Catalog.NeverminedProvider config={appConfig}>
       <MetaMask.WalletProvider

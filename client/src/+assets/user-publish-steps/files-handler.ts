@@ -1,14 +1,14 @@
 import axios from 'axios'
 import axiosRetry from 'axios-retry'
 import { gatewayUri, filecoinUploadUri, ipfsGatewayUri } from 'src/config'
-import { AssetFile } from '@nevermined-io/catalog-core/dist/node/types'
+import { AssetFile } from '@nevermined-io/catalog-core'
 
 export enum FileType {
   FilecoinID = 'Filecoin',
   Local = 'Local'
 }
 
-const handlePostRequest = async (url: string, formData: FormData, retries: number = 3) => {
+const handlePostRequest = async (url: string, formData: FormData, retries = 3) => {
   axiosRetry(axios, {
     retries: retries,
     shouldResetTimeout: true,
@@ -16,7 +16,7 @@ const handlePostRequest = async (url: string, formData: FormData, retries: numbe
       console.log(`retry attempt: ${retryCount}`)
       return retryCount * 2000 // time interval between retries
     },
-    retryCondition: (_error) => true // retry no matter what
+    retryCondition: () => true // retry no matter what
   })
 
   let response
@@ -78,7 +78,7 @@ export const checkFilecoinIdExists = async (id: string): Promise<[boolean, Asset
   }
 
   try {
-    const { data, status, headers } = await axios.get(url)
+    const { status, headers } = await axios.get(url)
 
     if (status == 200) {
       assetFile.content_type = headers['content-type']

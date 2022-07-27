@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState, useRef, ReactNode } from 'react'
-import { ethers } from 'ethers'
-import { DDO, Bookmark  } from '@nevermined-io/nevermined-sdk-js'
+import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import Catalog from '@nevermined-io/catalog-core'
 import { User } from '.'
@@ -26,7 +25,7 @@ interface UserProviderProps {
 
 const UserProvider = (props: UserProviderProps) => {
     const [ isLogged, setIsLogged ] = useState(false)
-    const [bookmarks, setBookmarks] = useState<Bookmark[]>([])
+    const [bookmarks, setBookmarks] = useState<DDO[]>([])
     const [balance, setBalance] = useState<{eth: any, nevermined: any}>({
         eth: 0,
         nevermined: 0
@@ -133,7 +132,7 @@ const UserProvider = (props: UserProviderProps) => {
 
     const fetchBalance = async () => {
         try {
-            const account = (await sdk.accounts.list())?.find(a => a.getId() === walletAddress)
+            const account = (await sdk.accounts?.list())?.find(a => a.getId() === walletAddress)
 
             if (account) {
                 const balance = await account.getBalance()
