@@ -66,25 +66,39 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
         description,
       });
 
-      setBookmarks([...bookmarks, bookmark])
+      const bookmarkDDO = await sdk.assets.resolve(bookmark.did);
+
+      setBookmarks([...bookmarks, bookmarkDDO])
     } catch (error: any) {
-      setErrorMessage(error.message)
+      console.error(error.message)
+      setErrorMessage("Error in adding bookmark")
       popupRef.current?.open()
     }
   }
 
   const onRemoveBookmark = async (did: string) => {
     try {
-      const bookmark = bookmarks.find(item => item.did === did);
+      
 
-      if (bookmark?.id) {
-        await checkAuth()
-        await sdk.bookmarks.deleteOneById(bookmark.id);
-        setBookmarks(bookmarks.filter(item => item.id !== bookmark.id))
+      const bookmarkDDO = bookmarks.find(item => item.id === did);
+
+      console.log(bookmarkDDO)
+
+      if (bookmarkDDO?.userId) {
+        const bookmarksData = await sdk.bookmarks.findManyByUserId(bookmarkDDO?.userId)
+
+        const bookmark = bookmarksData.results.find(b => b.did === did);
+
+        if (bookmark?.id) {
+          await checkAuth()
+          await sdk.bookmarks.deleteOneById(bookmark.id);
+          setBookmarks(bookmarks.filter(item => item.id !== bookmarkDDO.id))
+        } 
       }
 
     } catch (error: any) {
-      setErrorMessage(error.message)
+      console.error(error.message)
+      setErrorMessage("Error in removing bookmark")
       popupRef.current?.open()
     }
   }
@@ -108,7 +122,11 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
 
       const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
 
-      setBookmarks([...bookmarksData.results])
+      const bookmarksDDO = await Promise.all(
+        bookmarksData.results?.map(bookmark => sdk.assets.resolve(bookmark.did))
+      )
+
+      setBookmarks([...bookmarksDDO])
       setUserProfile(userProfile)
     })()
   }, [sdk])
@@ -227,7 +245,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                 </UiText>
               </UiText>
             </UiLayout>
-            {bookmarks.some(bookmark => bookmark.did === asset.id) ?
+            {bookmarks.some(bookmark => bookmark.id === asset.id) ?
               <UiLayout className={b('bookmark')} onClick={() => onRemoveBookmark(asset.id)}>
                 <img
                   className={b('bookmark', ['cover'])}

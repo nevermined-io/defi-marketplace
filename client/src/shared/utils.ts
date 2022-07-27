@@ -1,6 +1,6 @@
-import { Account, DDO, MetaData, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { DDO, MetaData } from '@nevermined-io/nevermined-sdk-js'
 
-import { categoryPrefix, subcategoryPrefix, networkPrefix, StoreItemTypes } from './constants'
+import { categoryPrefix, subcategoryPrefix, networkPrefix } from './constants'
 
 export function toDate(date: string) {
   return new Date(date).toLocaleDateString('en-uk')

@@ -18,7 +18,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
     const [nameInputError, setNameInputError] = useState('')
     const [descriptionInputError, setDescriptionInputError] = useState('')
 
-    const checkValues = (): Boolean => {
+    const checkValues = (): boolean => {
 
         if (!assetPublish.author) {
             setAuthorInputError('Author is required')

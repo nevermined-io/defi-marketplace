@@ -1,8 +1,9 @@
 import type { NextPage } from 'next'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { UiText, UiDivider, UiLayout, BEM, UiButton } from '@nevermined-io/styles'
 import styles from './account.module.scss'
 import { UserProfile } from './user-profile'
+import { User } from '../context'
 import Catalog from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers';
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
@@ -15,9 +16,9 @@ import Router from 'next/router'
 const b = BEM('account', styles)
 export const Account: NextPage = () => {
   const [view, setView] = useState<number>(0)
-  const [bookmarks, setBookmarks] = useState<DDO[]>([])
   const [published, setPublished] = useState<DDO[]>([])
   const [purchased, setPurchased] = useState<DDO[]>([])
+  const { bookmarks, setBookmarks } = useContext(User)
   const { sdk } = Catalog.useNevermined()
   const { walletAddress } = MetaMask.useWallet()
 
@@ -53,7 +54,6 @@ export const Account: NextPage = () => {
     }
     loadUserInfo()
   }, [sdk])
-
 
   const renderContent = () => {
 
