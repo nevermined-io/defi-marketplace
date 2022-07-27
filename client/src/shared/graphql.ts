@@ -1,6 +1,11 @@
 import { graphUrl } from 'src/config'
-import { Nevermined, subgraphs } from '@nevermined-io/nevermined-sdk-js'
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import {
+  RegisterEvent,
+  MetaMask,
+  getAssetRegisterEvent,
+  getUserRegisterEvents
+} from '@nevermined-io/catalog-providers'
 
 interface FullfilledOrders {
   documentId: string
@@ -37,21 +42,7 @@ export const loadPublishedEvent = async (
   asset: string,
   provider: MetaMask.MetamaskProvider
 ): Promise<RegisteredAsset | undefined> => {
-  const registered = await subgraphs.DIDRegistry.getDIDAttributeRegistereds(
-    `${graphUrl}/DIDRegistry`,
-    {
-      where: {
-        _did: asset
-      }
-    },
-    {
-      _did: true,
-      _owner: true,
-      _lastUpdatedBy: true,
-      _blockNumberUpdated: true
-    }
-  )
-
+  const registered = await getAssetRegisterEvent(asset, graphUrl)
   if (registered.length) {
     const tx = await provider.getBlock(registered[0]._blockNumberUpdated.toNumber())
     return {
@@ -65,21 +56,7 @@ export const loadPublishedEvent = async (
 export const loadUserPublished = async (
   sdk: Nevermined,
   owner: string
-): Promise<any | undefined> => {
-  const registered = await sdk.keeper.didRegistry.events.getPastEvents({
-    methodName: 'getDIDAttributeRegistereds',
-    filterSubgraph: {
-      where: {
-        _owner: owner
-      }
-    },
-    result: {
-      _did: true,
-      _owner: true,
-      _lastUpdatedBy: true,
-      _blockNumberUpdated: true
-    }
-  })
-
+): Promise<RegisterEvent[]> => {
+  const registered = await getUserRegisterEvents(sdk, owner)
   return registered
 }
