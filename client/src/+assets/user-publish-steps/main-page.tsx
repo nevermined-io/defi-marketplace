@@ -24,7 +24,7 @@ export const UserPublishMultiStep: NextPage = () => {
     setAssetMessage,
     assetPublish,
     setAssetPublish,
-    onAssetPublish
+    onAsset721Publish,
   } = Catalog.useAssetPublish()
   const [filesUploadedMessage, setFilesUploadedMessage] = useState<string[]>([])
   const popupRef = useRef<UiPopupHandlers>()
@@ -204,7 +204,7 @@ export const UserPublishMultiStep: NextPage = () => {
       await uploadFiles()
       txPopupRef.current?.open()
 
-      onAssetPublish({ nftAddress: getNftTierAddress(), metadata: generateMetadata() })
+      onAsset721Publish({ nftAddress: getNftTierAddress(), metadata: generateMetadata() })
         .then(() => {
           setResultOk(true)
           txPopupRef.current?.close()
