@@ -11,6 +11,7 @@ import { DetailsStep } from './details'
 import { PricesStep } from './prices'
 import { FilesStep } from './files'
 import { handleAssetFiles, FileType} from './files-handler'
+import { toast } from 'react-toastify';
 
 export const UserPublishMultiStep: NextPage = () => {
     const { errorAssetMessage, setAssetErrorMessage, setAssetMessage, assetPublish, setAssetPublish, onAssetPublish } = Catalog.useAssetPublish()

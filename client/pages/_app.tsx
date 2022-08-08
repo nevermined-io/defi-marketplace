@@ -24,6 +24,8 @@ import { docsUrl,
     correctNetworkId
 } from 'src/config'
 import chainConfig from 'src/chainConfig'
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const appConfig = {
     web3Provider: typeof window !== 'undefined' ? window.ethereum : new ethers.providers.JsonRpcProvider(nodeUri),
@@ -43,6 +45,17 @@ function App({ Component, pageProps }: AppProps) {
   Logger.setLevel(3)
 
   return (
+    <div>
+    <ToastContainer 
+      position="top-right"
+      autoClose={10000}
+      hideProgressBar={false}
+      newestOnTop={true}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover/>
     <Catalog.NeverminedProvider config={appConfig}>
       <MetaMask.WalletProvider
         chainConfig={chainConfig}
@@ -85,6 +98,7 @@ function App({ Component, pageProps }: AppProps) {
         </Catalog.AssetPublishProvider>
       </MetaMask.WalletProvider>
     </Catalog.NeverminedProvider>
+    </div>
   )
 }
 export default App
