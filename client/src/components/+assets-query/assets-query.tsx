@@ -107,7 +107,7 @@ export function XuiAssetsQuery({
       return
     }
 
-    ;(async () => {
+    (async () => {
       const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
       if (!userProfile?.userId) {
         return
