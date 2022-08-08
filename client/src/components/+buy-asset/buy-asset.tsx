@@ -11,7 +11,7 @@ interface BuyAssetProps {
 const b = BEM('buy-asset', styles)
 
 export function XuiBuyAsset(props: BuyAssetProps & HTMLAttributes<any> & Props<any>) {
-  const {children, asset} = props
+  const { children, asset } = props
   const popupRef = createRef<UiPopupHandlers>()
 
   const openPopup = (event: any) => {
@@ -22,7 +22,7 @@ export function XuiBuyAsset(props: BuyAssetProps & HTMLAttributes<any> & Props<a
   return (
     <>
       <UiPopup ref={popupRef}>
-        <XuiBuyAssetPopup asset={asset} close={() => popupRef.current?.close()}/>
+        <XuiBuyAssetPopup asset={asset} close={() => popupRef.current?.close()} />
       </UiPopup>
 
       <div className={extendClassName(props, b())} onClick={openPopup}>

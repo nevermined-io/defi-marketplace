@@ -1,9 +1,9 @@
-import React, { useEffect } from "react"
-import { useRouter } from "next/router";
-import { XuiWallet } from "ui"
-import {BEM, UiDivider, UiLayout, UiText,} from '@nevermined-io/styles'
-import Link from "next/link"
-import Image from "next/image"
+import React, { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { XuiWallet } from 'ui'
+import { BEM, UiDivider, UiLayout, UiText } from '@nevermined-io/styles'
+import Link from 'next/link'
+import Image from 'next/image'
 
 import styles from './header.module.scss'
 
@@ -15,22 +15,26 @@ interface HeaderLinkProps {
   target?: string
 }
 
-export const UiHeaderLink: React.FC<HeaderLinkProps> = ({ href, target, children }: HeaderLinkProps) => {
-  const router = useRouter();
-  const active = router.pathname === href;
+export const UiHeaderLink: React.FC<HeaderLinkProps> = ({
+  href,
+  target,
+  children
+}: HeaderLinkProps) => {
+  const router = useRouter()
+  const active = router.pathname === href
 
   const handleRouteChange = (url: string) => {
-    (window as any).gtag('config', 'G-11ZZZNJ4Q5', {
-      page_path: url,
-    });
-  };
+    ;(window as any).gtag('config', 'G-11ZZZNJ4Q5', {
+      page_path: url
+    })
+  }
 
   useEffect(() => {
-    router.events.on('routeChangeComplete', handleRouteChange);
+    router.events.on('routeChangeComplete', handleRouteChange)
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
-    };
-  }, [router.events]);
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [router.events])
 
   const renderContent = () => {
     return (
@@ -38,7 +42,8 @@ export const UiHeaderLink: React.FC<HeaderLinkProps> = ({ href, target, children
         <UiText
           className={`pointer ${b('link', { active })}`}
           type="link-caps"
-          variants={active ? [] : ['highlight']}>
+          variants={active ? [] : ['highlight']}
+        >
           {children}
         </UiText>
       </span>
@@ -46,15 +51,13 @@ export const UiHeaderLink: React.FC<HeaderLinkProps> = ({ href, target, children
   }
   return (
     <>
-      {target ?
+      {target ? (
         <a href={href} target={target}>
           {renderContent()}
         </a>
-        :
-        <Link href={href}>
-          {renderContent()}
-        </Link>
-      }
+      ) : (
+        <Link href={href}>{renderContent()}</Link>
+      )}
     </>
   )
 }
