@@ -24,7 +24,7 @@ export const UiHeaderLink: React.FC<HeaderLinkProps> = ({
   const active = router.pathname === href
 
   const handleRouteChange = (url: string) => {
-    ;(window as any).gtag('config', 'G-11ZZZNJ4Q5', {
+    (window as any).gtag('config', 'G-11ZZZNJ4Q5', {
       page_path: url
     })
   }
