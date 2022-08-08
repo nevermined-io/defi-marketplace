@@ -2,9 +2,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import { UiForm, UiLayout, UiText, UiPopupHandlers, NotificationPopup } from '@nevermined-io/styles'
 import  Catalog from '@nevermined-io/catalog-core'
 import  {AssetFile} from '@nevermined-io/catalog-core'
-
 import { NextPage } from 'next'
-import { MetaData} from "@nevermined-io/nevermined-sdk-js"
+import { DDO, MetaData} from "@nevermined-io/nevermined-sdk-js"
 import {  Nft721ContractAddress, tier1NftContractAddress, tier2NftContractAddress, tier3NftContractAddress } from 'src/config'
 import { BasicInfoStep } from './basic-info'
 import { DetailsStep } from './details'
@@ -14,7 +13,7 @@ import { handleAssetFiles, FileType} from './files-handler'
 import { toast } from 'react-toastify';
 
 export const UserPublishMultiStep: NextPage = () => {
-    const { errorAssetMessage, setAssetErrorMessage, setAssetMessage, assetPublish, setAssetPublish, onAssetPublish } = Catalog.useAssetPublish()
+    const { errorAssetMessage, setAssetErrorMessage, assetMessage, setAssetMessage, assetPublish, setAssetPublish, onAssetPublish } = Catalog.useAssetPublish()
     const [filesUploadedMessage, setFilesUploadedMessage] = useState<string[]>([])
     const popupRef = useRef<UiPopupHandlers>()
     const fileUploadPopupRef = useRef<UiPopupHandlers>()
@@ -189,13 +188,14 @@ export const UserPublishMultiStep: NextPage = () => {
         try {
             await uploadFiles()
             txPopupRef.current?.open()
-         
+
             onAssetPublish({nftAddress: getNftTierAddress(), metadata: generateMetadata()})
-            .then(() =>
+            .then((ddo) =>
                 {
                     setResultOk(true)
                     txPopupRef.current?.close()
                     resultPopupRef.current?.open()
+                    toast.success(`Asset Published correctly. DID: ${ddo!.id}`)
                 }
             )
             .catch((error) => { 
@@ -205,8 +205,9 @@ export const UserPublishMultiStep: NextPage = () => {
                         setAssetErrorMessage("Transaction was not mined within 50 blocks, but it might still be mined. Check later your profile to see the Assets already published")
                     }
                     resultPopupRef.current?.open()
+                    toast.error(errorAssetMessage)
                 }
-            )               
+            )             
         } catch (error: any ) {
             setAssetErrorMessage(error.message)
             popupRef.current?.open()
