@@ -1,10 +1,10 @@
-import React, { useContext } from "react"
+import React, { useContext } from 'react'
 import Router from 'next/router'
-import { BEM, UiDivider, UiText, UiLayout } from "@nevermined-io/styles"
-import Image from "next/image"
+import { BEM, UiDivider, UiText, UiLayout } from '@nevermined-io/styles'
+import Image from 'next/image'
 import styles from './banner.module.scss'
-import { XuiSearchBar } from "ui/+assets-query/search-bar"
-import { User } from "src/context"
+import { XuiSearchBar } from 'ui/+assets-query/search-bar'
+import { User } from 'src/context'
 
 const b = BEM('banner', styles)
 
@@ -25,35 +25,34 @@ export function UiBanner(props: BannerProps) {
         toDate,
         selectedCategories,
         priceRange
-      },
+      }
     })
   }
 
   return (
     <div className={b('bannerContainer')}>
       <Image src="/assets/nevermined-color.svg" width="115" height="70" />
-      <UiText className={b('bannerText', ["padding"])} wrapper="h1" type="h1">
-        Discover, Distribute &<br />
-        {' '}
-        Download
-        <UiText clear={['text-transform']} > DeFi  </UiText>
+      <UiText className={b('bannerText', ['padding'])} wrapper="h1" type="h1">
+        Discover, Distribute &<br /> Download
+        <UiText clear={['text-transform']}> DeFi </UiText>
         Data
       </UiText>
       <UiDivider type="s" />
-      {
-        props.showButton ?
-          <div>
-            <UiDivider type="xl" />
+      {props.showButton ? (
+        <div>
+          <UiDivider type="xl" />
 
-            <UiLayout type="container"  >
-              <XuiSearchBar onSearch={(searchString: any, priceRange:any) => onSearch(searchString, priceRange)} />
-            </UiLayout>
-            <UiDivider type="l" />
-            <UiDivider type="xxl" />
-          </div> :
-
+          <UiLayout type="container">
+            <XuiSearchBar
+              onSearch={(searchString: any, priceRange: any) => onSearch(searchString, priceRange)}
+            />
+          </UiLayout>
           <UiDivider type="l" />
-      }
+          <UiDivider type="xxl" />
+        </div>
+      ) : (
+        <UiDivider type="l" />
+      )}
     </div>
   )
 }

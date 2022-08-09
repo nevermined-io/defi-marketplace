@@ -36,7 +36,6 @@ This approach allows us to leverage all the retrieval processes in open source a
 All the events included in each dataset contain the transaction id that originated from, so all the data can be verified using a block explorer. Our library is just doing conversions to this data to provide the same units in all the different datasets avoiding the user wasting a lot of time cleaning the data.
 `.trim()
 
-
 const howWorks = `
 DeFi Data Marketplace uses three different protocols to retrieve, store and publish data.
 
@@ -49,33 +48,59 @@ export const About: NextPage = () => {
   return (
     <>
       <UiLayout type="container">
-        <UiText wrapper="h1" type="h1" variants={['heading']}>About us</UiText>
+        <UiText wrapper="h1" type="h1" variants={['heading']}>
+          About us
+        </UiText>
         <UiLayout>
-          <UiText type="h4" wrapper="h4" variants={['underline']}>What is DeFi Data Marketplace?​</UiText>
+          <UiText type="h4" wrapper="h4" variants={['underline']}>
+            What is DeFi Data Marketplace?​
+          </UiText>
         </UiLayout>
-        <UiDivider/>
-        {whatIs.split('\n').map((_, i) => (<UiText key={i} type="p" block>{_}</UiText>))}
-        <UiDivider type="xl"/>
+        <UiDivider />
+        {whatIs.split('\n').map((_, i) => (
+          <UiText key={i} type="p" block>
+            {_}
+          </UiText>
+        ))}
+        <UiDivider type="xl" />
         <UiLayout>
-          <UiText type="h4" wrapper="h4" variants={['underline']}>What can I find in the DeFi Data Marketplace?</UiText>
+          <UiText type="h4" wrapper="h4" variants={['underline']}>
+            What can I find in the DeFi Data Marketplace?
+          </UiText>
         </UiLayout>
-        <UiDivider/>
-        {whatFind.split('\n').map((_, i) => (<UiText key={i} type="p" block>{_}</UiText>))}
-        <UiDivider type="xl"/>
+        <UiDivider />
+        {whatFind.split('\n').map((_, i) => (
+          <UiText key={i} type="p" block>
+            {_}
+          </UiText>
+        ))}
+        <UiDivider type="xl" />
         <UiLayout>
-          <UiText type="h4" wrapper="h4" variants={['underline']}>How are these datasets created? Can I verify this data?</UiText>
+          <UiText type="h4" wrapper="h4" variants={['underline']}>
+            How are these datasets created? Can I verify this data?
+          </UiText>
         </UiLayout>
-        <UiDivider/>
-        {howAreCreated.split('\n').map((_, i) => (<UiText key={i} type="p" block>{_}</UiText>))}
-        <UiDivider type="xl"/>
+        <UiDivider />
+        {howAreCreated.split('\n').map((_, i) => (
+          <UiText key={i} type="p" block>
+            {_}
+          </UiText>
+        ))}
+        <UiDivider type="xl" />
         <UiLayout>
-          <UiText type="h4" wrapper="h4" variants={['underline']}>How it works</UiText>
+          <UiText type="h4" wrapper="h4" variants={['underline']}>
+            How it works
+          </UiText>
         </UiLayout>
-        <UiDivider/>
-        {howWorks.split('\n').map((_, i) => (<UiText key={i} type="p" block>{_}</UiText>))}
-        <UiDivider type="xl"/>
+        <UiDivider />
+        {howWorks.split('\n').map((_, i) => (
+          <UiText key={i} type="p" block>
+            {_}
+          </UiText>
+        ))}
+        <UiDivider type="xl" />
         <Diagram />
-        <UiDivider type="xl"/>
+        <UiDivider type="xl" />
       </UiLayout>
     </>
   )
