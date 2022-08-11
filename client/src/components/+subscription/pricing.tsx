@@ -20,7 +20,7 @@ export function Pricing({ tiers }: PricingProps) {
 
   const purchase = async (name: string) => {
     const accounts = await sdk.accounts.list()
-    const purchase = await subscription.buySubscription(
+    await subscription.buySubscription(
       DID_NFT_TIERS.find(tier => tier.name === name)?.did || '',
       accounts[0],
       NFT_TIERS_HOLDER,
