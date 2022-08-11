@@ -7,15 +7,14 @@ import { XuiNetworkBox } from './network-box'
 
 const b = BEM('filter-dropdown', styles)
 export function XuiNetworkSelector() {
-
-    return <div className={b('filter-container')}>
-        <h5 className={b('title')}>Network</h5>
-        <div className={b("network-selector-container")}>
-            {networkArray.map((network: string) =>
-               <XuiNetworkBox key={network} network={network} />
-            )}
-        </div>
-
-
+  return (
+    <div className={b('filter-container')}>
+      <h5 className={b('title')}>Network</h5>
+      <div className={b('network-selector-container')}>
+        {networkArray.map((network: string) => (
+          <XuiNetworkBox key={network} network={network} />
+        ))}
+      </div>
     </div>
+  )
 }

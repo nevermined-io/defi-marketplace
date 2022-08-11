@@ -14,11 +14,11 @@ interface FilterDropdownProps {
 const b = BEM('filter-dropdown', styles)
 
 export function XuiFilterDropdown(props: FilterDropdownProps) {
-
-  return <UiLayout type="grid" className={b('wrapper')}>
-    <XuiDatePicker />
-    <XuiNetworkSelector />
-    <XuiPriceRangeSelector setPriceRange={props.setPriceRange}/>
-
-  </UiLayout>
+  return (
+    <UiLayout type="grid" className={b('wrapper')}>
+      <XuiDatePicker />
+      <XuiNetworkSelector />
+      <XuiPriceRangeSelector setPriceRange={props.setPriceRange} />
+    </UiLayout>
+  )
 }

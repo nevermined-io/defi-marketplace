@@ -44,7 +44,9 @@ export const Subscription: NextPage = () => {
   return (
     <UiLayout type="container">
       <UiLayout>
-        <UiText wrapper="h1" type="h1" variants={['heading']}>Subscriptions</UiText>
+        <UiText wrapper="h1" type="h1" variants={['heading']}>
+          Subscriptions
+        </UiText>
       </UiLayout>
       <Pricing tiers={tiers} />
     </UiLayout>

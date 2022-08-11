@@ -1,11 +1,11 @@
 import React from 'react'
-import { Account, DDO, Nevermined, Bookmark } from '@nevermined-io/nevermined-sdk-js'
+import { DDO } from '@nevermined-io/nevermined-sdk-js'
 
 import { Bundle } from '../shared/api';
 
 export const User = React.createContext({
     isLogged: false,
-    bookmarks: [] as Bookmark[],
+    bookmarks: [] as DDO[],
     userBundles: [] as Bundle[],
     balance: {
         eth: 0,
@@ -51,7 +51,7 @@ export const User = React.createContext({
     setAllUserBundles: (account: string) => {
         /* empty */
     },
-    setBookmarks: (bookmarks: Bookmark[]) => {
+    setBookmarks: (bookmarks: DDO[]) => {
         /* empty */
     }
 })

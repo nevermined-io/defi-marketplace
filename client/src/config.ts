@@ -98,7 +98,14 @@ export const protocols = [
 export const assetTypes = ['dataset', 'report', 'notebook']
 export const networks = ['None'].concat(networkArray)
 export const notebookLanguages = ['Python', 'Java', 'Scala', 'R', 'SQL', 'Other']
-export const notebookFormats = ['Source code', 'Jupyter (.ipynb)', 'PDF', 'Zeppelin (.json)', 'Zip', 'Other']
+export const notebookFormats = [
+  'Source code',
+  'Jupyter (.ipynb)',
+  'PDF',
+  'Zeppelin (.json)',
+  'Zip',
+  'Other'
+]
 export const reportTypes = ['Aggregation', 'Enrichment', 'Merge', 'Transformation', 'Other']
 export const reportFormats = ['CSV', 'Excel', 'PDF', 'Other']
 
