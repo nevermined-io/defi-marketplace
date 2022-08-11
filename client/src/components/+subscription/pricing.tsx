@@ -1,8 +1,9 @@
 import { BEM } from '@nevermined-io/styles'
 import styles from './pricing.module.scss'
 const b = BEM('pricing', styles)
-import Catalog from '@nevermined-io/components-catalog'
-import { purchaseSubscription, registerSubscription } from 'src/shared/subscription'
+import Catalog from '@nevermined-io/catalog-core'
+import { DID_NFT_TIERS, NFT_TIERS_AMOUNT, NFT_TIERS_HOLDER, NFT_TIERS_TYPE } from 'src/config'
+
 
 interface Tier {
   name: string
@@ -15,13 +16,17 @@ interface PricingProps {
 
 export function Pricing({ tiers }: PricingProps) {
 
-  const { sdk } = Catalog.useNevermined()
+  const { sdk, subscription } = Catalog.useNevermined()
 
-  const purchase = async () => {
+  const purchase = async (name: string) => {
     const accounts = await sdk.accounts.list()
-
-    await registerSubscription(sdk, accounts[0])
-
+    const purchase = await subscription.buySubscription(
+      DID_NFT_TIERS.find(tier => tier.name === name)?.did || '',
+      accounts[0],
+      NFT_TIERS_HOLDER,
+      NFT_TIERS_AMOUNT,
+      NFT_TIERS_TYPE
+    )
   }
 
 
@@ -38,7 +43,7 @@ export function Pricing({ tiers }: PricingProps) {
               <li key={i}>{feat}</li>
             )}
           </ul>
-          <button className={b("add-to-cart")} onClick={() => purchase()}>Add to cart</button>
+          <button className={b("add-to-cart")} onClick={() => purchase(tier.name)}>Add to cart</button>
         </div>
       )}
     </div>
