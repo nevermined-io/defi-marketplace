@@ -15,9 +15,9 @@ import { XuiTokenName, XuiTokenPrice } from 'ui'
 import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
-import { AddedToBasketPopup } from './added-to-basket-popup'
 import Catalog from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
+import {XuiBuyAsset} from '../components/+buy-asset/buy-asset'
 
 interface AssetsListProps {
   assets: DDO[]
@@ -29,10 +29,8 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   const {
     selectedNetworks,
     selectedCategories,
-    addToBasket,
     setSelectedNetworks,
     setSelectedCategories,
-    userBundles,
     bookmarks,
     setBookmarks
   } = useContext(User)
@@ -42,7 +40,9 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   const [errorMessage, setErrorMessage] = useState('')
   const [batchActive, setBatchActive] = useState<boolean>(false)
   const [batchSelected, setBatchSelected] = useState<string[]>([])
+  const [assetDid, setAssetDid] = useState<string>("")
   const popupRef = useRef<UiPopupHandlers>()
+  const buyPopupRef = useRef<UiPopupHandlers>()
 
   const openPopup = (event: any) => {
     popupRef.current?.open()
@@ -123,6 +123,27 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
     setBatchSelected(batchSelected.filter((did) => !didsSet.has(did)))
   }
 
+  const checkAssetInUserSubscription = (assetTier: string) => {
+    // checks if the user can access the asset with the current subscription
+    // if user.subscriptionLevel >= asset Tier return true
+    return true
+
+  }
+
+  type AssetInfo = {did:string, tier:string}
+
+  const downloadAsset = async(assetInfo: AssetInfo) => {
+
+    if (!checkAssetInUserSubscription(assetInfo.tier!)){
+      setErrorMessage("You can't download this Asset with your current subscription")    
+      popupRef.current?.open()
+      return
+    }
+    setAssetDid(assetInfo.did)
+
+    buyPopupRef.current?.open()
+  }
+
   useEffect(() => {
     if (!sdk?.profiles) {
       return
@@ -147,7 +168,8 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
 
   return (
     <div className={b()}>
-      <AddedToBasketPopup closePopup={closePopup} popupRef={popupRef} />
+
+      <XuiBuyAsset popupRef={buyPopupRef} assetDid={assetDid}/>
       <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef} />
 
       {disableBatchSelect ? (
@@ -196,11 +218,13 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                   Add to basket
                 </div>
               </Fragment>
-            ) : (
+            ) : null 
+                /* (
               <div className={b('batch-select-inactive')} onClick={() => setBatchActive(true)}>
                 Batch Select
               </div>
-            )}
+              )*/     
+            }
           </div>
         </div>
       )}
@@ -324,22 +348,17 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
               </UiLayout>
             )}
             <hr style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
-            {userBundles.some((bundle) =>
-              bundle.datasets.some((dataset) => dataset.datasetId === asset.id)
-            ) ? (
-              <img alt="download" width="24px" src="assets/added_to_basket.svg" />
-            ) : (
+            
               <img
-                alt="basket"
+                alt="download"
                 onClick={(e) => {
-                  openPopup(e)
-                  addToBasket([asset.id])
+                  downloadAsset({did: asset.id, tier: "Tier1"})
                 }}
                 width="24px"
-                src="assets/basket_icon.svg"
+                src="assets/download_icon.svg"
                 style={{ cursor: 'pointer' }}
               />
-            )}
+           
           </UiLayout>
         ))}
     </div>

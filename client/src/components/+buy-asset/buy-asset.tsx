@@ -5,29 +5,20 @@ import styles from './buy-asset.module.scss'
 import { XuiBuyAssetPopup } from './popup/buy-asset-popup'
 
 interface BuyAssetProps {
-  asset: string
+  assetDid: string
+  popupRef:  React.MutableRefObject<UiPopupHandlers | undefined>
 }
 
 const b = BEM('buy-asset', styles)
 
 export function XuiBuyAsset(props: BuyAssetProps & HTMLAttributes<any> & Props<any>) {
-  const { children, asset } = props
-  const popupRef = createRef<UiPopupHandlers>()
-
-  const openPopup = (event: any) => {
-    popupRef.current?.open()
-    event.preventDefault()
-  }
+  const { children, assetDid, popupRef } = props
 
   return (
     <>
       <UiPopup ref={popupRef}>
-        <XuiBuyAssetPopup asset={asset} close={() => popupRef.current?.close()} />
+        <XuiBuyAssetPopup assetDid={assetDid} close={() => popupRef.current?.close()} />
       </UiPopup>
-
-      <div className={extendClassName(props, b())} onClick={openPopup}>
-        {children}
-      </div>
     </>
   )
 }
