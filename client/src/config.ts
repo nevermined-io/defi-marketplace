@@ -12,7 +12,7 @@ export const artifactsFolder =
   process.env.NEXT_PUBLIC_ARTIFACTS_FOLDER_URL || `http://localhost:3000/artifacts`
 
 export const tier1NftContractAddress =
-  process.env.TIER1_NFT_ADDRESS || '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
+  process.env.TIER1_NFT_ADDRESS || '0x90d986e8307A8Ee01C315447235A659f76fE2244'
 export const tier2NftContractAddress =
   process.env.TIER1_NFT_ADDRESS || '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
 export const tier3NftContractAddress =
