@@ -3,6 +3,7 @@ import type { NextPage } from 'next'
 import { UiLayout, UiText } from '@nevermined-io/styles'
 import { Pricing } from 'ui/+subscription/pricing'
 
+
 export const Subscription: NextPage = () => {
   const tiers = [
     {

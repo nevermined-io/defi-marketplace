@@ -19,6 +19,15 @@ export const tier3NftContractAddress =
   process.env.TIER1_NFT_ADDRESS || '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
 export const Nft721ContractAddress =
   process.env.DEFAULT_NFT721_ADDRESS || '0x18bdFAf7Cc2B66a4Cfa7e069693CD1a9B639A69b'
+export const DID_NFT_TIERS = [
+  { 'name': 'Community', 'did': process.env.DID_NFT_TIER1 || '529130bb62aab954e9cf3cb0c020ff860771a7ed182d674cd4c7607425b52007' },
+  { 'name': 'Analyst', 'did': process.env.DID_NFT_TIER2 || '55690f4cbee510bd59d3f3496a0f59be63e70eb022c6c54a739ed9291fe29cb3' },
+  { 'name': 'Enterprise', 'did': process.env.DID_NFT_TIER3 || 'ad13fd9ed7d15c72413cfaa4dacedce3c51a7ad9b038d0f632b8456327b23a63' },
+]
+export const NFT_TIERS_HOLDER = process.env.NFT_TIERS_HOLDER || '0x819dd6c82ad96e0B7B71Bf9161C90cFcd48E4dA5'
+export const NFT_TIERS_AMOUNT: number = Number(process.env.NFT_TIERS_AMOUNT) || 1
+export const NFT_TIERS_TYPE = 721
+
 
 //
 // APP CONFIG
