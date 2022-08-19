@@ -8,7 +8,6 @@ import { MetaMask } from '@nevermined-io/catalog-providers'
 import { toast } from 'react-toastify';
 import { UiPopupHandlers } from '@nevermined-io/styles'
 import { ConfirmPopup } from '../../+assets/user-publish-steps/confirm-popup'
-import { templates } from '@nevermined-io/nevermined-sdk-js'
 
 interface Tier {
   name: string
@@ -22,8 +21,6 @@ interface PricingProps {
 export function Pricing({ tiers }: PricingProps) {
 
   const { sdk, subscription } = Catalog.useNevermined()
-  const { walletAddress } = MetaMask.useWallet()
-
   const confirmPopupMessage = 'Press Confirm to Subscribe'
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [tierName, setTierName] = useState('')
