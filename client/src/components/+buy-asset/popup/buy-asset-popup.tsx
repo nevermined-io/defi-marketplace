@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import Catalog from '@nevermined-io/catalog-core'
 import {
   BEM,

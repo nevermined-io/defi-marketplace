@@ -1,7 +1,6 @@
-import React, { Props, HTMLAttributes, createRef } from 'react'
+import React, { Props, HTMLAttributes } from 'react'
 
-import { BEM, extendClassName, UiPopup, UiPopupHandlers } from '@nevermined-io/styles'
-import styles from './buy-asset.module.scss'
+import { BEM, UiPopup, UiPopupHandlers } from '@nevermined-io/styles'
 import { XuiBuyAssetPopup } from './popup/buy-asset-popup'
 
 interface BuyAssetProps {
@@ -9,10 +8,9 @@ interface BuyAssetProps {
   popupRef:  React.MutableRefObject<UiPopupHandlers | undefined>
 }
 
-const b = BEM('buy-asset', styles)
 
 export function XuiBuyAsset(props: BuyAssetProps & HTMLAttributes<any> & Props<any>) {
-  const { children, assetDid, popupRef } = props
+  const { assetDid, popupRef } = props
 
   return (
     <>
