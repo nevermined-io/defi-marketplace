@@ -1,9 +1,14 @@
 import { BEM } from '@nevermined-io/styles'
 import styles from './pricing.module.scss'
 const b = BEM('pricing', styles)
+import React, { useState, useRef } from 'react'
 import Catalog from '@nevermined-io/catalog-core'
 import { DID_NFT_TIERS, NFT_TIERS_AMOUNT, NFT_TIERS_HOLDER, NFT_TIERS_TYPE } from 'src/config'
-
+import { MetaMask } from '@nevermined-io/catalog-providers'
+import { toast } from 'react-toastify';
+import { UiPopupHandlers } from '@nevermined-io/styles'
+import { ConfirmPopup } from '../../+assets/user-publish-steps/confirm-popup'
+import { templates } from '@nevermined-io/nevermined-sdk-js'
 
 interface Tier {
   name: string
@@ -17,21 +22,51 @@ interface PricingProps {
 export function Pricing({ tiers }: PricingProps) {
 
   const { sdk, subscription } = Catalog.useNevermined()
+  const { walletAddress } = MetaMask.useWallet()
 
-  const purchase = async (name: string) => {
-    const accounts = await sdk.accounts.list()
-    await subscription.buySubscription(
-      DID_NFT_TIERS.find(tier => tier.name === name)?.did || '',
-      accounts[0],
-      NFT_TIERS_HOLDER,
-      NFT_TIERS_AMOUNT,
-      NFT_TIERS_TYPE
-    )
+  const confirmPopupMessage = 'Press Confirm to Subscribe'
+  const confirmPopupRef = useRef<UiPopupHandlers>()
+  const [tierName, setTierName] = useState('')
+
+  const confirm = (tier: string) => {
+    setTierName(tier)
+    confirmPopupRef.current?.open()
   }
 
+  const cancel = () => {
+    confirmPopupRef.current?.close()
+  }
+
+  const purchase = async () => {
+    confirmPopupRef.current?.close()
+    const accounts = await sdk.accounts.list()
+    const toastId = toast.info("Subscription in progress...")  
+    try{ 
+      const agreementID =  await subscription.buySubscription(
+        DID_NFT_TIERS.find(tier => tier.name === tierName)?.did || '',
+        accounts[0],
+        NFT_TIERS_HOLDER,
+        NFT_TIERS_AMOUNT,
+        NFT_TIERS_TYPE
+      )
+      toast.dismiss(toastId)
+      toast.success("Subscription bought correctly with agreement ID: " + agreementID)
+    }catch(error)  {
+      toast.dismiss(toastId)
+      toast.error("There was an error buying the subscription")
+      console.error("There was an error buying the subscription: " + error)
+    }  
+
+  }
 
   return (
     <div className={b('pricing')}>
+       <ConfirmPopup
+        message={confirmPopupMessage}
+        popupRef={confirmPopupRef}
+        confirm={purchase}
+        cancel={cancel}
+      />
       {tiers.map((tier) => (
         <div key={tier.name} className={b('price_card')}>
           <div className={b('header')}>
@@ -43,7 +78,7 @@ export function Pricing({ tiers }: PricingProps) {
               <li key={i}>{feat}</li>
             ))}
           </ul>
-          <button className={b("add-to-cart")} onClick={() => purchase(tier.name)}>Add to cart</button>
+          <button className={b("add-to-cart")} onClick={() => confirm(tier.name)}>Purchase</button>
         </div>
       ))}
     </div>
