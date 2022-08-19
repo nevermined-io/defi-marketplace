@@ -1,6 +1,6 @@
 import React, { Props, HTMLAttributes } from 'react'
 
-import { BEM, UiPopup, UiPopupHandlers } from '@nevermined-io/styles'
+import { UiPopup, UiPopupHandlers } from '@nevermined-io/styles'
 import { XuiBuyAssetPopup } from './popup/buy-asset-popup'
 
 interface BuyAssetProps {
