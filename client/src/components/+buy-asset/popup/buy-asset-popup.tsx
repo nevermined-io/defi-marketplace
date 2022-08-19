@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { OrderProgressStep } from '@nevermined-io/nevermined-sdk-js'
 import Catalog from '@nevermined-io/catalog-core'
 import {
   BEM,
@@ -19,25 +18,13 @@ interface BuyAssetPopupProps {
   close: () => any
 }
 
-/*
-const stepMessages = {
-  [OrderProgressStep.CreatingAgreement]: 'Creating a new agreement',
-  [OrderProgressStep.AgreementInitialized]: 'Agreement created successfully',
-  [OrderProgressStep.LockingPayment]: 'Locking payment',
-  [OrderProgressStep.LockedPayment]: 'Payment locked successfully'
-}
-*/
-
 const b = BEM('buy-asset-popup', styles)
 
 export function XuiBuyAssetPopup(props: BuyAssetPopupProps) {
   const { close, assetDid } = props
   const { sdk } = Catalog.useNevermined()
   const [view, setView] = useState<0 | 1 | 2>(0)
- // const [step, setStep] = useState<OrderProgressStep>(0)
- // const maxStep = Object.keys(OrderProgressStep).length / 2 - 1
   const [error, setError] = useState<string | undefined>(undefined)
-
   const start = useCallback(async () => {
   
     setView(1)

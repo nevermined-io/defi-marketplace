@@ -126,6 +126,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   const checkAssetInUserSubscription = (assetTier: string) => {
     // checks if the user can access the asset with the current subscription
     // if user.subscriptionLevel >= asset Tier return true
+    // TODO - Pending to implement
     return true
 
   }
@@ -220,6 +221,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
               </Fragment>
             ) : null 
                 /* (
+                  TODO - How to handle multiple selection
               <div className={b('batch-select-inactive')} onClick={() => setBatchActive(true)}>
                 Batch Select
               </div>
