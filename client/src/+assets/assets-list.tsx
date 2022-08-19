@@ -213,7 +213,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                   className={b('basket-add')}
                   onClick={(e) => {
                     openPopup(e)
-                    addToBasket(batchSelected)
+                    //TODO How to handle batch selection?
                   }}
                 >
                   Add to basket
