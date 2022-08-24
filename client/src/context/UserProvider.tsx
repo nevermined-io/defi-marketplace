@@ -5,6 +5,8 @@ import { Catalog, AuthToken } from '@nevermined-io/catalog-core'
 import { User } from '.'
 import { correctNetworkName } from '../config';
 import { getAllUserBundlers, Bundle } from '../shared/api';
+import { DID_NFT_TIERS} from 'src/config'
+
 
 import {
     gatewayUri,
@@ -45,6 +47,10 @@ const UserProvider = (props: UserProviderProps) => {
     const { walletAddress, isAvailable, checkIsLogged } = useContext(MetaMask.WalletContext)
     const prevBasket = useRef<string[]>()
     const userProviderMounted = useRef()
+    const [accessSubscriptionTier1, setAccessSubscriptionTier1] = useState<boolean>(false)
+    const [accessSubscriptionTier2, setAccessSubscriptionTier2] = useState<boolean>(false)
+    const [accessSubscriptionTier3, setAccessSubscriptionTier3] = useState<boolean>(false)
+    const [userSubscriptionTier, setUserSubscriptionTier] = useState<string>('') 
 
     useEffect(() => {
         if(isLoadingSDK || !network) {
@@ -93,6 +99,60 @@ const UserProvider = (props: UserProviderProps) => {
         prevBasket.current = basket
         
     }, [basket])
+
+
+    useEffect(() => {
+        if(!isAvailable()) {
+          setIsLogged(false)
+          return
+        }
+
+        if(isLoadingSDK ) {
+            return
+        }
+    
+        (async () => {
+           // Check Tier3
+            const tier3Address = DID_NFT_TIERS.find(tier => tier.name === "Enterprise")?.address || ''
+            const isTier3 = await checkSubscription(tier3Address)
+            if (isTier3){
+             setAccessSubscriptionTier3(true) 
+             setAccessSubscriptionTier2(true) 
+             setAccessSubscriptionTier1(true) 
+             setUserSubscriptionTier("Enterprise")
+             return
+            }
+            // Check Tier2
+            const tier2Address = DID_NFT_TIERS.find(tier => tier.name === "Analyst")?.address || ''
+            const isTier2 = await checkSubscription(tier2Address)
+            if (isTier2){
+                setAccessSubscriptionTier3(false)
+                setAccessSubscriptionTier2(true) 
+                setAccessSubscriptionTier1(true) 
+                setUserSubscriptionTier("Analyst")
+                return
+            }  
+            // Check Tier1
+            const tier1Address = DID_NFT_TIERS.find(tier => tier.name === "Community")?.address || ''
+            const isTier1 = await checkSubscription(tier1Address)
+            if (isTier1){
+                setAccessSubscriptionTier3(false)
+                setAccessSubscriptionTier2(false) 
+                setAccessSubscriptionTier1(true) 
+                setUserSubscriptionTier("Community")
+                console.log("Current subscription: " + userSubscriptionTier)
+            }
+        })()
+      }, [walletAddress, isLoadingSDK])
+
+    
+    const checkSubscription = async (nftTierAddress: string): Promise<boolean> => {
+        const nft721 = await sdk.contracts.loadNft721(nftTierAddress)
+        const accounts = await sdk.accounts.list()
+        const balance = await nft721.balanceOf(accounts[0])
+        
+        return balance.gt(0)
+    }
 
     const reloadSdk = async() => {
         const config = {
@@ -190,6 +250,10 @@ const UserProvider = (props: UserProviderProps) => {
             removeFromBasket: (dids: string[]) => removeFromBasket(dids),
             setSelectedPriceRange: (selectedPrice: number) => setSelectedPriceRange(selectedPrice),
             setAllUserBundles: (account: string): Promise<void> => fetchAllUserBundlers(account),
+            accessSubscriptionTier1, setAccessSubscriptionTier1,
+            accessSubscriptionTier2, setAccessSubscriptionTier2,
+            accessSubscriptionTier3, setAccessSubscriptionTier3,
+            userSubscriptionTier, setUserSubscriptionTier,
         }}>
             {props.children}
         </User.Provider>

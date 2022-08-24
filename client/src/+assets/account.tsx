@@ -11,15 +11,17 @@ import { loadFullfilledEvents, loadUserPublished } from 'src/shared/graphql'
 import { Summary } from 'ui/+account/summary'
 import { AssetsList } from './assets-list'
 import Router from 'next/router'
+import { toast } from 'react-toastify'
 
 const b = BEM('account', styles)
 export const Account: NextPage = () => {
   const [view, setView] = useState<number>(0)
   const [published, setPublished] = useState<DDO[]>([])
   const [purchased, setPurchased] = useState<DDO[]>([])
-  const { bookmarks, setBookmarks } = useContext(User)
+  const { bookmarks, setBookmarks, userSubscriptionTier } = useContext(User)
   const { sdk } = Catalog.useNevermined()
   const { walletAddress } = MetaMask.useWallet()
+  const subscriptionErrorText = "You don't have any current subscription. Only users with a subscription are allowed to publish"
 
   const loadUserInfo = async () => {
     const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
@@ -53,6 +55,14 @@ export const Account: NextPage = () => {
     loadUserInfo()
   }, [sdk])
 
+  const publishAsset = () => {
+    if (!userSubscriptionTier) {
+      toast.error(subscriptionErrorText)
+      return
+    }
+    Router.push('/user-publish')
+  }
+
   const renderContent = () => {
     if (view == 0) {
       return <Summary published={published} bookmarks={bookmarks} purchased={purchased} />
@@ -63,7 +73,7 @@ export const Account: NextPage = () => {
     } else if (view == 3) {
       return (
         <>
-          <UiButton onClick={() => Router.push('/user-publish')}>Publish new asset</UiButton>
+          <UiButton onClick={() =>publishAsset()}>Publish new asset</UiButton>
           <AssetsList assets={published} disableBatchSelect={true} />
         </>
       )

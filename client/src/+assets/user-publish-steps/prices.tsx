@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useContext } from 'react'
 import {
   UiFormGroup,
   UiFormInput,
@@ -16,9 +16,10 @@ import { ProgressPopup } from './progress-popup'
 import { ConfirmPopup } from './confirm-popup'
 import { ResultPopup } from './result-popup'
 import { AssetService } from '@nevermined-io/catalog-core'
+import { User } from '../../context'
+import { toast } from 'react-toastify'
 
 const b = BEM('user-publish', styles)
-const tiers: string[] = ['Tier 1', 'Tier 2', 'Tier 3']
 
 interface PricesProps {
   prevStep: () => void
@@ -44,7 +45,7 @@ export const PricesStep = (props: PricesProps) => {
     resultOk,
     resultPopupRef
   } = props
-  const [inputError] = useState('')
+  const [inputError, setInputError] = useState('')
   const UploadPopupMesssage = 'Uploading local files to Filecoin...'
   const txPopupMesssage = 'Sending transaction to register the Asset in the network...'
   const txAdditionalMessage =
@@ -54,7 +55,28 @@ export const PricesStep = (props: PricesProps) => {
   const txImage = '/assets/nevermined-color.svg'
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [showForm, setShowForm] = useState(true)
+  const { userSubscriptionTier, accessSubscriptionTier1, accessSubscriptionTier2, accessSubscriptionTier3} = useContext(User)
+  const [tiers, setTiers] = useState<string[]>([])
+  const subscriptionErrorText = "You don't have any current subscription. Only users with a subscription are allowed to publish"
+  
 
+  useEffect(() => {
+
+    if (!userSubscriptionTier) {
+      setInputError(subscriptionErrorText)
+      setTiers([])
+      return
+    }
+    if (accessSubscriptionTier1) 
+      setTiers([...tiers, "Community"])
+    if (accessSubscriptionTier2)
+      setTiers([...tiers, "Analyst"])
+    if (accessSubscriptionTier3)
+      setTiers([...tiers, "Enterprise"])    
+  
+  }, [userSubscriptionTier])
+
+ 
   useEffect(() => {
     if (isProcessing == true) {
       setShowForm(false)
@@ -66,6 +88,7 @@ export const PricesStep = (props: PricesProps) => {
     prevStep()
   }
 
+
   const confirm = () => {
     confirmPopupRef.current?.close()
     submit()
@@ -76,6 +99,10 @@ export const PricesStep = (props: PricesProps) => {
   }
 
   const showConfirm = () => {
+    if (!userSubscriptionTier) {
+      toast.error(subscriptionErrorText)
+      return
+    }
     confirmPopupRef.current?.open()
   }
 

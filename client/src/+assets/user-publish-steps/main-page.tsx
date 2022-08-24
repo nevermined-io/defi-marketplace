@@ -4,18 +4,13 @@ import { AssetService } from '@nevermined-io/catalog-core'
 import { AssetFile } from '@nevermined-io/catalog-core'
 import { NextPage } from 'next'
 import { MetaData } from '@nevermined-io/nevermined-sdk-js'
-import {
-  Nft721ContractAddress,
-  tier1NftContractAddress,
-  tier2NftContractAddress,
-  tier3NftContractAddress
-} from 'src/config'
 import { BasicInfoStep } from './basic-info'
 import { DetailsStep } from './details'
 import { PricesStep } from './prices'
 import { FilesStep } from './files'
 import { handleAssetFiles, FileType} from './files-handler'
 import { toast } from 'react-toastify';
+import { DID_NFT_TIERS} from 'src/config'
 
 export const UserPublishMultiStep: NextPage = () => {
   const {
@@ -41,7 +36,7 @@ export const UserPublishMultiStep: NextPage = () => {
       protocol: 'None',
       network: 'None',
       price: 0,
-      tier: 'Tier 1',
+      tier: 'Community',
       notebook_language: 'Python',
       notebook_requirements: '',
       notebook_format: 'Source code',
@@ -61,7 +56,7 @@ export const UserPublishMultiStep: NextPage = () => {
       protocol: 'None',
       network: 'None',
       price: 0,
-      tier: 'Tier 1',
+      tier: 'Community',
       assetFiles: [],
       notebook_language: 'Python',
       notebook_requirements: '',
@@ -145,7 +140,8 @@ export const UserPublishMultiStep: NextPage = () => {
         metadata.additionalInformation!.customData = {
           subtype: assetPublish.type,
           report_type: assetPublish.report_type,
-          report_format: assetPublish.report_format
+          report_format: assetPublish.report_format,
+          tier_name: assetPublish.tier
         }
         break
       case 'notebook':
@@ -153,10 +149,14 @@ export const UserPublishMultiStep: NextPage = () => {
           subtype: assetPublish.type,
           notebook_language: assetPublish.notebook_language,
           notebook_requirements: assetPublish.notebook_requirements,
-          notebook_format: assetPublish.notebook_format
+          notebook_format: assetPublish.notebook_format,
+          tier_name: assetPublish.tier
         }
         break
       default:
+        metadata.additionalInformation!.customData = {
+          tier_name: assetPublish.tier
+        }
         break
     }
 
@@ -164,16 +164,7 @@ export const UserPublishMultiStep: NextPage = () => {
   }
 
   const getNftTierAddress = (): string => {
-    switch (assetPublish.tier) {
-      case 'Tier 1':
-        return tier1NftContractAddress
-      case 'Tier 2':
-        return tier2NftContractAddress
-      case 'Tier 3':
-        return tier3NftContractAddress
-      default:
-        return Nft721ContractAddress
-    }
+    return DID_NFT_TIERS.find(tier => tier.name === assetPublish.tier)?.address || ''
   }
 
   const generateFilesUploadedMessage = (assetFiles: AssetFile[]) => {
