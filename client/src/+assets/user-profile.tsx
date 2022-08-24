@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import Catalog from '@nevermined-io/catalog-core'
+import { AccountService } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import {
   UiForm,
@@ -36,9 +36,9 @@ export const UserProfile: NextPage = () => {
     userProfile,
     addresses,
     newAddress,
-    onSubmitUserProfile,
-    onAddAddress
-  } = Catalog.useUserProfile(walletAddress)
+    submitUserProfile,
+    addAddress
+  } = AccountService.useUserProfile(walletAddress)
 
   const popupRef = useRef<UiPopupHandlers>()
 
@@ -121,7 +121,7 @@ export const UserProfile: NextPage = () => {
               ) : null}
             </div>
             <div className={b('profile-submit-container', ['submit'])}>
-              <UiButton onClick={onSubmitUserProfile}>Update Profile</UiButton>
+              <UiButton onClick={submitUserProfile}>Update Profile</UiButton>
             </div>
           </div>
         </UiForm>
@@ -154,7 +154,7 @@ export const UserProfile: NextPage = () => {
               <UiFormItem
                 label="Add new address"
                 value={newAddress}
-                onClick={onAddAddress}
+                onClick={addAddress}
                 disabled={true}
               />
             </UiFormGroup>

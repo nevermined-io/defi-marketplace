@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import Catalog from '@nevermined-io/catalog-core'
+import { Catalog } from '@nevermined-io/catalog-core'
 import {
   BEM,
   UiText,

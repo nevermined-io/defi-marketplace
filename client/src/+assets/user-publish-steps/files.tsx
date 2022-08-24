@@ -14,7 +14,7 @@ import {
 import styles from './user-publish.module.scss'
 import { FileType, checkFilecoinIdExists } from './files-handler'
 import { ProgressPopup } from './progress-popup'
-import Catalog from '@nevermined-io/catalog-core'
+import { AssetService } from '@nevermined-io/catalog-core'
 import { AssetFile } from '@nevermined-io/catalog-core/dist/node/types'
 
 const b = BEM('user-publish', styles)
@@ -27,7 +27,7 @@ interface FilesProps {
 }
 
 export const FilesStep = (props: FilesProps) => {
-  const { assetPublish } = Catalog.useAssetPublish()
+  const { assetPublish } = AssetService.useAssetPublish()
   const { updateFilesAdded, removeFile, prevStep, nextStep } = props
   const [inputError, setInputError] = useState('')
   const [newFilecoinID, setNewFilecoinID] = useState('')
@@ -118,10 +118,9 @@ export const FilesStep = (props: FilesProps) => {
             <div className={b('publish-current-files')} key={assetfile.label}>
               <UiFormItem
                 value={assetfile.label}
-                onClick={(e) => removeFile(assetfile.label)}
+                onClick={() => removeFile(assetfile.label)}
                 disabled={true}
                 readOnly={true}
-                onChange={() => {}}
               />
             </div>
           ))}

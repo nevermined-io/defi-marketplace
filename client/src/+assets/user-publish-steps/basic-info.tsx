@@ -11,7 +11,7 @@ import {
   BEM
 } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
-import Catalog from '@nevermined-io/catalog-core'
+import { AssetService } from '@nevermined-io/catalog-core'
 
 const b = BEM('user-publish', styles)
 
@@ -20,7 +20,7 @@ interface BasicInfoProps {
 }
 
 export const BasicInfoStep = (props: BasicInfoProps) => {
-  const { assetPublish, handleChange } = Catalog.useAssetPublish()
+  const { assetPublish, handleChange } = AssetService.useAssetPublish()
   const { nextStep } = props
   const [authorInputError, setAuthorInputError] = useState('')
   const [nameInputError, setNameInputError] = useState('')

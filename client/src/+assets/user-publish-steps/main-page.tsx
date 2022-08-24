@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { UiForm, UiLayout, UiText, UiPopupHandlers, NotificationPopup } from '@nevermined-io/styles'
-import Catalog from '@nevermined-io/catalog-core'
+import { AssetService } from '@nevermined-io/catalog-core'
 import { AssetFile } from '@nevermined-io/catalog-core'
 import { NextPage } from 'next'
 import { MetaData } from '@nevermined-io/nevermined-sdk-js'
@@ -24,8 +24,8 @@ export const UserPublishMultiStep: NextPage = () => {
     setAssetMessage,
     assetPublish,
     setAssetPublish,
-    onAsset721Publish,
-  } = Catalog.useAssetPublish()
+    publishAsset721,
+  } = AssetService.useAssetPublish()
   const [filesUploadedMessage, setFilesUploadedMessage] = useState<string[]>([])
   const popupRef = useRef<UiPopupHandlers>()
   const fileUploadPopupRef = useRef<UiPopupHandlers>()
@@ -204,7 +204,7 @@ const onSubmitUserPublish = async() => {
             await uploadFiles()
             txPopupRef.current?.open()
 
-            onAsset721Publish({nftAddress: getNftTierAddress(), metadata: generateMetadata()})
+            publishAsset721({nftAddress: getNftTierAddress(), metadata: generateMetadata()})
             .then((ddo) =>
                 {
                     setResultOk(true)

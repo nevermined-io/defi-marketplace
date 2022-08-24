@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { DDO, OrderProgressStep } from '@nevermined-io/nevermined-sdk-js'
-import Catalog from '@nevermined-io/catalog-core'
+import { Catalog } from '@nevermined-io/catalog-core'
 import {
   BEM,
   UiText,

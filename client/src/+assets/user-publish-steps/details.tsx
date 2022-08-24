@@ -21,7 +21,7 @@ import {
   reportTypes,
   reportFormats
 } from 'src/config'
-import Catalog from '@nevermined-io/catalog-core'
+import { AssetService } from '@nevermined-io/catalog-core'
 
 const b = BEM('user-publish', styles)
 
@@ -31,14 +31,14 @@ interface DetailsProps {
 }
 
 export const DetailsStep = (props: DetailsProps) => {
-  const { assetPublish, handleChange } = Catalog.useAssetPublish()
+  const { assetPublish, handleChange } = AssetService.useAssetPublish()
   const { prevStep, nextStep } = props
   const [typeInputError, setTypeInputError] = useState('')
   const [categoryInputError, setCategoryInputError] = useState('')
   const [protocolInputError, setProtocolInputError] = useState('')
   const [networkInputError, setNetworkInputError] = useState('')
 
-  const checkValues = (): Boolean => {
+  const checkValues = (): boolean => {
     if (!assetPublish.type) {
       setTypeInputError('Type is required')
       return false

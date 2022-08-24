@@ -15,7 +15,7 @@ import { XuiTokenName, XuiTokenPrice } from 'ui'
 import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
-import Catalog from '@nevermined-io/catalog-core'
+import { Catalog } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import {XuiBuyAsset} from '../components/+buy-asset/buy-asset'
 
@@ -123,7 +123,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
     setBatchSelected(batchSelected.filter((did) => !didsSet.has(did)))
   }
 
-  const checkAssetInUserSubscription = (assetTier: string) => {
+  const checkAssetInUserSubscription = (_assetTier: string) => {
     // checks if the user can access the asset with the current subscription
     // if user.subscriptionLevel >= asset Tier return true
     // TODO - Pending to implement
@@ -353,7 +353,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
             
               <img
                 alt="download"
-                onClick={(e) => {
+                onClick={() => {
                   downloadAsset({did: asset.id, tier: "Tier1"})
                 }}
                 width="24px"

@@ -15,7 +15,7 @@ import styles from './user-publish.module.scss'
 import { ProgressPopup } from './progress-popup'
 import { ConfirmPopup } from './confirm-popup'
 import { ResultPopup } from './result-popup'
-import Catalog from '@nevermined-io/catalog-core'
+import { AssetService } from '@nevermined-io/catalog-core'
 
 const b = BEM('user-publish', styles)
 const tiers: string[] = ['Tier 1', 'Tier 2', 'Tier 3']
@@ -33,7 +33,7 @@ interface PricesProps {
 
 export const PricesStep = (props: PricesProps) => {
   const { assetPublish, handleChange, isProcessing, assetMessage, errorAssetMessage } =
-    Catalog.useAssetPublish()
+    AssetService.useAssetPublish()
   const {
     prevStep,
     submit,

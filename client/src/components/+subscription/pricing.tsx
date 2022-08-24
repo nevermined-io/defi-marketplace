@@ -2,7 +2,7 @@ import { BEM } from '@nevermined-io/styles'
 import styles from './pricing.module.scss'
 const b = BEM('pricing', styles)
 import React, { useState, useRef } from 'react'
-import Catalog from '@nevermined-io/catalog-core'
+import { Catalog } from '@nevermined-io/catalog-core'
 import { DID_NFT_TIERS, NFT_TIERS_AMOUNT, NFT_TIERS_HOLDER, NFT_TIERS_TYPE } from 'src/config'
 import { toast } from 'react-toastify';
 import { UiPopupHandlers } from '@nevermined-io/styles'

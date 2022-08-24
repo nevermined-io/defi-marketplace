@@ -4,7 +4,7 @@ import '../src/styles/styles.scss'
 import React from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
-import Catalog from '@nevermined-io/catalog-core'
+import { Catalog, AuthToken, AssetService } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import { Logger } from '@nevermined-io/nevermined-sdk-js'
 import { ethers } from 'ethers'
@@ -39,7 +39,7 @@ const appConfig = {
   secretStoreUri,
   verbose,
   marketplaceAuthToken:
-    typeof window !== 'undefined' ? Catalog.fetchMarketplaceApiTokenFromLocalStorage().token : '',
+    typeof window !== 'undefined' ? AuthToken.fetchMarketplaceApiTokenFromLocalStorage().token : '',
   artifactsFolder,
   graphHttpUri: graphUrl
 }
@@ -65,7 +65,7 @@ function App({ Component, pageProps }: AppProps) {
         nodeUri={appConfig.nodeUri}
         correctNetworkId={correctNetworkId}
       >
-        <Catalog.AssetPublishProvider>
+        <AssetService.AssetPublishProvider>
           <UserProvider>
             <Head>
               <script async src="https://www.googletagmanager.com/gtag/js?id=G-11ZZZNJ4Q5"></script>
@@ -101,7 +101,7 @@ function App({ Component, pageProps }: AppProps) {
             <UiDivider flex />
             <UiFooter />
           </UserProvider>
-        </Catalog.AssetPublishProvider>
+        </AssetService.AssetPublishProvider>
       </MetaMask.WalletProvider>
     </Catalog.NeverminedProvider>
     </div>

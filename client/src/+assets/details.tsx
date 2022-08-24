@@ -3,7 +3,7 @@ import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { DDO, AdditionalInformation } from '@nevermined-io/nevermined-sdk-js'
-import Catalog from '@nevermined-io/catalog-core'
+import { Catalog } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import styles from './details.module.scss'
 import {
@@ -119,7 +119,7 @@ export const AssetDetails: NextPage = () => {
       return
     }
 
-    ;(async () => {
+    (async () => {
       setIsConnected(isLogged)
 
       try {
@@ -166,7 +166,7 @@ export const AssetDetails: NextPage = () => {
       return
     }
 
-    ;(async () => {
+    (async () => {
       try {
         const chainId = await window.ethereum.request({ method: 'eth_chainId' })
         if (chainId !== correctNetworkId) {

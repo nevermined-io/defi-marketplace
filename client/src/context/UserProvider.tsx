@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, useRef, ReactNode } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { MetaMask } from '@nevermined-io/catalog-providers'
-import Catalog from '@nevermined-io/catalog-core'
+import { Catalog, AuthToken } from '@nevermined-io/catalog-core'
 import { User } from '.'
 import { correctNetworkName } from '../config';
 import { getAllUserBundlers, Bundle } from '../shared/api';
@@ -104,7 +104,7 @@ const UserProvider = (props: UserProviderProps) => {
             gatewayAddress,
             secretStoreUri,
             verbose,
-            marketplaceAuthToken: Catalog.fetchMarketplaceApiTokenFromLocalStorage().token || '',
+            marketplaceAuthToken: AuthToken.fetchMarketplaceApiTokenFromLocalStorage().token || '',
             artifactsFolder,
             graphHttpUri: graphUrl
         }
