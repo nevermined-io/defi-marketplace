@@ -1,12 +1,13 @@
 import { BEM } from '@nevermined-io/styles'
 import styles from './pricing.module.scss'
 const b = BEM('pricing', styles)
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useContext } from 'react'
 import Catalog from '@nevermined-io/catalog-core'
 import { DID_NFT_TIERS, NFT_TIERS_AMOUNT, NFT_TIERS_HOLDER, NFT_TIERS_TYPE } from 'src/config'
 import { toast } from 'react-toastify';
 import { UiPopupHandlers } from '@nevermined-io/styles'
 import { ConfirmPopup } from '../../+assets/user-publish-steps/confirm-popup'
+import { User } from '../../context'
 
 interface Tier {
   name: string
@@ -23,8 +24,13 @@ export function Pricing({ tiers }: PricingProps) {
   const confirmPopupMessage = 'Press Confirm to Subscribe'
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [tierName, setTierName] = useState('')
+  const { userSubscriptionTier } = useContext(User)
 
   const confirm = (tier: string) => {
+    if (tier === userSubscriptionTier){
+      toast.warning(`You are already subscribed to  ${tier}`)
+      return
+    }
     setTierName(tier)
     confirmPopupRef.current?.open()
   }
