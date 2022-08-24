@@ -83,3 +83,28 @@ export const loadUserPublished = async (
 
   return registered
 }
+
+export const getUserSubscription = async (
+  sdk: Nevermined,
+  userAddress: string,
+  subscriptionDid: string
+): Promise<any | undefined> => {
+
+  const subscriptions = await sdk.keeper.conditions.transferNft721Condition.events.getPastEvents({
+    methodName: 'getFulfilleds',
+    eventName: 'Fulfilled',
+    filterSubgraph: {
+      where: {
+          _did: subscriptionDid,
+          _receiver: userAddress
+      }
+    },
+    result: {
+        _agreementId: true,
+        _did: true,
+        _receiver: true
+    }
+  })
+
+  return subscriptions
+}

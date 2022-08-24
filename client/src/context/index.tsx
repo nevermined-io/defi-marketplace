@@ -53,5 +53,21 @@ export const User = React.createContext({
     },
     setBookmarks: (bookmarks: DDO[]) => {
         /* empty */
+    },
+    accessSubscriptionTier1: false,
+    setAccessSubscriptionTier1: (isSubscribed: boolean) =>{
+         /* empty */
+    },
+    accessSubscriptionTier2: false,
+    setAccessSubscriptionTier2: (isSubscribed: boolean) =>{
+         /* empty */
+    },
+    accessSubscriptionTier3: false,
+    setAccessSubscriptionTier3: (isSubscribed: boolean) =>{
+         /* empty */
+    },
+    userSubscriptionTier: '',
+    setUserSubscriptionTier: (subscription: string) => {
+        /* empty */
     }
 })
