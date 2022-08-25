@@ -112,6 +112,11 @@ const UserProvider = (props: UserProviderProps) => {
         }
     
         (async () => {
+
+            setAccessSubscriptionTier3(false) 
+            setAccessSubscriptionTier2(false) 
+            setAccessSubscriptionTier1(false) 
+            setUserSubscriptionTier("")
            // Check Tier3
             const tier3Address = DID_NFT_TIERS.find(tier => tier.name === "Enterprise")?.address || ''
             const isTier3 = await checkSubscription(tier3Address)
@@ -140,7 +145,6 @@ const UserProvider = (props: UserProviderProps) => {
                 setAccessSubscriptionTier2(false) 
                 setAccessSubscriptionTier1(true) 
                 setUserSubscriptionTier("Community")
-                console.log("Current subscription: " + userSubscriptionTier)
             }
         })()
       }, [walletAddress, isLoadingSDK])

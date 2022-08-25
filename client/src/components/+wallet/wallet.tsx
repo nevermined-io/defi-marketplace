@@ -10,18 +10,19 @@ import Router from 'next/router'
 const b = BEM('wallet', styles)
 
 export function XuiWallet() {
-  const { network, basket, isLogged } = React.useContext(User)
+  const { network, basket, isLogged, userSubscriptionTier } = React.useContext(User)
   const { walletAddress, loginMetamask } = MetaMask.useWallet()
 
   return !(isLogged && walletAddress) ? (
     <UiButton onClick={loginMetamask}>Connect wallet</UiButton>
   ) : (
     <>
-      <div className={b('block', ['cart'])}>
-        <Link href={'/checkout'}>
+      <div className={b('block')}>
+        <Link href={'/account'}>
           <span style={{ cursor: 'pointer', display: 'flex' }}>
-            <Image width="17" height="16" src="/assets/basket_icon.svg" />
-            <span style={{ marginLeft: '14px' }}>{basket.length}</span>
+           {
+             userSubscriptionTier? <span>{userSubscriptionTier}</span>:<span>No Subscription</span>
+           } 
           </span>
         </Link>
       </div>
