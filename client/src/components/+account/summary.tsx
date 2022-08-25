@@ -7,10 +7,11 @@ interface SummaryProps {
   published: DDO[]
   bookmarks: DDO[]
   purchased: DDO[]
+  currentSubscription: String
 }
 
 const b = BEM('account-modules', styles)
-export function Summary({ published, bookmarks, purchased }: SummaryProps) {
+export function Summary({ published, bookmarks, purchased, currentSubscription }: SummaryProps) {
   return (
     <>
       <UiLayout type="container">
@@ -39,9 +40,11 @@ export function Summary({ published, bookmarks, purchased }: SummaryProps) {
           </UiLayout>
           <UiLayout type="container" className={b('card')}>
             <UiText type="h3" wrapper="h3">
-              Your Subscriptions
+              Your Subscription
             </UiText>
-            <UiText className={b('summary-number')}>0</UiText>
+            { 
+              currentSubscription?<UiText className={b('summary-number')}>{currentSubscription}</UiText>:<UiText className={b('summary-number')}>0</UiText>
+            }
           </UiLayout>
         </UiLayout>
       </UiLayout>

@@ -65,7 +65,7 @@ export const Account: NextPage = () => {
 
   const renderContent = () => {
     if (view == 0) {
-      return <Summary published={published} bookmarks={bookmarks} purchased={purchased} />
+      return <Summary published={published} bookmarks={bookmarks} purchased={purchased} currentSubscription= {userSubscriptionTier}/>
     } else if (view == 1) {
       return <UserProfile />
     } else if (view == 2) {
@@ -81,8 +81,10 @@ export const Account: NextPage = () => {
       return <AssetsList assets={purchased} disableBatchSelect={true} />
     } else if (view == 5) {
       return (
-        <>
-          <h1>No subscriptions yet</h1>
+        <>    
+        {
+          userSubscriptionTier?<h1>{userSubscriptionTier}</h1>:<h1>No subscriptions yet</h1>
+        }         
         </>
       )
     }
