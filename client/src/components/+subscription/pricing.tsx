@@ -24,7 +24,7 @@ export function Pricing({ tiers }: PricingProps) {
   const confirmPopupMessage = 'Press Confirm to Subscribe'
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [tierName, setTierName] = useState('')
-  const { userSubscriptionTier } = useContext(User)
+  const { userSubscriptionTier, setUserSubscriptionTier } = useContext(User)
 
   const confirm = (tier: string) => {
     if (tier === userSubscriptionTier){
@@ -53,6 +53,7 @@ export function Pricing({ tiers }: PricingProps) {
       )
       toast.dismiss(toastId)
       toast.success("Subscription bought correctly with agreement ID: " + agreementID)
+      setUserSubscriptionTier(tierName)
     }catch(error)  {
       toast.dismiss(toastId)
       toast.error("There was an error buying the subscription")
