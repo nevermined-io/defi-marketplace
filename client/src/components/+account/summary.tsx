@@ -7,7 +7,7 @@ interface SummaryProps {
   published: DDO[]
   bookmarks: DDO[]
   purchased: DDO[]
-  currentSubscription: String
+  currentSubscription: string
 }
 
 const b = BEM('account-modules', styles)

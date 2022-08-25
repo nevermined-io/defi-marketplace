@@ -4,13 +4,12 @@ import { MetaMask } from '@nevermined-io/catalog-providers'
 import { User } from '../../context'
 import styles from './wallet.module.scss'
 import Link from 'next/link'
-import Image from 'next/image'
 import Router from 'next/router'
 
 const b = BEM('wallet', styles)
 
 export function XuiWallet() {
-  const { network, basket, isLogged, userSubscriptionTier } = React.useContext(User)
+  const { network, isLogged, userSubscriptionTier } = React.useContext(User)
   const { walletAddress, loginMetamask } = MetaMask.useWallet()
 
   return !(isLogged && walletAddress) ? (
