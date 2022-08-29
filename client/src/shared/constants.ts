@@ -54,3 +54,16 @@ export interface Provenance {
   price: number
   currency: string
 }
+
+export enum SubscriptionTiers {
+  Tier1 = 'Community',
+  Tier2 = "Analyst",
+  Tier3 = "Enterprise"
+} 
+
+export interface UserSubscription {
+  tier: SubscriptionTiers
+  address: string
+  access: boolean
+  current: boolean
+}

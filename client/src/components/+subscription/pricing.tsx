@@ -3,11 +3,12 @@ import styles from './pricing.module.scss'
 const b = BEM('pricing', styles)
 import React, { useState, useRef, useContext } from 'react'
 import { Catalog } from '@nevermined-io/catalog-core'
-import { DID_NFT_TIERS, NFT_TIERS_AMOUNT, NFT_TIERS_HOLDER, NFT_TIERS_TYPE } from 'src/config'
+import { NFT_TIERS, NFT_TIERS_AMOUNT, NFT_TIERS_HOLDER, NFT_TIERS_TYPE } from 'src/config'
 import { toast } from 'react-toastify';
 import { UiPopupHandlers } from '@nevermined-io/styles'
 import { ConfirmPopup } from '../../+assets/user-publish-steps/confirm-popup'
 import { User } from '../../context'
+import { SubscriptionTiers } from 'src/shared'
 
 interface Tier {
   name: string
@@ -24,10 +25,10 @@ export function Pricing({ tiers }: PricingProps) {
   const confirmPopupMessage = 'Press Confirm to Subscribe'
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [tierName, setTierName] = useState('')
-  const { userSubscriptionTier, setUserSubscriptionTier } = useContext(User)
+  const { getCurrentUserSubscription, setCheckSubscriptions} = useContext(User)
 
   const confirm = (tier: string) => {
-    if (tier === userSubscriptionTier){
+    if (tier as SubscriptionTiers === getCurrentUserSubscription()?.tier){
       toast.warning(`You are already subscribed to  ${tier}`)
       return
     }
@@ -45,7 +46,7 @@ export function Pricing({ tiers }: PricingProps) {
     const toastId = toast.info("Subscription in progress...")  
     try{ 
       const agreementID =  await subscription.buySubscription(
-        DID_NFT_TIERS.find(tier => tier.name === tierName)?.did || '',
+        NFT_TIERS.find(tier => tier.name === tierName)?.did || '',
         accounts[0],
         NFT_TIERS_HOLDER,
         NFT_TIERS_AMOUNT,
@@ -53,7 +54,7 @@ export function Pricing({ tiers }: PricingProps) {
       )
       toast.dismiss(toastId)
       toast.success("Subscription bought correctly with agreement ID: " + agreementID)
-      setUserSubscriptionTier(tierName)
+      setCheckSubscriptions(true)
     }catch(error)  {
       toast.dismiss(toastId)
       toast.error("There was an error buying the subscription")

@@ -55,26 +55,22 @@ export const PricesStep = (props: PricesProps) => {
   const txImage = '/assets/nevermined-color.svg'
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [showForm, setShowForm] = useState(true)
-  const { userSubscriptionTier, accessSubscriptionTier1, accessSubscriptionTier2, accessSubscriptionTier3} = useContext(User)
+  const { userSubscriptions, getCurrentUserSubscription} = useContext(User)
   const [tiers, setTiers] = useState<string[]>([])
   const subscriptionErrorText = "You don't have any current subscription. Only users with a subscription are allowed to publish"
   
 
   useEffect(() => {
 
-    if (!userSubscriptionTier) {
+    if (!getCurrentUserSubscription()) {
       setInputError(subscriptionErrorText)
       setTiers([])
       return
     }
-    if (accessSubscriptionTier1) 
-      setTiers([...tiers, "Community"])
-    if (accessSubscriptionTier2)
-      setTiers([...tiers, "Analyst"])
-    if (accessSubscriptionTier3)
-      setTiers([...tiers, "Enterprise"])    
-  
-  }, [userSubscriptionTier])
+
+    setTiers(userSubscriptions.filter(s => s.access == true).map(s => s.tier.toString()))
+   
+  }, [userSubscriptions])
 
  
   useEffect(() => {
@@ -99,7 +95,7 @@ export const PricesStep = (props: PricesProps) => {
   }
 
   const showConfirm = () => {
-    if (!userSubscriptionTier) {
+    if (!getCurrentUserSubscription()) {
       toast.error(subscriptionErrorText)
       return
     }

@@ -9,7 +9,7 @@ import Router from 'next/router'
 const b = BEM('wallet', styles)
 
 export function XuiWallet() {
-  const { network, isLogged, userSubscriptionTier } = React.useContext(User)
+  const { network, isLogged, getCurrentUserSubscription } = React.useContext(User)
   const { walletAddress, loginMetamask } = MetaMask.useWallet()
 
   return !(isLogged && walletAddress) ? (
@@ -20,7 +20,7 @@ export function XuiWallet() {
         <Link href={'/account'}>
           <span style={{ cursor: 'pointer', display: 'flex' }}>
            {
-             userSubscriptionTier? <span>{userSubscriptionTier}</span>:<span>No Subscription</span>
+             getCurrentUserSubscription()? <span>{getCurrentUserSubscription()?.tier.toString()}</span>:<span>No Subscription</span>
            } 
           </span>
         </Link>

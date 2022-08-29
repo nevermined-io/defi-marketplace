@@ -5,8 +5,8 @@ import { Catalog, AuthToken } from '@nevermined-io/catalog-core'
 import { User } from '.'
 import { correctNetworkName } from '../config';
 import { getAllUserBundlers, Bundle } from '../shared/api';
-import { DID_NFT_TIERS} from 'src/config'
-
+import {SubscriptionTiers, UserSubscription } from '../shared/constants'
+import { NFT_TIERS} from 'src/config'
 
 import {
     gatewayUri,
@@ -47,10 +47,13 @@ const UserProvider = (props: UserProviderProps) => {
     const { walletAddress, isAvailable, checkIsLogged } = useContext(MetaMask.WalletContext)
     const prevBasket = useRef<string[]>()
     const userProviderMounted = useRef()
-    const [accessSubscriptionTier1, setAccessSubscriptionTier1] = useState<boolean>(false)
-    const [accessSubscriptionTier2, setAccessSubscriptionTier2] = useState<boolean>(false)
-    const [accessSubscriptionTier3, setAccessSubscriptionTier3] = useState<boolean>(false)
-    const [userSubscriptionTier, setUserSubscriptionTier] = useState<string>('') 
+    const [userSubscriptions, setUserSubscriptions] = useState<UserSubscription[]>([])
+    const [checkSubscriptions, setCheckSubscriptions] = useState<boolean>(true)
+
+    const getCurrentUserSubscription = () : UserSubscription | undefined => {
+        return userSubscriptions.find((subs) => subs.current)
+    }
+
 
     useEffect(() => {
         if(isLoadingSDK || !network) {
@@ -102,6 +105,12 @@ const UserProvider = (props: UserProviderProps) => {
 
 
     useEffect(() => {
+
+        console.log("launching checking subs...")
+
+        if (!checkSubscriptions)
+            return
+    
         if(!isAvailable()) {
           setIsLogged(false)
           return
@@ -110,44 +119,94 @@ const UserProvider = (props: UserProviderProps) => {
         if(isLoadingSDK ) {
             return
         }
-    
+
         (async () => {
 
-            setAccessSubscriptionTier3(false) 
-            setAccessSubscriptionTier2(false) 
-            setAccessSubscriptionTier1(false) 
-            setUserSubscriptionTier("")
+            console.log("checking subs...")
+
+            const tier3 = NFT_TIERS.find(tier => tier.level === 3)
+            const tier2 = NFT_TIERS.find(tier => tier.level === 2)
+            const tier1 = NFT_TIERS.find(tier => tier.level === 1)
+
            // Check Tier3
-            const tier3Address = DID_NFT_TIERS.find(tier => tier.name === "Enterprise")?.address || ''
-            const isTier3 = await checkSubscription(tier3Address)
-            if (isTier3){
-             setAccessSubscriptionTier3(true) 
-             setAccessSubscriptionTier2(true) 
-             setAccessSubscriptionTier1(true) 
-             setUserSubscriptionTier("Enterprise")
-             return
+            const isTier3 = await checkSubscription(tier3?.address || '')   
+            if (isTier3){    
+                setUserSubscriptions([
+                    {
+                        tier: tier3!.name as SubscriptionTiers,
+                        address: tier3!.address,
+                        access: true,
+                        current: true
+                    },
+                    {
+                        tier: tier2!.name as SubscriptionTiers,
+                        address: tier2!.address,
+                        access: true,
+                        current: false
+                    },
+                    {
+                        tier: tier1!.name as SubscriptionTiers,
+                        address: tier1!.address,
+                        access: true,
+                        current: false
+                    }
+                ])
+                setCheckSubscriptions(false)
+                return
             }
             // Check Tier2
-            const tier2Address = DID_NFT_TIERS.find(tier => tier.name === "Analyst")?.address || ''
-            const isTier2 = await checkSubscription(tier2Address)
+            const isTier2 = await checkSubscription(tier2?.address || '')
             if (isTier2){
-                setAccessSubscriptionTier3(false)
-                setAccessSubscriptionTier2(true) 
-                setAccessSubscriptionTier1(true) 
-                setUserSubscriptionTier("Analyst")
+                setUserSubscriptions([
+                    {
+                        tier: tier3!.name as SubscriptionTiers,
+                        address: tier3!.address,
+                        access: false,
+                        current: false
+                    },
+                    {
+                        tier: tier2!.name as SubscriptionTiers,
+                        address: tier2!.address,
+                        access: true,
+                        current: true
+                    },
+                    {
+                        tier: tier1!.name as SubscriptionTiers,
+                        address: tier1!.address,
+                        access: true,
+                        current: false
+                    }
+                ])
+                setCheckSubscriptions(false)
                 return
             }  
             // Check Tier1
-            const tier1Address = DID_NFT_TIERS.find(tier => tier.name === "Community")?.address || ''
-            const isTier1 = await checkSubscription(tier1Address)
-            if (isTier1){
-                setAccessSubscriptionTier3(false)
-                setAccessSubscriptionTier2(false) 
-                setAccessSubscriptionTier1(true) 
-                setUserSubscriptionTier("Community")
+            const isTier1 = await checkSubscription(tier1?.address || '')
+            if (isTier1){   
+                setUserSubscriptions([
+                    {
+                        tier: tier3!.name as SubscriptionTiers,
+                        address: tier3!.address,
+                        access: false,
+                        current: false
+                    },
+                    {
+                        tier: tier2!.name as SubscriptionTiers,
+                        address: tier2!.address,
+                        access: false,
+                        current: false
+                    },
+                    {
+                        tier: tier1!.name as SubscriptionTiers,
+                        address: tier1!.address,
+                        access: true,
+                        current: true
+                    }
+                ])
+                setCheckSubscriptions(false)
             }
         })()
-      }, [walletAddress, isLoadingSDK])
+      }, [walletAddress, isLoadingSDK, checkSubscriptions])
 
     
     const checkSubscription = async (nftTierAddress: string): Promise<boolean> => {
@@ -206,7 +265,7 @@ const UserProvider = (props: UserProviderProps) => {
                 }
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
     }
 
@@ -254,10 +313,9 @@ const UserProvider = (props: UserProviderProps) => {
             removeFromBasket: (dids: string[]) => removeFromBasket(dids),
             setSelectedPriceRange: (selectedPrice: number) => setSelectedPriceRange(selectedPrice),
             setAllUserBundles: (account: string): Promise<void> => fetchAllUserBundlers(account),
-            accessSubscriptionTier1, setAccessSubscriptionTier1,
-            accessSubscriptionTier2, setAccessSubscriptionTier2,
-            accessSubscriptionTier3, setAccessSubscriptionTier3,
-            userSubscriptionTier, setUserSubscriptionTier,
+            getCurrentUserSubscription,
+            userSubscriptions, setUserSubscriptions,
+            checkSubscriptions, setCheckSubscriptions
         }}>
             {props.children}
         </User.Provider>
