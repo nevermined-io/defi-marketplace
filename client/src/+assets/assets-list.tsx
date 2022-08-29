@@ -12,7 +12,7 @@ import {
   NotificationPopup
 } from '@nevermined-io/styles'
 import { XuiTokenName, XuiTokenPrice } from 'ui'
-import { toDate, getDefiInfo, getDdoTokenAddress } from '../shared'
+import { toDate, getDefiInfo, getDdoTokenAddress, getDdoSubscription, DDOSubscription} from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
 import { Catalog } from '@nevermined-io/catalog-core'
@@ -32,7 +32,8 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
     setSelectedNetworks,
     setSelectedCategories,
     bookmarks,
-    setBookmarks
+    setBookmarks,
+    userSubscriptions
   } = useContext(User)
   const { walletAddress } = MetaMask.useWallet()
   const { sdk, account } = Catalog.useNevermined()
@@ -123,19 +124,19 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
     setBatchSelected(batchSelected.filter((did) => !didsSet.has(did)))
   }
 
-  const checkAssetInUserSubscription = (_assetTier: string) => {
-    // checks if the user can access the asset with the current subscription
-    // if user.subscriptionLevel >= asset Tier return true
-    // TODO - Pending to implement
-    return true
-
+  const checkAssetInUserSubscription = (subscription:DDOSubscription) => {
+    const subs = userSubscriptions.find(s => s.tier === subscription.tier.toString() && s.address === subscription.address)
+    if (subs?.access){
+      return true
+    }
+    return false
   }
 
-  type AssetInfo = {did:string, tier:string}
+  type AssetInfo = {did:string, subscription:DDOSubscription}
 
   const downloadAsset = async(assetInfo: AssetInfo) => {
 
-    if (!checkAssetInUserSubscription(assetInfo.tier!)){
+    if (!checkAssetInUserSubscription(assetInfo.subscription)){
       setErrorMessage("You can't download this Asset with your current subscription")    
       popupRef.current?.open()
       return
@@ -247,8 +248,8 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
       <UiDivider />
       {assets
         .map((asset) => ({ asset, metadata: asset.findServiceByType('metadata').attributes }))
-        .map((data) => ({ ...data, defi: getDefiInfo(data.metadata) }))
-        .map(({ asset, metadata, defi }, i) => (
+        .map((data) => ({ ...data, defi: getDefiInfo(data.metadata), subscription: getDdoSubscription(data.asset) }))
+        .map(({ asset, metadata, defi, subscription }, i) => (
           <UiLayout key={`asset-${asset.id}-${i}`} className={b('asset')}>
             <div className={b(`${batchActive ? 'checkbox' : 'checkbox--hidden'}`)}>
               {batchSelected.includes(asset.id) ? (
@@ -268,7 +269,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
             <div className={`${b('asset-title')}`}>
               <Link href={`/asset/${asset.id}`}>
                 <UiText className={`pointer`} wrapper="h4" type="h4">
-                  {metadata.main.name}
+                  {metadata.main.name} - {subscription.tier?.toString()}
                 </UiText>
               </Link>
               <UiText className={b('asset-date')} type="small" variants={['detail']}>
@@ -354,7 +355,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
               <img
                 alt="download"
                 onClick={() => {
-                  downloadAsset({did: asset.id, tier: "Tier1"})
+                  downloadAsset({did: asset.id, subscription: subscription})
                 }}
                 width="24px"
                 src="assets/download_icon.svg"

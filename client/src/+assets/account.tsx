@@ -18,7 +18,7 @@ export const Account: NextPage = () => {
   const [view, setView] = useState<number>(0)
   const [published, setPublished] = useState<DDO[]>([])
   const [purchased, setPurchased] = useState<DDO[]>([])
-  const { bookmarks, setBookmarks, userSubscriptionTier } = useContext(User)
+  const { bookmarks, setBookmarks, getCurrentUserSubscription } = useContext(User)
   const { sdk } = Catalog.useNevermined()
   const { walletAddress } = MetaMask.useWallet()
   const subscriptionErrorText = "You don't have any current subscription. Only users with a subscription are allowed to publish"
@@ -56,7 +56,7 @@ export const Account: NextPage = () => {
   }, [sdk])
 
   const publishAsset = () => {
-    if (!userSubscriptionTier) {
+    if (!getCurrentUserSubscription()) {
       toast.error(subscriptionErrorText)
       return
     }
@@ -65,7 +65,7 @@ export const Account: NextPage = () => {
 
   const renderContent = () => {
     if (view == 0) {
-      return <Summary published={published} bookmarks={bookmarks} purchased={purchased} currentSubscription= {userSubscriptionTier}/>
+      return <Summary published={published} bookmarks={bookmarks} purchased={purchased} currentSubscription= {getCurrentUserSubscription()?.tier || ''}/>
     } else if (view == 1) {
       return <UserProfile />
     } else if (view == 2) {
@@ -83,7 +83,7 @@ export const Account: NextPage = () => {
       return (
         <>    
         {
-          userSubscriptionTier?<h1>{userSubscriptionTier}</h1>:<h1>No subscriptions yet</h1>
+          getCurrentUserSubscription()?<h1>{getCurrentUserSubscription()?.tier}</h1>:<h1>No subscriptions yet</h1>
         }         
         </>
       )

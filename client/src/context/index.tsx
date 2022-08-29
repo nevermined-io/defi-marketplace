@@ -2,6 +2,7 @@ import React from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 
 import { Bundle } from '../shared/api';
+import { UserSubscription } from '../shared/constants'
 
 export const User = React.createContext({
     isLogged: false,
@@ -54,20 +55,15 @@ export const User = React.createContext({
     setBookmarks: (bookmarks: DDO[]) => {
         /* empty */
     },
-    accessSubscriptionTier1: false,
-    setAccessSubscriptionTier1: (isSubscribed: boolean) =>{
+    userSubscriptions: [] as UserSubscription[],
+    setUserSubscriptions: (userSubscriptions: UserSubscription[]) => {
          /* empty */
     },
-    accessSubscriptionTier2: false,
-    setAccessSubscriptionTier2: (isSubscribed: boolean) =>{
-         /* empty */
+    getCurrentUserSubscription: () : UserSubscription | undefined => {
+        return 
     },
-    accessSubscriptionTier3: false,
-    setAccessSubscriptionTier3: (isSubscribed: boolean) =>{
-         /* empty */
-    },
-    userSubscriptionTier: '',
-    setUserSubscriptionTier: (subscription: string) => {
+    checkSubscriptions: false, 
+    setCheckSubscriptions: (check:boolean) => {
         /* empty */
     }
 })

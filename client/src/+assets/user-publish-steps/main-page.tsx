@@ -10,7 +10,7 @@ import { PricesStep } from './prices'
 import { FilesStep } from './files'
 import { handleAssetFiles, FileType} from './files-handler'
 import { toast } from 'react-toastify';
-import { DID_NFT_TIERS} from 'src/config'
+import { NFT_TIERS} from 'src/config'
 
 export const UserPublishMultiStep: NextPage = () => {
   const {
@@ -164,7 +164,7 @@ export const UserPublishMultiStep: NextPage = () => {
   }
 
   const getNftTierAddress = (): string => {
-    return DID_NFT_TIERS.find(tier => tier.name === assetPublish.tier)?.address || ''
+    return NFT_TIERS.find(tier => tier.name === assetPublish.tier)?.address || ''
   }
 
   const generateFilesUploadedMessage = (assetFiles: AssetFile[]) => {

@@ -11,10 +11,10 @@ export const secretStoreUri = process.env.NEXT_PUBLIC_SECRET_STORE_URI || 'http:
 export const artifactsFolder =
   process.env.NEXT_PUBLIC_ARTIFACTS_FOLDER_URL || `http://localhost:3000/artifacts`
 
-export const DID_NFT_TIERS = [
-  { 'name': 'Community', 'did': process.env.DID_NFT_TIER1 || 'c908e49f574f7af755e47cf8e82ea9b686c4f00b7b583a95bfb66727b6e93117', 'address':  process.env.NFT_ADDRESS_TIER1 || '0x90d986e8307A8Ee01C315447235A659f76fE2244' },
-  { 'name': 'Analyst', 'did': process.env.DID_NFT_TIER2 || '06297b4ca9d675416a4c9bcd2b9c098d70fc433b1e672111091e134318be2d75', 'address':  process.env.NFT_ADDRESS_TIER2 || '0x85675aC6cB590eb98bB1D1A6D5840056f8a303AF'  },
-  { 'name': 'Enterprise', 'did': process.env.DID_NFT_TIER3 || '764eeb81b31e727b68bcfc344627aaceacbf3c6460ef67f8c1f1da655c00698d', 'address':  process.env.NFT_ADDRESS_TIER3 || '0x5D8a60E34bB8Da1569B520527B30c38a6114B2aD'  },
+export const NFT_TIERS = [
+  { 'level': 1, 'name': 'Community', 'did': process.env.DID_NFT_TIER1 || 'c908e49f574f7af755e47cf8e82ea9b686c4f00b7b583a95bfb66727b6e93117', 'address':  process.env.NFT_ADDRESS_TIER1 || '0x90d986e8307A8Ee01C315447235A659f76fE2244' },
+  { 'level': 2, 'name': 'Analyst', 'did': process.env.DID_NFT_TIER2 || '06297b4ca9d675416a4c9bcd2b9c098d70fc433b1e672111091e134318be2d75', 'address':  process.env.NFT_ADDRESS_TIER2 || '0x85675aC6cB590eb98bB1D1A6D5840056f8a303AF'  },
+  { 'level': 3, 'name': 'Enterprise', 'did': process.env.DID_NFT_TIER3 || '764eeb81b31e727b68bcfc344627aaceacbf3c6460ef67f8c1f1da655c00698d', 'address':  process.env.NFT_ADDRESS_TIER3 || '0x5D8a60E34bB8Da1569B520527B30c38a6114B2aD'  },
 ]
 export const NFT_TIERS_HOLDER = process.env.NFT_TIERS_HOLDER || '0x819dd6c82ad96e0B7B71Bf9161C90cFcd48E4dA5'
 export const NFT_TIERS_AMOUNT: number = Number(process.env.NFT_TIERS_AMOUNT) || 1

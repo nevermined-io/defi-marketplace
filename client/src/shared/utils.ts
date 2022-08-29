@@ -1,6 +1,6 @@
 import { DDO, MetaData } from '@nevermined-io/nevermined-sdk-js'
-
-import { categoryPrefix, subcategoryPrefix, networkPrefix } from './constants'
+import { categoryPrefix, subcategoryPrefix, networkPrefix, SubscriptionTiers } from './constants'
+import {NFT_TIERS} from '../config'
 
 export function toDate(date: string) {
   return new Date(date).toLocaleDateString('en-uk')
@@ -26,6 +26,27 @@ export function getDdoTokenAddress(ddo: DDO) {
     .findServiceByType('access')
     ?.attributes?.serviceAgreementTemplate?.conditions?.find(({ name }) => name === 'lockPayment')
     ?.parameters?.find(({ name }) => name === '_tokenAddress')?.value
+}
+
+export interface DDOSubscription {
+  address:  string
+  tier: SubscriptionTiers
+}
+
+export function getDdoSubscription(ddo: DDO): DDOSubscription {
+
+  const subscriptionAddress = ddo
+  .findServiceByType('nft721-access')
+  ?.attributes?.serviceAgreementTemplate?.conditions?.find(({name}:any)  => name === 'nftHolder')
+  ?.parameters?.find(({name}:any)  => name === '_contractAddress')?.value
+
+  const tier: string = NFT_TIERS.find( tier => tier.address === subscriptionAddress)?.name || ''
+
+  return { 
+    address: subscriptionAddress,
+    tier: tier as SubscriptionTiers
+  }
+  
 }
 
 export const sortBy = (list: DDO[], key: Function) => list.sort((a: any, b: any) => key(a) + key(b))
