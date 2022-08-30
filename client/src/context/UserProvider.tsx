@@ -48,11 +48,99 @@ const UserProvider = (props: UserProviderProps) => {
     const prevBasket = useRef<string[]>()
     const userProviderMounted = useRef()
     const [userSubscriptions, setUserSubscriptions] = useState<UserSubscription[]>([])
-    const [checkSubscriptions, setCheckSubscriptions] = useState<boolean>(true)
 
     const getCurrentUserSubscription = () : UserSubscription | undefined => {
         return userSubscriptions.find((subs) => subs.current)
     }
+
+    const checkSubscription = async (nftTierAddress: string): Promise<boolean> => {
+        const nft721 = await sdk.contracts.loadNft721(nftTierAddress)
+        const accounts = await sdk.accounts.list()
+        const balance = await nft721.balanceOf(accounts[0])
+        
+        return balance.gt(0)
+    }
+
+    const getUserSubscriptions = async (): Promise<UserSubscription[]> => {
+      
+        const tier3 = NFT_TIERS.find(tier => tier.level === 3)
+        const tier2 = NFT_TIERS.find(tier => tier.level === 2)
+        const tier1 = NFT_TIERS.find(tier => tier.level === 1)
+      
+        // Check Tier3
+        const isTier3 = await checkSubscription(tier3?.address || '')   
+        if (isTier3){    
+            return([
+                {
+                    tier: tier3!.name as SubscriptionTiers,
+                    address: tier3!.address,
+                    access: true,
+                    current: true
+                },
+                {
+                    tier: tier2!.name as SubscriptionTiers,
+                    address: tier2!.address,
+                    access: true,
+                    current: false
+                },
+                {
+                    tier: tier1!.name as SubscriptionTiers,
+                    address: tier1!.address,
+                    access: true,
+                    current: false
+                }
+            ])
+        }
+        // Check Tier2
+        const isTier2 = await checkSubscription(tier2?.address || '')
+        if (isTier2){
+            return([
+                {
+                    tier: tier3!.name as SubscriptionTiers,
+                    address: tier3!.address,
+                    access: false,
+                    current: false
+                },
+                {
+                    tier: tier2!.name as SubscriptionTiers,
+                    address: tier2!.address,
+                    access: true,
+                    current: true
+                },
+                {
+                    tier: tier1!.name as SubscriptionTiers,
+                    address: tier1!.address,
+                    access: true,
+                    current: false
+                }
+            ])
+        }  
+        // Check Tier1
+        const isTier1 = await checkSubscription(tier1?.address || '')
+        if (isTier1){   
+            return([
+                {
+                    tier: tier3!.name as SubscriptionTiers,
+                    address: tier3!.address,
+                    access: false,
+                    current: false
+                },
+                {
+                    tier: tier2!.name as SubscriptionTiers,
+                    address: tier2!.address,
+                    access: false,
+                    current: false
+                },
+                {
+                    tier: tier1!.name as SubscriptionTiers,
+                    address: tier1!.address,
+                    access: true,
+                    current: true
+                }
+            ])
+          }    
+          return[]    
+        }
 
 
     useEffect(() => {
@@ -105,117 +193,20 @@ const UserProvider = (props: UserProviderProps) => {
 
 
     useEffect(() => {
-
-        console.log("launching checking subs...")
-
-        if (!checkSubscriptions)
-            return
     
         if(!isAvailable()) {
           setIsLogged(false)
           return
         }
-
         if(isLoadingSDK ) {
             return
         }
 
         (async () => {
-
-            console.log("checking subs...")
-
-            const tier3 = NFT_TIERS.find(tier => tier.level === 3)
-            const tier2 = NFT_TIERS.find(tier => tier.level === 2)
-            const tier1 = NFT_TIERS.find(tier => tier.level === 1)
-
-           // Check Tier3
-            const isTier3 = await checkSubscription(tier3?.address || '')   
-            if (isTier3){    
-                setUserSubscriptions([
-                    {
-                        tier: tier3!.name as SubscriptionTiers,
-                        address: tier3!.address,
-                        access: true,
-                        current: true
-                    },
-                    {
-                        tier: tier2!.name as SubscriptionTiers,
-                        address: tier2!.address,
-                        access: true,
-                        current: false
-                    },
-                    {
-                        tier: tier1!.name as SubscriptionTiers,
-                        address: tier1!.address,
-                        access: true,
-                        current: false
-                    }
-                ])
-                setCheckSubscriptions(false)
-                return
-            }
-            // Check Tier2
-            const isTier2 = await checkSubscription(tier2?.address || '')
-            if (isTier2){
-                setUserSubscriptions([
-                    {
-                        tier: tier3!.name as SubscriptionTiers,
-                        address: tier3!.address,
-                        access: false,
-                        current: false
-                    },
-                    {
-                        tier: tier2!.name as SubscriptionTiers,
-                        address: tier2!.address,
-                        access: true,
-                        current: true
-                    },
-                    {
-                        tier: tier1!.name as SubscriptionTiers,
-                        address: tier1!.address,
-                        access: true,
-                        current: false
-                    }
-                ])
-                setCheckSubscriptions(false)
-                return
-            }  
-            // Check Tier1
-            const isTier1 = await checkSubscription(tier1?.address || '')
-            if (isTier1){   
-                setUserSubscriptions([
-                    {
-                        tier: tier3!.name as SubscriptionTiers,
-                        address: tier3!.address,
-                        access: false,
-                        current: false
-                    },
-                    {
-                        tier: tier2!.name as SubscriptionTiers,
-                        address: tier2!.address,
-                        access: false,
-                        current: false
-                    },
-                    {
-                        tier: tier1!.name as SubscriptionTiers,
-                        address: tier1!.address,
-                        access: true,
-                        current: true
-                    }
-                ])
-                setCheckSubscriptions(false)
-            }
+           const userSubs = await getUserSubscriptions()
+           setUserSubscriptions(userSubs)     
         })()
-      }, [walletAddress, isLoadingSDK, checkSubscriptions])
-
-    
-    const checkSubscription = async (nftTierAddress: string): Promise<boolean> => {
-        const nft721 = await sdk.contracts.loadNft721(nftTierAddress)
-        const accounts = await sdk.accounts.list()
-        const balance = await nft721.balanceOf(accounts[0])
-        
-        return balance.gt(0)
-    }
+      }, [walletAddress, isLoadingSDK])
 
     const reloadSdk = async() => {
         const config = {
@@ -315,7 +306,7 @@ const UserProvider = (props: UserProviderProps) => {
             setAllUserBundles: (account: string): Promise<void> => fetchAllUserBundlers(account),
             getCurrentUserSubscription,
             userSubscriptions, setUserSubscriptions,
-            checkSubscriptions, setCheckSubscriptions
+            getUserSubscriptions
         }}>
             {props.children}
         </User.Provider>

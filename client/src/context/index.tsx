@@ -62,8 +62,7 @@ export const User = React.createContext({
     getCurrentUserSubscription: () : UserSubscription | undefined => {
         return 
     },
-    checkSubscriptions: false, 
-    setCheckSubscriptions: (check:boolean) => {
-        /* empty */
+    getUserSubscriptions: () : Promise<UserSubscription[]>  | undefined  => {
+        return
     }
 })
