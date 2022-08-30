@@ -19,7 +19,7 @@ export const UserPublishMultiStep: NextPage = () => {
     setAssetMessage,
     assetPublish,
     setAssetPublish,
-    publishAsset721,
+    publishNFT721,
   } = AssetService.useAssetPublish()
   const [filesUploadedMessage, setFilesUploadedMessage] = useState<string[]>([])
   const popupRef = useRef<UiPopupHandlers>()
@@ -195,7 +195,7 @@ const onSubmitUserPublish = async() => {
             await uploadFiles()
             txPopupRef.current?.open()
 
-            publishAsset721({nftAddress: getNftTierAddress(), metadata: generateMetadata()})
+            publishNFT721({nftAddress: getNftTierAddress(), metadata: generateMetadata()})
             .then((ddo) =>
                 {
                     setResultOk(true)
