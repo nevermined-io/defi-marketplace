@@ -17,7 +17,7 @@ import styles from './assets-list.module.scss'
 import { User } from '../context'
 import { Catalog } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
-import {XuiBuyAsset} from '../components/+buy-asset/buy-asset'
+import {XuiDownloadAsset} from '../components/+download-asset/download-asset'
 
 interface AssetsListProps {
   assets: DDO[]
@@ -43,7 +43,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   const [batchSelected, setBatchSelected] = useState<string[]>([])
   const [assetDid, setAssetDid] = useState<string>("")
   const popupRef = useRef<UiPopupHandlers>()
-  const buyPopupRef = useRef<UiPopupHandlers>()
+  const downloadPopupRef = useRef<UiPopupHandlers>()
 
   const openPopup = (event: any) => {
     popupRef.current?.open()
@@ -143,7 +143,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
     }
     setAssetDid(assetInfo.did)
 
-    buyPopupRef.current?.open()
+    downloadPopupRef.current?.open()
   }
 
   useEffect(() => {
@@ -171,7 +171,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   return (
     <div className={b()}>
 
-      <XuiBuyAsset popupRef={buyPopupRef} assetDid={assetDid}/>
+      <XuiDownloadAsset popupRef={downloadPopupRef} assetDid={assetDid}/>
       <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef} />
 
       {disableBatchSelect ? (

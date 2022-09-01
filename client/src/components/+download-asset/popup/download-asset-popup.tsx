@@ -1,34 +1,131 @@
-import React from 'react'
-import { BEM, UiText, UiPopup, UiPopupHandlers, UiButton } from '@nevermined-io/styles'
-import styles from './download-asset-popup.module.scss'
+import React, { useState, useCallback } from 'react'
+import { Catalog } from '@nevermined-io/catalog-core'
+import {
+  BEM,
+  UiText,
+  UiDivider,
+  UiLayout,
+  UiButton,
+  UiIcon,
+  CircleSpinner
+} from '@nevermined-io/styles'
 
-interface DownloadPopupProps {
-  closePopup: (event: any) => void
-  popupRef: React.RefObject<UiPopupHandlers>
+import styles from './download-asset-popup.module.scss'
+import { MetamaskErrorCodes, MetamaskCustomErrors } from '../../../shared/constants'
+
+interface DownloadAssetPopupProps {
+  assetDid: string
+  close: () => any
 }
 
-const b = BEM('download-popup', styles)
+const b = BEM('download-asset-popup', styles)
 
-export function DownloadPopup({ closePopup, popupRef }: DownloadPopupProps) {
-  return (
-    <>
-      <UiPopup ref={popupRef}>
-        <div className={b('basket-popup')}>
-          <img src="/assets/download_icon.svg" width="73px" />
+export function XuiDownloadAssetPopup(props: DownloadAssetPopupProps) {
+  const { close, assetDid } = props
+  const { sdk } = Catalog.useNevermined()
+  const [view, setView] = useState<0 | 1 | 2>(0)
+  const [error, setError] = useState<string | undefined>(undefined)
+  const start = useCallback(async () => {
+  
+    setView(1)
+    const account = (await sdk.accounts.list())[0]
+    sdk.nfts.access(assetDid, account)
+    .then(() => setView(2))
+    .catch((error) =>
+        setError(
+          error.code === MetamaskErrorCodes.CANCELED
+            ? MetamaskCustomErrors.CANCELED[1]
+            : error.message
+        )
+    )
+  }, [])
 
-          <UiText style={{ color: '#2E405A', margin: '72px 0 25px' }} type="h3">
-            Download In Progress
+  const cleanError = useCallback(() => {
+    setError(undefined)
+    setView(0)
+  }, [])
+
+  if (error) {
+    return (
+      <>
+        <UiDivider type="l" />
+        <UiIcon className={b('icon', ['error'])} icon="circleError" size="xxl" />
+        <UiDivider type="l" />
+        <UiText block type="h3" className={b('text')}>
+          Asset Downloading failed!
+        </UiText>
+        <UiDivider />
+        <UiText block className={b('text', ['content'])}>
+          {error}
+        </UiText>
+        <UiDivider type="l" />
+        <UiButton className={b('button')} type="error" onClick={() => {cleanError; close()}}>
+          Return
+        </UiButton>
+      </>
+    )
+  } else if (view === 0) {
+    return (
+      <>
+        <div className={b('confirm')}>
+          <UiText block type="h3" className={b('text')}>
+            Do you really want to <br /> download this Asset?
           </UiText>
-          <div className={b('popup-text')}>
-            Please, Sign the transaction on MetaMask to download the Asset.
-          </div>
-          <div className={b('popup-buttons')}>
-            <UiButton cover style={{ padding: '0', width: '170px' }} onClick={closePopup}>
-              Back To Profile
+          <UiDivider type="xl" />
+          <UiLayout style={{ padding: '30px' }}>
+            <UiButton className={b('button')} onClick={start}>
+              Yes
             </UiButton>
-          </div>
+            <UiDivider vertical />
+            <UiButton className={b('button')} type="secondary" onClick={close}>
+              Cancel
+            </UiButton>
+          </UiLayout>
         </div>
-      </UiPopup>
-    </>
-  )
+      </>
+    )
+  } else if (view === 1) {
+    return (
+      <>
+        <div className={b('confirm')} style={{ height: '480px' }}>
+          <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
+          <UiText block type="h3" className={b('text')}>
+            Transaction in <br /> progress...
+          </UiText>
+          <CircleSpinner
+            width="150"
+            height="150"
+            circleSpimmerSrc="/assets/circle-loadspinner.svg"
+          />
+          <UiText block className={b('text', ['content'])}>
+            Please sign the message and the datasets will be downloaded shortly. You can always
+            download this dataset from you profile page.
+          </UiText>
+          <UiDivider type="l" />
+        </div>
+      </>
+    )
+  } else if (view === 2){
+    return (
+      <>
+        <UiDivider type="l" />
+        <UiIcon className={b('icon', ['ok'])} icon="circleOk" size="xxl" />
+        <UiDivider type="l" />
+        <UiText block type="h3" className={b('text')}>
+           Asset Downloading OK!
+        </UiText>
+        <UiDivider />
+        <UiText block className={b('text', ['content'])}>
+          {error}
+        </UiText>
+        <UiDivider type="l" />
+        <UiButton className={b('button')}  onClick={() => {close()}}>
+          Return
+        </UiButton>
+      </>
+    )
+
+  }else {
+    return <span />
+  }
 }

@@ -1,29 +1,32 @@
 @import '~@nevermined-io/styles/lib/cjs/styles/index.scss';
-// @import '../src/styles/index';
 
+.download-asset-popup {
+  color: gc(gD);
 
-.download-popup {
-
-  &__basket-popup {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 516px;
-    padding: 105px 70px 40px;
+  &__confirm {
     width: 512px;
+    height: 320px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    padding:40px 15px 40px 15px;
   }
 
-  &__popup-text {
-    color: #132D43;
-    font-size: 18px;
-    line-height: 32px;
-  }
+  &__text {
+    color: gc(gD) !important;
 
-  &__popup-buttons {
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
-    width: 100%;
+    &--content {
+      max-width: 340px;
+      margin: auto;
+    }
   }
-
+  &__button {
+    flex: 1;
+  }
+  &__icon {
+    &--error {
+      color: gc(error)
+    }
+    &--success {
+      color: gc(success)
+    }
+  }
 }
