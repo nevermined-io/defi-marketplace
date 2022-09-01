@@ -1,26 +1,17 @@
 import React from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 
-import { Bundle } from '../shared/api';
 import { UserSubscription } from '../shared/constants'
 
 export const User = React.createContext({
     isLogged: false,
     bookmarks: [] as DDO[],
-    userBundles: [] as Bundle[],
     balance: {
         eth: 0,
         nevermined: 0
     },
     network: '',
     tokenSymbol: '',
-    basket: [] as string[],
-    addToBasket: (dids: string[]) => {
-        /* empty */
-    },
-    removeFromBasket: (dids: string[]) => {
-        /* empty */
-    },
     assets: [] as DDO[],
     setAssets: (assets: DDO[]) => {
         /* empty */
@@ -47,9 +38,6 @@ export const User = React.createContext({
     },
     selectedPrice: 0,
     setSelectedPriceRange: (selectedPrice: number) => {
-        /* empty */
-    },
-    setAllUserBundles: (account: string) => {
         /* empty */
     },
     setBookmarks: (bookmarks: DDO[]) => {

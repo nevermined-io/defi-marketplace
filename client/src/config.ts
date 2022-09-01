@@ -41,15 +41,8 @@ export const correctNetworkName = process.env.NEXT_PUBLIC_CORRECT_NETWORK_NAME |
 export const bundleServiceUri =
   process.env.NEXT_PUBLIC_BUNDLE_SERVICE_URI || 'https://defi.v2.bundler.mumbai.nevermined.rocks'
 
-export const bundleCreateUri = '/api/v1/bundle/create'
-export const bundleStatusUri = '/api/v1/bundle/status'
-export const userBundlesUri = '/api/v1/user/history'
-export const bundleDataset = '/api/v1/bundle/contains'
 export const sampleUri = '/api/v1/sample'
 export const filecoinUploadUri = '/api/v1/gateway/services/upload/filecoin'
-export const BUNDLE_MAX_RETRYS = 12
-export const BUNDLE_RETRY_TIMEOUT = 5000
-export const BUNDLE_STATUS_COMPLETED = 'COMPLETED'
 export const discordUrl = 'https://discord.gg/d8B4BkV3'
 export const networkArray = [
   'bsc',
