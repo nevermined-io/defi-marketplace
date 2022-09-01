@@ -1,5 +1,5 @@
 export * from './+assets-query/assets-query'
-export * from './+buy-asset/buy-asset'
+export * from './+download-asset/download-asset'
 export * from './+token-name/token-name'
 export * from './+token-price/token-price'
 export * from './+wallet/wallet'
