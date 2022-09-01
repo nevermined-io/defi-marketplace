@@ -75,43 +75,6 @@ export const AssetDetails: NextPage = () => {
     event.preventDefault()
   }
 
-  /**  TODO
-  * How to show Provenance now
-  const getProvenanceInfo = async () => {
-    const published = await loadPublishedEvent(didZeroX(String(did)), getProvider())
-
-   
-    const bundlesPuchased = await getBundlesWithDataset(String(did))
-
-    const provenance = bundlesPuchased.map((bundle) => ({
-      id: bundle.did,
-      action: 'bought',
-      date: new Date(bundle.createdAt),
-      account: bundle.user,
-      price: 0,
-      currency: 'USDC'
-    }))
-   
-
-    if (published) {
-      provenance.unshift({
-        id: published.did,
-        action: 'published',
-        date: published.registeredAt,
-        account: published.owner,
-        price: 0,
-        currency: 'USDC'
-      })
-    }
-    setProvenance(provenance)
-  }
-  
-
-  useEffect(() => {
-    getProvenanceInfo()
-  }, [])
-   */
-
   useEffect(() => {
     if (!sdk.assets || !did) {
       return
@@ -261,54 +224,11 @@ export const AssetDetails: NextPage = () => {
               variants={['underline']}
               className={b('provenance-title')}
             >
+               {/*
+              TODO // how to get Provenance with Subscription model?
+              */}
               Provenance
             </UiText>
-            {/*
-              TODO // how to get Provenance with Subscription model?
-              provenance.slice(startEndPage().start, startEndPage().end).map((p) => (
-              <div key={p.id}>
-                <UiText type="h4" wrapper="h4">
-                  {p.date.toLocaleDateString('en-US', dateOptions)}
-                </UiText>
-                <UiLayout direction="row" className={b('provenance-entry')}>
-                  <UiLayout direction="row" className={b('provenance-entry-data', ['left'])}>
-                    <UiLayout className={b('provenance-entry-data-ellipse')}>
-                      <Image width="26" height="26" alt="ellipse" src="/assets/ellipse.svg" />
-                    </UiLayout>
-                    <UiLayout direction="column">
-                      <UiText type="p">{p.action}</UiText>
-                      <UiText type="small">
-                        {p.date.toLocaleTimeString('en-US', timeOptions)}
-                      </UiText>
-                    </UiLayout>
-                  </UiLayout>
-                  <UiLayout direction="row" className={b('provenance-entry-data', ['left'])}>
-                    <UiLayout className={b('provenance-entry-data-ellipse')}>
-                      <Image width="26" height="26" alt="ellipse" src="/assets/ellipse.svg" />
-                    </UiLayout>
-                    <UiLayout direction="column">
-                      <UiText type="p">By</UiText>
-                      <UiText type="small">
-                        {p.account.slice(0, 10)}...{p.account.slice(-4)}
-                      </UiText>
-                    </UiLayout>
-                  </UiLayout>
-                  <UiLayout direction="row" className={b('provenance-entry-data', ['right'])}>
-                    <UiLayout direction="column">
-                      <UiText type="p">Price</UiText>
-                      <UiText type="small">
-                        {p.price} {p.currency}
-                      </UiText>
-                    </UiLayout>
-                  </UiLayout>
-                </UiLayout>
-              </div>
-            ))}
-
-            {totalPages > 1 && (
-              <XuiPagination totalPages={totalPages} page={page} setPage={setPage} />
-            )*/}
-
             <UiDivider type="s" />
             <UiDivider />
             <UiText type="h3" wrapper="h3" variants={['underline']}>
