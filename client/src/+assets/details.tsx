@@ -23,12 +23,10 @@ import {
   getDdoTokenAddress,
   calculateStartEndPage,
   calculatePages,
-  getBundlesWithDataset,
   Provenance,
   getSampleURL
 } from '../shared'
 import { Markdown } from 'ui/markdown/markdown'
-import { AddedToBasketPopup } from './added-to-basket-popup'
 import Image from 'next/image'
 import { XuiPagination } from 'ui/+assets-query/pagination'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
@@ -49,13 +47,10 @@ export const AssetDetails: NextPage = () => {
   const [asset, setAsset] = useState<DDO | false>()
   const [isConnected, setIsConnected] = useState(false)
   const [ownAsset, setOwnAsset] = useState(false)
-  const { addToBasket, isLogged, userBundles } = useContext(User)
+  const { isLogged } = useContext(User)
   const { assets, sdk } = Catalog.useNevermined()
-  const { getProvider, loginMetamask, switchChainsOrRegisterSupportedChain } = MetaMask.useWallet()
+  const { loginMetamask, switchChainsOrRegisterSupportedChain } = MetaMask.useWallet()
   const popupRef = createRef<UiPopupHandlers>()
-  const [page, setPage] = useState<number>(1)
-  const [totalPages, setTotalPages] = useState<number>(1)
-  const [provenance, setProvenance] = useState<Provenance[]>([])
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(true)
 
   const dateOptions: Intl.DateTimeFormatOptions = {
@@ -80,12 +75,12 @@ export const AssetDetails: NextPage = () => {
     event.preventDefault()
   }
 
-  const startEndPage = useCallback(() => {
-    return calculateStartEndPage(page, PROVENANCE_PER_PAGE)
-  }, [page])
-
+  /**  TODO
+  * How to show Provenance now
   const getProvenanceInfo = async () => {
     const published = await loadPublishedEvent(didZeroX(String(did)), getProvider())
+
+   
     const bundlesPuchased = await getBundlesWithDataset(String(did))
 
     const provenance = bundlesPuchased.map((bundle) => ({
@@ -96,6 +91,7 @@ export const AssetDetails: NextPage = () => {
       price: 0,
       currency: 'USDC'
     }))
+   
 
     if (published) {
       provenance.unshift({
@@ -109,10 +105,12 @@ export const AssetDetails: NextPage = () => {
     }
     setProvenance(provenance)
   }
+  
 
   useEffect(() => {
     getProvenanceInfo()
   }, [])
+   */
 
   useEffect(() => {
     if (!sdk.assets || !did) {
@@ -132,17 +130,6 @@ export const AssetDetails: NextPage = () => {
     })()
   }, [sdk])
 
-  useEffect(() => {
-    if (asset && userBundles?.length) {
-      if (
-        userBundles.some((bundle) =>
-          bundle.datasets.some((dataset) => dataset.datasetId === asset.id)
-        )
-      ) {
-        setOwnAsset(true)
-      }
-    }
-  }, [asset, userBundles])
 
   // if chain change, show button to swit
   useEffect(() => {
@@ -178,9 +165,6 @@ export const AssetDetails: NextPage = () => {
     })()
   }, [])
 
-  useEffect(() => {
-    setTotalPages(calculatePages(provenance.length, PROVENANCE_PER_PAGE))
-  }, [provenance])
 
   if (!asset) {
     return (
@@ -234,13 +218,8 @@ export const AssetDetails: NextPage = () => {
     win?.focus()
   }
 
-  const addtoCart = () => {
-    addToBasket([asset.id])
-  }
-
   return (
     <>
-      <AddedToBasketPopup closePopup={closePopup} popupRef={popupRef} />
 
       <UiLayout type="container">
         <UiText wrapper="h1" type="h1" variants={['heading']}>
@@ -284,7 +263,9 @@ export const AssetDetails: NextPage = () => {
             >
               Provenance
             </UiText>
-            {provenance.slice(startEndPage().start, startEndPage().end).map((p) => (
+            {/*
+              TODO // how to get Provenance with Subscription model?
+              provenance.slice(startEndPage().start, startEndPage().end).map((p) => (
               <div key={p.id}>
                 <UiText type="h4" wrapper="h4">
                   {p.date.toLocaleDateString('en-US', dateOptions)}
@@ -326,10 +307,9 @@ export const AssetDetails: NextPage = () => {
 
             {totalPages > 1 && (
               <XuiPagination totalPages={totalPages} page={page} setPage={setPage} />
-            )}
+            )*/}
 
             <UiDivider type="s" />
-            {/*<UiText type="h3" wrapper="h3" variants={['underline']}>Provenance</UiText>*/}
             <UiDivider />
             <UiText type="h3" wrapper="h3" variants={['underline']}>
               Command Line Interface
@@ -408,7 +388,8 @@ export const AssetDetails: NextPage = () => {
                     return
                   }
                   openPopup(e)
-                  addtoCart()
+                  // TODO, add Download button 
+                  //addtoCart()
                 }}
               >
                 {isConnected ? 'Purchase' : 'Connect Wallet'}

@@ -4,7 +4,6 @@ import { MetaMask } from '@nevermined-io/catalog-providers'
 import { Catalog, AuthToken } from '@nevermined-io/catalog-core'
 import { User } from '.'
 import { correctNetworkName } from '../config';
-import { getAllUserBundlers, Bundle } from '../shared/api';
 import {SubscriptionTiers, UserSubscription } from '../shared/constants'
 import { NFT_TIERS} from 'src/config'
 
@@ -32,10 +31,8 @@ const UserProvider = (props: UserProviderProps) => {
         eth: 0,
         nevermined: 0
     })
-    const [userBundles, setUserBundles ] = useState<Bundle[]>([])
     const [network, setNetwork] = useState('')
     const [tokenSymbol, setTokenSymbol] = useState('')
-    const [basket, setBasket] = useState<string[]>([])
     const [assets, setAssets] = useState<DDO[]>([])
     const [searchInputText, setSearchInputText] = useState('')
     const [fromDate, setFromDate] = useState('')
@@ -45,7 +42,6 @@ const UserProvider = (props: UserProviderProps) => {
     const [selectedPrice, setSelectedPrice] = useState<number>(0)
     const { sdk, updateSDK, isLoadingSDK } = Catalog.useNevermined()
     const { walletAddress, isAvailable, checkIsLogged } = useContext(MetaMask.WalletContext)
-    const prevBasket = useRef<string[]>()
     const userProviderMounted = useRef()
     const [userSubscriptions, setUserSubscriptions] = useState<UserSubscription[]>([])
 
@@ -186,11 +182,6 @@ const UserProvider = (props: UserProviderProps) => {
         })()
       }, [walletAddress])
 
-    useEffect(() => {
-        prevBasket.current = basket
-        
-    }, [basket])
-
 
     useEffect(() => {
     
@@ -238,7 +229,6 @@ const UserProvider = (props: UserProviderProps) => {
         
         const network = await sdk?.keeper?.getNetworkName();
         await fetchBalance()
-        await fetchAllUserBundlers(walletAddress)
         if (network === correctNetworkName) {
             fetchTokenSymbol()
         }
@@ -260,25 +250,6 @@ const UserProvider = (props: UserProviderProps) => {
         }
     }
 
-    const fetchAllUserBundlers = async (account: string) => {
-
-        if (account) {
-            const bundles = await getAllUserBundlers(account)
-            setUserBundles(bundles)
-        }
-    }
-
-    const addToBasket = (dids: string[]) => {
-        setBasket([...basket.concat(...dids.filter(did => !basket.includes(did)))])
-    }
-
-    const removeFromBasket = (dids: string[]): string[] => {
-        const didsSet = new Set(dids)
-        setBasket([...prevBasket.current?.filter(did => !didsSet.has(did)) as string[]])
-        return basket
-    }
-
-
     const setSelectedPriceRange = (selectedPrice: number) => {
         setSelectedPrice(selectedPrice)
     }
@@ -289,10 +260,8 @@ const UserProvider = (props: UserProviderProps) => {
             bookmarks, 
             setBookmarks,
             balance,
-            userBundles,
             network,
             tokenSymbol,
-            basket,
             assets, setAssets,
             searchInputText, setSearchInputText,
             fromDate, setFromDate,
@@ -300,10 +269,7 @@ const UserProvider = (props: UserProviderProps) => {
             selectedCategories, setSelectedCategories,
             selectedNetworks, setSelectedNetworks,
             selectedPrice,
-            addToBasket: (dids: string[]) => addToBasket(dids),
-            removeFromBasket: (dids: string[]) => removeFromBasket(dids),
             setSelectedPriceRange: (selectedPrice: number) => setSelectedPriceRange(selectedPrice),
-            setAllUserBundles: (account: string): Promise<void> => fetchAllUserBundlers(account),
             getCurrentUserSubscription,
             userSubscriptions, setUserSubscriptions,
             getUserSubscriptions
