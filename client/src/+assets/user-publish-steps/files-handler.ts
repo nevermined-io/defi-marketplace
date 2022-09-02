@@ -74,7 +74,7 @@ export const checkFilecoinIdExists = async (id: string): Promise<[boolean, Asset
   const assetFile: AssetFile = {
     type: FileType.FilecoinID,
     label: id,
-    filecoin_id: id
+    filecoin_id: 'cid://'.concat(id)
   }
 
   try {
