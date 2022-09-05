@@ -7,7 +7,7 @@ import { User } from '../context'
 import { Catalog } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
-import { loadFullfilledEvents, loadUserPublished } from 'src/shared/graphql'
+import { loadUserPublished, loadUserDownloads } from 'src/shared/graphql'
 import { Summary } from 'ui/+account/summary'
 import { AssetsList } from './assets-list'
 import Router from 'next/router'
@@ -17,7 +17,8 @@ const b = BEM('account', styles)
 export const Account: NextPage = () => {
   const [view, setView] = useState<number>(0)
   const [published, setPublished] = useState<DDO[]>([])
-  const [purchased, setPurchased] = useState<DDO[]>([])
+  //const [purchased, setPurchased] = useState<DDO[]>([])
+  const [downloaded, setDownloaded] = useState<DDO[]>([])
   const { bookmarks, setBookmarks, getCurrentUserSubscription } = useContext(User)
   const { sdk } = Catalog.useNevermined()
   const { walletAddress } = MetaMask.useWallet()
@@ -37,15 +38,14 @@ export const Account: NextPage = () => {
       published.map((asset: any) => sdk.assets.resolve(asset._did))
     )
 
-    const purchased = await loadFullfilledEvents(sdk, walletAddress)
-
-    const purchasedDDO = await Promise.all(
-      purchased.map((asset: any) => sdk.assets.resolve(asset.documentId))
+    const downloaded = await loadUserDownloads(sdk, walletAddress)
+    const downloadedDDO = await Promise.all(
+      downloaded.map(async (asset: any) => await sdk.assets.resolve(asset._did))
     )
 
     setBookmarks(bookmarksDDO)
     setPublished(publishedDDO)
-    setPurchased(purchasedDDO)
+    setDownloaded(downloadedDDO)
   }
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export const Account: NextPage = () => {
 
   const renderContent = () => {
     if (view == 0) {
-      return <Summary published={published} bookmarks={bookmarks} purchased={purchased} currentSubscription= {getCurrentUserSubscription()?.tier || ''}/>
+      return <Summary published={published} bookmarks={bookmarks} downloaded={downloaded} currentSubscription= {getCurrentUserSubscription()?.tier || ''}/>
     } else if (view == 1) {
       return <UserProfile />
     } else if (view == 2) {
@@ -78,7 +78,7 @@ export const Account: NextPage = () => {
         </>
       )
     } else if (view == 4) {
-      return <AssetsList assets={purchased} disableBatchSelect={true} />
+      return <AssetsList assets={downloaded} disableBatchSelect={true} />
     } else if (view == 5) {
       return (
         <>    
@@ -131,7 +131,7 @@ export const Account: NextPage = () => {
               variants={['detail']}
               onClick={() => setView(4)}
             >
-              Purchases
+              Downloads
             </UiText>
             <UiDivider />
             <UiText

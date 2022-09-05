@@ -6,12 +6,12 @@ import { DDO } from '@nevermined-io/nevermined-sdk-js'
 interface SummaryProps {
   published: DDO[]
   bookmarks: DDO[]
-  purchased: DDO[]
+  downloaded: DDO[]
   currentSubscription: string
 }
 
 const b = BEM('account-modules', styles)
-export function Summary({ published, bookmarks, purchased, currentSubscription }: SummaryProps) {
+export function Summary({ published, bookmarks, downloaded, currentSubscription }: SummaryProps) {
   return (
     <>
       <UiLayout type="container">
@@ -34,9 +34,9 @@ export function Summary({ published, bookmarks, purchased, currentSubscription }
         <UiLayout className={b('summary')}>
           <UiLayout type="container" className={b('card')}>
             <UiText type="h3" wrapper="h3">
-              Your Purchases
+              Your Downloads
             </UiText>
-            <UiText className={b('summary-number')}>{purchased.length}</UiText>
+            <UiText className={b('summary-number')}>{downloaded.length}</UiText>
           </UiLayout>
           <UiLayout type="container" className={b('card')}>
             <UiText type="h3" wrapper="h3">

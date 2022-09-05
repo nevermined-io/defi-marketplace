@@ -83,3 +83,32 @@ export const loadUserPublished = async (
 
   return registered
 }
+
+export const loadUserDownloads = async (
+  sdk:Nevermined,
+  userAddress: string
+): Promise<any | undefined> => {
+
+  console.log("looking downloads for " + userAddress)
+  const useds = sdk.keeper.didRegistry.events.getPastEvents({
+    methodName: 'getUseds',
+    filterSubgraph: {
+      where: {
+        _agentId: userAddress,
+        _attributes: 'nft access'
+      }
+    },
+    result: {
+      id: true,
+      _did: true,
+      __typename: true,
+      _attributes: true,
+      _blockNumberUpdated: true,
+      _agentId: true
+    }
+
+  })
+  return useds
+}
+
+
