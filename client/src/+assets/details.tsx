@@ -104,11 +104,6 @@ export const AssetDetails: NextPage = () => {
       }
     })
     setProvenance(nftProvenance)
-
-    console.log("walletAddress: " + walletAddress)
-    nftProvenance.forEach(function (event) {
-      console.log("events address " + event.address);
-  })
   }
 
   useEffect(() => {
