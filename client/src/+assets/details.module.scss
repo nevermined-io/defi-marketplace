@@ -57,6 +57,14 @@
     flex-flow: row;
     padding: 10px;
 
+    &-userAddress {
+      margin-bottom: 16px;
+      border: 4px solid gc(gM);
+      border-color: #67CFF9;
+      flex-flow: row;
+      padding: 10px;
+    }
+
     &-data {
       flex-basis: 33%;
       text-transform: capitalize;
