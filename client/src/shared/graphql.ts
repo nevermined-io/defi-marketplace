@@ -1,6 +1,7 @@
 import { graphUrl } from 'src/config'
 import { Nevermined, subgraphs } from '@nevermined-io/nevermined-sdk-js'
 import { MetaMask } from '@nevermined-io/catalog-providers'
+import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 
 interface FullfilledOrders {
   documentId: string
@@ -95,7 +96,9 @@ export const loadUserDownloads = async (
       where: {
         _agentId: userAddress,
         _attributes: 'nft access'
-      }
+      },
+      orderBy: "_blockNumberUpdated" ,
+      orderDirection: "desc"     
     },
     result: {
       id: true,
@@ -112,18 +115,18 @@ export const loadUserDownloads = async (
 
 export const loadAssetProvenance = async (
   sdk:Nevermined,
+  provider: MetaMask.MetamaskProvider,
   did: string
 ): Promise<any | undefined> => {
 
-  const useds = sdk.keeper.didRegistry.events.getPastEvents({
+  let useds = sdk.keeper.didRegistry.events.getPastEvents({
     methodName: 'getUseds',
     filterSubgraph: {
       where: {
-        _did: did
+        _did: didZeroX(did)
       },
-      orderBy: {
-        _blockNumberUpdated: true
-      }
+      orderBy: "_blockNumberUpdated" ,
+      orderDirection: "desc"     
     },
     result: {
       id: true,
@@ -134,6 +137,14 @@ export const loadAssetProvenance = async (
       _agentId: true
     }
 
+  });
+
+  useds = Promise.all(
+    (await useds).map( async(event) => {
+    const tx = await provider.getBlock(event._blockNumberUpdated.toNumber())
+    return {...event, date: new Date(Number(tx.timestamp) * 1000)}
   })
+  )
+
   return useds
 }

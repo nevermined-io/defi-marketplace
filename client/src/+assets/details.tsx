@@ -30,15 +30,23 @@ import { Markdown } from 'ui/markdown/markdown'
 import Image from 'next/image'
 import { XuiPagination } from 'ui/+assets-query/pagination'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
-import { loadPublishedEvent } from 'src/shared/graphql'
 import { correctNetworkId, correctNetworkName, EVENT_PREFIX, PROTOCOL_PREFIX } from 'src/config'
 import { loadAssetProvenance } from 'src/shared/graphql'
+import {  EventOptions} from '@nevermined-io/nevermined-sdk-js/dist/node/events/NeverminedEvent';
 
 const b = BEM('details', styles)
 const PROVENANCE_PER_PAGE = 4
 
 interface AdditionalInformationExtended extends AdditionalInformation {
   sampleUrl: string
+}
+
+interface NftProvenance {
+  id: string
+  action: string
+  address: string
+  date: string
+  blockNumber: string
 }
 
 export const AssetDetails: NextPage = () => {
@@ -50,9 +58,12 @@ export const AssetDetails: NextPage = () => {
   const [ownAsset, setOwnAsset] = useState(false)
   const { isLogged } = useContext(User)
   const { assets, sdk } = Catalog.useNevermined()
-  const { loginMetamask, switchChainsOrRegisterSupportedChain } = MetaMask.useWallet()
+  const { getProvider, loginMetamask, switchChainsOrRegisterSupportedChain } = MetaMask.useWallet()
   const popupRef = createRef<UiPopupHandlers>()
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(true)
+  const [provenance, setProvenance] = useState<NftProvenance[]>([])
+  const [page, setPage] = useState<number>(1)
+  const [totalPages, setTotalPages] = useState<number>(1)
 
   const dateOptions: Intl.DateTimeFormatOptions = {
     month: 'short',
@@ -75,6 +86,28 @@ export const AssetDetails: NextPage = () => {
     popupRef.current?.close()
     event.preventDefault()
   }
+
+  const startEndPage = useCallback(() => {
+    return calculateStartEndPage(page, PROVENANCE_PER_PAGE)
+  }, [page])
+
+  const getProvenanceInfo = async () => {
+    const events = await loadAssetProvenance(sdk, getProvider(), String(did))
+    const nftProvenance: NftProvenance[] = events.map( (event: EventOptions) => {
+      return {
+        id: event.id,
+        action: event._attributes,
+        address: event._agentId,
+        date: event.date.toISOString().replace(/\.[0-9]{3}/, ''),
+        blockNumber: event._blockNumberUpdated.toString()
+      }
+    })
+    setProvenance(nftProvenance)
+  }
+
+  useEffect(() => {
+    getProvenanceInfo()
+  }, [])
 
   useEffect(() => {
     if (!sdk.assets || !did) {
@@ -129,6 +162,9 @@ export const AssetDetails: NextPage = () => {
     })()
   }, [])
 
+  useEffect(() => {
+    setTotalPages(calculatePages(provenance.length, PROVENANCE_PER_PAGE))
+  }, [provenance])
 
   if (!asset) {
     return (
@@ -225,11 +261,52 @@ export const AssetDetails: NextPage = () => {
               variants={['underline']}
               className={b('provenance-title')}
             >
-               {/*
-              TODO // how to get Provenance with Subscription model?
-              */}
               Provenance
             </UiText>
+            {provenance.slice(startEndPage().start, startEndPage().end).map((p) => (
+              <div key={p.id}>
+                <UiLayout direction="row" className={b('provenance-entry')}>
+                  <UiLayout direction="row" className={b('provenance-entry-data', ['left'])}>
+                    <UiLayout className={b('provenance-entry-data-ellipse')}>
+                      <Image width="26" height="26" alt="ellipse" src="/assets/ellipse.svg" />
+                    </UiLayout>
+                    <UiLayout direction="column">
+                      <UiText type="p">Action</UiText>
+                      <UiText type="small">{p.action}</UiText>
+                    </UiLayout>
+                  </UiLayout>
+                  <UiLayout direction="row" className={b('provenance-entry-data', ['left'])}>
+                    <UiLayout direction="column">
+                      <UiText type="p">Address</UiText>
+                      <UiText type="small">
+                        {p.address.slice(0, 10)}...{p.address.slice(-4)}
+                      </UiText>
+                    </UiLayout>
+                  </UiLayout>
+                  <UiLayout direction="row" className={b('provenance-entry-data', ['right'])}>
+                    <UiLayout direction="column">
+                      <UiText type="p">Date</UiText>
+                      <UiText type="small">
+                        {p.date}
+                      </UiText>
+                    </UiLayout>
+                  </UiLayout>
+                  <UiLayout direction="row" className={b('provenance-entry-data', ['right'])}>
+                    <UiLayout direction="column">
+                      <UiText type="p">Block Number</UiText>
+                      <UiText type="small">
+                        {p.blockNumber}
+                      </UiText>
+                    </UiLayout>
+                  </UiLayout>
+                </UiLayout>
+              </div>
+            ))}
+
+            {totalPages > 1 && (
+              <XuiPagination totalPages={totalPages} page={page} setPage={setPage} />
+            )}
+
             <UiDivider type="s" />
             <UiDivider />
             <UiText type="h3" wrapper="h3" variants={['underline']}>
