@@ -64,6 +64,7 @@ export const AssetDetails: NextPage = () => {
   const [provenance, setProvenance] = useState<NftProvenance[]>([])
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
+  const { walletAddress } = MetaMask.useWallet()
 
   const dateOptions: Intl.DateTimeFormatOptions = {
     month: 'short',
@@ -103,6 +104,11 @@ export const AssetDetails: NextPage = () => {
       }
     })
     setProvenance(nftProvenance)
+
+    console.log("walletAddress: " + walletAddress)
+    nftProvenance.forEach(function (event) {
+      console.log("events address " + event.address);
+  })
   }
 
   useEffect(() => {
@@ -265,7 +271,7 @@ export const AssetDetails: NextPage = () => {
             </UiText>
             {provenance.slice(startEndPage().start, startEndPage().end).map((p) => (
               <div key={p.id}>
-                <UiLayout direction="row" className={b('provenance-entry')}>
+                <UiLayout direction="row" className={p.address.toLowerCase() === walletAddress.toLowerCase()?b('provenance-entry-userAddress'):b('provenance-entry')}>
                   <UiLayout direction="row" className={b('provenance-entry-data', ['left'])}>
                     <UiLayout className={b('provenance-entry-data-ellipse')}>
                       <Image width="26" height="26" alt="ellipse" src="/assets/ellipse.svg" />
