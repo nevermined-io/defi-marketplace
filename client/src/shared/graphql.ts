@@ -109,3 +109,31 @@ export const loadUserDownloads = async (
   })
   return useds
 }
+
+export const loadAssetProvenance = async (
+  sdk:Nevermined,
+  did: string
+): Promise<any | undefined> => {
+
+  const useds = sdk.keeper.didRegistry.events.getPastEvents({
+    methodName: 'getUseds',
+    filterSubgraph: {
+      where: {
+        _did: did
+      },
+      orderBy: {
+        _blockNumberUpdated: true
+      }
+    },
+    result: {
+      id: true,
+      _did: true,
+      __typename: true,
+      _attributes: true,
+      _blockNumberUpdated: true,
+      _agentId: true
+    }
+
+  })
+  return useds
+}
