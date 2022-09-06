@@ -17,7 +17,6 @@ const b = BEM('account', styles)
 export const Account: NextPage = () => {
   const [view, setView] = useState<number>(0)
   const [published, setPublished] = useState<DDO[]>([])
-  //const [purchased, setPurchased] = useState<DDO[]>([])
   const [downloaded, setDownloaded] = useState<DDO[]>([])
   const { bookmarks, setBookmarks, getCurrentUserSubscription } = useContext(User)
   const { sdk } = Catalog.useNevermined()
