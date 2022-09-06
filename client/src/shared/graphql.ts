@@ -89,7 +89,6 @@ export const loadUserDownloads = async (
   userAddress: string
 ): Promise<any | undefined> => {
 
-  console.log("looking downloads for " + userAddress)
   const useds = sdk.keeper.didRegistry.events.getPastEvents({
     methodName: 'getUseds',
     filterSubgraph: {
@@ -110,5 +109,3 @@ export const loadUserDownloads = async (
   })
   return useds
 }
-
-
