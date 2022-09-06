@@ -32,6 +32,7 @@ import { XuiPagination } from 'ui/+assets-query/pagination'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { loadPublishedEvent } from 'src/shared/graphql'
 import { correctNetworkId, correctNetworkName, EVENT_PREFIX, PROTOCOL_PREFIX } from 'src/config'
+import { loadAssetProvenance } from 'src/shared/graphql'
 
 const b = BEM('details', styles)
 const PROVENANCE_PER_PAGE = 4
