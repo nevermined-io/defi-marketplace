@@ -13,6 +13,7 @@ import { SubscriptionTiers } from 'src/shared'
 interface Tier {
   name: string
   price: string
+  symbol: string
   features: string[]
 }
 interface PricingProps {
@@ -25,10 +26,10 @@ export function Pricing({ tiers }: PricingProps) {
   const confirmPopupMessage = 'Press Confirm to Subscribe'
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [tierName, setTierName] = useState('')
-  const { getCurrentUserSubscription, getUserSubscriptions, setUserSubscriptions} = useContext(User)
+  const { getCurrentUserSubscription, getUserSubscriptions, setUserSubscriptions } = useContext(User)
 
   const confirm = (tier: string) => {
-    if (tier as SubscriptionTiers === getCurrentUserSubscription()?.tier){
+    if (tier as SubscriptionTiers === getCurrentUserSubscription()?.tier) {
       toast.warning(`You are already subscribed to  ${tier}`)
       return
     }
@@ -43,9 +44,9 @@ export function Pricing({ tiers }: PricingProps) {
   const purchase = async () => {
     confirmPopupRef.current?.close()
     const accounts = await sdk.accounts.list()
-    const toastId = toast.info("Subscription in progress...")  
-    try{ 
-      const agreementID =  await subscription.buySubscription(
+    const toastId = toast.info("Subscription in progress...")
+    try {
+      const agreementID = await subscription.buySubscription(
         NFT_TIERS.find(tier => tier.name === tierName)?.did || '',
         accounts[0],
         NFT_TIERS_HOLDER,
@@ -54,37 +55,48 @@ export function Pricing({ tiers }: PricingProps) {
       )
       toast.dismiss(toastId)
       toast.success("Subscription bought correctly with agreement ID: " + agreementID)
-     // setCheckSubscriptions(true)
       const userSubs = await getUserSubscriptions()
       setUserSubscriptions(userSubs!)
-    }catch(error)  {
+    } catch (error) {
       toast.dismiss(toastId)
       toast.error("There was an error buying the subscription")
       console.error("There was an error buying the subscription: " + error)
-    }  
+    }
 
   }
 
   return (
     <div className={b('pricing')}>
-       <ConfirmPopup
+      <ConfirmPopup
         message={confirmPopupMessage}
         popupRef={confirmPopupRef}
         confirm={purchase}
         cancel={cancel}
       />
-      {tiers.map((tier) => (
+      {tiers.map((tier, index) => (
         <div key={tier.name} className={b('price_card')}>
-          <div className={b('header')}>
-            <span className={b('price')}>{tier.price}</span>
+          <div className={b(`header-${index}`, ['header'])}>
             <span className={b('name')}>{tier.name}</span>
+            <span className={b('price')}>{tier.price}
+              <div className={b('symbol')}>{tier.symbol}</div>
+            </span>
           </div>
-          <ul className={b('features')}>
-            {tier.features.map((feat, i) => (
-              <li key={i}>{feat}</li>
-            ))}
-          </ul>
-          <button className={b("add-to-cart")} onClick={() => confirm(tier.name)}>Purchase</button>
+          <div className={b('features')}>
+            <div className={b('common-feat')}>
+              On-chain normalised data from
+              different protocols and networks</div>
+            <ul className={b('features-list')}>
+              {tier.features.map((feat, i) => (
+                <li key={i}>
+                  <img src="/assets/subscription-tick.svg" />
+                  <span className={b('feat-detail')}>{feat}</span>
+                </li>
+              ))}
+            </ul>
+            <div className={b("button")}>
+              <button className={b("add-to-cart")} onClick={() => confirm(tier.name)}>Subscribe</button>
+            </div>
+          </div>
         </div>
       ))}
     </div>

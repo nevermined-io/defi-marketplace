@@ -2,64 +2,116 @@
 
 .pricing {
   &__pricing {
-    width: 989px;
+    width: 1322px;
     margin: 100px auto;
   }
 
-  &__price_card{
-    width: 300px;
+  &__header-0 {
+    background: linear-gradient(91.25deg, #3448F9 0%, #41E0F5 100%);
+    height: 222px;
+  }
+
+  &__header-1 {
+    background: linear-gradient(104.3deg, #55D6BE 6.55%, #448CCA 94.47%);
+    height: 222px;
+  }
+
+  &__header-2 {
+    background: linear-gradient(91.25deg, #3834F9 0%, #A97DFB 100%);
+    height: 222px;
+
+  }
+
+  &__price_card {
+    width: 396px;
     background: rgb(81, 98, 146);
     display: inline-table;
     top: 0;
   }
 
-  &__price_card:not(:last-child){
-    margin-right: 40px;
+  &__price_card:not(:last-child) {
+    margin-right: 16px;
   }
 
-  &__price{
+  &__price {
     width: 100%;
     font-size: 60px;
     font-weight: 300;
     display: block;
-    text-align: center;
-    padding: 30px 0 10px;
+    padding: 10px 110px 10px;
   }
 
-  &__name{
+  &__symbol{
+    font-size: 32px;
+    float: right;
+    padding-top: 22px;
+  }
+
+  &__name {
     width: 100%;
-    font-size: 15px;
-    font-weight: 700;
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 48px;
     display: block;
     text-align: center;
-    padding: 0 0 30px;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    padding-top: 32px;
   }
 
-  &__features{
-      list-style: none;
-      text-align: center;
-      color: rgb(138, 138, 138);
-      margin: 0;
-      padding: 0;
-      height: 390px;
+    &__features{
+    background: rgba(8, 2, 40, 0.6);
+    backdrop-filter: blur(30px);
+    }
 
-      li{
-        margin: 0 35px;
-        padding: 20px 15px;
-        width: 200px;
-      }
+  &__features-list {
+    list-style: none;
+    color: #FFFFFF;
+    margin: 0;
+    padding: 0;
+    height: 320px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    li {
+      padding: 24px 24px 4px;
+    }
   }
 
-  &__add-to-cart{
+  &__feat-detail{
+    position: absolute;
+    padding-left: 22px;
+  }
+
+
+  &__common-feat{
+    padding-top: 24px;
+    padding-left: 59.5px;
+    padding-right: 62.5px;
+    padding-bottom: 24px;
+    font-family: 'Titillium Web';
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  &__add-to-cart {
+    font-family: 'Titillium Web';
     background: linear-gradient(92.67deg, #7834F9 0%, #67CFF9 100%);
     border: 0;
-    border-radius: 5px;
-    height: 40px;
-    width: 200px;
+    width: 194px;
+    height: 48px;
     display: block;
-    font-weight: 700;
-    font-size: 15px;
+    font-weight: 600;
+    font-size: 16px;
+    font-style: normal;
+    line-height: 24px;
     text-transform: uppercase;
-    margin: 20px auto 35px;
+    color: #FFFFFF;
+    left: 0px;
+    right: 0px;
+    margin: auto;
   }
 }
