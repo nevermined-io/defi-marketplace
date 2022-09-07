@@ -5,7 +5,7 @@ export const marketplaceUri = process.env.NEXT_PUBLIC_MARKETPLACE_API || 'http:/
 export const gatewayUri = process.env.NEXT_PUBLIC_GATEWAY_URI || 'http://localhost:8030' // next redirections on next.config.js
 export const faucetUri = '/api/faucet' // next redirections on next.config.js
 export const gatewayAddress =
-  process.env.NEXT_PUBLIC_GATEWAY_ADDRESS || '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0'
+  process.env.NEXT_PUBLIC_GATEWAY_ADDRESS || '0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc'
 export const nodeUri = process.env.NEXT_PUBLIC_NODE_URI || 'http://localhost:8545'
 export const secretStoreUri = process.env.NEXT_PUBLIC_SECRET_STORE_URI || 'http://localhost:12001'
 export const artifactsFolder =
