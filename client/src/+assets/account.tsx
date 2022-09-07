@@ -37,9 +37,14 @@ export const Account: NextPage = () => {
       published.map((asset: any) => sdk.assets.resolve(asset._did))
     )
 
-    const downloaded = await loadUserDownloads(sdk, walletAddress)
+    let downloaded = await loadUserDownloads(sdk, walletAddress)
+    downloaded = downloaded.map((asset: any) => asset._did)
+    // removing duplicates
+    downloaded = [...new Set(downloaded)];
+    console.log(JSON.stringify(downloaded))
+
     const downloadedDDO = await Promise.all(
-      downloaded.map(async (asset: any) => await sdk.assets.resolve(asset._did))
+      downloaded.map(async (did: any) => await sdk.assets.resolve(did))
     )
 
     setBookmarks(bookmarksDDO)
