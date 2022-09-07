@@ -10,7 +10,7 @@ import { PricesStep } from './prices'
 import { FilesStep } from './files'
 import { handleAssetFiles, FileType} from './files-handler'
 import { toast } from 'react-toastify';
-import { NFT_TIERS} from 'src/config'
+import { gatewayAddress, NFT_TIERS} from 'src/config'
 
 export const UserPublishMultiStep: NextPage = () => {
   const {
@@ -194,8 +194,7 @@ const onSubmitUserPublish = async() => {
         try {
             await uploadFiles()
             txPopupRef.current?.open()
-
-            publishNFT721({nftAddress: getNftTierAddress(), metadata: generateMetadata()})
+            publishNFT721({nftAddress: getNftTierAddress(), metadata: generateMetadata(), providers: [gatewayAddress]})
             .then((ddo) =>
                 {
                     setResultOk(true)
@@ -213,7 +212,7 @@ const onSubmitUserPublish = async() => {
                     resultPopupRef.current?.open()
                     toast.error(errorAssetMessage)
                 }
-            )             
+            )           
         } catch (error: any ) {
             setAssetErrorMessage(error.message)
             popupRef.current?.open()
