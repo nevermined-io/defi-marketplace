@@ -41,8 +41,6 @@ export const Account: NextPage = () => {
     downloaded = downloaded.map((asset: any) => asset._did)
     // removing duplicates
     downloaded = [...new Set(downloaded)];
-    console.log(JSON.stringify(downloaded))
-
     const downloadedDDO = await Promise.all(
       downloaded.map(async (did: any) => await sdk.assets.resolve(did))
     )
