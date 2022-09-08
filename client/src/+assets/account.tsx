@@ -7,20 +7,22 @@ import { User } from '../context'
 import { Catalog } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
-import { loadUserPublished, loadUserDownloads } from 'src/shared/graphql'
+import { loadUserPublished, loadUserDownloads, getUserSubscription } from 'src/shared/graphql'
 import { Summary } from 'ui/+account/summary'
 import { AssetsList } from './assets-list'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
+import { Subscriptions } from 'ui/+account/subscriptions'
 
 const b = BEM('account', styles)
 export const Account: NextPage = () => {
   const [view, setView] = useState<number>(0)
+  const [purchaseDate, setPurchaseDate] = useState<Date>(undefined)
   const [published, setPublished] = useState<DDO[]>([])
   const [downloaded, setDownloaded] = useState<DDO[]>([])
   const { bookmarks, setBookmarks, getCurrentUserSubscription } = useContext(User)
   const { sdk } = Catalog.useNevermined()
-  const { walletAddress } = MetaMask.useWallet()
+  const { walletAddress, getProvider} = MetaMask.useWallet()
   const subscriptionErrorText = "You don't have any current subscription. Only users with a subscription are allowed to publish"
 
   const loadUserInfo = async () => {
@@ -44,7 +46,13 @@ export const Account: NextPage = () => {
     const downloadedDDO = await Promise.all(
       downloaded.map(async (did: any) => await sdk.assets.resolve(did))
     )
-
+  
+    let subscriptionsEvents = await getUserSubscription(sdk, getProvider(), walletAddress, getCurrentUserSubscription()?.did)
+    subscriptionsEvents = subscriptionsEvents.sort(
+      (event1:any, event2:any) => event2.date.getTime() - event1.date.getTime()
+    )
+    const lastSuscriptionPurchase: Date = subscriptionsEvents?subscriptionsEvents[0]?.date:undefined
+    setPurchaseDate(lastSuscriptionPurchase)
     setBookmarks(bookmarksDDO)
     setPublished(publishedDDO)
     setDownloaded(downloadedDDO)
@@ -55,7 +63,7 @@ export const Account: NextPage = () => {
       return
     }
     loadUserInfo()
-  }, [sdk])
+  }, [sdk, walletAddress])
 
   const publishAsset = () => {
     if (!getCurrentUserSubscription()) {
@@ -84,9 +92,7 @@ export const Account: NextPage = () => {
     } else if (view == 5) {
       return (
         <>    
-        {
-          getCurrentUserSubscription()?<h1>{getCurrentUserSubscription()?.tier}</h1>:<h1>No subscriptions yet</h1>
-        }         
+        <Subscriptions purchaseDate={purchaseDate} currentSubscription={getCurrentUserSubscription()}/>        
         </>
       )
     }
