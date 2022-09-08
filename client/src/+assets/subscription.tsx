@@ -8,7 +8,8 @@ export const Subscription: NextPage = () => {
   const tiers = [
     {
       name: 'Community',
-      price: '$0',
+      price: '0',
+      symbol: 'USDC',
       features: [
         'On-chain normalized data from different protocols and networks',
         'Insights dashboards',
@@ -19,7 +20,8 @@ export const Subscription: NextPage = () => {
     },
     {
       name: 'Analyst',
-      price: '$50',
+      price: '50',
+      symbol: 'USDC',
       features: [
         'Tier 1 + Enriched and aggregated datasets',
         'Advanced dashboards',
@@ -30,7 +32,8 @@ export const Subscription: NextPage = () => {
     },
     {
       name: 'Enterprise',
-      price: '$500',
+      price: '500',
+      symbol: 'USDC',
       features: [
         'Tier 2 + Insights and AI on top of the on-chain data',
         'Full access to insights dashboards',
