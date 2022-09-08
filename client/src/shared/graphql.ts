@@ -141,10 +141,50 @@ export const loadAssetProvenance = async (
 
   useds = Promise.all(
     (await useds).map( async(event) => {
-    const tx = await provider.getBlock(event._blockNumberUpdated.toNumber())
-    return {...event, date: new Date(Number(tx.timestamp) * 1000)}
+    const block = await provider.getBlock(event._blockNumberUpdated.toNumber())
+    return {...event, date: new Date(Number(block.timestamp) * 1000)}
   })
   )
 
   return useds
+}
+
+
+export const getUserSubscription = async (
+  sdk: Nevermined,
+  provider: MetaMask.MetamaskProvider,
+  userAddress: string,
+  subscriptionDid: string
+): Promise<any | undefined> => {
+
+  let subscriptions =  sdk.keeper.conditions.transferNft721Condition.events.getPastEvents({
+    methodName: 'getFulfilleds',
+    eventName: 'Fulfilled',
+    filterSubgraph: {
+      where: {
+          _did: subscriptionDid,
+          _receiver: userAddress
+      }
+    },
+    result: {
+        id: true,
+        _agreementId: true,
+        _did: true,
+        _receiver: true
+    }
+  })
+
+  subscriptions = Promise.all( 
+    (await subscriptions).map( async (event) => {
+      const [txHash, logIndex] = event.id.split('-')
+      const tx = await provider.getTransaction(txHash)
+      const blockNumber = tx.blockNumber
+      if (!blockNumber)
+        return {...event, date: null}
+      const block = await provider.getBlock(blockNumber)
+      return {...event, date: new Date(Number(block.timestamp) * 1000)}
+    })
+  )
+
+  return subscriptions
 }
