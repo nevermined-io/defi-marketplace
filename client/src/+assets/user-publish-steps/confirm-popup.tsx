@@ -1,5 +1,5 @@
 import React from 'react'
-import { BEM, UiText, UiPopup, UiPopupHandlers, UiButton, UiDivider } from '@nevermined-io/styles'
+import { BEM, UiText, UiPopup, UiPopupHandlers, UiButton } from '@nevermined-io/styles'
 import styles from './popup.module.scss'
 
 interface ConfirmPopupProps {
@@ -20,22 +20,21 @@ export const ConfirmPopup: React.FC<ConfirmPopupProps> = ({
   return (
     <>
       <UiPopup ref={popupRef}>
-        <div className={b('confirm')} style={{ height: '480px' }}>
-          <UiDivider />
-          <img src="/assets/nevermined-color.svg" width="73px" />
-          <UiDivider />
-          <UiDivider />
-          <UiText block type="h3" className={b('text')}>
-            {message}
-          </UiText>
-          <UiDivider />
-          <UiDivider />
-          <UiDivider />
-          <div>
-            <UiButton onClick={confirm}>Confirm</UiButton>
-            <UiButton onClick={cancel}>Cancel</UiButton>
+        <div className={b('confirm')}>
+          <div className={b('logo')}>
+            <img src="/assets/nevermined-color.svg" />
           </div>
-          <UiDivider type="l" />
+          <div className={b('confirm-text')}>
+            <UiText block type="h3" className={b('text')}>
+              {message}
+            </UiText>
+          </div>
+          <div>
+            <div className={b('buttons')}>
+              <UiButton onClick={confirm}>Confirm</UiButton>
+              <UiButton onClick={cancel}>Cancel</UiButton>
+            </div>
+          </div>
         </div>
       </UiPopup>
     </>
