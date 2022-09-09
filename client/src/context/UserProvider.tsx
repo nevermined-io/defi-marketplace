@@ -70,18 +70,21 @@ const UserProvider = (props: UserProviderProps) => {
                 {
                     tier: tier3!.name as SubscriptionTiers,
                     address: tier3!.address,
+                    did: tier3!.did,
                     access: true,
                     current: true
                 },
                 {
                     tier: tier2!.name as SubscriptionTiers,
                     address: tier2!.address,
+                    did: tier2!.did,
                     access: true,
                     current: false
                 },
                 {
                     tier: tier1!.name as SubscriptionTiers,
                     address: tier1!.address,
+                    did: tier1!.did,
                     access: true,
                     current: false
                 }
@@ -94,18 +97,21 @@ const UserProvider = (props: UserProviderProps) => {
                 {
                     tier: tier3!.name as SubscriptionTiers,
                     address: tier3!.address,
+                    did: tier3!.did,
                     access: false,
                     current: false
                 },
                 {
                     tier: tier2!.name as SubscriptionTiers,
                     address: tier2!.address,
+                    did: tier2!.did,
                     access: true,
                     current: true
                 },
                 {
                     tier: tier1!.name as SubscriptionTiers,
                     address: tier1!.address,
+                    did: tier1!.did,
                     access: true,
                     current: false
                 }
@@ -118,18 +124,21 @@ const UserProvider = (props: UserProviderProps) => {
                 {
                     tier: tier3!.name as SubscriptionTiers,
                     address: tier3!.address,
+                    did: tier3!.did,
                     access: false,
                     current: false
                 },
                 {
                     tier: tier2!.name as SubscriptionTiers,
                     address: tier2!.address,
+                    did: tier2!.did,
                     access: false,
                     current: false
                 },
                 {
                     tier: tier1!.name as SubscriptionTiers,
                     address: tier1!.address,
+                    did: tier1!.did,
                     access: true,
                     current: true
                 }

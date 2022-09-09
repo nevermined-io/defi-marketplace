@@ -63,6 +63,7 @@ export enum SubscriptionTiers {
 
 export interface UserSubscription {
   tier: SubscriptionTiers
+  did: string
   address: string
   access: boolean
   current: boolean
