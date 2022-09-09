@@ -37,6 +37,22 @@
     }
   }
 
+  &__card {
+    height: 250px;
+    width: 396px;
+    left: 419px;
+    top: 369.000244140625px;
+    text-align: center;
+    border-radius: 0px;
+    padding: 32px 8px 32px 8px;
+    background: linear-gradient(180deg, #7834F9 21.35%, #60CCF0 100%);
+  }
+
+  &__card-icon{
+    padding-top: 10px;
+    padding-bottom: 20px;
+  }
+
   &__heading {
     margin-bottom: 32px;
   }
@@ -102,8 +118,26 @@
     }
   }
 
-  &__summary-number{
-    margin-left: 160px;
+  &__summary {
+    padding-bottom: 32px;
+  }
+
+  &__summary-number {
+    font-family: Titillium Web;
+    font-size: 80px;
+    font-weight: 400;
+    line-height: 90px;
+    letter-spacing: -0.03em;
+    text-align: left;
+  }
+
+  &__card-name {
+    font-family: Titillium Web;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 48px;
+    letter-spacing: -0.04em;
+    color: #FFFFFF;
   }
 
 }

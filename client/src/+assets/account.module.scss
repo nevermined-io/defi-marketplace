@@ -6,10 +6,35 @@
   &__row {
     display: flex;
     flex-direction: row;
+    padding-top: 85px;
   }
 
   &__columnleft {
     width: 20%;
+  }
+
+  &__header{
+    padding-top: 169px;
+  }
+
+  &__user-name{
+    height: 48px;
+  }
+
+  &__account-title{
+    padding-top: 18px;
+  }
+
+  &__user-name {
+    font-family: Titillium Web;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 49px;
+    letter-spacing: -0.04em;
+    text-align: left;
+    text-transform: uppercase;
+    position: relative;
+    top: 12px;
   }
 
   &__pointer {
