@@ -47,7 +47,11 @@ export function Summary({ published, bookmarks, downloaded, currentSubscription 
               Your Subscription
             </UiText>
             {
+<<<<<<< HEAD
               currentSubscription ? <UiText className={b('summary-number')}>{currentSubscription}</UiText> : <UiText className={b('summary-number')}>0</UiText>
+=======
+              currentSubscription?<UiText className={b('summary-number')}>{currentSubscription}</UiText>:<UiText className={b('summary-number')}>No Subscription</UiText>
+>>>>>>> 23bce5dea60a8f26a1fd4bbf440d6aee1afba4cd
             }
           </UiLayout>
         </UiLayout>
