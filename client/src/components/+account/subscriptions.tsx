@@ -2,14 +2,20 @@ import styles from './account.module.scss'
 import React from 'react'
 import { BEM, UiText, UiLayout } from '@nevermined-io/styles'
 import { UserSubscription } from '../../shared/constants'
+import {SUBSCRIPTION_DURATION_IN_SEGS} from '../../config'
 
 interface SubscriptionsProps {
   purchaseDate: Date
-  currentSubscription: UserSubscription
+  currentSubscription: UserSubscription | undefined
 }
 
 const b = BEM('account-modules', styles)
 export function Subscriptions({ purchaseDate, currentSubscription }: SubscriptionsProps) {
+
+  let endOfSubscription: Date = new Date(purchaseDate)
+  endOfSubscription.setSeconds(endOfSubscription.getSeconds() + SUBSCRIPTION_DURATION_IN_SEGS)
+
+
   return (
     <>
       <UiLayout type="container">
@@ -22,10 +28,11 @@ export function Subscriptions({ purchaseDate, currentSubscription }: Subscriptio
             { 
               currentSubscription?
               <UiLayout>
-                <UiText className={b('summary-number')}>{currentSubscription?.tier}</UiText>
-                <UiText className={b('summary-number')}>{purchaseDate.toISOString().replace(/\.[0-9]{3}/, '')}</UiText>
+                <UiText>{currentSubscription?.tier} </UiText>
+                <UiText> - Started: {purchaseDate.toLocaleDateString()}</UiText>
+                <UiText>-  Ends: {endOfSubscription.toLocaleDateString()}</UiText>
               </UiLayout>
-              :<UiText className={b('summary-number')}>No Subscription</UiText>
+              :<UiText>No Subscription</UiText>
             }
           </UiLayout>
         </UiLayout>
