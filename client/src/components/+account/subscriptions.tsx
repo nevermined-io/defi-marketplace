@@ -12,8 +12,11 @@ interface SubscriptionsProps {
 const b = BEM('account-modules', styles)
 export function Subscriptions({ purchaseDate, currentSubscription }: SubscriptionsProps) {
 
-  let endOfSubscription: Date = new Date(purchaseDate)
-  endOfSubscription.setSeconds(endOfSubscription.getSeconds() + SUBSCRIPTION_DURATION_IN_SEGS)
+  let endOfSubscription: Date = new Date()
+  if (currentSubscription) {
+    endOfSubscription =new Date(purchaseDate)
+    endOfSubscription.setSeconds(endOfSubscription.getSeconds() + SUBSCRIPTION_DURATION_IN_SEGS)
+  }
 
 
   return (
