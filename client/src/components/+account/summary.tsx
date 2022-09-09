@@ -17,13 +17,15 @@ export function Summary({ published, bookmarks, downloaded, currentSubscription 
       <UiLayout type="container">
         <UiLayout className={b('summary')}>
           <UiLayout type="container" className={b('card')}>
-            <UiText type="h3" wrapper="h3">
+            <img className={b('card-icon')} src="/assets/subscription-icon.svg" />
+            <UiText className={b('card-name')} type="h3" wrapper="h3">
               Your bookmarks
             </UiText>
             <UiText className={b('summary-number')}>{bookmarks.length}</UiText>
           </UiLayout>
           <UiLayout type="container" className={b('card')}>
-            <UiText type="h3" wrapper="h3">
+            <img className={b('card-icon')} src="/assets/published-icon.svg" />
+            <UiText className={b('card-name')} type="h3" wrapper="h3">
               Your published assets
             </UiText>
             <UiText className={b('summary-number')}>{published.length}</UiText>
@@ -33,17 +35,19 @@ export function Summary({ published, bookmarks, downloaded, currentSubscription 
       <UiLayout type="container">
         <UiLayout className={b('summary')}>
           <UiLayout type="container" className={b('card')}>
-            <UiText type="h3" wrapper="h3">
+            <img className={b('card-icon')} src="/assets/purchase-icon.svg" />
+            <UiText className={b('card-name')} type="h3" wrapper="h3">
               Your Downloads
             </UiText>
             <UiText className={b('summary-number')}>{downloaded.length}</UiText>
           </UiLayout>
           <UiLayout type="container" className={b('card')}>
-            <UiText type="h3" wrapper="h3">
+            <img className={b('card-icon')} src="/assets/subscription-icon.svg" />
+            <UiText className={b('card-name')} type="h3" wrapper="h3">
               Your Subscription
             </UiText>
-            { 
-              currentSubscription?<UiText className={b('summary-number')}>{currentSubscription}</UiText>:<UiText className={b('summary-number')}>0</UiText>
+            {
+              currentSubscription ? <UiText className={b('summary-number')}>{currentSubscription}</UiText> : <UiText className={b('summary-number')}>0</UiText>
             }
           </UiLayout>
         </UiLayout>

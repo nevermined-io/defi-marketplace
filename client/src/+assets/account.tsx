@@ -67,7 +67,12 @@ export const Account: NextPage = () => {
 
   const renderContent = () => {
     if (view == 0) {
-      return <Summary published={published} bookmarks={bookmarks} downloaded={downloaded} currentSubscription= {getCurrentUserSubscription()?.tier || ''}/>
+      return <Summary
+        published={published}
+        bookmarks={bookmarks}
+        downloaded={downloaded}
+        currentSubscription={getCurrentUserSubscription()?.tier || ''}
+      />
     } else if (view == 1) {
       return <UserProfile />
     } else if (view == 2) {
@@ -75,7 +80,7 @@ export const Account: NextPage = () => {
     } else if (view == 3) {
       return (
         <>
-          <UiButton onClick={() =>publishAsset()}>Publish new asset</UiButton>
+          <UiButton onClick={() => publishAsset()}>Publish new asset</UiButton>
           <AssetsList assets={published} disableBatchSelect={true} />
         </>
       )
@@ -83,10 +88,13 @@ export const Account: NextPage = () => {
       return <AssetsList assets={downloaded} disableBatchSelect={true} />
     } else if (view == 5) {
       return (
-        <>    
-        {
-          getCurrentUserSubscription()?<h1>{getCurrentUserSubscription()?.tier}</h1>:<h1>No subscriptions yet</h1>
-        }         
+        <>
+          {
+            getCurrentUserSubscription()
+              ? <h1>{getCurrentUserSubscription()?.tier}</h1>
+              :
+              <h1>No subscriptions yet</h1>
+          }
         </>
       )
     }
@@ -95,11 +103,27 @@ export const Account: NextPage = () => {
   return (
     <>
       <UiLayout type="container">
-        <UiText wrapper="h1" type="h1" variants={['heading']}>
-          Your Account
-        </UiText>
+        <div className={b('header')}>
+          <div className={b('user-name')}>
+            Welcome back
+          </div>
+          <div className={b('account-title')}>
+            <UiText block type="h2" className={b('text')}>
+              Your account
+            </UiText>
+          </div>
+        </div>
         <div className={b('row')}>
           <div className={b('columnleft')}>
+            <UiText
+              className={b('pointer', view === 0 ? ['active'] : [])}
+              type="link-caps"
+              variants={['detail']}
+              onClick={() => setView(0)}
+            >
+              Dashboard
+            </UiText>
+            <UiDivider />
             <UiText
               className={b('pointer', view === 1 ? ['active'] : [])}
               type="link-caps"
