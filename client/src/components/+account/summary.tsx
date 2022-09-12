@@ -47,7 +47,7 @@ export function Summary({ published, bookmarks, downloaded, currentSubscription 
               Your Subscription
             </UiText>
             {
-              currentSubscription?currentSubscription: "No Subscription"
+              currentSubscription || "No Subscription"
             }
           </UiLayout>
         </UiLayout>
