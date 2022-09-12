@@ -1,6 +1,5 @@
-import styles from './account.module.scss'
 import React from 'react'
-import { BEM, UiText, UiLayout } from '@nevermined-io/styles'
+import { UiText, UiLayout } from '@nevermined-io/styles'
 import { UserSubscription } from '../../shared/constants'
 import {SUBSCRIPTION_DURATION_IN_SEGS} from '../../config'
 
