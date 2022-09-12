@@ -17,7 +17,7 @@ import { Subscriptions } from 'ui/+account/subscriptions'
 const b = BEM('account', styles)
 export const Account: NextPage = () => {
   const [view, setView] = useState<number>(0)
-  const [purchaseDate, setPurchaseDate] = useState<Date>(undefined)
+  const [purchaseDate, setPurchaseDate] = useState<Date>()
   const [published, setPublished] = useState<DDO[]>([])
   const [downloaded, setDownloaded] = useState<DDO[]>([])
   const { bookmarks, setBookmarks, getCurrentUserSubscription } = useContext(User)
