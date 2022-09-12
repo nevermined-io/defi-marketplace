@@ -9,7 +9,6 @@ interface SubscriptionsProps {
   currentSubscription: UserSubscription | undefined
 }
 
-const b = BEM('account-modules', styles)
 export function Subscriptions({ purchaseDate, currentSubscription }: SubscriptionsProps) {
 
   let endOfSubscription: Date = new Date()
