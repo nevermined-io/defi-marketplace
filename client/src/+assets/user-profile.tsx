@@ -57,10 +57,10 @@ export const UserProfile: NextPage = () => {
     <UiLayout type="container">
       <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef} />
       <UiLayout type="container">
-        <UiText wrapper="h1" type="h1" variants={['heading']}>
+        <UiText wrapper="h1" type="h3" variants={['heading']}>
           User Profile account
         </UiText>
-        <UiText type="h2" wrapper="h2">
+        <UiText type="h3" wrapper="h3" className={b('subheader')}>
           Update your profile
         </UiText>
       </UiLayout>
@@ -68,6 +68,8 @@ export const UserProfile: NextPage = () => {
       <UiLayout type="container">
         <div className={b('profile-horizontal-line')} />
         <UiForm>
+        <div className={b('row')}>
+        <div className={b('columnleft')}>
           <UiFormGroup orientation={Orientation.Vertical}>
             <UiFormInput
               className={b('profile-form-input')}
@@ -87,6 +89,8 @@ export const UserProfile: NextPage = () => {
               placeholder="Type your name"
             />
           </UiFormGroup>
+          </div>
+        <div className={b('columnright')}>
           <UiFormGroup orientation={Orientation.Vertical}>
             <UiFormInput
               className={b('profile-form-input')}
@@ -112,6 +116,8 @@ export const UserProfile: NextPage = () => {
               }
             />
           </UiFormGroup>
+          </div>
+          </div>
           <div className={b('profile-submit-container')}>
             <div className={b('profile-submit-container', ['updated-message'])}>
               {isUpdated ? (
@@ -127,20 +133,16 @@ export const UserProfile: NextPage = () => {
         </UiForm>
       </UiLayout>
       <UiLayout type="container" className={b('profile-addresses')}>
-        <UiText type="h2" wrapper="h2">
-          Addresses
-        </UiText>
-        <div className={b('profile-horizontal-line')} />
         <UiForm>
           <div>
-            <UiText type="h3">Current Addresses</UiText>
+            <UiText type="h3" className={b('addresses-header')} >Current Addresses</UiText>
           </div>
           <div>
-            <UiText variants={['detail']}>
+            <UiText variants={['detail']} className={b('addresses-detail')}>
               Change your wallet account to add more address to your profile
             </UiText>
           </div>
-
+        <div className={b('profile-horizontal-line')} />
           <div className={b('profile-current-addresses-container')}>
             {addresses.map((a) => (
               <div key={a} className={b('profile-current-address')}>
