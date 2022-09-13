@@ -1,55 +1,92 @@
 @import '~@nevermined-io/styles/lib/cjs/styles/index.scss';
 
 .user-profile {
-    &__profile-horizontal-line {
-        border-top: 2px solid #2B465C;
-        padding-top: 30px;
+  &__profile-horizontal-line {
+    border-top: 2px solid #2B465C;
+    padding-top: 30px;
+  }
+
+  &__subheader {
+    color: #fff;
+  }
+
+  &__row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__columnleft {
+    width: 50%;
+  }
+
+  &__columnright {
+    width: 50%;
+    margin-left: 16px;
+  }
+
+  &__profile-submit-container {
+    display: flex;
+    width: 100%;
+    margin-top: 20px;
+
+    &--submit {
+      text-align: right;
+      flex-basis: 20%;
+      justify-content: flex-end;
     }
 
-    &__profile-submit-container {
-        display: flex;
-        width: 100%;
-        margin-top: 20px;
-
-        &--submit {
-            text-align: right;
-            flex-basis: 20%;
-            justify-content: flex-end;
-        }
-
-        &--updated-message {
-            flex-basis: 80%;
-            justify-content: flex-start;
-        }
-
-        button{
-          width: 200px;
-        }
+    &--updated-message {
+      flex-basis: 80%;
+      justify-content: flex-start;
     }
 
-    &__profile-form-input {
-        margin-bottom: 20px;
+    button {
+      width: 200px;
     }
+  }
 
-    &__profile-addresses {
-        margin-top: 40px;
-    }
+  &__profile-form-input {
+    margin-bottom: 20px;
 
-    &__profile-add-address {
-        margin-top: 20px;
+    label {
+      color: #fff;
+      font-family: Titillium Web;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 32px;
+      letter-spacing: 0em;
+      text-align: left;
     }
+  }
 
-    &__profile-current-addresses-container {
-        display: flex;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-    }
+  &__profile-addresses {
+    margin-top: 40px;
+  }
 
-    &__profile-current-address {
-        border: 2px solid gc(gM);
-        flex-basis: 40%;
-        text-align: center;
-        margin: 30px 50px 0 0;
-        padding: 20px;
-    }
+  &__addresses-detail {
+    color: #67CFF9;
+  }
+
+  &__addresses-header {
+    color: #fff;
+  }
+
+  &__profile-add-address {
+    margin-top: 20px;
+  }
+
+  &__profile-current-addresses-container {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  &__profile-current-address {
+    border: 2px solid gc(gM);
+    flex-basis: 40%;
+    text-align: center;
+    margin: 20px 20px 0 0;
+    padding: 20px;
+    width: 409px;
+  }
 }
