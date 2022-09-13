@@ -4,7 +4,7 @@ import {SUBSCRIPTION_DURATION_IN_SEGS} from '../../config'
 import React, { useEffect, useState } from 'react'
 
 interface SubscriptionsProps {
-  purchaseDate: Date | undefined
+  purchaseDate: Date | undefined
   currentSubscription: UserSubscription | undefined
 }
 
@@ -20,7 +20,7 @@ export function Subscriptions({ purchaseDate, currentSubscription }: Subscriptio
     }
 
   }
-  
+
   useEffect(() => {
     calculateEndSubscription()
   }, [])
