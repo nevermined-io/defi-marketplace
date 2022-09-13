@@ -20,7 +20,7 @@ export const Account: NextPage = () => {
   const [purchaseDate, setPurchaseDate] = useState<Date>()
   const [published, setPublished] = useState<DDO[]>([])
   const [downloaded, setDownloaded] = useState<DDO[]>([])
-  const { bookmarks, setBookmarks, getCurrentUserSubscription } = useContext(User)
+  const { bookmarks, setBookmarks, getCurrentUserSubscription, userSubscriptions } = useContext(User)
   const { sdk } = Catalog.useNevermined()
   const { walletAddress, getProvider } = MetaMask.useWallet()
   const subscriptionErrorText = "You don't have any current subscription. Only users with a subscription are allowed to publish"
@@ -46,6 +46,13 @@ export const Account: NextPage = () => {
     const downloadedDDO = await Promise.all(
       downloaded.map(async (did: any) => await sdk.assets.resolve(did))
     )
+    
+    setBookmarks(bookmarksDDO)
+    setPublished(publishedDDO)
+    setDownloaded(downloadedDDO)
+  }
+
+  const loadSubscription = async () => {
 
     let subscriptionsEvents = await getUserSubscription(sdk, getProvider(), walletAddress, getCurrentUserSubscription()?.did)
     subscriptionsEvents = subscriptionsEvents.sort(
@@ -53,9 +60,6 @@ export const Account: NextPage = () => {
     )
     const lastSuscriptionPurchase: Date = subscriptionsEvents ? subscriptionsEvents[0]?.date : undefined
     setPurchaseDate(lastSuscriptionPurchase)
-    setBookmarks(bookmarksDDO)
-    setPublished(publishedDDO)
-    setDownloaded(downloadedDDO)
   }
 
   useEffect(() => {
@@ -64,6 +68,13 @@ export const Account: NextPage = () => {
     }
     loadUserInfo()
   }, [sdk, walletAddress])
+
+  useEffect(() => {
+    if (!sdk?.profiles) {
+      return
+    }
+    loadSubscription()
+  }, [userSubscriptions])
 
   const publishAsset = () => {
     if (!getCurrentUserSubscription()) {

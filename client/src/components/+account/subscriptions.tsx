@@ -1,20 +1,29 @@
-import React from 'react'
 import { UiText, UiLayout } from '@nevermined-io/styles'
 import { UserSubscription } from '../../shared/constants'
 import {SUBSCRIPTION_DURATION_IN_SEGS} from '../../config'
+import React, { useEffect, useState } from 'react'
 
 interface SubscriptionsProps {
-  purchaseDate: Date
+  purchaseDate: Date | undefined
   currentSubscription: UserSubscription | undefined
 }
 
 export function Subscriptions({ purchaseDate, currentSubscription }: SubscriptionsProps) {
 
-  let endOfSubscription: Date = new Date()
-  if (currentSubscription) {
-    endOfSubscription =new Date(purchaseDate)
-    endOfSubscription.setSeconds(endOfSubscription.getSeconds() + SUBSCRIPTION_DURATION_IN_SEGS)
+  const [endOfSubscription, seteEndOfSubscription] = useState<Date>()
+
+  const calculateEndSubscription = async () => {
+    if (currentSubscription && purchaseDate) {
+      const endSubscription =new Date(purchaseDate)
+      endSubscription.setSeconds(endSubscription.getSeconds() + SUBSCRIPTION_DURATION_IN_SEGS)
+      seteEndOfSubscription(endSubscription)
+    }
+
   }
+  
+  useEffect(() => {
+    calculateEndSubscription()
+  }, [])
 
 
   return (
@@ -27,11 +36,11 @@ export function Subscriptions({ purchaseDate, currentSubscription }: Subscriptio
               Your Subscription
             </UiText>
             { 
-              currentSubscription?
+              currentSubscription && purchaseDate?
               <UiLayout>
                 <UiText>{currentSubscription?.tier} </UiText>
-                <UiText> - Started: {purchaseDate.toLocaleDateString()}</UiText>
-                <UiText>-  Ends: {endOfSubscription.toLocaleDateString()}</UiText>
+                <UiText> - Started: {purchaseDate?.toLocaleDateString()}</UiText>
+                <UiText>-  Ends: {endOfSubscription?.toLocaleDateString()}</UiText>
               </UiLayout>
               :<UiText>No Subscription</UiText>
             }
