@@ -137,11 +137,11 @@ export const AssetDetails: NextPage = () => {
       }
     }
 
-    window.ethereum.on('chainChanged', checkNetworkAndSetState)
+    window?.ethereum?.on('chainChanged', checkNetworkAndSetState)
 
     //remove the event
     return () => {
-      window.ethereum.removeListener('chainChanged', checkNetworkAndSetState)
+      window?.ethereum?.removeListener('chainChanged', checkNetworkAndSetState)
     }
   }, [])
 
@@ -153,7 +153,7 @@ export const AssetDetails: NextPage = () => {
 
     (async () => {
       try {
-        const chainId = await window.ethereum.request({ method: 'eth_chainId' })
+        const chainId = await window?.ethereum?.request({ method: 'eth_chainId' })
         if (chainId !== correctNetworkId) {
           setIsCorrectNetwork(false)
         }
@@ -391,7 +391,7 @@ export const AssetDetails: NextPage = () => {
                   //addtoCart()
                 }}
               >
-                {isConnected ? 'Purchase' : 'Connect Wallet'}
+                {isConnected ? 'Download' : 'Connect Wallet'}
               </UiButton>
             )}
           </div>
