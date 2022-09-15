@@ -1,6 +1,7 @@
 import React, { useRef, Fragment, useContext, useEffect, useState } from 'react'
 import { DDO, Profile } from '@nevermined-io/nevermined-sdk-js'
 import Link from 'next/link'
+import LogoIcon from '../../public/assets/nevermined.svg'
 
 import {
   BEM,
@@ -12,13 +13,18 @@ import {
   NotificationPopup
 } from '@nevermined-io/styles'
 import { XuiTokenName, XuiTokenPrice } from 'ui'
-import { toDate, getDefiInfo, getDdoTokenAddress, getDdoSubscription, DDOSubscription} from '../shared'
+import {
+  toDate,
+  getDefiInfo,
+  getDdoTokenAddress,
+  getDdoSubscription,
+  DDOSubscription
+} from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
 import { Catalog } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
-import {XuiDownloadAsset} from '../components/+download-asset/download-asset'
-import { toast } from 'react-toastify'
+import { XuiDownloadAsset } from '../components/+download-asset/download-asset'
 
 interface AssetsListProps {
   assets: DDO[]
@@ -26,6 +32,7 @@ interface AssetsListProps {
 }
 
 const b = BEM('assets-list', styles)
+
 export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   const {
     selectedNetworks,
@@ -42,7 +49,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   const [errorMessage, setErrorMessage] = useState('')
   const [batchActive, setBatchActive] = useState<boolean>(false)
   const [batchSelected, setBatchSelected] = useState<string[]>([])
-  const [assetDid, setAssetDid] = useState<string>("")
+  const [assetDid, setAssetDid] = useState<string>('')
   const popupRef = useRef<UiPopupHandlers>()
   const downloadPopupRef = useRef<UiPopupHandlers>()
 
@@ -61,15 +68,14 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   }
 
   const checkAuth = async () => {
-    
-    let auth = true;
+    let auth = true
     if (!account.isTokenValid()) {
       auth = false
       setErrorMessage(
         'Your login is expired. Please first sign with your wallet and after try again'
       )
       popupRef.current?.open()
-      await account.generateToken() 
+      await account.generateToken()
       return auth
     }
 
@@ -77,15 +83,14 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   }
 
   const onAddBookmark = async (did: string, description: string) => {
-
-    if (!walletAddress){
-      toast.error("Please connect your wallet.")
+    if (!walletAddress) {
+      toast.error('Please connect your wallet.')
       return
     }
-    
+
     try {
       const wasAuth = await checkAuth()
-      if(!wasAuth) return
+      if (!wasAuth) return
       const bookmark = await sdk.bookmarks.create({
         did,
         userId: userProfile.userId,
@@ -113,7 +118,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
 
         if (bookmark?.id) {
           const wasAuth = await checkAuth()
-          if(!wasAuth) return wasAuth
+          if (!wasAuth) return wasAuth
           await sdk.bookmarks.deleteOneById(bookmark.id)
           setBookmarks(bookmarks.filter((item) => item.id !== bookmarkDDO.id))
         }
@@ -130,25 +135,21 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
     setBatchSelected(batchSelected.filter((did) => !didsSet.has(did)))
   }
 
-  const checkAssetInUserSubscription = (subscription:DDOSubscription) => {
-    const subs = userSubscriptions.find(s => s.tier === subscription.tier.toString() && s.address === subscription.address)
-    if (subs?.access){
+  const checkAssetInUserSubscription = (subscription: DDOSubscription) => {
+    const subs = userSubscriptions.find(
+      (s) => s.tier === subscription.tier.toString() && s.address === subscription.address
+    )
+    if (subs?.access) {
       return true
     }
     return false
   }
 
-  type AssetInfo = {did:string, subscription:DDOSubscription}
+  type AssetInfo = { did: string; subscription: DDOSubscription }
 
-  const downloadAsset = async(assetInfo: AssetInfo) => {
-
-    if (!walletAddress){
-      toast.error("Please connect your wallet.")
-      return
-    }
-
-    if (!checkAssetInUserSubscription(assetInfo.subscription)){
-      setErrorMessage("You can't download this Asset with your current subscription")    
+  const downloadAsset = async (assetInfo: AssetInfo) => {
+    if (!checkAssetInUserSubscription(assetInfo.subscription)) {
+      setErrorMessage("You can't download this Asset with your current subscription")
       popupRef.current?.open()
       return
     }
@@ -161,12 +162,8 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
     if (!sdk?.profiles) {
       return
     }
-  
-    (async () => {
 
-      if (!walletAddress)
-        return
-
+    ;(async () => {
       const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
       if (!userProfile?.userId) {
         return
@@ -185,10 +182,8 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
 
   return (
     <div className={b()}>
-
-      <XuiDownloadAsset popupRef={downloadPopupRef} assetDid={assetDid}/>
+      <XuiDownloadAsset popupRef={downloadPopupRef} assetDid={assetDid} />
       <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef} />
-
       {disableBatchSelect ? (
         <></>
       ) : (
@@ -235,64 +230,75 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                   Add to basket
                 </div>
               </Fragment>
-            ) : null 
-                /* (
-                  TODO - How to handle multiple selection
+            ) : (
               <div className={b('batch-select-inactive')} onClick={() => setBatchActive(true)}>
                 Batch Select
               </div>
-              )*/     
-            }
+            )}
           </div>
         </div>
       )}
       <UiLayout className={b('asset', ['asset-row-header'])}>
-        <UiText type="caps" className={b('asset', ['indexer'])} variants={['detail']}>
+        {batchActive && (
+          <UiText type="caps" className={b('info', ['checkbox'])} variants={['detail']} />
+        )}
+        <UiText type="caps" className={b('info', ['indexer'])} variants={['detail']}>
           indexer
         </UiText>
         <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
           category
         </UiText>
         <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
+          type
+        </UiText>
+        <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
           network
         </UiText>
         <UiText type="caps" className={b('info', ['price'])} variants={['detail']}>
-          price
+          subscription
         </UiText>
       </UiLayout>
       <UiDivider />
       {assets
         .map((asset) => ({ asset, metadata: asset.findServiceByType('metadata').attributes }))
-        .map((data) => ({ ...data, defi: getDefiInfo(data.metadata), subscription: getDdoSubscription(data.asset) }))
-        .map(({ asset, metadata, defi, subscription }, i) => (
-          <UiLayout key={`asset-${asset.id}-${i}`} className={b('asset')}>
-            <div className={b(`${batchActive ? 'checkbox' : 'checkbox--hidden'}`)}>
-              {batchSelected.includes(asset.id) ? (
-                <img
-                  onClick={() => removeFromBatchSelected([asset.id])}
-                  src={'assets/checked_box.svg'}
-                  width="20px"
-                />
-              ) : (
-                <img
-                  onClick={() => addToBatchSelected([asset.id])}
-                  src={'assets/unchecked_box.svg'}
-                  width="20px"
-                />
-              )}
-            </div>
-            <div className={`${b('asset-title')}`}>
-              <Link href={`/asset/${asset.id}`}>
-                <UiText className={`pointer`} wrapper="h4" type="h4">
-                  {metadata.main.name} - {subscription.tier?.toString()}
-                </UiText>
-              </Link>
-              <UiText className={b('asset-date')} type="small" variants={['detail']}>
-                {toDate(metadata.main.datePublished as string).replace(/\//g, '.')}
-              </UiText>
-            </div>
-            {defi?.category && defi?.network && (
-              <>
+        .map((data) => ({
+          ...data,
+          defi: getDefiInfo(data.metadata),
+          subscription: getDdoSubscription(data.asset)
+        }))
+        .map(({ asset, metadata, defi, subscription }, i) => {
+          const isBookmarked = bookmarks.some((bookmark) => bookmark.id === asset.id)
+
+          return (
+            <UiLayout key={`asset-${asset.id}-${i}`} className={b('asset')}>
+              <div className={b(`${batchActive ? 'checkbox' : 'checkbox--hidden'}`)}>
+                {batchSelected.includes(asset.id) ? (
+                  <img
+                    onClick={() => removeFromBatchSelected([asset.id])}
+                    src={'assets/checked_box.svg'}
+                    width="20px"
+                  />
+                ) : (
+                  <img
+                    onClick={() => addToBatchSelected([asset.id])}
+                    src={'assets/unchecked_box.svg'}
+                    width="20px"
+                  />
+                )}
+              </div>
+              <div className={`${b('asset', ['indexer'])}`}>
+                <div className={`${b('asset-title')}`}>
+                  <Link href={`/asset/${asset.id}`}>
+                    <UiText className={`pointer`} wrapper="h4" type="h4">
+                      {metadata.main.name} - {subscription.tier?.toString()}
+                    </UiText>
+                  </Link>
+                  <UiText className={b('asset-date')} type="small" variants={['detail']}>
+                    {toDate(metadata.main.datePublished as string).replace(/\//g, '.')}
+                  </UiText>
+                </div>
+              </div>
+              {defi?.category ? (
                 <UiLayout
                   className={b('info')}
                   onClick={() =>
@@ -303,11 +309,20 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                     )
                   }
                 >
-                  <UiIcon className={b('info-icon')} icon="folder" color="secondary" />
-                  <UiText variants={['secondary']}>{defi.category}</UiText>
-                  <UiText variants={['detail']}>&nbsp;&ndash;&nbsp;</UiText>
-                  <UiText variants={['secondary']}>{defi.subcategory}</UiText>
+                  <div className={b('category-row')}>
+                    <UiIcon className={b('info-icon')} icon="folder" color="secondary" />
+                    <UiText variants={['secondary']}>{defi.category}</UiText>
+                    <UiText className={b('dash')} variants={['detail']}>
+                      &ndash;
+                    </UiText>
+                    <UiText variants={['secondary']}>{defi.subcategory}</UiText>
+                  </div>
                 </UiLayout>
+              ) : (
+                <UiLayout className={b('info')}></UiLayout>
+              )}
+              <UiLayout className={b('info')}></UiLayout>
+              {defi?.network ? (
                 <UiLayout
                   className={b('info')}
                   onClick={() =>
@@ -322,63 +337,211 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                     <></>
                   ) : (
                     <img
+                      className={b('icon', ['clickable', 'network'])}
                       alt="network"
                       src={`/assets/logos/${defi.network.toLowerCase()}.svg`}
-                      style={{ cursor: 'pointer', paddingRight: '10px' }}
                       width="25"
                     />
                   )}
-
                   <UiText variants={['secondary']}>{defi.network}</UiText>
                 </UiLayout>
-              </>
-            )}
-            <UiLayout className={b('info', ['price'])}>
-              <UiIcon className={b('info-icon')} icon="tag" color="secondary" />
-              <UiText variants={['secondary']}>
-                <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice>{' '}
-                <UiText variants={['detail']}>
-                  <XuiTokenName address={getDdoTokenAddress(asset)?.toString()} />
-                </UiText>
-              </UiText>
+              ) : (
+                <UiLayout className={b('info')}></UiLayout>
+              )}
+              <UiLayout className={b('info', ['subscription'])}>
+                <div className={b('subscription-border')} />
+                <div className={b('badge', ['inactive'])}>
+                  <LogoIcon className={b('badge-logo')} />
+                  Community
+                </div>
+                <img
+                  className={b('icon', ['clickable'])}
+                  alt="download"
+                  onClick={() => {
+                    downloadAsset({ did: asset.id, subscription: subscription })
+                  }}
+                  width="24px"
+                  src="assets/download_icon.svg"
+                />
+              </UiLayout>
+              <div className={b('bookmark-col')}>
+                <div
+                  className={b('bookmark')}
+                  onClick={() =>
+                    isBookmarked ? onRemoveBookmark(asset.id) : onAddBookmark(asset.id, '')
+                  }
+                >
+                  {isBookmarked ? (
+                    <div className={b('bookmark', ['minus'])}>
+                      <div>
+                        - <span className={b('bookmark-text')}>Remove</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className={b('bookmark', ['plus'])}>
+                      <div>
+                        + <span className={b('bookmark-text')}>Add</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </UiLayout>
-            {bookmarks.some((bookmark) => bookmark.id === asset.id) ? (
-              <UiLayout className={b('bookmark')} onClick={() => onRemoveBookmark(asset.id)}>
-                <img
-                  className={b('bookmark', ['cover'])}
-                  alt="network"
-                  src={'/assets/bookmark-marked.svg'}
-                  style={{ cursor: 'pointer' }}
-                  width="25"
-                />
-                <div className={b('bookmark', ['minus'])}>-</div>
-              </UiLayout>
-            ) : (
-              <UiLayout className={b('bookmark')} onClick={() => onAddBookmark(asset.id, '')}>
-                <img
-                  className={b('bookmark', ['cover'])}
-                  alt="network"
-                  src={'/assets/bookmark.svg'}
-                  style={{ cursor: 'pointer' }}
-                  width="25"
-                />
-                <div className={b('bookmark', ['plus'])}>+</div>
-              </UiLayout>
-            )}
-            <hr style={{ border: '1px solid #2B465C', marginRight: '16px' }} />
-            
-              <img
-                alt="download"
-                onClick={() => {
-                  downloadAsset({did: asset.id, subscription: subscription})
-                }}
-                width="24px"
-                src="assets/download_icon.svg"
-                style={{ cursor: 'pointer' }}
-              />
-           
-          </UiLayout>
-        ))}
+          )
+        })}
+      {/* <table>
+        <thead>
+          {batchActive && <th />}
+          <th className="indexer">
+            <UiText type="caps" className={b('asset', ['indexer'])} variants={['detail']}>
+              indexer
+            </UiText>
+          </th>
+          <th>
+            <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
+              category
+            </UiText>
+          </th>
+          <th>
+            <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
+              type
+            </UiText>
+          </th>
+          <th>
+            <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
+              network
+            </UiText>
+          </th>
+          <th>
+            <UiText type="caps" className={b('info', ['price'])} variants={['detail']}>
+              subscription
+            </UiText>
+          </th>
+          <th />
+        </thead>
+        <tbody>
+          {assets
+            .map((asset) => ({ asset, metadata: asset.findServiceByType('metadata').attributes }))
+            .map((data) => ({
+              ...data,
+              defi: getDefiInfo(data.metadata),
+              subscription: getDdoSubscription(data.asset)
+            }))
+            .map(({ asset, metadata, defi, subscription }, i) => {
+              const isBookmarked = bookmarks.some((bookmark) => bookmark.id === asset.id)
+
+              return (
+                <tr key={`asset-${asset.id}-${i}`}>
+                  {batchActive && (
+                    <td className={b('checkbox')}>
+                      {batchSelected.includes(asset.id) ? (
+                        <img
+                          onClick={() => removeFromBatchSelected([asset.id])}
+                          src={'assets/checked_box.svg'}
+                          width="20px"
+                        />
+                      ) : (
+                        <img
+                          onClick={() => addToBatchSelected([asset.id])}
+                          src={'assets/unchecked_box.svg'}
+                          width="20px"
+                        />
+                      )}
+                    </td>
+                  )}
+                  <td className={b('asset-title-col')}>
+                    <div className={b('asset-title')}>
+                      <Link href={`/asset/${asset.id}`}>
+                        <UiText className={`pointer`} wrapper="h4" type="h4">
+                          {metadata.main.name} - {subscription.tier?.toString()}
+                        </UiText>
+                      </Link>
+                      <UiText className={b('asset-date')} type="small" variants={['detail']}>
+                        {toDate(metadata.main.datePublished as string).replace(/\//g, '.')}
+                      </UiText>
+                    </div>
+                  </td>
+                  {defi?.category ? (
+                    <td
+                      className={b('info')}
+                      onClick={() =>
+                        setSelectedCategories(
+                          !selectedCategories.includes(defi.category)
+                            ? selectedCategories.concat(defi.subcategory)
+                            : selectedCategories
+                        )
+                      }
+                    >
+                      <UiIcon className={b('info', ['icon'])} icon="folder" color="secondary" />
+                      <UiText variants={['secondary']}>{defi.category}</UiText>
+                      <UiText variants={['detail']}>&nbsp;&ndash;&nbsp;</UiText>
+                      <UiText variants={['secondary']}>{defi.subcategory}</UiText>
+                    </td>
+                  ) : (
+                    <td className={b('info')}></td>
+                  )}
+                  <td></td>
+                  {defi?.network ? (
+                    <td
+                      className={b('info')}
+                      onClick={() =>
+                        setSelectedNetworks(
+                          !selectedNetworks.includes(defi.network)
+                            ? selectedNetworks.concat(defi.network)
+                            : selectedNetworks
+                        )
+                      }
+                    >
+                      {defi.network.toLowerCase() == 'none' ||
+                      defi.network.toLowerCase() == 'na' ? (
+                        <></>
+                      ) : (
+                        <img
+                          className={b('icon', ['clickable', 'network'])}
+                          alt="network"
+                          src={`/assets/logos/${defi.network.toLowerCase()}.svg`}
+                          width="25"
+                        />
+                      )}
+                      <UiText variants={['secondary']}>{defi.network}</UiText>
+                    </td>
+                  ) : (
+                    <td className={b('info')}></td>
+                  )}
+                  <td>
+                    <div className={b('info', ['subscription'])}>
+                      <div className={b('badge', ['inactive'])}>
+                        <LogoIcon className={b('badge-logo')} />
+                        Community
+                      </div>
+                      <img
+                        className={b('icon', ['clickable'])}
+                        alt="download"
+                        onClick={() => {
+                          downloadAsset({ did: asset.id, subscription: subscription })
+                        }}
+                        width="24px"
+                        src="assets/download_icon.svg"
+                      />
+                    </div>
+                  </td>
+                  <td
+                    className={b('bookmark-col')}
+                    onClick={() =>
+                      isBookmarked ? onRemoveBookmark(asset.id) : onAddBookmark(asset.id, '')
+                    }
+                  >
+                    {isBookmarked ? (
+                      <div className={b('bookmark', ['minus'])}>-</div>
+                    ) : (
+                      <div className={b('bookmark', ['plus'])}>+</div>
+                    )}
+                  </td>
+                </tr>
+              )
+            })}
+        </tbody>
+      </table> */}
     </div>
   )
 }
