@@ -30,7 +30,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const appConfig = {
   web3Provider:
-    typeof window !== 'undefined' ? window.ethereum : new ethers.providers.JsonRpcProvider(nodeUri),
+    typeof window !== 'undefined' ? window?.ethereum : new ethers.providers.JsonRpcProvider(nodeUri),
   nodeUri,
   marketplaceUri,
   gatewayUri,
