@@ -99,8 +99,6 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
     try {
       const bookmarkDDO = bookmarks.find((item) => item.id === did)
 
-      console.log(bookmarkDDO)
-
       if (bookmarkDDO?.userId) {
         const bookmarksData = await sdk.bookmarks.findManyByUserId(bookmarkDDO?.userId)
 
