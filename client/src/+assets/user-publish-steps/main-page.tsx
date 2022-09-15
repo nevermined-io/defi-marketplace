@@ -15,7 +15,7 @@ import { gatewayAddress, NFT_TIERS} from 'src/config'
 export const UserPublishMultiStep: NextPage = () => {
   const {
     errorAssetMessage,
-    setAssetErrorMessage,
+    setErrorAssetMessage,
     setAssetMessage,
     assetPublish,
     setAssetPublish,
@@ -207,14 +207,14 @@ const onSubmitUserPublish = async() => {
                     txPopupRef.current?.close()
                     setResultOk(false)
                     if (error.message.includes("Transaction was not mined within 50 blocks")){
-                        setAssetErrorMessage("Transaction was not mined within 50 blocks, but it might still be mined. Check later your profile to see the Assets already published")
+                      setErrorAssetMessage("Transaction was not mined within 50 blocks, but it might still be mined. Check later your profile to see the Assets already published")
                     }
                     resultPopupRef.current?.open()
                     toast.error(errorAssetMessage)
                 }
             )           
         } catch (error: any ) {
-            setAssetErrorMessage(error.message)
+          setErrorAssetMessage(error.message)
             popupRef.current?.open()
         }
     }
