@@ -9,6 +9,7 @@ import { UiPopupHandlers } from '@nevermined-io/styles'
 import { ConfirmPopup } from '../../+assets/user-publish-steps/confirm-popup'
 import { User } from '../../context'
 import { SubscriptionTiers } from 'src/shared'
+import { MetaMask } from '@nevermined-io/catalog-providers'
 
 interface Tier {
   name: string
@@ -23,12 +24,17 @@ interface PricingProps {
 export function Pricing({ tiers }: PricingProps) {
 
   const { sdk, subscription } = Catalog.useNevermined()
+  const { walletAddress } = MetaMask.useWallet()
   const confirmPopupMessage = 'Press Confirm to Subscribe'
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [tierName, setTierName] = useState('')
   const { getCurrentUserSubscription, getUserSubscriptions, setUserSubscriptions } = useContext(User)
 
   const confirm = (tier: string) => {
+    if(!walletAddress){
+      toast.error("Please connect your wallet.")
+      return
+    }
     if (tier as SubscriptionTiers === getCurrentUserSubscription()?.tier) {
       toast.warning(`You are already subscribed to  ${tier}`)
       return
