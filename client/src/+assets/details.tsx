@@ -119,7 +119,7 @@ export const AssetDetails: NextPage = () => {
       setIsConnected(isLogged)
 
       try {
-        const ddo = await assets.getSingle(String(did))
+        const ddo = await assets.findOne(String(did))
         setAsset(ddo)
       } catch (error) {
         console.log(error)
@@ -236,7 +236,7 @@ export const AssetDetails: NextPage = () => {
               Description
             </UiText>
             <UiDivider />
-            <p>
+            <div>
               {metadata
                 .additionalInformation!.description?.replaceAll('-', '\n-')
                 .split('\n')
@@ -245,7 +245,7 @@ export const AssetDetails: NextPage = () => {
                     {_}
                   </UiText>
                 ))}
-            </p>
+            </div>
             <UiDivider type="l" />
             <UiButton
               cover
