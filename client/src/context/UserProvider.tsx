@@ -54,8 +54,7 @@ const UserProvider = (props: UserProviderProps) => {
         const accounts = await sdk.accounts.list()
         if (!accounts[0])
             return false
-     
-
+            
         const nft721 = await sdk.contracts.loadNft721(nftTierAddress)   
         const balance = await nft721.balanceOf(accounts[0])
         return balance.gt(0)
