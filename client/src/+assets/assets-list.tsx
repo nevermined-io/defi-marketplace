@@ -60,6 +60,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   }
 
   const checkAuth = async () => {
+    
     let auth = true;
     if (!account.isTokenValid()) {
       auth = false
@@ -150,8 +151,12 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
     if (!sdk?.profiles) {
       return
     }
-
+  
     (async () => {
+
+      if (!walletAddress)
+        return
+
       const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
       if (!userProfile?.userId) {
         return
