@@ -234,41 +234,4 @@
       }
     }
   }
-
-  table {
-    border-collapse: separate;
-    border-spacing: 0 10px;
-    width: 100%;
-
-    tr,
-    td,
-    th {
-      height: 100%;
-    }
-
-    th {
-      text-align: left;
-      padding: 0 10px 20px 20px;
-
-      &.indexer {
-        width: 50%;
-      }
-    }
-
-    td {
-      border-width: 2px 0;
-      border-color: gc(gM);
-      border-style: solid;
-      vertical-align: middle;
-      padding: 5px 15px;
-
-      &:first-child {
-        border-left-width: 2px;
-      }
-
-      &:last-child {
-        border-right-width: 2px;
-      }
-    }
-  }
 }
