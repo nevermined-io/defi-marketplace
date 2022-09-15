@@ -2,6 +2,7 @@
 @import '../styles/variables';
 
 .assets-list {
+  font-family: 'Titillium Web';
   margin-top: 32px;
 
   &__bookmark {
@@ -21,14 +22,22 @@
     color: #67cff9;
     background: #2b465c;
     text-align: center;
-    max-width: 22px;
+    width: 22px;
     padding: 0 7px;
     align-self: stretch;
-    transition: max-width 0.5s;
+    transition: width 0.5s;
     overflow: hidden;
 
-    &:hover {
-      max-width: 100px;
+    &--add {
+      &:hover {
+        width: 60px;
+      }
+    }
+
+    &--remove {
+      &:hover {
+        width: 90px;
+      }
     }
   }
 
@@ -100,7 +109,7 @@
   }
 
   &__asset-date {
-    padding-left: 1%;
+    margin-left: 22px;
   }
 
   &__asset {
@@ -109,17 +118,12 @@
     margin-bottom: 16px;
     padding: 0 0 0 20px;
     border: 2px solid gc(gM);
+    height: 72px;
 
     &--asset-row-header {
       border-bottom: none;
       border-left: none;
       border-right: none;
-    }
-
-    &--indexer {
-      padding: 0;
-      border: none;
-      width: 50%;
     }
   }
 
@@ -142,6 +146,7 @@
       padding: 0;
       border: none;
       width: 50%;
+      display: flex;
     }
 
     &--info-header {
@@ -182,14 +187,14 @@
   }
 
   &__icon {
-    margin-left: 10px;
-
     &--clickable {
       cursor: pointer;
     }
 
-    &--network {
-      padding-right: 10px;
+    &--network,
+    &--dataset,
+    &--folder {
+      margin-right: 5px;
     }
   }
 
@@ -201,8 +206,8 @@
     display: flex;
     align-items: center;
     padding: 6px 8px;
+    margin-right: 10px;
     gap: 8px;
-    font-family: 'Titillium Web';
     font-style: normal;
     font-weight: 700;
     font-size: 14px;

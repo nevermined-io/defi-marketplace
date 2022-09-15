@@ -189,52 +189,56 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
       ) : (
         <div className={b('heading')}>
           <div className={b('batch-select-wrapper')}>
-            {batchActive ? (
-              <Fragment>
-                <div className={b('batch-select')}>
-                  {assets.every((asset) => batchSelected.includes(asset.id)) ? (
+            {
+              batchActive ? (
+                <Fragment>
+                  <div className={b('batch-select')}>
+                    {assets.every((asset) => batchSelected.includes(asset.id)) ? (
+                      <img
+                        alt="checkbox"
+                        onClick={() => removeFromBatchSelected(assets.map((asset) => asset.id))}
+                        className={b('batch-checkbox')}
+                        src={'assets/checked_box.svg'}
+                        width="14px"
+                      />
+                    ) : (
+                      <img
+                        alt="uncheckbox"
+                        onClick={() => addToBatchSelected(assets.map((asset) => asset.id))}
+                        className={b('batch-checkbox')}
+                        src={'assets/unchecked_box.svg'}
+                        width="14px"
+                      />
+                    )}
+                    <div className={b('selected-count')}>
+                      Selected: <b>{batchSelected.length}</b>
+                    </div>
                     <img
-                      alt="checkbox"
-                      onClick={() => removeFromBatchSelected(assets.map((asset) => asset.id))}
-                      className={b('batch-checkbox')}
-                      src={'assets/checked_box.svg'}
-                      width="14px"
+                      alt="close"
+                      className={b('batch-close')}
+                      onClick={() => setBatchActive(false)}
+                      src={'assets/close.svg'}
+                      width="12px"
                     />
-                  ) : (
-                    <img
-                      alt="uncheckbox"
-                      onClick={() => addToBatchSelected(assets.map((asset) => asset.id))}
-                      className={b('batch-checkbox')}
-                      src={'assets/unchecked_box.svg'}
-                      width="14px"
-                    />
-                  )}
-                  <div className={b('selected-count')}>
-                    Selected: <b>{batchSelected.length}</b>
                   </div>
-                  <img
-                    alt="close"
-                    className={b('batch-close')}
-                    onClick={() => setBatchActive(false)}
-                    src={'assets/close.svg'}
-                    width="12px"
-                  />
-                </div>
-                <div
-                  className={b('basket-add')}
-                  onClick={(e) => {
-                    openPopup(e)
-                    //TODO How to handle batch selection?
-                  }}
-                >
-                  Add to basket
-                </div>
-              </Fragment>
-            ) : (
-              <div className={b('batch-select-inactive')} onClick={() => setBatchActive(true)}>
-                Batch Select
-              </div>
-            )}
+                  <div
+                    className={b('basket-add')}
+                    onClick={(e) => {
+                      openPopup(e)
+                      //TODO How to handle batch selection?
+                    }}
+                  >
+                    Add to basket
+                  </div>
+                </Fragment>
+              ) : null
+              /* (
+              TODO - How to handle multiple selection
+          <div className={b('batch-select-inactive')} onClick={() => setBatchActive(true)}>
+            Batch Select
+          </div>
+            )*/
+            }
           </div>
         </div>
       )}
@@ -286,16 +290,24 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                   />
                 )}
               </div>
-              <div className={`${b('asset', ['indexer'])}`}>
+              <div className={`${b('info', ['indexer'])}`}>
                 <div className={`${b('asset-title')}`}>
-                  <Link href={`/asset/${asset.id}`}>
+                  {metadata.main.name ? (
+                    <Link href={`/asset/${asset.id}`}>
+                      <UiText className={`pointer`} wrapper="h4" type="h4">
+                        {metadata.main.name}
+                      </UiText>
+                    </Link>
+                  ) : (
                     <UiText className={`pointer`} wrapper="h4" type="h4">
-                      {metadata.main.name} - {subscription.tier?.toString()}
+                      -
                     </UiText>
-                  </Link>
-                  <UiText className={b('asset-date')} type="small" variants={['detail']}>
-                    {toDate(metadata.main.datePublished as string).replace(/\//g, '.')}
-                  </UiText>
+                  )}
+                  {metadata.main.datePublished && (
+                    <UiText className={b('asset-date')} type="small" variants={['detail']}>
+                      {toDate(metadata.main.datePublished as string).replace(/\//g, '.')}
+                    </UiText>
+                  )}
                 </div>
               </div>
               {defi?.category ? (
@@ -310,7 +322,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                   }
                 >
                   <div className={b('category-row')}>
-                    <UiIcon className={b('info-icon')} icon="folder" color="secondary" />
+                    <UiIcon className={b('icon', ['folder'])} icon="folder" color="secondary" />
                     <UiText variants={['secondary']}>{defi.category}</UiText>
                     <UiText className={b('dash')} variants={['detail']}>
                       &ndash;
@@ -321,7 +333,15 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
               ) : (
                 <UiLayout className={b('info')}></UiLayout>
               )}
-              <UiLayout className={b('info')}></UiLayout>
+              <UiLayout className={b('info')}>
+                <img
+                  className={b('icon', ['dataset'])}
+                  alt="dataset"
+                  width="17px"
+                  src="assets/dataset.svg"
+                />
+                {metadata.main?.type?.toUpperCase()}
+              </UiLayout>
               {defi?.network ? (
                 <UiLayout
                   className={b('info')}
@@ -350,10 +370,12 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
               )}
               <UiLayout className={b('info', ['subscription'])}>
                 <div className={b('subscription-border')} />
-                <div className={b('badge', ['inactive'])}>
-                  <LogoIcon className={b('badge-logo')} />
-                  Community
-                </div>
+                {subscription.tier && (
+                  <div className={b('badge', [subscription.tier?.toLowerCase() ?? 'inactive'])}>
+                    <LogoIcon className={b('badge-logo')} />
+                    {subscription.tier?.toString()}
+                  </div>
+                )}
                 <img
                   className={b('icon', ['clickable'])}
                   alt="download"
@@ -364,7 +386,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                   src="assets/download_icon.svg"
                 />
               </UiLayout>
-              <div className={b('bookmark-col')}>
+              <div className={b('bookmark-col', [isBookmarked ? 'remove' : 'add'])}>
                 <div
                   className={b('bookmark')}
                   onClick={() =>
