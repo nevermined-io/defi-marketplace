@@ -23,13 +23,11 @@ import {
   getDdoTokenAddress,
   calculateStartEndPage,
   calculatePages,
-  Provenance,
   getSampleURL
 } from '../shared'
 import { Markdown } from 'ui/markdown/markdown'
 import Image from 'next/image'
 import { XuiPagination } from 'ui/+assets-query/pagination'
-import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { correctNetworkId, correctNetworkName, EVENT_PREFIX, PROTOCOL_PREFIX } from 'src/config'
 import { loadAssetProvenance } from 'src/shared/graphql'
 import {  EventOptions} from '@nevermined-io/nevermined-sdk-js/dist/node/events/NeverminedEvent';

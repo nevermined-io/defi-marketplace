@@ -18,6 +18,7 @@ import { User } from '../context'
 import { Catalog } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import {XuiDownloadAsset} from '../components/+download-asset/download-asset'
+import { toast } from 'react-toastify'
 
 interface AssetsListProps {
   assets: DDO[]
@@ -76,6 +77,12 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   }
 
   const onAddBookmark = async (did: string, description: string) => {
+
+    if (!walletAddress){
+      toast.error("Please connect your wallet.")
+      return
+    }
+    
     try {
       const wasAuth = await checkAuth()
       if(!wasAuth) return
@@ -134,6 +141,11 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
   type AssetInfo = {did:string, subscription:DDOSubscription}
 
   const downloadAsset = async(assetInfo: AssetInfo) => {
+
+    if (!walletAddress){
+      toast.error("Please connect your wallet.")
+      return
+    }
 
     if (!checkAssetInUserSubscription(assetInfo.subscription)){
       setErrorMessage("You can't download this Asset with your current subscription")    
