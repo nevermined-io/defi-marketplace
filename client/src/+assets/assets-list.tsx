@@ -374,13 +374,13 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                   {isBookmarked ? (
                     <div className={b('bookmark', ['minus'])}>
                       <div>
-                        - <span className={b('bookmark-text')}>Remove</span>
+                        -<span className={b('bookmark-text')}>Remove</span>
                       </div>
                     </div>
                   ) : (
                     <div className={b('bookmark', ['plus'])}>
                       <div>
-                        + <span className={b('bookmark-text')}>Add</span>
+                        +<span className={b('bookmark-text')}>Add</span>
                       </div>
                     </div>
                   )}
