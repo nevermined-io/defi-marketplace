@@ -65,7 +65,7 @@ export const UserPublishMultiStep: NextPage = () => {
       report_format: 'CSV'
     })
     setFilesUploadedMessage([])
-    setAssetErrorMessage('')
+    setErrorAssetMessage('')
     setAssetMessage('')
     setResultOk(false)
   }
