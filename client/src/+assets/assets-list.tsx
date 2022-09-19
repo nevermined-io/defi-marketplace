@@ -5,6 +5,7 @@ import LogoIcon from '../../public/assets/nevermined.svg'
 import { toast } from 'react-toastify'
 import {
   BEM,
+  extendClassName,
   UiLayout,
   UiText,
   UiDivider,
@@ -240,7 +241,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
           </div>
         </div>
       )}
-      <UiLayout className={b('asset', ['asset-row-header'])}>
+      {/* <UiLayout className={b('asset', ['asset-row-header'])}>
         {batchActive && (
           <UiText type="caps" className={b('info', ['checkbox'])} variants={['detail']} />
         )}
@@ -408,7 +409,166 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
               </div>
             </UiLayout>
           )
-        })}
+        })} */}
+
+      <table className={b('table')}>
+        <thead>
+          <tr>
+            {batchActive && <th />}
+            <th className={b('table__header', ['indexer'])}>
+              <UiText type="caps" className={b('asset', ['indexer'])} variants={['detail']}>
+                indexer
+              </UiText>
+            </th>
+            <th>
+              <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
+                category
+              </UiText>
+            </th>
+            <th>
+              <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
+                type
+              </UiText>
+            </th>
+            <th>
+              <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
+                network
+              </UiText>
+            </th>
+            <th>
+              <UiText type="caps" className={b('info', ['price'])} variants={['detail']}>
+                subscription
+              </UiText>
+            </th>
+            <th className={b('table__header', ['bookmark'])} />
+          </tr>
+        </thead>
+        <tbody>
+          {assets
+            .map((asset) => ({ asset, metadata: asset.findServiceByType('metadata').attributes }))
+            .map((data) => ({
+              ...data,
+              defi: getDefiInfo(data.metadata),
+              subscription: getDdoSubscription(data.asset)
+            }))
+            .map(({ asset, metadata, defi, subscription }, i) => {
+              const isBookmarked = bookmarks.some((bookmark) => bookmark.id === asset.id)
+
+              return (
+                <tr key={`asset-${asset.id}-${i}`}>
+                  {batchActive && (
+                    <td className={b('checkbox')}>
+                      {batchSelected.includes(asset.id) ? (
+                        <img
+                          onClick={() => removeFromBatchSelected([asset.id])}
+                          src={'assets/checked_box.svg'}
+                          width="20px"
+                        />
+                      ) : (
+                        <img
+                          onClick={() => addToBatchSelected([asset.id])}
+                          src={'assets/unchecked_box.svg'}
+                          width="20px"
+                        />
+                      )}
+                    </td>
+                  )}
+                  <td className={b('asset-title-col')}>
+                    <div className={b('asset-title')}>
+                      <Link href={`/asset/${asset.id}`}>
+                        <UiText className={`pointer`} wrapper="h4" type="h4">
+                          {metadata.main.name} - {subscription.tier?.toString()}
+                        </UiText>
+                      </Link>
+                      <UiText className={b('asset-date')} type="small" variants={['detail']}>
+                        {toDate(metadata.main.datePublished as string).replace(/\//g, '.')}
+                      </UiText>
+                    </div>
+                  </td>
+                  {defi?.category ? (
+                    <td
+                      className={b('info')}
+                      onClick={() =>
+                        setSelectedCategories(
+                          !selectedCategories.includes(defi.category)
+                            ? selectedCategories.concat(defi.subcategory)
+                            : selectedCategories
+                        )
+                      }
+                    >
+                      <UiIcon className={b('info', ['icon'])} icon="folder" color="secondary" />
+                      <UiText variants={['secondary']}>{defi.category}</UiText>
+                      <UiText variants={['detail']}>&nbsp;&ndash;&nbsp;</UiText>
+                      <UiText variants={['secondary']}>{defi.subcategory}</UiText>
+                    </td>
+                  ) : (
+                    <td className={b('info')}></td>
+                  )}
+                  <td></td>
+                  {defi?.network ? (
+                    <td
+                      className={b('info')}
+                      onClick={() =>
+                        setSelectedNetworks(
+                          !selectedNetworks.includes(defi.network)
+                            ? selectedNetworks.concat(defi.network)
+                            : selectedNetworks
+                        )
+                      }
+                    >
+                      {defi.network.toLowerCase() == 'none' ||
+                      defi.network.toLowerCase() == 'na' ? (
+                        <></>
+                      ) : (
+                        <img
+                          className={b('icon', ['clickable', 'network'])}
+                          alt="network"
+                          src={`/assets/logos/${defi.network.toLowerCase()}.svg`}
+                          width="25"
+                        />
+                      )}
+                      <UiText variants={['secondary']}>{defi.network}</UiText>
+                    </td>
+                  ) : (
+                    <td className={b('info')}></td>
+                  )}
+                  <td>
+                    <div className={b('info', ['subscription'])}>
+                      <div className={b('badge', ['inactive'])}>
+                        <LogoIcon className={b('badge-logo')} />
+                        Community
+                      </div>
+                      <img
+                        className={b('icon', ['clickable'])}
+                        alt="download"
+                        onClick={() => {
+                          downloadAsset({ did: asset.id, subscription: subscription })
+                        }}
+                        width="24px"
+                        src="assets/download_icon.svg"
+                      />
+                    </div>
+                  </td>
+                  <td
+                    className={extendClassName(
+                      { className: b('bookmark-col') },
+                      b('table__column', ['bookmark'])
+                    )}
+                    onClick={() =>
+                      isBookmarked ? onRemoveBookmark(asset.id) : onAddBookmark(asset.id, '')
+                    }
+                  >
+                    {isBookmarked ? (
+                      <div className={b('bookmark', ['minus'])}>- Remove</div>
+                    ) : (
+                      <div className={b('bookmark', ['plus'])}>+ Bookmark</div>
+                    )}
+                  </td>
+                </tr>
+              )
+            })}
+        </tbody>
+      </table>
     </div>
   )
 }
