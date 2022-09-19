@@ -2,7 +2,7 @@ import React, { useRef, Fragment, useContext, useEffect, useState } from 'react'
 import { DDO, Profile } from '@nevermined-io/nevermined-sdk-js'
 import Link from 'next/link'
 import LogoIcon from '../../public/assets/nevermined.svg'
-
+import { toast } from 'react-toastify'
 import {
   BEM,
   UiLayout,
@@ -12,11 +12,9 @@ import {
   UiPopupHandlers,
   NotificationPopup
 } from '@nevermined-io/styles'
-import { XuiTokenName, XuiTokenPrice } from 'ui'
 import {
   toDate,
   getDefiInfo,
-  getDdoTokenAddress,
   getDdoSubscription,
   DDOSubscription
 } from '../shared'

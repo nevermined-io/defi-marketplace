@@ -91,8 +91,8 @@ export const AssetDetails: NextPage = () => {
   }, [page])
 
   const getProvenanceInfo = async () => {
-    const events = await loadAssetProvenance(sdk, getProvider(), String(did))
-    const nftProvenance: NftProvenance[] = events.map( (event: EventOptions) => {
+    const events: any = await loadAssetProvenance(sdk, getProvider(), String(did))
+    const nftProvenance: NftProvenance[] = events.map( (event: any) => {
       return {
         id: event.id,
         action: event._attributes,
@@ -385,7 +385,7 @@ export const AssetDetails: NextPage = () => {
                     return
                   }
                   openPopup(e)
-                  // TODO, add Download button 
+                  // TODO, add Download button
                   //addtoCart()
                 }}
               >
