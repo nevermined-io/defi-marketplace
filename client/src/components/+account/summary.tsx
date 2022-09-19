@@ -30,10 +30,6 @@ export function Summary({ published, bookmarks, downloaded, currentSubscription 
             </UiText>
             <UiText className={b('summary-number')}>{published.length}</UiText>
           </UiLayout>
-        </UiLayout>
-      </UiLayout>
-      <UiLayout type="container">
-        <UiLayout className={b('summary')}>
           <UiLayout type="container" className={b('card')}>
             <img className={b('card-icon')} src="/assets/purchase-icon.svg" />
             <UiText className={b('card-name')} type="h3" wrapper="h3">
@@ -46,9 +42,9 @@ export function Summary({ published, bookmarks, downloaded, currentSubscription 
             <UiText className={b('card-name')} type="h3" wrapper="h3">
               Your Subscription
             </UiText>
-            {
-              currentSubscription || "No Subscription"
-            }
+            <UiText className={b('summary-subscription')}>
+              {currentSubscription || 'No Subscription'}
+            </UiText>
           </UiLayout>
         </UiLayout>
       </UiLayout>
