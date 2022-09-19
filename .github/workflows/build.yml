@@ -23,3 +23,6 @@ jobs:
     - name: Run linters
       working-directory: ./client
       run: npm run lint
+    - name: Build
+      working-directory: ./client
+      run: npm run build
