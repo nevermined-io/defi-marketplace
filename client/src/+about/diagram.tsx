@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react'
-import type { NextPage } from 'next'
 import styles from './diagram.module.scss'
 
 import { BEM } from '@nevermined-io/styles'
 import Image from 'next/image'
 
 const b = BEM('diagram', styles)
-export const Diagram: NextPage = () => (
+export const Diagram = () => (
   <Fragment>
     <div className={b('top-text')}>
       Blockchain stores all the historical data of users interactions

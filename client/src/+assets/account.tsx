@@ -43,7 +43,7 @@ export const Account: NextPage = () => {
     downloaded = downloaded.map((asset: any) => asset._did)
     // removing duplicates
     downloaded = [...new Set(downloaded)];
-    const downloadedDDO = await Promise.all(
+    const downloadedDDO: DDO[] = await Promise.all(
       downloaded.map(async (did: any) => await sdk.assets.resolve(did))
     )
 
