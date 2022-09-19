@@ -8,7 +8,6 @@
   &__bookmark {
     text-align: center;
     height: 100%;
-    width: 100%;
     max-width: 22px;
     background: #2b465c;
     position: absolute;
@@ -23,11 +22,6 @@
     &--remove {
       font-size: 20px;
     }
-
-    &--remove-text,
-    &--add-text {
-      display: none;
-    }
   }
 
   &__bookmark-col {
@@ -40,16 +34,12 @@
     align-self: stretch;
     overflow: hidden;
     white-space: nowrap;
+    display: flex;
 
     &:hover {
       .assets-list__bookmark {
         width: auto;
         max-width: 100px;
-      }
-
-      .assets-list__bookmark--remove-text,
-      .assets-list__bookmark--add-text {
-        display: block;
       }
     }
 
@@ -69,7 +59,7 @@
   &__bookmark-text {
     color: #fff;
     font-size: 14px;
-    margin: 0 5px;
+    margin-left: 10px;
   }
 
   &__heading {
@@ -170,7 +160,6 @@
     &--indexer {
       padding: 0;
       border: none;
-      width: 50%;
       display: flex;
     }
 
@@ -181,8 +170,9 @@
     &--subscription {
       display: flex;
       flex-grow: 1;
-      justify-content: flex-end;
-      padding-right: 10px;
+      justify-content: space-evenly;
+      border-left: 2px solid #2b465c;
+      padding: 0 0 0 20px;
     }
 
     &--icon {
@@ -304,7 +294,7 @@
       padding: 0 10px 20px 20px;
 
       &--indexer {
-        width: 50%;
+        max-width: 50%;
       }
 
       &--bookmark {

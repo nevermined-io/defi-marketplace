@@ -414,32 +414,39 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
       <table className={b('table')}>
         <thead>
           <tr>
+            {/* Checbox */}
             {batchActive && <th />}
+            {/* Indexer */}
             <th className={b('table__header', ['indexer'])}>
               <UiText type="caps" className={b('asset', ['indexer'])} variants={['detail']}>
                 indexer
               </UiText>
             </th>
+            {/* Category */}
             <th>
               <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
                 category
               </UiText>
             </th>
+            {/* Type */}
             <th>
               <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
                 type
               </UiText>
             </th>
+            {/* Network */}
             <th>
               <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
                 network
               </UiText>
             </th>
+            {/* Subscription */}
             <th>
               <UiText type="caps" className={b('info', ['price'])} variants={['detail']}>
                 subscription
               </UiText>
             </th>
+            {/* Bookmark */}
             <th className={b('table__header', ['bookmark'])} />
           </tr>
         </thead>
@@ -456,6 +463,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
 
               return (
                 <tr key={`asset-${asset.id}-${i}`}>
+                  {/* Checbox */}
                   {batchActive && (
                     <td className={b('checkbox')}>
                       {batchSelected.includes(asset.id) ? (
@@ -473,6 +481,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                       )}
                     </td>
                   )}
+                  {/* Indexer */}
                   <td className={b('asset-title-col')}>
                     <div className={b('asset-title')}>
                       <Link href={`/asset/${asset.id}`}>
@@ -485,6 +494,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                       </UiText>
                     </div>
                   </td>
+                  {/* Category */}
                   {defi?.category ? (
                     <td
                       className={b('info')}
@@ -496,7 +506,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                         )
                       }
                     >
-                      <UiIcon className={b('info', ['icon'])} icon="folder" color="secondary" />
+                      <UiIcon className={b('icon', ['folder'])} icon="folder" color="secondary" />
                       <UiText variants={['secondary']}>{defi.category}</UiText>
                       <UiText variants={['detail']}>&nbsp;&ndash;&nbsp;</UiText>
                       <UiText variants={['secondary']}>{defi.subcategory}</UiText>
@@ -504,7 +514,19 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                   ) : (
                     <td className={b('info')}></td>
                   )}
-                  <td></td>
+                  {/* Type */}
+                  <td className={b('info')}>
+                    <div>
+                      <img
+                        className={b('icon', ['dataset'])}
+                        alt="dataset"
+                        width="17px"
+                        src="assets/dataset.svg"
+                      />
+                      {metadata.main?.type?.toUpperCase()}
+                    </div>
+                  </td>
+                  {/* Network */}
                   {defi?.network ? (
                     <td
                       className={b('info')}
@@ -516,39 +538,47 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                         )
                       }
                     >
-                      {defi.network.toLowerCase() == 'none' ||
-                      defi.network.toLowerCase() == 'na' ? (
-                        <></>
-                      ) : (
-                        <img
-                          className={b('icon', ['clickable', 'network'])}
-                          alt="network"
-                          src={`/assets/logos/${defi.network.toLowerCase()}.svg`}
-                          width="25"
-                        />
-                      )}
-                      <UiText variants={['secondary']}>{defi.network}</UiText>
+                      <div className={b('category-row')}>
+                        {defi.network.toLowerCase() == 'none' ||
+                        defi.network.toLowerCase() == 'na' ? (
+                          <></>
+                        ) : (
+                          <img
+                            className={b('icon', ['clickable', 'network'])}
+                            alt="network"
+                            src={`/assets/logos/${defi.network.toLowerCase()}.svg`}
+                            width="25"
+                          />
+                        )}
+                        <UiText variants={['secondary']}>{defi.network}</UiText>
+                      </div>
                     </td>
                   ) : (
                     <td className={b('info')}></td>
                   )}
+                  {/* Subscription */}
                   <td>
                     <div className={b('info', ['subscription'])}>
-                      <div className={b('badge', ['inactive'])}>
-                        <LogoIcon className={b('badge-logo')} />
-                        Community
-                      </div>
+                      {subscription.tier && (
+                        <div
+                          className={b('badge', [subscription.tier?.toLowerCase() ?? 'inactive'])}
+                        >
+                          <LogoIcon className={b('badge-logo')} />
+                          {subscription.tier?.toString()}
+                        </div>
+                      )}
                       <img
                         className={b('icon', ['clickable'])}
                         alt="download"
                         onClick={() => {
-                          downloadAsset({ did: asset.id, subscription: subscription })
+                          downloadAsset({ did: asset.id, subscription })
                         }}
                         width="24px"
                         src="assets/download_icon.svg"
                       />
                     </div>
                   </td>
+                  {/* Bookmark */}
                   <td
                     className={extendClassName(
                       { className: b('bookmark-col') },
@@ -559,9 +589,13 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                     }
                   >
                     {isBookmarked ? (
-                      <div className={b('bookmark', ['minus'])}>- Remove</div>
+                      <div className={b('bookmark', ['minus'])}>
+                        -<span className={b('bookmark-text')}>Remove</span>
+                      </div>
                     ) : (
-                      <div className={b('bookmark', ['plus'])}>+ Bookmark</div>
+                      <div className={b('bookmark', ['plus'])}>
+                        +<span className={b('bookmark-text')}>Bookmark</span>
+                      </div>
                     )}
                   </td>
                 </tr>
