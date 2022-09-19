@@ -24,7 +24,7 @@ interface AdditionalInformation {
   linkedinProfile: string
 }
 
-export const UserProfile: NextPage = () => {
+export const UserProfile = () => {
   const { walletAddress } = MetaMask.useWallet()
   const {
     errorMessage,
