@@ -46,7 +46,7 @@ export const Account: NextPage = () => {
     const downloadedDDO = await Promise.all(
       downloaded.map(async (did: any) => await sdk.assets.resolve(did))
     )
-    
+
     setBookmarks(bookmarksDDO)
     setPublished(publishedDDO)
     setDownloaded(downloadedDDO)
@@ -54,7 +54,7 @@ export const Account: NextPage = () => {
 
   const loadSubscription = async () => {
 
-    let subscriptionsEvents = await getUserSubscription(sdk, getProvider(), walletAddress, getCurrentUserSubscription()?.did)
+    let subscriptionsEvents = await getUserSubscription(sdk, getProvider(), walletAddress, getCurrentUserSubscription()?.did || "")
     subscriptionsEvents = subscriptionsEvents.sort(
       (event1: any, event2: any) => event2.date.getTime() - event1.date.getTime()
     )

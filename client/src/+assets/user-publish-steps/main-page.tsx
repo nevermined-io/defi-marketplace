@@ -65,7 +65,7 @@ export const UserPublishMultiStep: NextPage = () => {
       report_format: 'CSV'
     })
     setFilesUploadedMessage([])
-    setAssetErrorMessage('')
+    setErrorAssetMessage('')
     setAssetMessage('')
     setResultOk(false)
   }
@@ -203,7 +203,7 @@ const onSubmitUserPublish = async() => {
                     toast.success(`Asset Published correctly. DID: ${ddo!.id}`)
                 }
             )
-            .catch((error) => { 
+            .catch((error) => {
                     txPopupRef.current?.close()
                     setResultOk(false)
                     if (error.message.includes("Transaction was not mined within 50 blocks")){
@@ -212,14 +212,14 @@ const onSubmitUserPublish = async() => {
                     resultPopupRef.current?.open()
                     toast.error(errorAssetMessage)
                 }
-            )           
+            )
         } catch (error: any ) {
           setErrorAssetMessage(error.message)
             popupRef.current?.open()
         }
     }
-   
-  
+
+
   const updateFilesAdded = (assetFile: AssetFile) => {
     const arrayFiles: AssetFile[] = assetPublish.assetFiles
     setAssetPublish({ ...assetPublish, assetFiles: [...arrayFiles, assetFile] })
