@@ -8,13 +8,10 @@ import { XuiNetworkSelector } from './network-selector'
 import { XuiTypeSelector } from './type-selector'
 import { XuiSubscriptionSelector } from './subscription-selector'
 
-interface FilterDropdownProps {
-  setPriceRange: (price: number) => void
-}
 
 const b = BEM('filter-dropdown', styles)
 
-export function XuiFilterDropdown(props: FilterDropdownProps) {
+export function XuiFilterDropdown() {
   return (
     <UiLayout type="grid" className={b('wrapper')}>
       <XuiDatePicker />
