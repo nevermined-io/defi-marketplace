@@ -54,19 +54,6 @@ export function Subscriptions({ purchaseDate, currentSubscription }: Subscriptio
               endOfSubscription: endSubscription,
               purchaseDate,
               isActive: false
-            },
-            {
-              name: 'Analyst',
-              price: tier.price,
-              symbol: tier.symbol,
-              description: tier.features[0],
-              featureColumns: [
-                tier.features.slice(0, itemsPerChunk),
-                tier.features.slice(itemsPerChunk, tier.features.length)
-              ],
-              endOfSubscription: endSubscription,
-              purchaseDate,
-              isActive: false
             }
           ])
         }

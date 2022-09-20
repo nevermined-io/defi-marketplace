@@ -59,7 +59,7 @@ export const Account: NextPage = () => {
       sdk,
       getProvider(),
       walletAddress,
-      getCurrentUserSubscription()?.did
+      getCurrentUserSubscription()?.did || ''
     )
     subscriptionsEvents = subscriptionsEvents.sort(
       (event1: any, event2: any) => event2.date.getTime() - event1.date.getTime()

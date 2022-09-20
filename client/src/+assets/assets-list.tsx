@@ -13,12 +13,7 @@ import {
   UiPopupHandlers,
   NotificationPopup
 } from '@nevermined-io/styles'
-import {
-  toDate,
-  getDefiInfo,
-  getDdoSubscription,
-  DDOSubscription
-} from '../shared'
+import { toDate, getDefiInfo, getDdoSubscription, DDOSubscription } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
 import { Catalog } from '@nevermined-io/catalog-core'
@@ -26,15 +21,15 @@ import { MetaMask } from '@nevermined-io/catalog-providers'
 import { XuiDownloadAsset } from '../components/+download-asset/download-asset'
 import { SubscriptionBadge } from '../components/subscription-badge/subscription-badge'
 
-
 interface AssetsListProps {
   assets: DDO[]
   disableBatchSelect?: boolean
+  disableBookmarks?: boolean
 }
 
 const b = BEM('assets-list', styles)
 
-export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
+export function AssetsList({ assets, disableBatchSelect, disableBookmarks }: AssetsListProps) {
   const {
     selectedNetworks,
     selectedCategories,
