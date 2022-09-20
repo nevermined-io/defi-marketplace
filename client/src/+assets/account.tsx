@@ -81,7 +81,6 @@ export const Account: NextPage = () => {
     if (!sdk?.profiles) {
       return
     }
-    console.log(userSubscriptions)
     loadSubscription()
   }, [userSubscriptions])
 
