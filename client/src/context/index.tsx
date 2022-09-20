@@ -40,6 +40,14 @@ export const User = React.createContext({
     setSelectedPriceRange: (selectedPrice: number) => {
         /* empty */
     },
+    selectedSubscriptions: [] as string[],
+    setSelectedSubscriptions: (selectedSubscriptions: string[]) => {
+        /* empty */
+    },
+    selectedSubtypes: [] as string[],
+    setSelectedSubtypes: (selectedSubtypes: string[]) => {
+        /* empty */
+    },
     setBookmarks: (bookmarks: DDO[]) => {
         /* empty */
     },

@@ -25,6 +25,7 @@ import { User } from '../context'
 import { Catalog } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import { XuiDownloadAsset } from '../components/+download-asset/download-asset'
+import { toast } from 'react-toastify';
 
 interface AssetsListProps {
   assets: DDO[]

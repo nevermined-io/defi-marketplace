@@ -9,6 +9,7 @@ import { User } from '../../context'
 import { networkPrefix, subcategoryPrefix } from '../../shared'
 import { XuiPagination } from './pagination'
 import { XuiSearchBar } from './search-bar'
+import { NFT_TIERS} from 'src/config'
 
 interface AssetsQueryProps {
   search?: 'onsite' | 'search-page'
@@ -33,6 +34,8 @@ export function XuiAssetsQuery({
     selectedCategories,
     selectedNetworks,
     selectedPrice,
+    selectedSubscriptions,
+    selectedSubtypes,
     setSelectedPriceRange,
     setSelectedNetworks,
     setAssets,
@@ -67,7 +70,23 @@ export function XuiAssetsQuery({
         selectedNetworkEvent.length === 0 ? '' : selectedNetworks.join(', ')
     }
   }
+  const nftAccess = { match: { 'service.type': 'nft721-access' } }
   const listed = { match: { 'service.attributes.curation.isListed': 'true' } }
+
+  const subscriptionFilter = () => {
+    if (selectedSubscriptions.length === 0)
+      return ''
+    const tierAddresses = selectedSubscriptions.map(subscription => NFT_TIERS.find(tier => tier.name === subscription)?.address)  
+    return tierAddresses && { match: { 'service.attributes.serviceAgreementTemplate.conditions.parameters.value': tierAddresses.join(', ') } }
+  }
+ 
+  const datasetAssetType = {
+    match: {
+      'service.attributes.additionalInformation.customData.subtype':
+      selectedSubtypes.length === 0 ? '' : selectedSubtypes.join(', ')
+    }
+  }
+
   const dateFilter = fromDate !== '' &&
     toDate !== '' && {
       range: {
@@ -79,26 +98,19 @@ export function XuiAssetsQuery({
       }
     }
 
-  const priceRange = selectedPrice > 0 && {
-    range: {
-      'service.attributes.main.price': {
-        gte: '0',
-        lte: selectedPrice
-      }
-    }
-  }
-
-  const mustArray = [textFilter, datasetCategory, listed]
+  const mustArray = [textFilter, datasetCategory, nftAccess]
   selectedNetworkEvent.length > 0 && mustArray.push(datasetNetwork as any)
   dateFilter && mustArray.push(dateFilter as any)
-  priceRange && mustArray.push(priceRange as any)
+  subscriptionFilter() && mustArray.push(subscriptionFilter() as any)
+  selectedSubtypes.length > 0 && mustArray.push(datasetAssetType as any)
+
+  const notBundleFilter = { match: { 'service.attributes.additionalInformation.categories': 'EventType:bundle' } }
+  const mustNotArray = [notBundleFilter]
 
   const query = {
     bool: {
       must: mustArray,
-      must_not: [
-        { match: { 'service.attributes.additionalInformation.categories': 'EventType:bundle' } }
-      ]
+      must_not: mustNotArray
     }
   }
 
