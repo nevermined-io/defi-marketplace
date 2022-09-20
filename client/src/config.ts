@@ -15,28 +15,28 @@ export const NFT_TIERS = [
   {
     'level': 1,
     'name': 'Community',
-    'did': process.env.DID_NFT_TIER1 || '0b6d32e8c2a7f478eef501f9ab0527511801018f37dd89f436b1a752d3bb33ef',
-    'address': process.env.NFT_ADDRESS_TIER1 || '0xec6ec39FD6a0099dE1Ed9Dfd312caBf7b9cc6e41'
+    'did': process.env.NEXT_PUBLIC_DID_NFT_TIER1 || '0b6d32e8c2a7f478eef501f9ab0527511801018f37dd89f436b1a752d3bb33ef',
+    'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER1 || '0xec6ec39FD6a0099dE1Ed9Dfd312caBf7b9cc6e41'
   },
   {
     'level': 2,
     'name': 'Analyst',
-    'did': process.env.DID_NFT_TIER2 || '9e60322c32cafe73153ac9c315773b04c34829b89e56d2b73baedc7f0816346e',
-    'address': process.env.NFT_ADDRESS_TIER2 || '0x1B058140C5448f0e0e6d2a09711F7ABc6BE07411'
+    'did': process.env.NEXT_PUBLIC_DID_NFT_TIER2 || '9e60322c32cafe73153ac9c315773b04c34829b89e56d2b73baedc7f0816346e',
+    'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER2 || '0x1B058140C5448f0e0e6d2a09711F7ABc6BE07411'
   },
   {
     'level': 3,
     'name': 'Enterprise',
-    'did': process.env.DID_NFT_TIER3 || '72b8302b75dd2c16fb2c4db60757f779c3f7927068f0a50e4d0508103edffbe5',
-    'address': process.env.NFT_ADDRESS_TIER3 || '0x2dBafaa2f8362C763f49CcDcA35a882386D455c5'
+    'did': process.env.NEXT_PUBLIC_DID_NFT_TIER3 || '72b8302b75dd2c16fb2c4db60757f779c3f7927068f0a50e4d0508103edffbe5',
+    'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER3 || '0x2dBafaa2f8362C763f49CcDcA35a882386D455c5'
   },
 ]
-export const NFT_TIERS_HOLDER = process.env.NFT_TIERS_HOLDER || '0x819dd6c82ad96e0B7B71Bf9161C90cFcd48E4dA5'
-export const NFT_TIERS_AMOUNT: number = Number(process.env.NFT_TIERS_AMOUNT) || 1
+export const NFT_TIERS_HOLDER = process.env.NEXT_PUBLIC_NFT_TIERS_HOLDER || '0x819dd6c82ad96e0B7B71Bf9161C90cFcd48E4dA5'
+export const NFT_TIERS_AMOUNT: number = Number(process.env.NEXT_PUBLIC_NFT_TIERS_AMOUNT) || 1
 export const NFT_TIERS_TYPE = 721
 
-export const SUBSCRIPTION_DURATION_IN_BLOCKS = process.env.SUBSCRIPTION_DURATION_IN_BLOCKS || 15770000
-export const NETWORK_BLOCK_INTERVAL = process.env.NETWORK_BLOCK_INTERVAL || 2
+export const SUBSCRIPTION_DURATION_IN_BLOCKS = process.env.NEXT_PUBLIC_SUBSCRIPTION_DURATION_IN_BLOCKS || 15770000
+export const NETWORK_BLOCK_INTERVAL = process.env.NEXT_PUBLIC_NETWORK_BLOCK_INTERVAL || 2
 export const SUBSCRIPTION_DURATION_IN_SEGS = +SUBSCRIPTION_DURATION_IN_BLOCKS * +NETWORK_BLOCK_INTERVAL
 
 //
