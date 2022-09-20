@@ -279,7 +279,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
               </UiText>
             </th>
             {/* Bookmark */}
-            <th className={b('table__header', ['bookmark'])} />
+            {!disableBookmarks && <th className={b('table__header', ['bookmark'])} />}
           </tr>
         </thead>
         <tbody>
@@ -411,25 +411,27 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                     </div>
                   </td>
                   {/* Bookmark */}
-                  <td
-                    className={extendClassName(
-                      { className: b('bookmark-col') },
-                      b('table__column', ['bookmark'])
-                    )}
-                    onClick={() =>
-                      isBookmarked ? onRemoveBookmark(asset.id) : onAddBookmark(asset.id, '')
-                    }
-                  >
-                    {isBookmarked ? (
-                      <div className={b('bookmark', ['minus'])}>
-                        -<span className={b('bookmark-text')}>Remove</span>
-                      </div>
-                    ) : (
-                      <div className={b('bookmark', ['plus'])}>
-                        +<span className={b('bookmark-text')}>Bookmark</span>
-                      </div>
-                    )}
-                  </td>
+                  {!disableBookmarks && (
+                    <td
+                      className={extendClassName(
+                        { className: b('bookmark-col') },
+                        b('table__column', ['bookmark'])
+                      )}
+                      onClick={() =>
+                        isBookmarked ? onRemoveBookmark(asset.id) : onAddBookmark(asset.id, '')
+                      }
+                    >
+                      {isBookmarked ? (
+                        <div className={b('bookmark', ['minus'])}>
+                          -<span className={b('bookmark-text')}>Remove</span>
+                        </div>
+                      ) : (
+                        <div className={b('bookmark', ['plus'])}>
+                          +<span className={b('bookmark-text')}>Bookmark</span>
+                        </div>
+                      )}
+                    </td>
+                  )}
                 </tr>
               )
             })}

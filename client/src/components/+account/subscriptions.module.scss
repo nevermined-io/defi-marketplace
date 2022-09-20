@@ -56,7 +56,7 @@
     &--details {
       opacity: 0;
       height: 0 !important;
-      visibility: hidden;
+      visibility: collapse;
       transition: visibility 0s, opacity 0.5s linear;
     }
 
