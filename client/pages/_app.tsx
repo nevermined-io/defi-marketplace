@@ -46,10 +46,11 @@ const appConfig = {
 
 function App({ Component, pageProps }: AppProps) {
   Logger.setLevel(3)
+  const MainComponent = Component as any;
 
   return (
     <div>
-    <ToastContainer 
+    <ToastContainer
       position="top-right"
       autoClose={false}
       hideProgressBar={false}
@@ -95,7 +96,7 @@ function App({ Component, pageProps }: AppProps) {
                 </UiHeaderLink>
               </UiHeader>
 
-              <Component {...pageProps} />
+              <MainComponent {...pageProps} />
             </div>
 
             <UiDivider flex />
