@@ -38,8 +38,7 @@ export function Subscriptions({ purchaseDate, currentSubscription }: Subscriptio
         const tier = tiers.find((item) => item.name === currentSubscription.tier)
 
         if (tier) {
-          const delta = tier.features.length / 2
-          const itemsPerChunk = Math.ceil(delta)
+          const itemsPerChunk = Math.ceil(tier.features.length / 2)
 
           setSubscriptionTiers([
             {
