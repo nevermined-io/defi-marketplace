@@ -25,11 +25,17 @@ interface AssetsListProps {
   assets: DDO[]
   disableBatchSelect?: boolean
   disableBookmarks?: boolean
+  hideCategoryColumn?: boolean
 }
 
 const b = BEM('assets-list', styles)
 
-export function AssetsList({ assets, disableBatchSelect, disableBookmarks }: AssetsListProps) {
+export function AssetsList({
+  assets,
+  disableBatchSelect,
+  disableBookmarks,
+  hideCategoryColumn
+}: AssetsListProps) {
   const {
     selectedNetworks,
     selectedCategories,
@@ -250,11 +256,13 @@ export function AssetsList({ assets, disableBatchSelect, disableBookmarks }: Ass
               </UiText>
             </th>
             {/* Category */}
-            <th>
-              <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
-                category
-              </UiText>
-            </th>
+            {!hideCategoryColumn && (
+              <th>
+                <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
+                  category
+                </UiText>
+              </th>
+            )}
             {/* Type */}
             <th>
               <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
@@ -322,7 +330,7 @@ export function AssetsList({ assets, disableBatchSelect, disableBookmarks }: Ass
                     </div>
                   </td>
                   {/* Category */}
-                  {defi?.category ? (
+                  {!hideCategoryColumn && defi?.category ? (
                     <td
                       className={b('info')}
                       onClick={() =>
@@ -339,7 +347,7 @@ export function AssetsList({ assets, disableBatchSelect, disableBookmarks }: Ass
                       <UiText variants={['secondary']}>{defi.subcategory}</UiText>
                     </td>
                   ) : (
-                    <td className={b('info')}></td>
+                    !hideCategoryColumn && <td className={b('info')}></td>
                   )}
                   {/* Type */}
                   <td className={b('info')}>
@@ -386,14 +394,7 @@ export function AssetsList({ assets, disableBatchSelect, disableBookmarks }: Ass
                   {/* Subscription */}
                   <td>
                     <div className={b('info', ['subscription'])}>
-                      {subscription.tier && (
-                        <div
-                          className={b('badge', [subscription.tier?.toLowerCase() ?? 'inactive'])}
-                        >
-                          <LogoIcon className={b('badge-logo')} />
-                          {subscription.tier?.toString()}
-                        </div>
-                      )}
+                      {subscription.tier && <SubscriptionBadge tier={subscription.tier} />}
                       <img
                         className={b('icon', ['clickable'])}
                         alt="download"

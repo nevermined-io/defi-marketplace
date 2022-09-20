@@ -78,6 +78,8 @@ const UserProvider = (props: UserProviderProps) => {
   const [toDate, setToDate] = useState('')
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [selectedNetworks, setSelectedNetworks] = useState<string[]>([])
+  const [selectedSubscriptions, setSelectedSubscriptions] = useState<string[]>([])
+  const [selectedSubtypes, setSelectedSubtypes] = useState<string[]>([])
   const [selectedPrice, setSelectedPrice] = useState<number>(0)
   const { sdk, updateSDK, isLoadingSDK } = Catalog.useNevermined()
   const { walletAddress, isAvailable, checkIsLogged } = useContext(MetaMask.WalletContext)
@@ -306,8 +308,8 @@ const UserProvider = (props: UserProviderProps) => {
         setBookmarks,
         balance,
         network,
-        tokenSymbol,
         tiers,
+        tokenSymbol,
         assets,
         setAssets,
         searchInputText,
@@ -322,6 +324,10 @@ const UserProvider = (props: UserProviderProps) => {
         setSelectedNetworks,
         selectedPrice,
         setSelectedPriceRange: (selectedPrice: number) => setSelectedPriceRange(selectedPrice),
+        selectedSubscriptions,
+        setSelectedSubscriptions,
+        selectedSubtypes,
+        setSelectedSubtypes,
         getCurrentUserSubscription,
         userSubscriptions,
         setUserSubscriptions,

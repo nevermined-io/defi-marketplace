@@ -115,7 +115,7 @@ export const Account: NextPage = () => {
         </>
       )
     } else if (view == 4) {
-      return <AssetsList assets={downloaded} disableBatchSelect />
+      return <AssetsList assets={downloaded} disableBatchSelect hideCategoryColumn />
     } else if (view == 5) {
       return (
         <>
@@ -183,7 +183,7 @@ export const Account: NextPage = () => {
               variants={['detail']}
               onClick={() => setView(4)}
             >
-              Downloads
+              Purchases
             </UiText>
             <UiDivider />
             <UiText
