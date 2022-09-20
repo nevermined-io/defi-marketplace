@@ -1,0 +1,40 @@
+@import '../../styles/variables';
+
+.subscription-badge {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  gap: 8px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 14px;
+
+  &--community {
+    background: $community-subscription-gradient;
+  }
+
+  &--analyst {
+    background: $analyst-subscription-gradient;
+  }
+
+  &--enterprise {
+    background: $enterprise-subscription-gradient;
+  }
+
+  &--inactive {
+    background: #2b465c;
+    color: #8aaabe;
+
+    .subscription-badge__badge-logo {
+      path {
+        fill: #8aaabe;
+      }
+    }
+  }
+
+  &__logo {
+    width: 16px;
+    height: 10px;
+  }
+}

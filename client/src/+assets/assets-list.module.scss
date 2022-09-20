@@ -1,5 +1,4 @@
 @import '~@nevermined-io/styles/lib/cjs/styles/index.scss';
-@import '../styles/variables';
 
 .assets-list {
   font-family: 'Titillium Web';
@@ -216,44 +215,8 @@
     margin: 5px;
   }
 
-  &__badge {
-    display: flex;
-    align-items: center;
-    padding: 6px 8px;
+  &__subscription-badge {
     margin-right: 10px;
-    gap: 8px;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 14px;
-
-    &-logo {
-      width: 16px;
-      height: 10px;
-    }
-
-    &--community {
-      background: $community-subscription-gradient;
-    }
-
-    &--analyst {
-      background: $analyst-subscription-gradient;
-    }
-
-    &--enterprise {
-      background: $enterprise-subscription-gradient;
-    }
-
-    &--inactive {
-      background: #2b465c;
-      color: #8aaabe;
-
-      .assets-list__badge-logo {
-        path {
-          fill: #8aaabe;
-        }
-      }
-    }
   }
 
   &__table {
