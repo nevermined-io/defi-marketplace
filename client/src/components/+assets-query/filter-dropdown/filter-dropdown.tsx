@@ -5,7 +5,8 @@ import { XuiDatePicker } from './date-picker'
 
 import styles from './filter-dropdown.module.scss'
 import { XuiNetworkSelector } from './network-selector'
-import { XuiPriceRangeSelector } from './price-range-selector'
+import { XuiTypeSelector } from './type-selector'
+import { XuiSubscriptionSelector } from './subscription-selector'
 
 interface FilterDropdownProps {
   setPriceRange: (price: number) => void
@@ -18,7 +19,8 @@ export function XuiFilterDropdown(props: FilterDropdownProps) {
     <UiLayout type="grid" className={b('wrapper')}>
       <XuiDatePicker />
       <XuiNetworkSelector />
-      <XuiPriceRangeSelector setPriceRange={props.setPriceRange} />
+      <XuiTypeSelector />
+      <XuiSubscriptionSelector />
     </UiLayout>
   )
 }

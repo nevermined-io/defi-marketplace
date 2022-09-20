@@ -155,6 +155,7 @@ export const UserPublishMultiStep: NextPage = () => {
         break
       default:
         metadata.additionalInformation!.customData = {
+          subtype: assetPublish.type,
           tier_name: assetPublish.tier
         }
         break

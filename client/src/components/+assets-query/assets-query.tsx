@@ -71,8 +71,7 @@ export function XuiAssetsQuery({
     }
   }
   const nftAccess = { match: { 'service.type': 'nft721-access' } }
-  const listed = { match: { 'service.attributes.curation.isListed': 'true' } }
-
+ 
   const subscriptionFilter = () => {
     if (selectedSubscriptions.length === 0)
       return ''
@@ -98,6 +97,8 @@ export function XuiAssetsQuery({
       }
     }
 
+  // add listed into mustArray once we have a dataset with that property in the metadata
+  //  const listed = { match: { 'service.attributes.curation.isListed': 'true' } }
   const mustArray = [textFilter, datasetCategory, nftAccess]
   selectedNetworkEvent.length > 0 && mustArray.push(datasetNetwork as any)
   dateFilter && mustArray.push(dateFilter as any)
@@ -163,11 +164,6 @@ export function XuiAssetsQuery({
           break
         case 'fromDate':
           queryParams.get('fromDate') ? setFromDate(value) : setFromDate(fromDate)
-          break
-        case 'priceRange':
-          queryParams.get('priceRange')
-            ? setSelectedPriceRange(parseFloat(value))
-            : setSelectedPriceRange(selectedPrice)
           break
         default:
           break
