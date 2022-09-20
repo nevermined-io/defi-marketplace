@@ -21,17 +21,18 @@ export function XuiSearchBar({ onSearch }: SearchBarProps) {
     toDate,
     selectedCategories,
     selectedNetworks,
-    selectedPrice,
+    selectedSubscriptions,
+    selectedSubtypes,
     setSelectedCategories,
     setToDate,
     setFromDate,
     setSearchInputText,
     setSelectedNetworks,
-    setSelectedPriceRange
+    setSelectedSubscriptions,
+    setSelectedSubtypes
   } = useContext(User)
 
   const [textValue, setTextValue] = useState('')
-  const [priceValue, setPriceValue] = useState<number>(0)
 
   //write the text in the serchbar
   const inputChanges = useCallback((event: any) => {
@@ -41,32 +42,28 @@ export function XuiSearchBar({ onSearch }: SearchBarProps) {
   const inputOnEnter = useCallback(
     (event: any) => {
       if (event.key === 'Enter') {
-        onSearch ? onSearch(event.target.value, priceValue) : setSearchInputText(textValue)
+        onSearch ? onSearch(event.target.value) : setSearchInputText(textValue)
       }
     },
     [textValue]
   )
 
   const submitSearch = () => {
-    if (onSearch) return onSearch(textValue, priceValue)
+    if (onSearch) return onSearch(textValue)
     else {
       setSearchInputText(textValue)
-      setSelectedPriceRange(priceValue)
     }
   }
 
   const resetCategories = () => {
     setSelectedCategories([])
     setSelectedNetworks([])
+    setSelectedSubscriptions([])
+    setSelectedSubtypes([])
     setToDate('')
     setFromDate('')
     setTextValue('')
     setSearchInputText('')
-    setSelectedPriceRange(0)
-  }
-
-  const setPriceRange = (price: number) => {
-    setPriceValue(price)
   }
 
   return (
@@ -75,9 +72,10 @@ export function XuiSearchBar({ onSearch }: SearchBarProps) {
       <UiLayout type="sides" justify="end">
         {(selectedCategories.length ||
           selectedNetworks.length > 0 ||
+          setSelectedSubscriptions.length > 0 ||
+          selectedSubtypes.length > 0 ||
           fromDate ||
-          toDate ||
-          selectedPrice > 0) && (
+          toDate) && (
           <div onClick={resetCategories} className={b('clear-div')}>
             <span className={b('clear-div', ['clear-button'])}>Clear</span>
             <span className={b('clear-div')}>
@@ -108,14 +106,15 @@ export function XuiSearchBar({ onSearch }: SearchBarProps) {
         </UiDropdown>
         <UiDropdown
           selected={
-            fromDate || toDate || selectedPrice > 0 || selectedNetworks.length ? true : false
+            fromDate || toDate || selectedNetworks.length ? true : false ||
+            selectedSubscriptions.length ? true : false || selectedSubtypes.length ? true : false
           }
           imgHeight="10px"
           imgSrc="/assets/filter.svg"
           title="Filters"
           imgWidth="10px"
         >
-          <XuiFilterDropdown setPriceRange={setPriceRange} />
+          <XuiFilterDropdown />
         </UiDropdown>
         <div className={b('form-button')} onClick={submitSearch}>
           <UiButton
