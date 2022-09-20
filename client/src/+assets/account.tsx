@@ -115,7 +115,9 @@ export const Account: NextPage = () => {
         </>
       )
     } else if (view == 4) {
-      return <AssetsList assets={downloaded} disableBatchSelect hideCategoryColumn />
+      return (
+        <AssetsList assets={downloaded} disableBatchSelect disableBookmarks hideCategoryColumn />
+      )
     } else if (view == 5) {
       return (
         <>
