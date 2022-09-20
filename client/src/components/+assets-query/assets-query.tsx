@@ -33,10 +33,8 @@ export function XuiAssetsQuery({
     toDate,
     selectedCategories,
     selectedNetworks,
-    selectedPrice,
     selectedSubscriptions,
     selectedSubtypes,
-    setSelectedPriceRange,
     setSelectedNetworks,
     setAssets,
     setSelectedCategories,
@@ -196,7 +194,7 @@ export function XuiAssetsQuery({
         history.replaceState(
           null,
           '',
-          `/list?searchInputText=${searchInputText}&fromDate=${fromDate}&toDate=${toDate}&selectedCategories=${selectedCategories}&selectedNetworks=${selectedNetworks}&priceRange=${selectedPrice}`
+          `/list?searchInputText=${searchInputText}&fromDate=${fromDate}&toDate=${toDate}&selectedCategories=${selectedCategories}&selectedNetworks=${selectedNetworks}`
         )
       })
   }, [sdk, page, JSON.stringify(query), bookmarks])
