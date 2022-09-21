@@ -109,6 +109,11 @@ export const UserPublishMultiStep: NextPage = () => {
 
   const generateMetadata = () => {
     const metadata: MetaData = {
+      curation: {
+        rating: 0,
+        numVotes: 0,
+        isListed: true 
+      },
       main: {
         name: assetPublish.name,
         dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
