@@ -317,7 +317,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                     <div className={b('asset-title')}>
                       <Link href={`/asset/${asset.id}`}>
                         <UiText className={`pointer`} wrapper="h4" type="h4">
-                          {metadata.main.name} - {subscription.tier?.toString()}
+                          {metadata.main.name}
                         </UiText>
                       </Link>
                       <UiText className={b('asset-date')} type="small" variants={['detail']}>
@@ -354,7 +354,11 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                         width="17px"
                         src="assets/dataset.svg"
                       />
-                      {metadata.main?.type?.toUpperCase()}
+                      {
+                        metadata?.additionalInformation?.customData?.subtype ?
+                        metadata?.additionalInformation?.customData?.subtype?.toUpperCase():
+                        metadata.main?.type?.toUpperCase()
+                      }
                     </div>
                   </td>
                   {/* Network */}
