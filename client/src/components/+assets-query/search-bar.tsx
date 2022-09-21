@@ -17,20 +17,15 @@ const b = BEM('assets-query', styles)
 
 export function XuiSearchBar({ onSearch }: SearchBarProps) {
   const {
-    fromDate,
-    toDate,
     selectedCategories,
-    selectedNetworks,
-    selectedSubscriptions,
-    selectedSubtypes,
     setSelectedCategories,
-    setToDate,
-    setFromDate,
     setSearchInputText,
-    setSelectedNetworks,
     setSelectedSubscriptions,
-    setSelectedSubtypes
+    dropdownFilters,
+    clearDropdownFilters
   } = useContext(User)
+  const { selectedNetworks, selectedSubscriptions, selectedSubtypes, fromDate, toDate } =
+    dropdownFilters
 
   const [textValue, setTextValue] = useState('')
 
@@ -57,11 +52,7 @@ export function XuiSearchBar({ onSearch }: SearchBarProps) {
 
   const resetCategories = () => {
     setSelectedCategories([])
-    setSelectedNetworks([])
-    setSelectedSubscriptions([])
-    setSelectedSubtypes([])
-    setToDate('')
-    setFromDate('')
+    clearDropdownFilters()
     setTextValue('')
     setSearchInputText('')
   }
@@ -106,8 +97,13 @@ export function XuiSearchBar({ onSearch }: SearchBarProps) {
         </UiDropdown>
         <UiDropdown
           selected={
-            fromDate || toDate || selectedNetworks.length ? true : false ||
-            selectedSubscriptions.length ? true : false || selectedSubtypes.length ? true : false
+            fromDate || toDate || selectedNetworks.length
+              ? true
+              : false || selectedSubscriptions.length
+              ? true
+              : false || selectedSubtypes.length
+              ? true
+              : false
           }
           imgHeight="10px"
           imgSrc="/assets/filter.svg"

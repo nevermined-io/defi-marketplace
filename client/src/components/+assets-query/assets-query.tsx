@@ -9,7 +9,7 @@ import { User } from '../../context'
 import { networkPrefix, subcategoryPrefix } from '../../shared'
 import { XuiPagination } from './pagination'
 import { XuiSearchBar } from './search-bar'
-import { NFT_TIERS} from 'src/config'
+import { NFT_TIERS } from 'src/config'
 
 interface AssetsQueryProps {
   search?: 'onsite' | 'search-page'
@@ -29,12 +29,7 @@ export function XuiAssetsQuery({
   const {
     assets,
     searchInputText,
-    fromDate,
-    toDate,
     selectedCategories,
-    selectedNetworks,
-    selectedSubscriptions,
-    selectedSubtypes,
     setSelectedNetworks,
     setAssets,
     setSelectedCategories,
@@ -42,8 +37,11 @@ export function XuiAssetsQuery({
     setFromDate,
     setSearchInputText,
     setBookmarks,
-    bookmarks
+    bookmarks,
+    dropdownFilters
   } = useContext(User)
+  const { selectedNetworks, selectedSubscriptions, selectedSubtypes, fromDate, toDate } =
+    dropdownFilters
   const { sdk } = Catalog.useNevermined()
   const { walletAddress } = MetaMask.useWallet()
   const [totalPages, setTotalPages] = useState<number>(1)
@@ -71,16 +69,24 @@ export function XuiAssetsQuery({
   const nftAccess = { match: { 'service.type': 'nft721-access' } }
 
   const subscriptionFilter = () => {
-    if (selectedSubscriptions.length === 0)
-      return ''
-    const tierAddresses = selectedSubscriptions.map(subscription => NFT_TIERS.find(tier => tier.name === subscription)?.address)
-    return tierAddresses && { match: { 'service.attributes.serviceAgreementTemplate.conditions.parameters.value': tierAddresses.join(', ') } }
+    if (selectedSubscriptions.length === 0) return ''
+    const tierAddresses = selectedSubscriptions.map(
+      (subscription) => NFT_TIERS.find((tier) => tier.name === subscription)?.address
+    )
+    return (
+      tierAddresses && {
+        match: {
+          'service.attributes.serviceAgreementTemplate.conditions.parameters.value':
+            tierAddresses.join(', ')
+        }
+      }
+    )
   }
 
   const datasetAssetType = {
     match: {
       'service.attributes.additionalInformation.customData.subtype':
-      selectedSubtypes.length === 0 ? '' : selectedSubtypes.join(', ')
+        selectedSubtypes.length === 0 ? '' : selectedSubtypes.join(', ')
     }
   }
 
@@ -103,7 +109,9 @@ export function XuiAssetsQuery({
   subscriptionFilter() && mustArray.push(subscriptionFilter() as any)
   selectedSubtypes.length > 0 && mustArray.push(datasetAssetType as any)
 
-  const notBundleFilter = { match: { 'service.attributes.additionalInformation.categories': 'EventType:bundle' } }
+  const notBundleFilter = {
+    match: { 'service.attributes.additionalInformation.categories': 'EventType:bundle' }
+  }
   const mustNotArray = [notBundleFilter]
 
   const query = {
@@ -118,9 +126,8 @@ export function XuiAssetsQuery({
       return
     }
 
-    (async () => {
-      if (!walletAddress)
-        return
+    ;(async () => {
+      if (!walletAddress) return
 
       const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
       if (!userProfile?.userId) {

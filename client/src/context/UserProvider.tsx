@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState, useRef, ReactNode } from 'react'
+import React, { useContext, useEffect, useState, useRef, ReactNode, useCallback } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import { Catalog, AuthToken } from '@nevermined-io/catalog-core'
-import { User } from '.'
+import { User, DropDownFilters } from '.'
 import { correctNetworkName } from '../config'
 import { SubscriptionTiers, UserSubscription } from '../shared/constants'
 import { NFT_TIERS } from 'src/config'
@@ -85,6 +85,13 @@ const UserProvider = (props: UserProviderProps) => {
   const { walletAddress, isAvailable, checkIsLogged } = useContext(MetaMask.WalletContext)
   const userProviderMounted = useRef()
   const [userSubscriptions, setUserSubscriptions] = useState<UserSubscription[]>([])
+  const [dropdownFilters, setDropDownFilters] = useState<DropDownFilters>({
+    selectedNetworks: [],
+    selectedSubscriptions: [],
+    selectedSubtypes: [],
+    fromDate: '',
+    toDate: ''
+  })
 
   const getCurrentUserSubscription = (): UserSubscription | undefined => {
     return userSubscriptions.find((subs) => subs.current)
@@ -300,6 +307,32 @@ const UserProvider = (props: UserProviderProps) => {
     setSelectedPrice(selectedPrice)
   }
 
+  const applyDropdownFilters = useCallback(() => {
+    setDropDownFilters({
+      selectedNetworks,
+      selectedSubscriptions,
+      selectedSubtypes,
+      fromDate,
+      toDate
+    })
+  }, [selectedNetworks, selectedSubscriptions, selectedSubtypes, fromDate, toDate])
+
+  const clearDropdownFilters = useCallback(() => {
+    const dropdownFilters = {
+      selectedNetworks: [],
+      selectedSubscriptions: [],
+      selectedSubtypes: [],
+      fromDate: '',
+      toDate: ''
+    }
+    setSelectedNetworks(dropdownFilters.selectedNetworks)
+    setSelectedSubscriptions(dropdownFilters.selectedSubscriptions)
+    setSelectedSubtypes(dropdownFilters.selectedSubtypes)
+    setFromDate(dropdownFilters.fromDate)
+    setToDate(dropdownFilters.toDate)
+    setDropDownFilters(dropdownFilters)
+  }, [])
+
   return (
     <User.Provider
       value={{
@@ -331,7 +364,10 @@ const UserProvider = (props: UserProviderProps) => {
         getCurrentUserSubscription,
         userSubscriptions,
         setUserSubscriptions,
-        getUserSubscriptions
+        getUserSubscriptions,
+        dropdownFilters,
+        applyDropdownFilters,
+        clearDropdownFilters
       }}
     >
       {props.children}

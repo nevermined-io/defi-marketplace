@@ -117,7 +117,12 @@ $h: 1em;
     }
 
     span {
-      margin: 15px 15px 15px 0;
+      margin: 0 15px 15px 0;
+    }
+
+    @media (max-width: 1080px) {
+      flex-flow: column-reverse;
+      width: 100%;
     }
   }
 
@@ -132,7 +137,8 @@ $h: 1em;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0 15px;
+    align-items: center;
+    padding: 15px;
   }
 
   &__button {
@@ -212,8 +218,6 @@ $h: 1em;
     text-transform: uppercase;
     padding: 5px;
     cursor: pointer;
-    color: #8aaabe;
-
     background: #2b465c;
 
     &--selected {
