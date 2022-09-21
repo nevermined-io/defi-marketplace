@@ -126,6 +126,7 @@ export function XuiAssetsQuery({
       return
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-extra-semi
     ;(async () => {
       if (!walletAddress) return
 
