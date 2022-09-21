@@ -3,6 +3,7 @@ import { User } from 'src/context'
 
 import { BEM } from '@nevermined-io/styles'
 import styles from './filter-dropdown.module.scss'
+import { SubscriptionBadge } from '../../subscription-badge/subscription-badge'
 
 interface SubscriptionBoxProps {
   subscription: string
@@ -22,7 +23,11 @@ export function XuiSubscriptionBox(props: SubscriptionBoxProps) {
 
   const addRemoveSubscriptionToFilter = (subscription: string) => {
     if (selectedSubscriptions.includes(subscription)) {
-      setSelectedSubscriptions(selectedSubscriptions.filter((selectedSubscriptions) => selectedSubscriptions !== subscription))
+      setSelectedSubscriptions(
+        selectedSubscriptions.filter(
+          (selectedSubscriptions) => selectedSubscriptions !== subscription
+        )
+      )
       setSelected(false)
     } else {
       setSelectedSubscriptions(selectedSubscriptions.concat(subscription))
@@ -31,11 +36,11 @@ export function XuiSubscriptionBox(props: SubscriptionBoxProps) {
   }
 
   return (
-    <div
-      className={selected ? b('network-selector-box', ['selected']) : b('network-selector-box')}
+    <SubscriptionBadge
+      tier={props.subscription}
+      className={b('network-selector-box')}
+      inactive={!selected}
       onClick={() => addRemoveSubscriptionToFilter(props.subscription)}
-    >
-      {props.subscription}
-    </div>
+    />
   )
 }

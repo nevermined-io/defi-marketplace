@@ -7,12 +7,16 @@ type IProps = {
   className?: string
   tier: 'community' | 'analyst' | 'enterprise' | string
   inactive?: boolean
+  onClick: () => void
 }
 
 const b = BEM('subscription-badge', styles)
 
-export const SubscriptionBadge: React.FC<IProps> = ({ className, tier, inactive }) => (
-  <div className={extendClassName({ className }, b([inactive ? 'inactive' : tier?.toLowerCase()]))}>
+export const SubscriptionBadge: React.FC<IProps> = ({ className, tier, inactive, onClick }) => (
+  <div
+    className={extendClassName({ className }, b([inactive ? 'inactive' : tier?.toLowerCase()]))}
+    onClick={onClick}
+  >
     <LogoIcon className={b('logo')} />
     {tier?.toString()}
   </div>

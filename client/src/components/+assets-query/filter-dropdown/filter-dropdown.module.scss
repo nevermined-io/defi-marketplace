@@ -51,9 +51,8 @@ $h: 1em;
     background: gc(bg);
     border: 1px solid gc(gM);
     display: flex;
+    width: 840px;
     justify-content: space-between;
-
-    
 
     input[type='range'] {
       // &::-webkit-slider-runnable-track,
@@ -90,12 +89,11 @@ $h: 1em;
         background: #2b465c;
         color: #8aaabe;
         padding: 6%;
-        width:50px
+        width: 50px;
       }
 
       &::-webkit-datetime-edit-fields-wrapper {
         background: #2b465c;
-        
       }
       &::-webkit-datetime-edit-text {
         color: #8aaabe;
@@ -123,11 +121,54 @@ $h: 1em;
     }
   }
 
-  &__filter-container{
-    display:flex;
+  &__controls {
+    font-family: 'Titillium Web';
+    display: flex;
+    flex-flow: row wrap;
+    flex-basis: auto;
+  }
+
+  &__buttons {
+    display: flex;
     flex-direction: column;
-    width:300px;
-    padding:10px
+    justify-content: center;
+    padding: 0 15px;
+  }
+
+  &__button {
+    font-family: 'Titillium Web';
+    border: none;
+    padding: 10px;
+    width: 208px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &--clear {
+      background: #131e35;
+      color: #8aaabe;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    &--apply {
+      background: none;
+      border: 3px solid;
+      border-image-slice: 1;
+      border-image-source: linear-gradient(to right, #7834f9, #67cff9);
+      color: #ffffff;
+    }
+  }
+
+  &__filter-container {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    padding: 15px;
   }
 
   &__picker {
@@ -140,6 +181,8 @@ $h: 1em;
     font-weight: bold;
     text-align: left;
     padding-bottom: 10px;
+    border-bottom: 2px solid #2b465c;
+    margin-bottom: 15px;
   }
 
   &__date-pickers {
@@ -161,45 +204,42 @@ $h: 1em;
   &__network-selector-container {
     display: flex;
     flex-wrap: wrap;
-    width:250px;
-    justify-content: space-around;
   }
-  
+
   &__network-selector-box {
-    margin:5px;
+    margin: 5px;
     font-size: 12px;
     text-transform: uppercase;
     padding: 5px;
     cursor: pointer;
-    color: #8AAABE;
-    
-    background: #2B465C;
-   
-    &--selected{
-      background: #67CEF9;
-      color:#132D43;
+    color: #8aaabe;
+
+    background: #2b465c;
+
+    &--selected {
+      background: #67cef9;
+      color: #132d43;
     }
   }
 
-  &__ranges-limits{
+  &__ranges-limits {
     padding-bottom: 10px;
 
-    span{
-      color: #8AAABE;
-      margin:0;
+    span {
+      color: #8aaabe;
+      margin: 0;
       font-size: 14px;
       justify-items: center;
       align-items: center;
     }
 
-    label{
+    label {
       padding: 5px;
-      background: #2B465C;
+      background: #2b465c;
     }
   }
 
-  &__range-bar{
+  &__range-bar {
     background-color: red;
   }
-
 }
