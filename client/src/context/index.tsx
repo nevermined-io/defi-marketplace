@@ -77,7 +77,7 @@ export const User = React.createContext({
   getUserSubscriptions: (): Promise<UserSubscription[]> | undefined => {
     return
   },
-  dropdownFilters: {} as Filters,
+  dropdownFilters: {} as DropDownFilters,
   applyDropdownFilters: () => {
     /* empty */
   },
