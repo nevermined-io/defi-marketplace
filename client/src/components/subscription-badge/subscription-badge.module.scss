@@ -3,12 +3,14 @@
 .subscription-badge {
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 6px 8px;
   gap: 8px;
   font-style: normal;
   font-weight: 700;
   font-size: 14px;
   line-height: 14px;
+  min-width: 110px;
 
   &--community {
     background: $community-subscription-gradient;
