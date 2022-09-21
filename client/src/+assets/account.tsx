@@ -20,10 +20,12 @@ export const Account: NextPage = () => {
   const [purchaseDate, setPurchaseDate] = useState<Date>()
   const [published, setPublished] = useState<DDO[]>([])
   const [downloaded, setDownloaded] = useState<DDO[]>([])
-  const { bookmarks, setBookmarks, getCurrentUserSubscription, userSubscriptions } = useContext(User)
+  const { bookmarks, setBookmarks, getCurrentUserSubscription, userSubscriptions } =
+    useContext(User)
   const { sdk } = Catalog.useNevermined()
   const { walletAddress, getProvider } = MetaMask.useWallet()
-  const subscriptionErrorText = "You don't have any current subscription. Only users with a subscription are allowed to publish"
+  const subscriptionErrorText =
+    "You don't have any current subscription. Only users with a subscription are allowed to publish"
 
   const loadUserInfo = async () => {
     const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
@@ -42,7 +44,7 @@ export const Account: NextPage = () => {
     let downloaded = await loadUserDownloads(sdk, walletAddress)
     downloaded = downloaded.map((asset: any) => asset._did)
     // removing duplicates
-    downloaded = [...new Set(downloaded)];
+    downloaded = [...new Set(downloaded)]
     const downloadedDDO: DDO[] = await Promise.all(
       downloaded.map(async (did: any) => await sdk.assets.resolve(did))
     )
@@ -53,12 +55,18 @@ export const Account: NextPage = () => {
   }
 
   const loadSubscription = async () => {
-
-    let subscriptionsEvents = await getUserSubscription(sdk, getProvider(), walletAddress, getCurrentUserSubscription()?.did || "")
+    let subscriptionsEvents = await getUserSubscription(
+      sdk,
+      getProvider(),
+      walletAddress,
+      getCurrentUserSubscription()?.did || ''
+    )
     subscriptionsEvents = subscriptionsEvents.sort(
       (event1: any, event2: any) => event2.date.getTime() - event1.date.getTime()
     )
-    const lastSuscriptionPurchase: Date = subscriptionsEvents ? subscriptionsEvents[0]?.date : undefined
+    const lastSuscriptionPurchase: Date = subscriptionsEvents
+      ? subscriptionsEvents[0]?.date
+      : undefined
     setPurchaseDate(lastSuscriptionPurchase)
   }
 
@@ -86,12 +94,14 @@ export const Account: NextPage = () => {
 
   const renderContent = () => {
     if (view == 0) {
-      return <Summary
-        published={published}
-        bookmarks={bookmarks}
-        downloaded={downloaded}
-        currentSubscription={getCurrentUserSubscription()?.tier || ''}
-      />
+      return (
+        <Summary
+          published={published}
+          bookmarks={bookmarks}
+          downloaded={downloaded}
+          currentSubscription={getCurrentUserSubscription()?.tier || ''}
+        />
+      )
     } else if (view == 1) {
       return <UserProfile />
     } else if (view == 2) {
@@ -100,15 +110,20 @@ export const Account: NextPage = () => {
       return (
         <>
           <UiButton onClick={() => publishAsset()}>Publish new asset</UiButton>
-          <AssetsList assets={published} disableBatchSelect={true} />
+          <AssetsList assets={published} disableBatchSelect disableBookmarks />
         </>
       )
     } else if (view == 4) {
-      return <AssetsList assets={downloaded} disableBatchSelect={true} />
+      return (
+        <AssetsList assets={downloaded} disableBatchSelect disableBookmarks hideCategoryColumn />
+      )
     } else if (view == 5) {
       return (
         <>
-          <Subscriptions purchaseDate={purchaseDate} currentSubscription={getCurrentUserSubscription()} />
+          <Subscriptions
+            purchaseDate={purchaseDate}
+            currentSubscription={getCurrentUserSubscription()}
+          />
         </>
       )
     }
@@ -117,10 +132,8 @@ export const Account: NextPage = () => {
   return (
     <>
       <UiLayout type="container">
-      <div className={b('header')}>
-          <div className={b('user-name')}>
-            Welcome back
-          </div>
+        <div className={b('header')}>
+          <div className={b('user-name')}>Welcome back</div>
           <div className={b('account-title')}>
             <UiText block type="h2" className={b('text')}>
               Your account
@@ -129,7 +142,7 @@ export const Account: NextPage = () => {
         </div>
         <div className={b('row')}>
           <div className={b('columnleft')}>
-          <UiText
+            <UiText
               className={b('pointer', view === 0 ? ['active'] : [])}
               type="link-caps"
               variants={['detail']}
@@ -171,7 +184,7 @@ export const Account: NextPage = () => {
               variants={['detail']}
               onClick={() => setView(4)}
             >
-              Downloads
+              Purchases
             </UiText>
             <UiDivider />
             <UiText

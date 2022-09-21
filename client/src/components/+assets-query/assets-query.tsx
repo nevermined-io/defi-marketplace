@@ -69,14 +69,14 @@ export function XuiAssetsQuery({
     }
   }
   const nftAccess = { match: { 'service.type': 'nft721-access' } }
- 
+
   const subscriptionFilter = () => {
     if (selectedSubscriptions.length === 0)
       return ''
-    const tierAddresses = selectedSubscriptions.map(subscription => NFT_TIERS.find(tier => tier.name === subscription)?.address)  
+    const tierAddresses = selectedSubscriptions.map(subscription => NFT_TIERS.find(tier => tier.name === subscription)?.address)
     return tierAddresses && { match: { 'service.attributes.serviceAgreementTemplate.conditions.parameters.value': tierAddresses.join(', ') } }
   }
- 
+
   const datasetAssetType = {
     match: {
       'service.attributes.additionalInformation.customData.subtype':
@@ -121,7 +121,7 @@ export function XuiAssetsQuery({
     (async () => {
       if (!walletAddress)
         return
-        
+
       const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
       if (!userProfile?.userId) {
         return

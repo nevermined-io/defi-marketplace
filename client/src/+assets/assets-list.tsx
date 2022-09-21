@@ -13,27 +13,29 @@ import {
   UiPopupHandlers,
   NotificationPopup
 } from '@nevermined-io/styles'
-import {
-  toDate,
-  getDefiInfo,
-  getDdoSubscription,
-  DDOSubscription
-} from '../shared'
+import { toDate, getDefiInfo, getDdoSubscription, DDOSubscription } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
 import { Catalog } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import { XuiDownloadAsset } from '../components/+download-asset/download-asset'
-
+import { SubscriptionBadge } from '../components/subscription-badge/subscription-badge'
 
 interface AssetsListProps {
   assets: DDO[]
   disableBatchSelect?: boolean
+  disableBookmarks?: boolean
+  hideCategoryColumn?: boolean
 }
 
 const b = BEM('assets-list', styles)
 
-export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
+export function AssetsList({
+  assets,
+  disableBatchSelect,
+  disableBookmarks,
+  hideCategoryColumn
+}: AssetsListProps) {
   const {
     selectedNetworks,
     selectedCategories,
@@ -254,11 +256,13 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
               </UiText>
             </th>
             {/* Category */}
-            <th>
-              <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
-                category
-              </UiText>
-            </th>
+            {!hideCategoryColumn && (
+              <th>
+                <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
+                  category
+                </UiText>
+              </th>
+            )}
             {/* Type */}
             <th>
               <UiText type="caps" className={b('info', ['info-header'])} variants={['detail']}>
@@ -278,7 +282,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
               </UiText>
             </th>
             {/* Bookmark */}
-            <th className={b('table__header', ['bookmark'])} />
+            {!disableBookmarks && <th className={b('table__header', ['bookmark'])} />}
           </tr>
         </thead>
         <tbody>
@@ -326,7 +330,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                     </div>
                   </td>
                   {/* Category */}
-                  {defi?.category ? (
+                  {!hideCategoryColumn && defi?.category ? (
                     <td
                       className={b('info')}
                       onClick={() =>
@@ -343,7 +347,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                       <UiText variants={['secondary']}>{defi.subcategory}</UiText>
                     </td>
                   ) : (
-                    <td className={b('info')}></td>
+                    !hideCategoryColumn && <td className={b('info')}></td>
                   )}
                   {/* Type */}
                   <td className={b('info')}>
@@ -394,14 +398,7 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                   {/* Subscription */}
                   <td>
                     <div className={b('info', ['subscription'])}>
-                      {subscription.tier && (
-                        <div
-                          className={b('badge', [subscription.tier?.toLowerCase() ?? 'inactive'])}
-                        >
-                          <LogoIcon className={b('badge-logo')} />
-                          {subscription.tier?.toString()}
-                        </div>
-                      )}
+                      {subscription.tier && <SubscriptionBadge tier={subscription.tier} />}
                       <img
                         className={b('icon', ['clickable'])}
                         alt="download"
@@ -414,25 +411,27 @@ export function AssetsList({ assets, disableBatchSelect }: AssetsListProps) {
                     </div>
                   </td>
                   {/* Bookmark */}
-                  <td
-                    className={extendClassName(
-                      { className: b('bookmark-col') },
-                      b('table__column', ['bookmark'])
-                    )}
-                    onClick={() =>
-                      isBookmarked ? onRemoveBookmark(asset.id) : onAddBookmark(asset.id, '')
-                    }
-                  >
-                    {isBookmarked ? (
-                      <div className={b('bookmark', ['minus'])}>
-                        -<span className={b('bookmark-text')}>Remove</span>
-                      </div>
-                    ) : (
-                      <div className={b('bookmark', ['plus'])}>
-                        +<span className={b('bookmark-text')}>Bookmark</span>
-                      </div>
-                    )}
-                  </td>
+                  {!disableBookmarks && (
+                    <td
+                      className={extendClassName(
+                        { className: b('bookmark-col') },
+                        b('table__column', ['bookmark'])
+                      )}
+                      onClick={() =>
+                        isBookmarked ? onRemoveBookmark(asset.id) : onAddBookmark(asset.id, '')
+                      }
+                    >
+                      {isBookmarked ? (
+                        <div className={b('bookmark', ['minus'])}>
+                          -<span className={b('bookmark-text')}>Remove</span>
+                        </div>
+                      ) : (
+                        <div className={b('bookmark', ['plus'])}>
+                          +<span className={b('bookmark-text')}>Bookmark</span>
+                        </div>
+                      )}
+                    </td>
+                  )}
                 </tr>
               )
             })}

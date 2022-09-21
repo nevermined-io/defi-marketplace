@@ -3,6 +3,13 @@ import { DDO } from '@nevermined-io/nevermined-sdk-js'
 
 import { UserSubscription } from '../shared/constants'
 
+export type SubscriptionTier = {
+  name: string
+  price: string
+  symbol: string
+  features: string[]
+}
+
 export const User = React.createContext({
     isLogged: false,
     bookmarks: [] as DDO[],
@@ -11,6 +18,7 @@ export const User = React.createContext({
         nevermined: 0
     },
     network: '',
+    tiers: [] as SubscriptionTier[],
     tokenSymbol: '',
     assets: [] as DDO[],
     setAssets: (assets: DDO[]) => {
@@ -56,7 +64,7 @@ export const User = React.createContext({
          /* empty */
     },
     getCurrentUserSubscription: () : UserSubscription | undefined => {
-        return 
+        return
     },
     getUserSubscriptions: () : Promise<UserSubscription[]>  | undefined  => {
         return

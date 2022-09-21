@@ -39,9 +39,11 @@
 
   &__card {
     height: 250px;
-    width: 396px;
+    max-width: 396px;
+    justify-self: center;
+    width: 100%;
     left: 419px;
-    top: 369.000244140625px;
+    margin: 0;
     text-align: center;
     border-radius: 0px;
     padding: 32px 8px 32px 8px;
@@ -119,7 +121,10 @@
   }
 
   &__summary {
-    padding-bottom: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: calc(396px*2);
   }
 
   &__summary-number {
@@ -131,6 +136,11 @@
     text-align: left;
   }
 
+  &__summary-subscription {
+    font-family: Titillium Web;
+    line-height: 90px;
+  }
+
   &__card-name {
     font-family: Titillium Web;
     font-size: 24px;
@@ -139,5 +149,4 @@
     letter-spacing: -0.04em;
     color: #FFFFFF;
   }
-
 }

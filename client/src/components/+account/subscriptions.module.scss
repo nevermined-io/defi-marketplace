@@ -1,0 +1,144 @@
+@import '~@nevermined-io/styles/lib/cjs/styles/index.scss';
+
+.subscriptions {
+  font-family: 'Titillium Web';
+
+  &__table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    width: 100%;
+
+    th {
+      padding-bottom: 5px;
+
+      &:not(:first-child) {
+        padding-left: 10px;
+      }
+    }
+
+    td {
+      padding: 10px 0;
+
+      &:not(:first-child) {
+        padding-left: 10px;
+      }
+    }
+
+    tr {
+      height: 100%;
+    }
+  }
+
+  &__table-column {
+    text-align: left;
+    padding-bottom: 5px;
+
+    &:not(:first-child) {
+      padding-left: 10px;
+    }
+
+    &--type {
+      width: 30%;
+    }
+
+    &--details {
+      text-align: right;
+    }
+  }
+
+  &__table-row {
+    &--data {
+      td {
+        border-top: 1px solid #8aaabe;
+      }
+    }
+
+    &--details {
+      opacity: 0;
+      height: 0 !important;
+      visibility: collapse;
+      transition: visibility 0s, opacity 0.5s linear;
+    }
+
+    &--active {
+      opacity: 1;
+      height: auto;
+      visibility: visible;
+    }
+  }
+
+  &__data-column {
+    &--view-details {
+      text-align: right;
+    }
+  }
+
+  &__subscription-badge {
+    width: fit-content;
+  }
+
+  &__price {
+    &--icon {
+      width: 15px;
+      margin-right: 5px;
+      vertical-align: middle;
+
+      path {
+        fill: #67cff9;
+      }
+    }
+  }
+
+  &__features-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  &__features-column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+  }
+
+  &__features-list {
+    list-style: none;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    margin: 16px 0;
+
+    li {
+      line-height: 32px;
+      display: flex;
+      list-style-type: none;
+      align-items: baseline;
+      column-gap: 24px;
+      margin-bottom: 16px;
+    }
+  }
+
+  &__feat-detail {
+    line-height: 24px;
+  }
+
+  &__view-details {
+    &--container {
+      cursor: pointer;
+    }
+
+    &--text {
+      margin-right: 18px;
+    }
+
+    &--sign {
+      display: inline-block;
+      width: 10px;
+    }
+  }
+}
