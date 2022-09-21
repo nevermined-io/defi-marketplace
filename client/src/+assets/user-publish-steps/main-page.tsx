@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { UiForm, UiLayout, UiText, UiPopupHandlers, NotificationPopup } from '@nevermined-io/styles'
-import { AssetService } from '@nevermined-io/catalog-core'
-import { AssetFile } from '@nevermined-io/catalog-core'
+import { Catalog,AssetFile, AssetService, RoyaltyKind, getRoyaltyScheme } from '@nevermined-io/catalog-core';
 import { NextPage } from 'next'
 import { MetaData } from '@nevermined-io/nevermined-sdk-js'
 import { BasicInfoStep } from './basic-info'
@@ -28,6 +27,7 @@ export const UserPublishMultiStep: NextPage = () => {
   const [step, setStep] = useState<number>(1)
   const [resultOk, setResultOk] = useState(false)
   const resultPopupRef = useRef<UiPopupHandlers>()
+  const { sdk, isLoadingSDK } = Catalog.useNevermined();
 
   useEffect(() => {
     setAssetPublish({
@@ -200,7 +200,19 @@ const onSubmitUserPublish = async() => {
         try {
             await uploadFiles()
             txPopupRef.current?.open()
-            publishNFT721({nftAddress: getNftTierAddress(), metadata: generateMetadata(), providers: [gatewayAddress]})
+
+            const royaltyAttributes = {
+              royaltyKind: RoyaltyKind.Standard,
+              scheme: getRoyaltyScheme(sdk, RoyaltyKind.Standard),
+              amount: 0,
+            };
+
+            publishNFT721({
+              nftAddress: getNftTierAddress(), 
+              metadata: generateMetadata(), 
+              providers: [gatewayAddress],
+              royaltyAttributes: royaltyAttributes
+            })
             .then((ddo) =>
                 {
                     setResultOk(true)
