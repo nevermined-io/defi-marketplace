@@ -7,7 +7,7 @@ type IProps = {
   className?: string
   tier: 'community' | 'analyst' | 'enterprise' | string
   inactive?: boolean
-  onClick: () => void
+  onClick?: () => void
 }
 
 const b = BEM('subscription-badge', styles)
