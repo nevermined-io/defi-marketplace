@@ -1,14 +1,11 @@
 import React, { useRef, Fragment, useContext, useEffect, useState } from 'react'
 import { DDO, Profile } from '@nevermined-io/nevermined-sdk-js'
 import Link from 'next/link'
-import LogoIcon from '../../public/assets/nevermined.svg'
 import { toast } from 'react-toastify'
 import {
   BEM,
   extendClassName,
-  UiLayout,
   UiText,
-  UiDivider,
   UiIcon,
   UiPopupHandlers,
   NotificationPopup
@@ -351,18 +348,16 @@ export function AssetsList({
                   )}
                   {/* Type */}
                   <td className={b('info')}>
-                    <div>
+                    <div className={b('asset-type')}>
                       <img
                         className={b('icon', ['dataset'])}
                         alt="dataset"
                         width="17px"
                         src="assets/dataset.svg"
                       />
-                      {
-                        metadata?.additionalInformation?.customData?.subtype ?
-                        metadata?.additionalInformation?.customData?.subtype?.toUpperCase():
-                        metadata.main?.type?.toUpperCase()
-                      }
+                      {metadata?.additionalInformation?.customData?.subtype
+                        ? metadata?.additionalInformation?.customData?.subtype?.toUpperCase()
+                        : metadata.main?.type?.toUpperCase()}
                     </div>
                   </td>
                   {/* Network */}
@@ -398,7 +393,12 @@ export function AssetsList({
                   {/* Subscription */}
                   <td>
                     <div className={b('info', ['subscription'])}>
-                      {subscription.tier && <SubscriptionBadge tier={subscription.tier} />}
+                      {subscription.tier && (
+                        <SubscriptionBadge
+                          className={b('subscription-badge')}
+                          tier={subscription.tier}
+                        />
+                      )}
                       <img
                         className={b('icon', ['clickable'])}
                         alt="download"

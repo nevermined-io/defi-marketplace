@@ -12,7 +12,7 @@ type IProps = {
 const b = BEM('subscription-badge', styles)
 
 export const SubscriptionBadge: React.FC<IProps> = ({ className, tier, inactive }) => (
-  <div className={extendClassName({ className }, b([inactive ? 'inactive' : tier]))}>
+  <div className={extendClassName({ className }, b([inactive ? 'inactive' : tier?.toLowerCase()]))}>
     <LogoIcon className={b('logo')} />
     {tier?.toString()}
   </div>

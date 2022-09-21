@@ -126,6 +126,10 @@
     margin-left: 22px;
   }
 
+  &__asset-type {
+    display: flex;
+  }
+
   &__asset {
     position: relative;
     align-items: center;
@@ -207,6 +211,7 @@
     &--dataset,
     &--folder {
       margin-right: 5px;
+      vertical-align: middle;
     }
   }
 
