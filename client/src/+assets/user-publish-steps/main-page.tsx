@@ -1,14 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { UiForm, UiLayout, UiText, UiPopupHandlers, NotificationPopup } from '@nevermined-io/styles'
-import { Catalog,AssetFile, AssetService, RoyaltyKind, getRoyaltyScheme } from '@nevermined-io/catalog-core';
+import {
+  Catalog,
+  AssetFile,
+  AssetService,
+  RoyaltyKind,
+  getRoyaltyScheme
+} from '@nevermined-io/catalog-core'
 import { NextPage } from 'next'
 import { MetaData } from '@nevermined-io/nevermined-sdk-js'
 import { BasicInfoStep } from './basic-info'
 import { DetailsStep } from './details'
 import { FilesStep } from './files'
-import { handleAssetFiles, FileType} from './files-handler'
-import { toast } from 'react-toastify';
-import { gatewayAddress, NFT_TIERS} from 'src/config'
+import { handleAssetFiles, FileType } from './files-handler'
+import { toast } from '../../components'
+import { gatewayAddress, NFT_TIERS } from 'src/config'
 
 export const UserPublishMultiStep: NextPage = () => {
   const {
@@ -17,7 +23,7 @@ export const UserPublishMultiStep: NextPage = () => {
     setAssetMessage,
     assetPublish,
     setAssetPublish,
-    publishNFT721,
+    publishNFT721
   } = AssetService.useAssetPublish()
   const [filesUploadedMessage, setFilesUploadedMessage] = useState<string[]>([])
   const popupRef = useRef<UiPopupHandlers>()
@@ -26,7 +32,7 @@ export const UserPublishMultiStep: NextPage = () => {
   const [step, setStep] = useState<number>(1)
   const [resultOk, setResultOk] = useState(false)
   const resultPopupRef = useRef<UiPopupHandlers>()
-  const { sdk, isLoadingSDK } = Catalog.useNevermined();
+  const { sdk, isLoadingSDK } = Catalog.useNevermined()
 
   useEffect(() => {
     setAssetPublish({
@@ -111,7 +117,7 @@ export const UserPublishMultiStep: NextPage = () => {
       curation: {
         rating: 0,
         numVotes: 0,
-        isListed: true 
+        isListed: true
       },
       main: {
         name: assetPublish.name,
@@ -169,7 +175,7 @@ export const UserPublishMultiStep: NextPage = () => {
   }
 
   const getNftTierAddress = (): string => {
-    return NFT_TIERS.find(tier => tier.name === assetPublish.tier)?.address || ''
+    return NFT_TIERS.find((tier) => tier.name === assetPublish.tier)?.address || ''
   }
 
   const generateFilesUploadedMessage = (assetFiles: AssetFile[]) => {
@@ -195,47 +201,45 @@ export const UserPublishMultiStep: NextPage = () => {
     }
   }
 
-const onSubmitUserPublish = async() => {
-        try {
-            await uploadFiles()
-            txPopupRef.current?.open()
+  const onSubmitUserPublish = async () => {
+    try {
+      await uploadFiles()
+      txPopupRef.current?.open()
 
-            const royaltyAttributes = {
-              royaltyKind: RoyaltyKind.Standard,
-              scheme: getRoyaltyScheme(sdk, RoyaltyKind.Standard),
-              amount: 0,
-            };
+      const royaltyAttributes = {
+        royaltyKind: RoyaltyKind.Standard,
+        scheme: getRoyaltyScheme(sdk, RoyaltyKind.Standard),
+        amount: 0
+      }
 
-            publishNFT721({
-              nftAddress: getNftTierAddress(), 
-              metadata: generateMetadata(), 
-              providers: [gatewayAddress],
-              royaltyAttributes: royaltyAttributes
-            })
-            .then((ddo) =>
-                {
-                    setResultOk(true)
-                    txPopupRef.current?.close()
-                    resultPopupRef.current?.open()
-                    toast.success(`Asset Published correctly. DID: ${ddo!.id}`)
-                }
+      publishNFT721({
+        nftAddress: getNftTierAddress(),
+        metadata: generateMetadata(),
+        providers: [gatewayAddress],
+        royaltyAttributes: royaltyAttributes
+      })
+        .then((ddo) => {
+          setResultOk(true)
+          txPopupRef.current?.close()
+          resultPopupRef.current?.open()
+          toast.success(`Asset Published correctly. DID: ${ddo!.id}`)
+        })
+        .catch((error) => {
+          txPopupRef.current?.close()
+          setResultOk(false)
+          if (error.message.includes('Transaction was not mined within 50 blocks')) {
+            setErrorAssetMessage(
+              'Transaction was not mined within 50 blocks, but it might still be mined. Check later your profile to see the Assets already published'
             )
-            .catch((error) => {
-                    txPopupRef.current?.close()
-                    setResultOk(false)
-                    if (error.message.includes("Transaction was not mined within 50 blocks")){
-                      setErrorAssetMessage("Transaction was not mined within 50 blocks, but it might still be mined. Check later your profile to see the Assets already published")
-                    }
-                    resultPopupRef.current?.open()
-                    toast.error(errorAssetMessage)
-                }
-            )
-        } catch (error: any ) {
-          setErrorAssetMessage(error.message)
-            popupRef.current?.open()
-        }
+          }
+          resultPopupRef.current?.open()
+          toast.error(errorAssetMessage)
+        })
+    } catch (error: any) {
+      setErrorAssetMessage(error.message)
+      popupRef.current?.open()
     }
-
+  }
 
   const updateFilesAdded = (assetFile: AssetFile) => {
     const arrayFiles: AssetFile[] = assetPublish.assetFiles

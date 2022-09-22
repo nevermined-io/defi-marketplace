@@ -1,7 +1,6 @@
 import React, { useRef, Fragment, useContext, useEffect, useState } from 'react'
 import { DDO, Profile } from '@nevermined-io/nevermined-sdk-js'
 import Link from 'next/link'
-import { toast } from 'react-toastify'
 import {
   BEM,
   extendClassName,
@@ -17,6 +16,7 @@ import { Catalog } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import { XuiDownloadAsset } from '../components/+download-asset/download-asset'
 import { SubscriptionBadge } from '../components/subscription-badge/subscription-badge'
+import { toast } from '../components'
 
 interface AssetsListProps {
   assets: DDO[]

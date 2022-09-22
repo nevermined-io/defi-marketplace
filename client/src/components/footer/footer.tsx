@@ -3,6 +3,7 @@ import { BEM, UiDivider, UiLayout, UiText } from '@nevermined-io/styles'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from './footer.module.scss'
+import { docsUrl } from 'src/config'
 
 const b = BEM('footer', styles)
 
@@ -34,8 +35,8 @@ export function UiFooter() {
             </a>
           </Link>
           <UiDivider vertical type="l" />
-          <Link href="/docs">
-            <a>
+          <Link href={docsUrl}>
+            <a target="_blank">
               <UiText className="pointer" type="link-caps" variants={['detail']}>
                 Docs
               </UiText>

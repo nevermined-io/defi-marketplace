@@ -4,7 +4,7 @@ const b = BEM('pricing', styles)
 import React, { useState, useRef, useContext } from 'react'
 import { Catalog } from '@nevermined-io/catalog-core'
 import { NFT_TIERS, NFT_TIERS_AMOUNT, NFT_TIERS_HOLDER, NFT_TIERS_TYPE } from 'src/config'
-import { toast } from 'react-toastify'
+import { toast } from '../'
 import { UiPopupHandlers } from '@nevermined-io/styles'
 import { ConfirmPopup } from '../../+assets/user-publish-steps/confirm-popup'
 import { User } from '../../context'

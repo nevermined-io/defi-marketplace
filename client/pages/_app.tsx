@@ -25,12 +25,15 @@ import {
   correctNetworkId
 } from 'src/config'
 import chainConfig from 'src/chainConfig'
-import { ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import '../src/components/toast/toast.scss'
 
 const appConfig = {
   web3Provider:
-    typeof window !== 'undefined' ? window?.ethereum : new ethers.providers.JsonRpcProvider(nodeUri),
+    typeof window !== 'undefined'
+      ? window?.ethereum
+      : new ethers.providers.JsonRpcProvider(nodeUri),
   nodeUri,
   marketplaceUri,
   gatewayUri,
@@ -46,65 +49,65 @@ const appConfig = {
 
 function App({ Component, pageProps }: AppProps) {
   Logger.setLevel(3)
-  const MainComponent = Component as any;
+  const MainComponent = Component as any
 
   return (
     <div>
-    <ToastContainer
-      position="top-right"
-      autoClose={false}
-      hideProgressBar={false}
-      newestOnTop={true}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover/>
-    <Catalog.NeverminedProvider config={appConfig}>
-      <MetaMask.WalletProvider
-        externalChainConfig={chainConfig}
-        nodeUri={appConfig.nodeUri}
-        correctNetworkId={correctNetworkId}
-      >
-        <AssetService.AssetPublishProvider>
-          <UserProvider>
-            <Head>
-              <script async src="https://www.googletagmanager.com/gtag/js?id=G-11ZZZNJ4Q5"></script>
-              <script
-                dangerouslySetInnerHTML={{
-                  __html: `
+      <ToastContainer
+        position="top-right"
+        autoClose={false}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <Catalog.NeverminedProvider config={appConfig}>
+        <MetaMask.WalletProvider
+          externalChainConfig={chainConfig}
+          nodeUri={appConfig.nodeUri}
+          correctNetworkId={correctNetworkId}
+        >
+          <AssetService.AssetPublishProvider>
+            <UserProvider>
+              <Head>
+                <script
+                  async
+                  src="https://www.googletagmanager.com/gtag/js?id=G-11ZZZNJ4Q5"
+                ></script>
+                <script
+                  dangerouslySetInnerHTML={{
+                    __html: `
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments)}
                   gtag('js', new Date());
 
                   gtag('config', 'G-11ZZZNJ4Q5');
                 `
-                }}
-              ></script>
-              <title>Nevermined DeFi Marketplace</title>
-              <meta name="description" content="Nevermined DeFi Marketplace" />
-              <link rel="icon" href="/favicon.ico" />
-            </Head>
+                  }}
+                ></script>
+                <title>Nevermined DeFi Marketplace</title>
+                <meta name="description" content="Nevermined DeFi Marketplace" />
+                <link rel="icon" href="/favicon.ico" />
+              </Head>
 
-            <div>
-              <UiHeader>
-                <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
-                <UiHeaderLink href="/subscription">Pricing</UiHeaderLink>
-                <UiHeaderLink href="/about">About</UiHeaderLink>
-                <UiHeaderLink href={docsUrl} target="_blank">
-                  Docs
-                </UiHeaderLink>
-              </UiHeader>
+              <div>
+                <UiHeader>
+                  <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
+                  <UiHeaderLink href="/subscription">Subscriptions</UiHeaderLink>
+                </UiHeader>
 
-              <MainComponent {...pageProps} />
-            </div>
+                <MainComponent {...pageProps} />
+              </div>
 
-            <UiDivider flex />
-            <UiFooter />
-          </UserProvider>
-        </AssetService.AssetPublishProvider>
-      </MetaMask.WalletProvider>
-    </Catalog.NeverminedProvider>
+              <UiDivider flex />
+              <UiFooter />
+            </UserProvider>
+          </AssetService.AssetPublishProvider>
+        </MetaMask.WalletProvider>
+      </Catalog.NeverminedProvider>
     </div>
   )
 }
