@@ -105,7 +105,14 @@ export const Account: NextPage = () => {
     } else if (view == 1) {
       return <UserProfile />
     } else if (view == 2) {
-      return <AssetsList assets={bookmarks} />
+     return (
+      <>
+        <Subscriptions
+          purchaseDate={purchaseDate}
+          currentSubscription={getCurrentUserSubscription()}
+        />
+      </>
+    )
     } else if (view == 3) {
       return (
         <>
@@ -118,14 +125,7 @@ export const Account: NextPage = () => {
         <AssetsList assets={downloaded} disableBatchSelect disableBookmarks hideCategoryColumn />
       )
     } else if (view == 5) {
-      return (
-        <>
-          <Subscriptions
-            purchaseDate={purchaseDate}
-            currentSubscription={getCurrentUserSubscription()}
-          />
-        </>
-      )
+      return <AssetsList assets={bookmarks} />
     }
   }
 
@@ -166,7 +166,7 @@ export const Account: NextPage = () => {
               variants={['detail']}
               onClick={() => setView(2)}
             >
-              Bookmarks
+              Subscriptions
             </UiText>
             <UiDivider />
             <UiText
@@ -184,7 +184,7 @@ export const Account: NextPage = () => {
               variants={['detail']}
               onClick={() => setView(4)}
             >
-              Purchases
+              Downloads
             </UiText>
             <UiDivider />
             <UiText
@@ -193,7 +193,7 @@ export const Account: NextPage = () => {
               variants={['detail']}
               onClick={() => setView(5)}
             >
-              Subscriptions
+              Bookmarks
             </UiText>
           </div>
           <div className={b('columnright')}>{renderContent()}</div>
