@@ -5,7 +5,6 @@ import { NextPage } from 'next'
 import { MetaData } from '@nevermined-io/nevermined-sdk-js'
 import { BasicInfoStep } from './basic-info'
 import { DetailsStep } from './details'
-import { PricesStep } from './prices'
 import { FilesStep } from './files'
 import { handleAssetFiles, FileType} from './files-handler'
 import { toast } from 'react-toastify';
@@ -316,39 +315,15 @@ const onSubmitUserPublish = async() => {
             <UiForm className="">
               <FilesStep
                 prevStep={prevStep}
-                nextStep={nextStep}
                 updateFilesAdded={updateFilesAdded}
                 removeFile={removeFile}
-              />
-            </UiForm>
-          </UiLayout>
-        </UiLayout>
-      )
-    case 4:
-      return (
-        <UiLayout type="container">
-          <NotificationPopup
-            closePopup={closePopup}
-            message={errorAssetMessage}
-            popupRef={popupRef}
-          />
-          <UiLayout type="container">
-            <UiText wrapper="h1" type="h1" variants={['heading']}>
-              Publish new asset
-            </UiText>
-          </UiLayout>
-
-          <UiLayout type="container">
-            <UiForm className="">
-              <PricesStep
-                prevStep={prevStep}
-                reset={resetValues}
                 submit={onSubmitUserPublish}
                 filesUploadedMessage={filesUploadedMessage}
                 fileUploadPopupRef={fileUploadPopupRef}
                 txPopupRef={txPopupRef}
                 resultOk={resultOk}
                 resultPopupRef={resultPopupRef}
+                reset={resetValues}
               />
             </UiForm>
           </UiLayout>
