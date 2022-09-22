@@ -1,0 +1,56 @@
+@import '~@nevermined-io/styles/lib/cjs/styles/index.scss';
+
+.Toastify {
+  &__toast {
+    font-family: Titillium Web;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    min-height: 40px;
+    border-radius: 0;
+
+    &--success {
+      background-color: #55d6be;
+    }
+
+    &--error {
+      background-color: #fc6471;
+    }
+  }
+
+  &__toast-container {
+    width: auto;
+  }
+
+  &__toast-theme {
+    &--light {
+      color: #131e35;
+    }
+  }
+
+  &__toast-body {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 12px;
+  }
+
+  &__toast-icon {
+    width: auto;
+    margin-inline-end: 0;
+
+    svg {
+      height: 12px;
+
+      path {
+        fill: #131e35;
+      }
+    }
+  }
+
+  &__close-button {
+    display: none;
+  }
+}

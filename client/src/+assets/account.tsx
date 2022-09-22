@@ -11,7 +11,7 @@ import { loadUserPublished, loadUserDownloads, getUserSubscription } from 'src/s
 import { Summary } from 'ui/+account/summary'
 import { AssetsList } from './assets-list'
 import Router from 'next/router'
-import { toast } from 'react-toastify'
+import { toast } from '../components'
 import { Subscriptions } from 'ui/+account/subscriptions'
 
 const b = BEM('account', styles)
