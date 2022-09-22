@@ -12,7 +12,6 @@ import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
 import { UiDivider } from '@nevermined-io/styles'
 import UserProvider from '../src/context/UserProvider'
 import {
-  docsUrl,
   marketplaceUri,
   gatewayUri,
   gatewayAddress,
