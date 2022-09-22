@@ -74,7 +74,7 @@ export const DetailsStep = (props: DetailsProps) => {
   return (
     <UiLayout type="container">
       <UiText type="h2" wrapper="h2">
-        Details - Step 2 of 4
+        Details - Step 2 of 3
       </UiText>
       <div className={b('publish-horizontal-line')} />
 

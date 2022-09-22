@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react'
 import {
   UiFormGroup,
   UiFormInput,
@@ -16,24 +16,63 @@ import { FileType, checkFilecoinIdExists } from './files-handler'
 import { ProgressPopup } from './progress-popup'
 import { AssetService } from '@nevermined-io/catalog-core'
 import { AssetFile } from '@nevermined-io/catalog-core/dist/node/types'
+import { ConfirmPopup } from './confirm-popup'
+import { ResultPopup } from './result-popup'
+import { User } from '../../context'
+import { toast } from 'react-toastify'
+
 
 const b = BEM('user-publish', styles)
 
 interface FilesProps {
-  prevStep: () => void
-  nextStep: () => void
   updateFilesAdded: (assetFiles: AssetFile) => void
   removeFile: (label: string) => void
+  prevStep: () => void
+  submit: () => void
+  reset: () => void
+  filesUploadedMessage: string[]
+  fileUploadPopupRef: React.MutableRefObject<UiPopupHandlers | undefined>
+  txPopupRef: React.MutableRefObject<UiPopupHandlers | undefined>
+  resultOk: boolean
+  resultPopupRef: React.MutableRefObject<UiPopupHandlers | undefined>
 }
 
 export const FilesStep = (props: FilesProps) => {
-  const { assetPublish } = AssetService.useAssetPublish()
-  const { updateFilesAdded, removeFile, prevStep, nextStep } = props
+  const { assetPublish, handleChange, isProcessing, assetMessage, errorAssetMessage } =
+    AssetService.useAssetPublish()
+
+  const { updateFilesAdded,
+    removeFile, 
+    prevStep, 
+    submit,
+    reset,
+    filesUploadedMessage,
+    fileUploadPopupRef,
+    txPopupRef,
+    resultOk,
+    resultPopupRef } = props
   const [inputError, setInputError] = useState('')
   const [newFilecoinID, setNewFilecoinID] = useState('')
   const [popupMesssage, setPopupMessage] = useState('')
   const popupRef = useRef<UiPopupHandlers>()
   const filecoinImage = '/assets/logos/filecoin_grey.svg'
+  const UploadPopupMesssage = 'Uploading local files to Filecoin...'
+  const txPopupMesssage = 'Sending transaction to register the Asset in the network...'
+  const txAdditionalMessage =
+    'The transaction has been sent correctly. It could take some time to complete. You can close this window and visit your profile later to check the status of the new Asset.'
+  const confirmPopupMessage = 'Press Confirm to Publish the new Asset'
+  const uploadImage = '/assets/logos/filecoin_grey.svg'
+  const txImage = '/assets/nevermined-color.svg'
+  const confirmPopupRef = useRef<UiPopupHandlers>()
+  const [showForm, setShowForm] = useState(true)
+  const subscriptionErrorText = "You don't have any current subscription. Only users with a subscription are allowed to publish"
+  const { getCurrentUserSubscription} = useContext(User)
+
+  useEffect(() => {
+    if (isProcessing == true) {
+      setShowForm(false)
+    }
+  }, [isProcessing])
 
   const checkValues = (): boolean => {
     if (!assetPublish.assetFiles || assetPublish.assetFiles.length == 0) {
@@ -41,12 +80,6 @@ export const FilesStep = (props: FilesProps) => {
       return false
     }
     return true
-  }
-
-  const Continue = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!checkValues()) return
-    nextStep()
   }
 
   const Previous = (e: React.FormEvent<HTMLFormElement>) => {
@@ -94,12 +127,76 @@ export const FilesStep = (props: FilesProps) => {
     popupRef.current?.close()
   }
 
+  const confirm = () => {
+    confirmPopupRef.current?.close()
+    submit()
+  }
+
+  const cancel = () => {
+    confirmPopupRef.current?.close()
+  }
+
+  const showConfirm = () => {
+    if (!checkValues()) return
+
+    if (!getCurrentUserSubscription()) {
+      toast.error(subscriptionErrorText)
+      return
+    }
+    confirmPopupRef.current?.open()
+  }
+
   return (
     <UiLayout type="container">
       <ProgressPopup message={popupMesssage} image={filecoinImage} popupRef={popupRef} />
 
-      <UiText type="h2" wrapper="h2">
-        FILES - Step 3 of 4
+      <ProgressPopup
+        message={UploadPopupMesssage}
+        popupRef={fileUploadPopupRef}
+        image={uploadImage}
+      />
+      <ProgressPopup
+        message={txPopupMesssage}
+        popUpHeight="780px"
+        additionalMessage={txAdditionalMessage}
+        showCloseButton={true}
+        popupRef={txPopupRef}
+        image={txImage}
+      />
+      <ConfirmPopup
+        message={confirmPopupMessage}
+        popupRef={confirmPopupRef}
+        confirm={confirm}
+        cancel={cancel}
+      />
+      
+      {!showForm ? (
+      // Asset published. Show result
+      <div>
+        <UiText type="h2" wrapper="h2">
+          Asset Published
+        </UiText> 
+        <div className={b('publish-horizontal-line')} />
+        <div className={b('form-input')}></div>
+        <UiDivider />
+        <UiFormGroup orientation={Orientation.Vertical}>
+        <div className={b('user-publish-submit-container', ['updated-message'])}>
+              <ResultPopup
+                message={resultOk ? assetMessage : errorAssetMessage}
+                additionalMessage={filesUploadedMessage}
+                popupRef={resultPopupRef}
+                resultOk={resultOk}
+              />
+              <UiButton onClick={reset}>Publish New Asset</UiButton>
+        </div>        
+        </UiFormGroup>
+      </div>
+      ):
+      // Show form to add Files 
+      (
+      <div>
+       <UiText type="h2" wrapper="h2">
+        FILES - Step 3 of 3
       </UiText>
       <div className={b('publish-horizontal-line')} />
 
@@ -125,10 +222,8 @@ export const FilesStep = (props: FilesProps) => {
             </div>
           ))}
         </div>
-
         <UiDivider></UiDivider>
         <UiDivider></UiDivider>
-
         <UiFormGroup orientation={Orientation.Vertical}>
           <UiFormItem
             className={b('publish-form-input')}
@@ -154,10 +249,15 @@ export const FilesStep = (props: FilesProps) => {
 
         <UiDivider />
         <UiFormGroup orientation={Orientation.Vertical}>
-          <UiButton onClick={Previous}>&lt;</UiButton>
-          <UiButton onClick={Continue}>&gt;</UiButton>
+          <div className={b('user-publish-submit-container', ['submit'])}>
+              <UiButton onClick={Previous}>&lt;</UiButton>
+              <UiButton onClick={showConfirm}>Publish Asset</UiButton>
+          </div>
         </UiFormGroup>
       </div>
+      </div>  
+      )}
+
     </UiLayout>
   )
 }
