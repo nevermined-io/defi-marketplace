@@ -21,12 +21,25 @@
       font-weight: 600;
       font-size: 16px;
       line-height: 24px;
-      color: #67CFF9;
+      color: #67cff9;
     }
+
     &--address {
       cursor: pointer;
     }
+
+    &--subscription {
+      cursor: pointer;
+      padding: 0;
+      margin-left: 0;
+    }
+
+    &--no-subscription {
+      padding: 0 15px 0 0;
+      margin-left: 0;
+    }
   }
+
   &__logged {
     width: 8px;
     height: 8px;
@@ -35,6 +48,24 @@
     box-sizing: border-box;
     background: gc(success);
     box-shadow: 0 0 0 1px gc(success);
-    margin-right: 6px;
+    margin-right: 12px;
+  }
+
+  &__account {
+    color: #ffffff;
+    text-transform: uppercase;
+    margin-right: 12px;
+  }
+
+  &__separator {
+    width: 1px;
+    height: 50%;
+    background: gc(gL);
+    margin-right: 12px;
+  }
+
+  &__subscription-badge {
+    height: 100%;
+    min-width: unset;
   }
 }

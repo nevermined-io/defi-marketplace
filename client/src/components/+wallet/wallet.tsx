@@ -4,34 +4,44 @@ import { MetaMask } from '@nevermined-io/catalog-providers'
 import { User } from '../../context'
 import styles from './wallet.module.scss'
 import Link from 'next/link'
-import Router from 'next/router'
+import { SubscriptionBadge } from 'ui/subscription-badge/subscription-badge'
 
 const b = BEM('wallet', styles)
 
 export function XuiWallet() {
   const { network, isLogged, getCurrentUserSubscription } = React.useContext(User)
   const { walletAddress, loginMetamask } = MetaMask.useWallet()
+  const currentUserSubscription = getCurrentUserSubscription()
 
   return !(isLogged && walletAddress) ? (
     <UiButton onClick={loginMetamask}>Connect wallet</UiButton>
   ) : (
     <>
-      <div className={b('block')}>
-        <Link href={'/account'}>
-          <span style={{ cursor: 'pointer', display: 'flex' }}>
-           {
-             getCurrentUserSubscription()? <span>{getCurrentUserSubscription()?.tier.toString()}</span>:<span>No Subscription</span>
-           } 
-          </span>
-        </Link>
-      </div>
-
-      <div className={b('block', ['address'])} onClick={() => Router.push('/account')}>
-        <span className={b('logged')} />
-        {`${walletAddress.substr(0, 6)}...${walletAddress.substr(-4)}`}
-      </div>
-
-      <div className={b('block', ['network'])}>{network}</div>
+      <Link href={'/account'}>
+        <div className={b('block', ['address'])}>
+          <span className={b('logged')} />
+          <span className={b('account')}>Account</span>
+          <span className={b('separator')} />
+          {`${walletAddress.substr(0, 6)}...${walletAddress.substr(-4)}`}
+        </div>
+      </Link>
+      <Link href={'/account'}>
+        <div className={b('block', [currentUserSubscription ? 'subscription' : 'no-subscription'])}>
+          {currentUserSubscription ? (
+            <SubscriptionBadge
+              className={b('subscription-badge')}
+              tier={currentUserSubscription.tier}
+              logoOnly
+            />
+          ) : (
+            <>
+              <span className={b('separator')} />
+              {'No Subscription'}
+            </>
+          )}
+        </div>
+      </Link>
+      {network && <div className={b('block', ['network'])}>{network}</div>}
     </>
   )
 }
