@@ -2,6 +2,7 @@
 
 .markdown {
   @include component;
+  font-family: 'Titillium Web';
   margin: 20px 0;
 
   &__header {
