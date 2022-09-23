@@ -28,6 +28,8 @@ import {
   getDdoSubscription
 } from 'src/shared'
 import { Markdown } from 'ui/markdown/markdown'
+import Image from 'next/image'
+import { XuiPagination } from 'ui/+assets-query/pagination'
 import { correctNetworkId, correctNetworkName, EVENT_PREFIX, PROTOCOL_PREFIX } from 'src/config'
 import { loadAssetProvenance } from 'src/shared/graphql'
 import DatasetIcon from '../../public/assets/dataset.svg'
@@ -394,21 +396,70 @@ export const AssetDetails: NextPage = () => {
             {metadata?.additionalInformation?.customData?.subtype === 'notebook' &&
               metadata.additionalInformation.customData.notebook_requirements && (
                 <>
-                  <div className={b('field-row')}>
+                  <div className={b('field-column')}>
                     <UiText type="caps" variants={['detail']}>
                       Requirements
                     </UiText>
-                    <span>
-                      <DatasetIcon className={b('field-icon', ['dataset'])} />
-                      <UiText className={b('field-text')} type="caps">
-                        {metadata.additionalInformation.customData.notebook_requirements}
-                      </UiText>
-                    </span>
+                    <UiText className={b('field-text')}>
+                      {metadata.additionalInformation.customData.notebook_requirements}
+                    </UiText>
                   </div>
                   <UiDivider type="s" className={b('divider-line', ['s'])} />
                 </>
               )}
-            <>
+            <div className={b('field-column')}>
+              <UiText type="caps" variants={['detail']}>
+                Provenance
+              </UiText>
+              <UiDivider type="s" />
+              {provenance.slice(startEndPage().start, startEndPage().end).map((p) => (
+                <div key={p.id}>
+                  <UiLayout
+                    direction="row"
+                    className={
+                      p.address.toLowerCase() === walletAddress.toLowerCase()
+                        ? b('provenance-entry-userAddress')
+                        : b('provenance-entry')
+                    }
+                  >
+                    <UiLayout direction="row" className={b('provenance-entry-data', ['left'])}>
+                      <UiLayout className={b('provenance-entry-data-ellipse')}>
+                        <Image width="26" height="26" alt="ellipse" src="/assets/ellipse.svg" />
+                      </UiLayout>
+                      <UiLayout direction="column">
+                        <UiText type="p">Action</UiText>
+                        <UiText type="small">{p.action}</UiText>
+                      </UiLayout>
+                    </UiLayout>
+                    <UiLayout direction="row" className={b('provenance-entry-data', ['left'])}>
+                      <UiLayout direction="column">
+                        <UiText type="p">Address</UiText>
+                        <UiText type="small">
+                          {p.address.slice(0, 10)}...{p.address.slice(-4)}
+                        </UiText>
+                      </UiLayout>
+                    </UiLayout>
+                    <UiLayout direction="row" className={b('provenance-entry-data', ['right'])}>
+                      <UiLayout direction="column">
+                        <UiText type="p">Date</UiText>
+                        <UiText type="small">{p.date}</UiText>
+                      </UiLayout>
+                    </UiLayout>
+                    <UiLayout direction="row" className={b('provenance-entry-data', ['right'])}>
+                      <UiLayout direction="column">
+                        <UiText type="p">Block Number</UiText>
+                        <UiText type="small">{p.blockNumber}</UiText>
+                      </UiLayout>
+                    </UiLayout>
+                  </UiLayout>
+                </div>
+              ))}
+              {totalPages > 1 && (
+                <XuiPagination totalPages={totalPages} page={page} setPage={setPage} />
+              )}
+              <UiDivider type="s" className={b('divider-line', ['s'])} />
+            </div>
+            <div className={b('field-column')}>
               <UiText type="caps" variants={['detail']}>
                 Command Line Interface
               </UiText>
@@ -418,9 +469,11 @@ export const AssetDetails: NextPage = () => {
               </UiText>
               <Markdown code={`$ ncli assets get ${asset.id}`} />
               <UiDivider type="s" className={b('divider-line', ['s'])} />
-            </>
+            </div>
           </div>
+
           <UiDivider vertical />
+
           <div className={b('side-panel')}>
             <div className={b('side-box')}>
               <div className={b('field-row')}>

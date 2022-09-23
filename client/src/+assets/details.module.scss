@@ -73,8 +73,7 @@
   }
 
   &__provenance-entry {
-    margin-bottom: 16px;
-    border: 2px solid gc(gM);
+    border: 1px solid gc(gM);
     flex-flow: row;
     padding: 10px;
 
@@ -179,6 +178,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  &__field-column {
+    display: flex;
+    flex-direction: column;
   }
 
   &__field-icon {
