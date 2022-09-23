@@ -25,9 +25,9 @@ export const Markdown: React.FC<MarkdownProps> = ({ code, height, disableCopy }:
   }
 
   return (
-    <div className="markdown" style={{ margin: '20px 0' }}>
+    <div className={b()}>
       <div className={b('header')}>
-        <div style={disableCopy ? { visibility: 'hidden' } : {}}>
+        <div className={b('header-row')} style={disableCopy ? { visibility: 'hidden' } : {}}>
           <img onClick={() => copyToClipboard(code)} src="/assets/copy_logo.png" />
           <div onClick={() => copyToClipboard(code)} className={b('copy-text')}>
             Copy

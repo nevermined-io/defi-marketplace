@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, createRef, useCallback } from 'react'
+import React, { useEffect, useContext, useState, createRef, useCallback, useMemo } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -15,7 +15,7 @@ import {
   UiButton,
   UiPopupHandlers
 } from '@nevermined-io/styles'
-import { XuiTokenName, XuiTokenPrice } from 'ui'
+import { XuiTokenName } from 'ui'
 import { Loader } from '@nevermined-io/styles'
 import { User } from '../context'
 import {
@@ -23,14 +23,15 @@ import {
   getDdoTokenAddress,
   calculateStartEndPage,
   calculatePages,
-  getSampleURL
-} from '../shared'
+  getSampleURL,
+  getDefiInfo,
+  getDdoSubscription
+} from 'src/shared'
 import { Markdown } from 'ui/markdown/markdown'
-import Image from 'next/image'
-import { XuiPagination } from 'ui/+assets-query/pagination'
 import { correctNetworkId, correctNetworkName, EVENT_PREFIX, PROTOCOL_PREFIX } from 'src/config'
 import { loadAssetProvenance } from 'src/shared/graphql'
-import {  EventOptions} from '@nevermined-io/nevermined-sdk-js/dist/node/events/NeverminedEvent';
+import DatasetIcon from '../../public/assets/dataset.svg'
+import { SubscriptionBadge } from '../components/subscription-badge/subscription-badge'
 
 const b = BEM('details', styles)
 const PROVENANCE_PER_PAGE = 4
@@ -92,7 +93,7 @@ export const AssetDetails: NextPage = () => {
 
   const getProvenanceInfo = async () => {
     const events: any = await loadAssetProvenance(sdk, getProvider(), String(did))
-    const nftProvenance: NftProvenance[] = events.map( (event: any) => {
+    const nftProvenance: NftProvenance[] = events.map((event: any) => {
       return {
         id: event.id,
         action: event._attributes,
@@ -113,7 +114,7 @@ export const AssetDetails: NextPage = () => {
       return
     }
 
-    (async () => {
+    ;(async () => {
       setIsConnected(isLogged)
 
       try {
@@ -125,7 +126,6 @@ export const AssetDetails: NextPage = () => {
       }
     })()
   }, [sdk])
-
 
   // if chain change, show button to swit
   useEffect(() => {
@@ -149,7 +149,7 @@ export const AssetDetails: NextPage = () => {
       return
     }
 
-    (async () => {
+    ;(async () => {
       try {
         const chainId = await window?.ethereum?.request({ method: 'eth_chainId' })
         if (chainId !== correctNetworkId) {
@@ -201,6 +201,8 @@ export const AssetDetails: NextPage = () => {
   }
 
   const metadata = asset.findServiceByType('metadata').attributes
+  const defi = getDefiInfo(metadata)
+  const subscription = getDdoSubscription(asset)
 
   const openSample = async () => {
     const addtionalInfoExtended = metadata.additionalInformation as AdditionalInformationExtended
@@ -219,179 +221,288 @@ export const AssetDetails: NextPage = () => {
 
   return (
     <>
-
       <UiLayout type="container">
-        <UiText wrapper="h1" type="h1" variants={['heading']}>
-          Details
-        </UiText>
-        <UiText type="h2" wrapper="h2" variants={['heading']}>
-          {metadata.main.name}
-        </UiText>
-
         <UiLayout align="start" type="sides">
           <div className={b('content')}>
-            <UiText type="h3" wrapper="h3" variants={['underline']}>
-              Description
+            <UiText type="h2" wrapper="h2">
+              Report
             </UiText>
-            <UiDivider />
-            <div>
-              {metadata
-                .additionalInformation!.description?.replaceAll('-', '\n-')
-                .split('\n')
-                .map((_, i) => (
-                  <UiText key={i} block>
-                    {_}
-                  </UiText>
-                ))}
-            </div>
-            <UiDivider type="l" />
-            <UiButton
-              cover
-              style={{ padding: '0', width: '235px', background: '#2E405A', textTransform: 'none' }}
-              onClick={openSample}
-            >
-              <img src="/assets/logos/filecoin_grey.svg" />
-              &nbsp;&nbsp;Download Sample Data
-            </UiButton>
-            <UiDivider type="s" />
-            <UiText
-              type="h3"
-              wrapper="h3"
-              variants={['underline']}
-              className={b('provenance-title')}
-            >
-              Provenance
-            </UiText>
-            {provenance.slice(startEndPage().start, startEndPage().end).map((p) => (
-              <div key={p.id}>
-                <UiLayout direction="row" className={p.address.toLowerCase() === walletAddress.toLowerCase()?b('provenance-entry-userAddress'):b('provenance-entry')}>
-                  <UiLayout direction="row" className={b('provenance-entry-data', ['left'])}>
-                    <UiLayout className={b('provenance-entry-data-ellipse')}>
-                      <Image width="26" height="26" alt="ellipse" src="/assets/ellipse.svg" />
-                    </UiLayout>
-                    <UiLayout direction="column">
-                      <UiText type="p">Action</UiText>
-                      <UiText type="small">{p.action}</UiText>
-                    </UiLayout>
-                  </UiLayout>
-                  <UiLayout direction="row" className={b('provenance-entry-data', ['left'])}>
-                    <UiLayout direction="column">
-                      <UiText type="p">Address</UiText>
-                      <UiText type="small">
-                        {p.address.slice(0, 10)}...{p.address.slice(-4)}
-                      </UiText>
-                    </UiLayout>
-                  </UiLayout>
-                  <UiLayout direction="row" className={b('provenance-entry-data', ['right'])}>
-                    <UiLayout direction="column">
-                      <UiText type="p">Date</UiText>
-                      <UiText type="small">
-                        {p.date}
-                      </UiText>
-                    </UiLayout>
-                  </UiLayout>
-                  <UiLayout direction="row" className={b('provenance-entry-data', ['right'])}>
-                    <UiLayout direction="column">
-                      <UiText type="p">Block Number</UiText>
-                      <UiText type="small">
-                        {p.blockNumber}
-                      </UiText>
-                    </UiLayout>
-                  </UiLayout>
-                </UiLayout>
-              </div>
-            ))}
-
-            {totalPages > 1 && (
-              <XuiPagination totalPages={totalPages} page={page} setPage={setPage} />
+            <UiDivider className={b('divider-line', ['fade'])} />
+            {metadata.main.name && (
+              <>
+                <UiText type="h4" wrapper="h4">
+                  {metadata.main.name}
+                </UiText>
+                <UiDivider />
+              </>
             )}
-
-            <UiDivider type="s" />
-            <UiDivider />
-            <UiText type="h3" wrapper="h3" variants={['underline']}>
-              Command Line Interface
-            </UiText>
-            <UiDivider />
-            <UiText type="p">
-              To download this dataset directly from the CLI run the following command
-            </UiText>
-            <Markdown code={`$ ncli assets get ${asset.id}`} />
+            {metadata.additionalInformation!.description && (
+              <>
+                <UiText type="caps" variants={['detail']}>
+                  Description
+                </UiText>
+                <UiDivider type="s" />
+                <div>
+                  {metadata
+                    .additionalInformation!.description?.replaceAll('-', '\n-')
+                    .split('\n')
+                    .map((_, i) => (
+                      <UiText key={i} block>
+                        {_}
+                      </UiText>
+                    ))}
+                </div>
+                <UiDivider type="l" className={b('divider-line', ['l'])} />
+              </>
+            )}
+            {defi?.category && (
+              <>
+                <div className={b('field-row')}>
+                  <UiText type="caps" variants={['detail']}>
+                    Category
+                  </UiText>
+                  <span>
+                    <UiIcon
+                      className={b('field-icon', ['folder'])}
+                      icon="folder"
+                      color="secondary"
+                    />
+                    <UiText className={b('field-text')} type="caps">
+                      {defi?.category}
+                      {defi.subcategory && (
+                        <>
+                          <span className={b('dash')} />
+                          {defi.subcategory}
+                        </>
+                      )}
+                    </UiText>
+                  </span>
+                </div>
+                <UiDivider type="s" className={b('divider-line', ['s'])} />
+              </>
+            )}
+            {Boolean(
+              metadata?.main?.type || metadata?.additionalInformation?.customData?.subtype
+            ) && (
+              <>
+                <div className={b('field-row')}>
+                  <UiText type="caps" variants={['detail']}>
+                    Type
+                  </UiText>
+                  <span>
+                    <DatasetIcon className={b('field-icon', ['dataset'])} />
+                    <UiText className={b('field-text')} type="caps">
+                      {metadata.additionalInformation?.customData?.subtype || metadata.main?.type}
+                    </UiText>
+                  </span>
+                </div>
+                <UiDivider type="s" className={b('divider-line', ['s'])} />
+              </>
+            )}
+            {defi?.network && (
+              <>
+                <div className={b('field-row')}>
+                  <UiText type="caps" variants={['detail']}>
+                    Network
+                  </UiText>
+                  <span>
+                    {defi.network.toLowerCase() == 'none' || defi.network.toLowerCase() == 'na' ? (
+                      <></>
+                    ) : (
+                      <img
+                        className={b('field-icon', ['network'])}
+                        alt="network"
+                        src={`/assets/logos/${defi.network.toLowerCase()}.svg`}
+                      />
+                    )}
+                    <UiText className={b('field-text')} type="caps">
+                      {defi.network}
+                    </UiText>
+                  </span>
+                </div>
+                <UiDivider type="s" className={b('divider-line', ['s'])} />
+              </>
+            )}
+            {metadata?.additionalInformation?.customData?.subtype === 'report' &&
+              metadata.additionalInformation.customData.report_type && (
+                <>
+                  <div className={b('field-row')}>
+                    <UiText type="caps" variants={['detail']}>
+                      Report Type
+                    </UiText>
+                    <span>
+                      <DatasetIcon className={b('field-icon', ['dataset'])} />
+                      <UiText className={b('field-text')} type="caps">
+                        {metadata.additionalInformation.customData.report_type}
+                      </UiText>
+                    </span>
+                  </div>
+                  <UiDivider type="s" className={b('divider-line', ['s'])} />
+                </>
+              )}
+            {metadata?.additionalInformation?.customData?.subtype === 'report' &&
+              metadata.additionalInformation.customData.report_format && (
+                <>
+                  <div className={b('field-row')}>
+                    <UiText type="caps" variants={['detail']}>
+                      Report Format
+                    </UiText>
+                    <span>
+                      <DatasetIcon className={b('field-icon', ['dataset'])} />
+                      <UiText className={b('field-text')} type="caps">
+                        {metadata.additionalInformation.customData.report_format}
+                      </UiText>
+                    </span>
+                  </div>
+                  <UiDivider type="s" className={b('divider-line', ['s'])} />
+                </>
+              )}
+            {metadata?.additionalInformation?.customData?.subtype === 'notebook' &&
+              metadata.additionalInformation.customData.notebook_language && (
+                <>
+                  <div className={b('field-row')}>
+                    <UiText type="caps" variants={['detail']}>
+                      Language
+                    </UiText>
+                    <span>
+                      <DatasetIcon className={b('field-icon', ['dataset'])} />
+                      <UiText className={b('field-text')} type="caps">
+                        {metadata.additionalInformation.customData.notebook_language}
+                      </UiText>
+                    </span>
+                  </div>
+                  <UiDivider type="s" className={b('divider-line', ['s'])} />
+                </>
+              )}
+            {metadata?.additionalInformation?.customData?.subtype === 'notebook' &&
+              metadata.additionalInformation.customData.notebook_format && (
+                <>
+                  <div className={b('field-row')}>
+                    <UiText type="caps" variants={['detail']}>
+                      Format
+                    </UiText>
+                    <span>
+                      <DatasetIcon className={b('field-icon', ['dataset'])} />
+                      <UiText className={b('field-text')} type="caps">
+                        {metadata.additionalInformation.customData.notebook_format}
+                      </UiText>
+                    </span>
+                  </div>
+                  <UiDivider type="s" className={b('divider-line', ['s'])} />
+                </>
+              )}
+            {metadata?.additionalInformation?.customData?.subtype === 'notebook' &&
+              metadata.additionalInformation.customData.notebook_requirements && (
+                <>
+                  <div className={b('field-row')}>
+                    <UiText type="caps" variants={['detail']}>
+                      Requirements
+                    </UiText>
+                    <span>
+                      <DatasetIcon className={b('field-icon', ['dataset'])} />
+                      <UiText className={b('field-text')} type="caps">
+                        {metadata.additionalInformation.customData.notebook_requirements}
+                      </UiText>
+                    </span>
+                  </div>
+                  <UiDivider type="s" className={b('divider-line', ['s'])} />
+                </>
+              )}
+            <>
+              <UiText type="caps" variants={['detail']}>
+                Command Line Interface
+              </UiText>
+              <UiDivider type="s" />
+              <UiText type="p">
+                To download this dataset directly from the CLI run the following command
+              </UiText>
+              <Markdown code={`$ ncli assets get ${asset.id}`} />
+              <UiDivider type="s" className={b('divider-line', ['s'])} />
+            </>
           </div>
           <UiDivider vertical />
-          <div>
-            <UiText block className={b('side-box')}>
-              <UiText className={b('attr')} type="caps">
-                Author:
-              </UiText>{' '}
-              {metadata.main.author}
-              <br />
-              <UiText className={b('attr')} type="caps">
-                Date:
-              </UiText>{' '}
-              {toDate(metadata.main.dateCreated)}
-            </UiText>
+          <div className={b('side-panel')}>
+            <div className={b('side-box')}>
+              <div className={b('field-row')}>
+                <UiText className={b('attr')} type="caps">
+                  Author:
+                </UiText>
+                <UiText className={b('attr', ['value'])}>{metadata.main.author}</UiText>
+              </div>
+              <div className={b('field-row')}>
+                <UiText className={b('attr')} type="caps">
+                  Date:
+                </UiText>
+                <UiText className={b('attr', ['value'])}>
+                  {toDate(metadata.main.dateCreated)}
+                </UiText>
+              </div>
+            </div>
 
             <UiDivider />
 
-            <UiLayout>
-              <UiIcon color="secondary" icon="file" size="xl" />
-              <UiDivider vertical type="s" />
-              <UiText block>
-                <UiText className={b('attr')} type="caps" variants={['bold']}>
-                  Price:
-                </UiText>{' '}
-                <XuiTokenPrice>{metadata.main.price}</XuiTokenPrice>{' '}
-                <XuiTokenName address={getDdoTokenAddress(asset)?.toString()} />
-                <br />
-                <UiText className={b('attr')} type="caps" variants={['bold']}>
-                  Files:
-                </UiText>{' '}
-                {metadata.main.files?.length}
-                <br />
-                <UiText className={b('attr')} type="caps" variants={['bold']}>
-                  Size:
-                </UiText>{' '}
-                {metadata.main.files
-                  ?.map((item) => Number(item.contentLength))
-                  .reduce((acc, el) => acc + el) + ' bytes'}
-                <br />
-                <UiText className={b('attr')} type="caps" variants={['bold']}>
-                  Type:
-                </UiText>{' '}
-                {metadata.main.files
-                  ?.map((item) => item.contentType)
-                  .reduce((acc, el) => {
-                    return acc.includes(el) ? acc : acc.concat(` ${el}`)
-                  })}
-              </UiText>
-              <UiDivider flex />
+            <UiLayout className={b('asset-attributes')}>
+              <UiIcon color="secondary" icon="file" className={b('side-box-icon')} />
+              <div className={b('fields')}>
+                <div className={b('field-row')}>
+                  <UiText className={b('attr')} type="caps">
+                    Subscription
+                  </UiText>{' '}
+                  {subscription?.tier && <SubscriptionBadge tier={subscription.tier} />}
+                </div>
+                <div className={b('field-row')}>
+                  <XuiTokenName address={getDdoTokenAddress(asset)?.toString()} />
+                </div>
+                <div className={b('field-row')}>
+                  <UiText className={b('attr')} type="caps">
+                    Files
+                  </UiText>{' '}
+                  {metadata.main.files?.length}
+                </div>
+                <div className={b('field-row')}>
+                  <UiText className={b('attr')} type="caps">
+                    Size
+                  </UiText>{' '}
+                  {metadata.main.files
+                    ?.map((item) => Number(item.contentLength))
+                    .reduce((acc, el) => acc + el) + ' bytes'}
+                </div>
+                <div className={b('field-row')}>
+                  <UiText className={b('attr')} type="caps">
+                    Type
+                  </UiText>{' '}
+                  {metadata.main.files
+                    ?.map((item) => item.contentType)
+                    .reduce((acc, el) => {
+                      return acc.includes(el) ? acc : acc.concat(` ${el}`)
+                    })}
+                </div>
+                <UiDivider />
+                {ownAsset ? (
+                  <UiText className={b('already-purchased')}>
+                    You already purchased this dataset,{' '}
+                    <span className={b('already-purchased-link')}>
+                      <Link href="/profile">see in your bundle</Link>
+                    </span>
+                  </UiText>
+                ) : (
+                  <UiButton
+                    cover
+                    onClick={(e: any) => {
+                      if (!isConnected) {
+                        loginMetamask()
+                        return
+                      }
+                      openPopup(e)
+                      // TODO, add Download button
+                      //addtoCart()
+                    }}
+                  >
+                    {isConnected ? 'Download' : 'Connect Wallet'}
+                  </UiButton>
+                )}
+              </div>
             </UiLayout>
-
-            <UiDivider />
-
-            {ownAsset ? (
-              <UiText className={b('already-purchased')}>
-                You already purchased this dataset,{' '}
-                <span className={b('already-purchased-link')}>
-                  <Link href="/profile">see in your bundle</Link>
-                </span>
-              </UiText>
-            ) : (
-              <UiButton
-                cover
-                onClick={(e: any) => {
-                  if (!isConnected) {
-                    loginMetamask()
-                    return
-                  }
-                  openPopup(e)
-                  // TODO, add Download button
-                  //addtoCart()
-                }}
-              >
-                {isConnected ? 'Download' : 'Connect Wallet'}
-              </UiButton>
-            )}
           </div>
         </UiLayout>
       </UiLayout>
