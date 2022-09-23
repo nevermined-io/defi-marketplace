@@ -117,12 +117,12 @@ export const Account: NextPage = () => {
       return (
         <>
           <UiButton onClick={() => publishAsset()}>Publish new asset</UiButton>
-          <AssetsList assets={published} disableBatchSelect disableBookmarks />
+          <AssetsList assets={published} disableBookmarks />
         </>
       )
     } else if (view == 4) {
       return (
-        <AssetsList assets={downloaded} disableBatchSelect disableBookmarks hideCategoryColumn />
+        <AssetsList assets={downloaded} disableBookmarks hideCategoryColumn />
       )
     } else if (view == 5) {
       return <AssetsList assets={bookmarks} />
