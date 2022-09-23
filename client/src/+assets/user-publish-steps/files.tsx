@@ -38,7 +38,7 @@ interface FilesProps {
 }
 
 export const FilesStep = (props: FilesProps) => {
-  const { assetPublish, handleChange, isProcessing, assetMessage, errorAssetMessage } =
+  const { assetPublish, handleChange, isProcessing, errorAssetMessage } =
     AssetService.useAssetPublish()
 
   const { updateFilesAdded,
@@ -57,15 +57,16 @@ export const FilesStep = (props: FilesProps) => {
   const popupRef = useRef<UiPopupHandlers>()
   const filecoinImage = '/assets/logos/filecoin_grey.svg'
   const UploadPopupMesssage = 'Uploading local files to Filecoin...'
-  const txPopupMesssage = 'Sending transaction to register the Asset in the network...'
+  const txPopupMesssage = 'Sending transactions to register the Asset in the network...'
   const txAdditionalMessage =
-    'The transaction has been sent correctly. It could take some time to complete. You can close this window and visit your profile later to check the status of the new Asset.'
-  const confirmPopupMessage = 'Press Confirm to Publish the new Asset'
+    'Please sign the transactions with Metamask. It could take some time to complete, but you will be notified when the Asset has been published.'
+  const confirmPopupMessage = 'Publish the new Asset?'
   const uploadImage = '/assets/logos/filecoin_grey.svg'
   const txImage = '/assets/nevermined-color.svg'
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [showForm, setShowForm] = useState(true)
   const subscriptionErrorText = "You don't have any current subscription. Only users with a subscription are allowed to publish"
+  const assetOkMessage = "Your Asset has been sucessfully Published"
   const { getCurrentUserSubscription} = useContext(User)
 
   useEffect(() => {
@@ -114,7 +115,7 @@ export const FilesStep = (props: FilesProps) => {
 
     const result = await checkFilecoinIdExists(newFilecoinID)
     if (!result[0]) {
-      setInputError('The filecoin ID was not found')
+      setInputError('We could not found information of this file in Filecoin or IPFS. Make sure the ID is correct')
       popupRef.current?.close()
       return
     }
@@ -182,7 +183,7 @@ export const FilesStep = (props: FilesProps) => {
         <UiFormGroup orientation={Orientation.Vertical}>
         <div className={b('user-publish-submit-container', ['updated-message'])}>
               <ResultPopup
-                message={resultOk ? assetMessage : errorAssetMessage}
+                message={resultOk ? assetOkMessage : errorAssetMessage}
                 additionalMessage={filesUploadedMessage}
                 popupRef={resultPopupRef}
                 resultOk={resultOk}

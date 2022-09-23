@@ -22,7 +22,7 @@ interface PricingProps {
 
 export function Pricing({ tiers }: PricingProps) {
   const { sdk, subscription } = Catalog.useNevermined()
-  const confirmPopupMessage = 'Press Confirm to Subscribe'
+  const [confirmPopupMessage, setConfirmPopupMessage] = useState<string>('')
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [tierName, setTierName] = useState('')
   const { getCurrentUserSubscription, getUserSubscriptions, setUserSubscriptions } =
@@ -34,6 +34,7 @@ export function Pricing({ tiers }: PricingProps) {
       return
     }
     setTierName(tier)
+    setConfirmPopupMessage (`Subscribe to ${tier}?`)
     confirmPopupRef.current?.open()
   }
 
@@ -44,9 +45,9 @@ export function Pricing({ tiers }: PricingProps) {
   const purchase = async () => {
     confirmPopupRef.current?.close()
     const accounts = await sdk.accounts.list()
-    const toastId = toast.info('Subscription in progress...')
+    const toastId = toast.info(`Subscribing to ${tierName}...`)
     try {
-      const agreementID = await subscription.buySubscription(
+      await subscription.buySubscription(
         NFT_TIERS.find((tier) => tier.name === tierName)?.did || '',
         accounts[0],
         NFT_TIERS_HOLDER,
@@ -54,13 +55,13 @@ export function Pricing({ tiers }: PricingProps) {
         NFT_TIERS_TYPE
       )
       toast.dismiss(toastId)
-      toast.success('Subscription bought correctly with agreement ID: ' + agreementID)
+      toast.success(`Subscribed correctly to ${tierName}`)
       const userSubs = await getUserSubscriptions()
       setUserSubscriptions(userSubs!)
     } catch (error) {
       toast.dismiss(toastId)
-      toast.error('There was an error buying the subscription')
-      console.error('There was an error buying the subscription: ' + error)
+      toast.error(`There was an error subscribing to ${tierName}`)
+      console.error(`There was an error subscribing to ${tierName}: ` + error)
     }
   }
 

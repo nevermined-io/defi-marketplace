@@ -222,14 +222,14 @@ export const UserPublishMultiStep: NextPage = () => {
           setResultOk(true)
           txPopupRef.current?.close()
           resultPopupRef.current?.open()
-          toast.success(`Asset Published correctly. DID: ${ddo!.id}`)
+          toast.success(`Asset published correctly in the Marketplace`)
         })
         .catch((error) => {
           txPopupRef.current?.close()
           setResultOk(false)
           if (error.message.includes('Transaction was not mined within 50 blocks')) {
             setErrorAssetMessage(
-              'Transaction was not mined within 50 blocks, but it might still be mined. Check later your profile to see the Assets already published'
+              'Transaction was not mined within 50 blocks, but it might still be mined. Check later the Published Assets section in your Account'
             )
           }
           resultPopupRef.current?.open()

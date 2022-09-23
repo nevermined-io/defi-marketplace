@@ -69,7 +69,7 @@ export function XuiDownloadAssetPopup(props: DownloadAssetPopupProps) {
       <>
         <div className={b('confirm')}>
           <UiText block type="h3" className={b('text')}>
-            Do you really want to <br /> download this Asset?
+            Download this Asset?
           </UiText>
           <UiDivider type="xl" />
           <UiLayout style={{ padding: '30px' }}>
