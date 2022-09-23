@@ -1,5 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { UiForm, UiLayout, UiText, UiPopupHandlers, NotificationPopup } from '@nevermined-io/styles'
+import {
+  BEM,
+  UiForm,
+  UiLayout,
+  UiText,
+  UiPopupHandlers,
+  NotificationPopup,
+  UiDivider
+} from '@nevermined-io/styles'
 import {
   Catalog,
   AssetFile,
@@ -15,6 +23,10 @@ import { FilesStep } from './files'
 import { handleAssetFiles, FileType } from './files-handler'
 import { toast } from '../../components'
 import { gatewayAddress, NFT_TIERS } from 'src/config'
+import { ProgressBar } from './progress-bar/progress-bar'
+import styles from './publish-asset.module.scss'
+
+const b = BEM('publish-asset', styles)
 
 export const UserPublishMultiStep: NextPage = () => {
   const {
@@ -259,62 +271,30 @@ export const UserPublishMultiStep: NextPage = () => {
     }
   }
 
-  switch (step) {
-    case 1:
-      return (
-        <UiLayout type="container">
-          <NotificationPopup
-            closePopup={closePopup}
-            message={errorAssetMessage}
-            popupRef={popupRef}
-          />
-          <UiLayout type="container">
-            <UiText wrapper="h1" type="h1" variants={['heading']}>
-              Publish new asset
-            </UiText>
-          </UiLayout>
-
+  return (
+    <UiLayout type="container" className={b()}>
+      <NotificationPopup closePopup={closePopup} message={errorAssetMessage} popupRef={popupRef} />
+      <UiLayout type="container">
+        <UiText type="h2" wrapper="h2">
+          Publish new asset
+        </UiText>
+        <UiDivider className={b('divider-line', ['fade'])} />
+        <ProgressBar currentStep={step} totalSteps={3} />
+        {step === 1 && (
           <UiLayout type="container">
             <UiForm className="">
               <BasicInfoStep nextStep={nextStep} />
             </UiForm>
           </UiLayout>
-        </UiLayout>
-      )
-    case 2:
-      return (
-        <UiLayout type="container">
-          <NotificationPopup
-            closePopup={closePopup}
-            message={errorAssetMessage}
-            popupRef={popupRef}
-          />
-          <UiLayout type="container">
-            <UiText wrapper="h1" type="h1" variants={['heading']}>
-              Publish new asset
-            </UiText>
-          </UiLayout>
+        )}
+        {step === 2 && (
           <UiLayout type="container">
             <UiForm className="">
               <DetailsStep prevStep={prevStep} nextStep={nextStep} />
             </UiForm>
           </UiLayout>
-        </UiLayout>
-      )
-    case 3:
-      return (
-        <UiLayout type="container">
-          <NotificationPopup
-            closePopup={closePopup}
-            message={errorAssetMessage}
-            popupRef={popupRef}
-          />
-          <UiLayout type="container">
-            <UiText wrapper="h1" type="h1" variants={['heading']}>
-              Publish new asset
-            </UiText>
-          </UiLayout>
-
+        )}
+        {step === 3 && (
           <UiLayout type="container">
             <UiForm className="">
               <FilesStep
@@ -331,9 +311,19 @@ export const UserPublishMultiStep: NextPage = () => {
               />
             </UiForm>
           </UiLayout>
-        </UiLayout>
-      )
-    default:
-      return <></>
-  }
+        )}
+      </UiLayout>
+      <UiLayout type="container">
+        <UiText type="h2" wrapper="h2">
+          Publish new asset
+        </UiText>
+        <UiDivider className={b('divider-line', ['fade'])} />
+      </UiLayout>
+      <UiLayout type="container">
+        <UiForm className="">
+          <BasicInfoStep nextStep={nextStep} />
+        </UiForm>
+      </UiLayout>
+    </UiLayout>
+  )
 }

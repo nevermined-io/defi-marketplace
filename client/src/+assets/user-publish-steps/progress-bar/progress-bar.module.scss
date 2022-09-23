@@ -1,0 +1,53 @@
+.progress-bar {
+  &__step {
+    color: #67cff9;
+    width: 100%;
+    max-width: 190px;
+    margin-right: 16px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__step-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__text {
+    color: #2b465c;
+
+    &--active {
+      color: #fff;
+    }
+  }
+
+  &__underline {
+    background: #2b465c;
+    height: 1px;
+    min-height: 0;
+    margin-top: 16px;
+
+    &--active {
+      background: linear-gradient(91.25deg, #7834f9 0%, #67cff9 100%);
+    }
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 16px;
+
+    path {
+      fill: #2b465c;
+    }
+
+    &--active {
+      path {
+        fill: #fff;
+      }
+    }
+  }
+}
