@@ -1,0 +1,13 @@
+.publish-asset {
+  margin-top: 5em;
+
+  &__divider-line {
+    &--fade {
+      border-bottom: none;
+      background: linear-gradient(90deg, #67cff9 10.16%, rgba(0, 0, 0, 0) 74.1%);
+      height: 1px;
+      min-height: 0;
+      margin: 24px 0;
+    }
+  }
+}
