@@ -444,12 +444,14 @@ export const AssetDetails: NextPage = () => {
             <UiLayout className={b('asset-attributes')}>
               <UiIcon color="secondary" icon="file" className={b('side-box-icon')} />
               <div className={b('fields')}>
-                <div className={b('field-row')}>
-                  <UiText className={b('attr')} type="caps">
-                    Subscription
-                  </UiText>{' '}
-                  {subscription?.tier && <SubscriptionBadge tier={subscription.tier} />}
-                </div>
+                {subscription?.tier && (
+                  <div className={b('field-row')}>
+                    <UiText className={b('attr')} type="caps">
+                      Subscription
+                    </UiText>{' '}
+                    <SubscriptionBadge tier={subscription.tier} />
+                  </div>
+                )}
                 <div className={b('field-row')}>
                   <XuiTokenName address={getDdoTokenAddress(asset)?.toString()} />
                 </div>
