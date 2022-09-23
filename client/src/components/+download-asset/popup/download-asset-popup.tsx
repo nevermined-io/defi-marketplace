@@ -90,7 +90,7 @@ export function XuiDownloadAssetPopup(props: DownloadAssetPopupProps) {
         <div className={b('confirm')} style={{ height: '480px' }}>
           <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
           <UiText block type="h3" className={b('text')}>
-            Transaction in <br /> progress...
+            Downloading in <br /> progress...
           </UiText>
           <CircleSpinner
             width="150"
@@ -98,8 +98,7 @@ export function XuiDownloadAssetPopup(props: DownloadAssetPopupProps) {
             circleSpimmerSrc="/assets/circle-loadspinner.svg"
           />
           <UiText block className={b('text', ['content'])}>
-            Please sign the message and the datasets will be downloaded shortly. You can always
-            download this dataset from you profile page.
+            Please sign the message with Metamask and the datasets will be downloaded shortly.
           </UiText>
           <UiDivider type="l" />
         </div>

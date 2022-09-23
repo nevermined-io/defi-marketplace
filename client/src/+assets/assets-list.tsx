@@ -20,7 +20,6 @@ import { toast } from '../components'
 
 interface AssetsListProps {
   assets: DDO[]
-  disableBatchSelect?: boolean
   disableBookmarks?: boolean
   hideCategoryColumn?: boolean
 }
@@ -29,7 +28,6 @@ const b = BEM('assets-list', styles)
 
 export function AssetsList({
   assets,
-  disableBatchSelect,
   disableBookmarks,
   hideCategoryColumn
 }: AssetsListProps) {
@@ -46,8 +44,6 @@ export function AssetsList({
   const { sdk, account } = Catalog.useNevermined()
   const [userProfile, setUserProfile] = useState<Profile>({} as Profile)
   const [errorMessage, setErrorMessage] = useState('')
-  const [batchActive, setBatchActive] = useState<boolean>(false)
-  const [batchSelected, setBatchSelected] = useState<string[]>([])
   const [assetDid, setAssetDid] = useState<string>('')
   const popupRef = useRef<UiPopupHandlers>()
   const downloadPopupRef = useRef<UiPopupHandlers>()
@@ -60,10 +56,6 @@ export function AssetsList({
   const closePopup = (event: any) => {
     popupRef.current?.close()
     event.preventDefault()
-  }
-
-  const addToBatchSelected = (dids: string[]) => {
-    setBatchSelected(batchSelected.concat(...dids.filter((did) => !batchSelected.includes(did))))
   }
 
   const checkAuth = async () => {
@@ -129,11 +121,6 @@ export function AssetsList({
     }
   }
 
-  const removeFromBatchSelected = (dids: string[]) => {
-    const didsSet = new Set(dids)
-    setBatchSelected(batchSelected.filter((did) => !didsSet.has(did)))
-  }
-
   const checkAssetInUserSubscription = (subscription: DDOSubscription) => {
     const subs = userSubscriptions.find(
       (s) => s.tier === subscription.tier.toString() && s.address === subscription.address
@@ -186,69 +173,10 @@ export function AssetsList({
     <div className={b()}>
       <XuiDownloadAsset popupRef={downloadPopupRef} assetDid={assetDid} />
       <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef} />
-      {disableBatchSelect ? (
-        <></>
-      ) : (
-        <div className={b('heading')}>
-          <div className={b('batch-select-wrapper')}>
-            {
-              batchActive ? (
-                <Fragment>
-                  <div className={b('batch-select')}>
-                    {assets.every((asset) => batchSelected.includes(asset.id)) ? (
-                      <img
-                        alt="checkbox"
-                        onClick={() => removeFromBatchSelected(assets.map((asset) => asset.id))}
-                        className={b('batch-checkbox')}
-                        src={'assets/checked_box.svg'}
-                        width="14px"
-                      />
-                    ) : (
-                      <img
-                        alt="uncheckbox"
-                        onClick={() => addToBatchSelected(assets.map((asset) => asset.id))}
-                        className={b('batch-checkbox')}
-                        src={'assets/unchecked_box.svg'}
-                        width="14px"
-                      />
-                    )}
-                    <div className={b('selected-count')}>
-                      Selected: <b>{batchSelected.length}</b>
-                    </div>
-                    <img
-                      alt="close"
-                      className={b('batch-close')}
-                      onClick={() => setBatchActive(false)}
-                      src={'assets/close.svg'}
-                      width="12px"
-                    />
-                  </div>
-                  <div
-                    className={b('basket-add')}
-                    onClick={(e) => {
-                      openPopup(e)
-                      //TODO How to handle batch selection?
-                    }}
-                  >
-                    Add to basket
-                  </div>
-                </Fragment>
-              ) : null
-              /* (
-              TODO - How to handle multiple selection
-          <div className={b('batch-select-inactive')} onClick={() => setBatchActive(true)}>
-            Batch Select
-          </div>
-            )*/
-            }
-          </div>
-        </div>
-      )}
+     
       <table className={b('table')}>
         <thead>
           <tr>
-            {/* Checbox */}
-            {batchActive && <th />}
             {/* Indexer */}
             <th className={b('table__header', ['indexer'])}>
               <UiText type="caps" className={b('asset', ['indexer'])} variants={['detail']}>
@@ -298,24 +226,6 @@ export function AssetsList({
 
               return (
                 <tr key={`asset-${asset.id}-${i}`}>
-                  {/* Checbox */}
-                  {batchActive && (
-                    <td className={b('checkbox')}>
-                      {batchSelected.includes(asset.id) ? (
-                        <img
-                          onClick={() => removeFromBatchSelected([asset.id])}
-                          src={'assets/checked_box.svg'}
-                          width="20px"
-                        />
-                      ) : (
-                        <img
-                          onClick={() => addToBatchSelected([asset.id])}
-                          src={'assets/unchecked_box.svg'}
-                          width="20px"
-                        />
-                      )}
-                    </td>
-                  )}
                   {/* Indexer */}
                   <td className={b('asset-title-col')}>
                     <div className={b('asset-title')}>
