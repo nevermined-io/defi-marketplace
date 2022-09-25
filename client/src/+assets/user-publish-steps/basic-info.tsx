@@ -12,11 +12,13 @@ import {
   BEM
 } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
+import stepStyles from './step-content.module.scss'
 import { AssetService } from '@nevermined-io/catalog-core'
 import { User } from '../../context'
 import { toast } from 'react-toastify'
 
 const b = BEM('user-publish', styles)
+const step = BEM('step-container', stepStyles)
 
 interface BasicInfoProps {
   nextStep: () => void
@@ -30,20 +32,19 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
   const [descriptionInputError, setDescriptionInputError] = useState('')
   const [subscriptionInputError, setSubscriptionInputError] = useState('')
 
-  const { userSubscriptions, getCurrentUserSubscription} = useContext(User)
+  const { userSubscriptions, getCurrentUserSubscription } = useContext(User)
   const [tiers, setTiers] = useState<string[]>([])
-  const subscriptionErrorText = "You don't have any current subscription. Only users with a subscription are allowed to publish"
+  const subscriptionErrorText =
+    "You don't have any current subscription. Only users with a subscription are allowed to publish"
 
   useEffect(() => {
-
     if (!getCurrentUserSubscription()) {
       setSubscriptionInputError(subscriptionErrorText)
       setTiers([])
       return
     }
 
-    setTiers(userSubscriptions.filter(s => s.access == true).map(s => s.tier.toString()))
-
+    setTiers(userSubscriptions.filter((s) => s.access == true).map((s) => s.tier.toString()))
   }, [userSubscriptions])
 
   const checkValues = (): boolean => {
@@ -65,7 +66,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
     return true
   }
 
-  const Continue = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleContinueClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     if (!getCurrentUserSubscription()) {
@@ -79,12 +80,14 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
   }
 
   return (
-    <UiLayout type="container">
-      <UiText type="h2" wrapper="h2">
-        Basic Info - Step 1 of 3
-      </UiText>
-      <div className={b('publish-horizontal-line')} />
-
+    <>
+      <div className={step('step-title')}>
+        <span className={step('step-title-icon')}>1</span>
+        <UiText className={step('step-title-text')} type="caps" wrapper="span">
+          Basic Info
+        </UiText>
+      </div>
+      <UiDivider type="l" />
       <div className={b('form-input')}>
         <UiFormGroup orientation={Orientation.Vertical}>
           <UiFormInput
@@ -121,22 +124,22 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
         <div className={b('publish-horizontal-line')} />
 
         <UiFormGroup orientation={Orientation.Vertical}>
-              <UiFormSelect
-                value={assetPublish.tier}
-                onChange={(e) => handleChange(e as string, 'tier')}
-                options={tiers}
-                className={b('publish-form-select')}
-                label="Subscription"
-                inputError={subscriptionInputError}
-              />
+          <UiFormSelect
+            value={assetPublish.tier}
+            onChange={(e) => handleChange(e as string, 'tier')}
+            options={tiers}
+            className={b('publish-form-select')}
+            label="Subscription"
+            inputError={subscriptionInputError}
+          />
         </UiFormGroup>
 
         <UiDivider />
 
         <UiFormGroup orientation={Orientation.Vertical}>
-          <UiButton onClick={Continue}>&gt;</UiButton>
+          <UiButton onClick={handleContinueClick}>Continue</UiButton>
         </UiFormGroup>
       </div>
-    </UiLayout>
+    </>
   )
 }

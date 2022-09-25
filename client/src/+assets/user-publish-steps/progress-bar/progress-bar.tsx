@@ -1,8 +1,7 @@
 import React from 'react'
 import { BEM, UiLayout, UiText, UiDivider } from '@nevermined-io/styles'
 import styles from './progress-bar.module.scss'
-import CircleCheck from '../../../../public/assets/circle-check.svg'
-import CheckMark from '../../../../public/assets/check_mark.svg'
+import CheckMark from '../../../../public/assets/subscription-tick.svg'
 
 type ProgressBarProps = {
   currentStep: number
@@ -17,19 +16,25 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, totalStep
       <UiLayout className={b()}>
         {[...Array(totalSteps)].map((_, index) => {
           const stepIndex = ++index
+          const isStepComplete = currentStep >= stepIndex
           const isActiveStep = currentStep === stepIndex
+          const cssModifiers = []
+
+          if (isActiveStep) {
+            cssModifiers.push('active')
+          } else if (isStepComplete) {
+            cssModifiers.push('complete')
+          }
 
           return (
             <div key={index} className={b('step')}>
               <div className={b('step-content')}>
-                {isActiveStep ? (
-                  <CircleCheck className={b('icon', ['active'])} />
-                ) : (
-                  <CheckMark className={b('icon')} />
-                )}
-                <UiText className={b('text', [isActiveStep ? 'active' : ''])}>Step {stepIndex}</UiText>
+                <span className={b('icon', cssModifiers)}>
+                  <CheckMark />
+                </span>
+                <UiText className={b('text', cssModifiers)}>Step {stepIndex}</UiText>
               </div>
-              <UiDivider className={b('underline', [isActiveStep ? 'active' : ''])} />
+              <UiDivider className={b('underline', cssModifiers)} />
             </div>
           )
         })}

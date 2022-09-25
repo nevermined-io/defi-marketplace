@@ -11,6 +11,7 @@ import {
   BEM
 } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
+import stepStyles from './step-content.module.scss'
 import {
   networks,
   categories,
@@ -24,6 +25,7 @@ import {
 import { AssetService } from '@nevermined-io/catalog-core'
 
 const b = BEM('user-publish', styles)
+const step = BEM('step-container', stepStyles)
 
 interface DetailsProps {
   prevStep: () => void
@@ -72,12 +74,14 @@ export const DetailsStep = (props: DetailsProps) => {
   }
 
   return (
-    <UiLayout type="container">
-      <UiText type="h2" wrapper="h2">
-        Details - Step 2 of 3
-      </UiText>
-      <div className={b('publish-horizontal-line')} />
-
+    <>
+      <div className={step('step-title')}>
+        <span className={step('step-title-icon')}>2</span>
+        <UiText className={step('step-title-text')} type="caps" wrapper="span">
+          Asset Details
+        </UiText>
+      </div>
+      <UiDivider type="l" />
       <div className={b('form-input')}>
         <UiFormGroup orientation={Orientation.Vertical}>
           <UiFormSelect
@@ -191,6 +195,6 @@ export const DetailsStep = (props: DetailsProps) => {
           <UiButton onClick={Continue}>&gt;</UiButton>
         </UiFormGroup>
       </div>
-    </UiLayout>
+    </>
   )
 }
