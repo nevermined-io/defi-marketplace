@@ -9,9 +9,11 @@ import {
   UiDivider,
   BEM,
   UiFormItem,
-  UiPopupHandlers
+  UiPopupHandlers,
+  Action
 } from '@nevermined-io/styles'
 import styles from './user-publish.module.scss'
+import stepStyles from './step-content.module.scss'
 import { FileType, checkFilecoinIdExists } from './files-handler'
 import { ProgressPopup } from './progress-popup'
 import { AssetService } from '@nevermined-io/catalog-core'
@@ -21,8 +23,8 @@ import { ResultPopup } from './result-popup'
 import { User } from '../../context'
 import { toast } from 'react-toastify'
 
-
 const b = BEM('user-publish', styles)
+const step = BEM('step-container', stepStyles)
 
 interface FilesProps {
   updateFilesAdded: (assetFiles: AssetFile) => void
@@ -41,16 +43,18 @@ export const FilesStep = (props: FilesProps) => {
   const { assetPublish, handleChange, isProcessing, errorAssetMessage } =
     AssetService.useAssetPublish()
 
-  const { updateFilesAdded,
-    removeFile, 
-    prevStep, 
+  const {
+    updateFilesAdded,
+    removeFile,
+    prevStep,
     submit,
     reset,
     filesUploadedMessage,
     fileUploadPopupRef,
     txPopupRef,
     resultOk,
-    resultPopupRef } = props
+    resultPopupRef
+  } = props
   const [inputError, setInputError] = useState('')
   const [newFilecoinID, setNewFilecoinID] = useState('')
   const [popupMesssage, setPopupMessage] = useState('')
@@ -65,9 +69,10 @@ export const FilesStep = (props: FilesProps) => {
   const txImage = '/assets/nevermined-color.svg'
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [showForm, setShowForm] = useState(true)
-  const subscriptionErrorText = "You don't have any current subscription. Only users with a subscription are allowed to publish"
-  const assetOkMessage = "Your Asset has been sucessfully Published"
-  const { getCurrentUserSubscription} = useContext(User)
+  const subscriptionErrorText =
+    "You don't have any current subscription. Only users with a subscription are allowed to publish"
+  const assetOkMessage = 'Your Asset has been sucessfully Published'
+  const { getCurrentUserSubscription } = useContext(User)
 
   useEffect(() => {
     if (isProcessing == true) {
@@ -77,13 +82,13 @@ export const FilesStep = (props: FilesProps) => {
 
   const checkValues = (): boolean => {
     if (!assetPublish.assetFiles || assetPublish.assetFiles.length == 0) {
-      setInputError('Local File  or Filecoin URL is required')
+      setInputError('Local File or Filecoin URL is required')
       return false
     }
     return true
   }
 
-  const Previous = (e: React.FormEvent<HTMLFormElement>) => {
+  const handlePreviousClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     prevStep()
   }
@@ -115,7 +120,9 @@ export const FilesStep = (props: FilesProps) => {
 
     const result = await checkFilecoinIdExists(newFilecoinID)
     if (!result[0]) {
-      setInputError('We could not found information of this file in Filecoin or IPFS. Make sure the ID is correct')
+      setInputError(
+        'We could not find information of this file in Filecoin or IPFS. Make sure the ID is correct'
+      )
       popupRef.current?.close()
       return
     }
@@ -170,18 +177,18 @@ export const FilesStep = (props: FilesProps) => {
         confirm={confirm}
         cancel={cancel}
       />
-      
+
       {!showForm ? (
-      // Asset published. Show result
-      <div>
-        <UiText type="h2" wrapper="h2">
-          Asset Published
-        </UiText> 
-        <div className={b('publish-horizontal-line')} />
-        <div className={b('form-input')}></div>
-        <UiDivider />
-        <UiFormGroup orientation={Orientation.Vertical}>
-        <div className={b('user-publish-submit-container', ['updated-message'])}>
+        // Asset published. Show result
+        <div>
+          <UiText type="h2" wrapper="h2">
+            Asset Published
+          </UiText>
+          <div className={b('publish-horizontal-line')} />
+          <div className={b('form-input')}></div>
+          <UiDivider />
+          <UiFormGroup orientation={Orientation.Vertical}>
+            <div className={b('user-publish-submit-container', ['updated-message'])}>
               <ResultPopup
                 message={resultOk ? assetOkMessage : errorAssetMessage}
                 additionalMessage={filesUploadedMessage}
@@ -189,76 +196,69 @@ export const FilesStep = (props: FilesProps) => {
                 resultOk={resultOk}
               />
               <UiButton onClick={reset}>Publish New Asset</UiButton>
-        </div>        
-        </UiFormGroup>
-      </div>
-      ):
-      // Show form to add Files 
-      (
-      <div>
-       <UiText type="h2" wrapper="h2">
-        FILES - Step 3 of 3
-      </UiText>
-      <div className={b('publish-horizontal-line')} />
-
-      <div>
-        <UiText type="h3">Asset Files</UiText>
-      </div>
-      <div>
-        <UiText variants={['detail']}>
-          Introduce a Filecoin ID or Upload a file from your computer to Filecoin{' '}
-        </UiText>
-      </div>
-
-      <div className={b('form-input')}>
-        <div className={b('publish-current-files-container')}>
-          {assetPublish.assetFiles.map((assetfile) => (
-            <div className={b('publish-current-files')} key={assetfile.label}>
-              <UiFormItem
-                value={assetfile.label}
-                onClick={() => removeFile(assetfile.label)}
-                disabled={true}
-                readOnly={true}
-              />
             </div>
-          ))}
+          </UiFormGroup>
         </div>
-        <UiDivider></UiDivider>
-        <UiDivider></UiDivider>
-        <UiFormGroup orientation={Orientation.Vertical}>
-          <UiFormItem
-            className={b('publish-form-input')}
-            label="Add New File from Filecoin"
-            value={newFilecoinID}
-            onClick={addFilecoinID}
-            onChange={(e) => setNewFilecoinID(e.target.value)}
-            placeholder="Type the Filecoin or IPFS ID of the file"
-            disabled={false}
-          />
-        </UiFormGroup>
-
-        <UiFormGroup orientation={Orientation.Vertical}>
-          <UiFormInput
-            className={b('publish-form-input')}
-            type="file"
-            label="Upload from your computer"
-            onChange={handleNewFile}
-            placeholder="Select the file"
-            inputError={inputError}
-          />
-        </UiFormGroup>
-
-        <UiDivider />
-        <UiFormGroup orientation={Orientation.Vertical}>
-          <div className={b('user-publish-submit-container', ['submit'])}>
-              <UiButton onClick={Previous}>&lt;</UiButton>
-              <UiButton onClick={showConfirm}>Publish Asset</UiButton>
+      ) : (
+        // Show form to add Files
+        <>
+          <div className={step('step-title')}>
+            <span className={step('step-title-icon')}>3</span>
+            <UiText className={step('step-title-text')} type="caps" wrapper="span">
+              Asset File
+            </UiText>
           </div>
-        </UiFormGroup>
-      </div>
-      </div>  
+          <UiDivider type="l" />
+          <div className={b('form-input')}>
+            <UiFormGroup orientation={Orientation.Vertical}>
+              <UiFormItem
+                className={b('publish-form-input')}
+                label="Add New File from Filecoin"
+                value={newFilecoinID}
+                onClick={addFilecoinID}
+                onChange={(e) => setNewFilecoinID(e.target.value)}
+                placeholder="Type the Filecoin or IPFS ID of the file"
+                disabled={false}
+                inputError={inputError}
+              />
+            </UiFormGroup>
+            <UiDivider type="l" />
+            <div className={b('separator')}>OR</div>
+            <UiDivider type="l" />
+            <UiFormGroup orientation={Orientation.Vertical}>
+              <UiFormInput
+                id="computer"
+                className={b('publish-form-input', ['button-only'])}
+                type="file"
+                label="Upload from your computer"
+                onChange={handleNewFile}
+                placeholder="Select the file"
+              />
+              <UiDivider type="l" />
+              <div className={b('publish-current-files-container')}>
+                {assetPublish.assetFiles.map((assetfile) => (
+                  <div className={b('publish-current-files')} key={assetfile.label}>
+                    <UiFormItem
+                      value={assetfile.label}
+                      onClick={() => removeFile(assetfile.label)}
+                      action={Action.Remove}
+                      disabled
+                      readOnly
+                    />
+                  </div>
+                ))}
+              </div>
+            </UiFormGroup>
+            <UiDivider type="xl" />
+            <UiFormGroup orientation={Orientation.Vertical}>
+              <div className={b('user-publish-submit-container', ['submit'])}>
+                <UiButton onClick={handlePreviousClick}>Back</UiButton>
+                <UiButton onClick={showConfirm}>Publish Asset</UiButton>
+              </div>
+            </UiFormGroup>
+          </div>
+        </>
       )}
-
     </UiLayout>
   )
 }

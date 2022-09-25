@@ -19,8 +19,9 @@
   &__text {
     color: #2b465c;
 
-    &--active {
-      color: #fff;
+    &--active,
+    &--complete {
+      color: #67cff9;
     }
   }
 
@@ -30,23 +31,49 @@
     min-height: 0;
     margin-top: 16px;
 
-    &--active {
+    &--active,
+    &--complete {
       background: linear-gradient(91.25deg, #7834f9 0%, #67cff9 100%);
     }
   }
 
   &__icon {
+    width: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin-right: 16px;
+    background: #2b465c;
     width: 24px;
     height: 24px;
-    margin-right: 16px;
 
-    path {
-      fill: #2b465c;
+    svg {
+      width: 10px;
+
+      path {
+        fill: #13122b;
+      }
     }
 
     &--active {
-      path {
-        fill: #fff;
+      border: 1px solid #67cff9;
+
+      svg {
+        path {
+          fill: #fff;
+        }
+      }
+    }
+
+    &--complete {
+      background: linear-gradient(91.25deg, #7834f9 0%, #67cff9 100%);
+
+      svg {
+        path {
+          fill: #fff;
+        }
       }
     }
   }

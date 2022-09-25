@@ -1,46 +1,133 @@
 .user-publish {
-    &__publish-horizontal-line {
-        border-top: 2px solid #2B465C;
-        padding-top: 30px;
+  &__publish-horizontal-line {
+    border-top: 2px solid #2b465c;
+    margin: 40px 0 30px 0;
+  }
+
+  &__publish-submit-container {
+    display: flex;
+    width: 100%;
+    margin-top: 20px;
+
+    &--submit {
+      text-align: right;
+      flex-basis: 20%;
+      justify-content: flex-end;
     }
 
-    &__publish-submit-container {
-        display: flex;
-        width: 100%;
-        margin-top: 20px;
-
-        &--submit {
-            text-align: right;
-            flex-basis: 20%;
-            justify-content: flex-end;
-        }
-
-        &--updated-message {
-            flex-basis: 80%;
-            justify-content: flex-start;
-        }
+    &--updated-message {
+      flex-basis: 80%;
+      justify-content: flex-start;
     }
+  }
 
-    &__publish-form-input {
-        margin-bottom: 20px;
-    }
+  &__publish-current-files-container {
+    .user-publish__publish-current-files {
+      margin-bottom: 16px;
 
-    &__publish-form-select {
-        margin-bottom: 20px;
-    }
-
-    &__publish-add-address {
-        margin-top: 20px;
-    }
-
-    &__form-input {
-      select, input, textarea{
-        color: #8AAABE;
-      }
-      option{
-        background-color: #2B465C;
+      &:last-of-type {
+        margin-bottom: 0;
       }
     }
 
+    input,
+    input:disabled {
+      background: #d0f2ff !important;
+      color: #132d43;
+    }
 
+    button {
+      flex-basis: auto;
+      background: #d0f2ff;
+      color: #132d43;
+    }
+  }
+
+  &__publish-form-input {
+    > *[class~='text--alert'] {
+      color: #fc6471;
+      font-size: 18px;
+      line-height: 32px;
+      border: none;
+      text-transform: none;
+      justify-content: flex-start;
+    }
+
+    // &--button-only {
+    //   input {
+    //     display: none;
+    //   }
+
+    //   label {
+    //     background-color: indigo;
+    //     color: white;
+    //     padding: 0.5rem;
+    //     font-family: sans-serif;
+    //     border-radius: 0.3rem;
+    //     cursor: pointer;
+    //     margin-top: 1rem;
+    //   }
+    // }
+  }
+
+  &__publish-form-select {
+    margin-bottom: 20px;
+  }
+
+  &__publish-add-address {
+    margin-top: 20px;
+  }
+
+  &__form-input {
+    select,
+    input,
+    textarea {
+      color: #8aaabe;
+      font-family: Titillium Web;
+    }
+
+    input {
+      border: none;
+      padding: 0 24px;
+
+      &:disabled {
+        background: #2b465c;
+      }
+    }
+
+    select {
+      text-transform: capitalize;
+    }
+
+    option {
+      background-color: #2b465c;
+    }
+
+    label {
+      font-size: 18px;
+      line-height: 32px;
+      color: #fff;
+    }
+  }
+
+  &__separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #fff;
+    }
+
+    &:not(:empty)::before {
+      margin-right: 23px;
+    }
+
+    &:not(:empty)::after {
+      margin-left: 23px;
+    }
+  }
 }

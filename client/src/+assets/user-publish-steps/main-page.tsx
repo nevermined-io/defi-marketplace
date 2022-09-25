@@ -41,7 +41,7 @@ export const UserPublishMultiStep: NextPage = () => {
   const popupRef = useRef<UiPopupHandlers>()
   const fileUploadPopupRef = useRef<UiPopupHandlers>()
   const txPopupRef = useRef<UiPopupHandlers>()
-  const [step, setStep] = useState<number>(1)
+  const [step, setStep] = useState<number>(3)
   const [resultOk, setResultOk] = useState(false)
   const resultPopupRef = useRef<UiPopupHandlers>()
   const { sdk, isLoadingSDK } = Catalog.useNevermined()
@@ -280,48 +280,23 @@ export const UserPublishMultiStep: NextPage = () => {
         </UiText>
         <UiDivider className={b('divider-line', ['fade'])} />
         <ProgressBar currentStep={step} totalSteps={3} />
-        {step === 1 && (
-          <UiLayout type="container">
-            <UiForm className="">
-              <BasicInfoStep nextStep={nextStep} />
-            </UiForm>
-          </UiLayout>
-        )}
-        {step === 2 && (
-          <UiLayout type="container">
-            <UiForm className="">
-              <DetailsStep prevStep={prevStep} nextStep={nextStep} />
-            </UiForm>
-          </UiLayout>
-        )}
-        {step === 3 && (
-          <UiLayout type="container">
-            <UiForm className="">
-              <FilesStep
-                prevStep={prevStep}
-                updateFilesAdded={updateFilesAdded}
-                removeFile={removeFile}
-                submit={onSubmitUserPublish}
-                filesUploadedMessage={filesUploadedMessage}
-                fileUploadPopupRef={fileUploadPopupRef}
-                txPopupRef={txPopupRef}
-                resultOk={resultOk}
-                resultPopupRef={resultPopupRef}
-                reset={resetValues}
-              />
-            </UiForm>
-          </UiLayout>
-        )}
-      </UiLayout>
-      <UiLayout type="container">
-        <UiText type="h2" wrapper="h2">
-          Publish new asset
-        </UiText>
-        <UiDivider className={b('divider-line', ['fade'])} />
-      </UiLayout>
-      <UiLayout type="container">
-        <UiForm className="">
-          <BasicInfoStep nextStep={nextStep} />
+        <UiForm className={b('step-container')}>
+          {step === 1 && <BasicInfoStep nextStep={nextStep} />}
+          {step === 2 && <DetailsStep prevStep={prevStep} nextStep={nextStep} />}
+          {step === 3 && (
+            <FilesStep
+              prevStep={prevStep}
+              updateFilesAdded={updateFilesAdded}
+              removeFile={removeFile}
+              submit={onSubmitUserPublish}
+              filesUploadedMessage={filesUploadedMessage}
+              fileUploadPopupRef={fileUploadPopupRef}
+              txPopupRef={txPopupRef}
+              resultOk={resultOk}
+              resultPopupRef={resultPopupRef}
+              reset={resetValues}
+            />
+          )}
         </UiForm>
       </UiLayout>
     </UiLayout>

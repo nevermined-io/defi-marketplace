@@ -1,0 +1,26 @@
+.step-container {
+  &__step-title {
+    display: flex;
+    align-items: center;
+
+    &-icon {
+      background: linear-gradient(180deg, #7834f9 21.35%, #60ccf0 100%);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-right: 10px;
+    }
+
+    &-text {
+      font-size: 28px;
+      line-height: 43px;
+      font-weight: 400;
+      letter-spacing: -0.04em;
+    }
+  }
+}
