@@ -206,4 +206,24 @@
       fill: #132d43;
     }
   }
+
+  &__filecoin-container {
+    display: flex;
+    align-items: center;
+  }
+
+  &__filecoin-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 18px;
+
+    path[id~='background'] {
+      fill: #0090ff;
+    }
+  }
+
+  &__filecoin_text {
+    font-size: 28px;
+    line-height: 43px;
+  }
 }
