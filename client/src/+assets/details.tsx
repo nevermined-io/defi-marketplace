@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, createRef, useCallback, useMemo } from 'react'
+import React, { useEffect, useContext, useState, createRef, useCallback, useRef } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -13,7 +13,8 @@ import {
   UiLayout,
   UiDivider,
   UiButton,
-  UiPopupHandlers
+  UiPopupHandlers,
+  NotificationPopup
 } from '@nevermined-io/styles'
 import { XuiTokenName } from 'ui'
 import { Loader } from '@nevermined-io/styles'
@@ -25,7 +26,8 @@ import {
   calculatePages,
   getSampleURL,
   getDefiInfo,
-  getDdoSubscription
+  getDdoSubscription,
+  DDOSubscription
 } from 'src/shared'
 import { Markdown } from 'ui/markdown/markdown'
 import Image from 'next/image'
@@ -34,6 +36,7 @@ import { correctNetworkId, correctNetworkName, EVENT_PREFIX, PROTOCOL_PREFIX } f
 import { loadAssetProvenance } from 'src/shared/graphql'
 import DatasetIcon from '../../public/assets/dataset.svg'
 import { SubscriptionBadge } from '../components/subscription-badge/subscription-badge'
+import { XuiDownloadAsset } from '../components/+download-asset/download-asset'
 
 const b = BEM('details', styles)
 const PROVENANCE_PER_PAGE = 4
@@ -57,15 +60,18 @@ export const AssetDetails: NextPage = () => {
   const [asset, setAsset] = useState<DDO | false>()
   const [isConnected, setIsConnected] = useState(false)
   const [ownAsset, setOwnAsset] = useState(false)
-  const { isLogged } = useContext(User)
+  const { isLogged, userSubscriptions } = useContext(User)
   const { assets, sdk } = Catalog.useNevermined()
   const { getProvider, loginMetamask, switchChainsOrRegisterSupportedChain } = MetaMask.useWallet()
   const popupRef = createRef<UiPopupHandlers>()
+  const downloadPopupRef = useRef<UiPopupHandlers>()
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(true)
   const [provenance, setProvenance] = useState<NftProvenance[]>([])
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
   const { walletAddress } = MetaMask.useWallet()
+  const [errorMessage, setErrorMessage] = useState('')
+  const [assetDid, setAssetDid] = useState<string>('')
 
   const dateOptions: Intl.DateTimeFormatOptions = {
     month: 'short',
@@ -105,6 +111,26 @@ export const AssetDetails: NextPage = () => {
       }
     })
     setProvenance(nftProvenance)
+  }
+
+  const checkAssetInUserSubscription = (subscription: DDOSubscription) => {
+    const subs = userSubscriptions.find(
+      (s) => s.tier === subscription.tier.toString() && s.address === subscription.address
+    )
+    if (subs?.access) {
+      return true
+    }
+    return false
+  }
+
+  const downloadAsset = async (did: string, subscription: DDOSubscription) => {
+    if (!checkAssetInUserSubscription(subscription)) {
+      setErrorMessage("You can't download this Asset with your current subscription")
+      popupRef.current?.open()
+      return
+    }
+    setAssetDid(did)
+    downloadPopupRef.current?.open()
   }
 
   useEffect(() => {
@@ -224,6 +250,8 @@ export const AssetDetails: NextPage = () => {
   return (
     <>
       <UiLayout type="container">
+      <XuiDownloadAsset popupRef={downloadPopupRef} assetDid={assetDid} />
+      <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef} />
         <UiLayout align="start" type="sides">
           <div className={b('content')}>
             <UiText type="h2" wrapper="h2">
@@ -540,9 +568,8 @@ export const AssetDetails: NextPage = () => {
                         loginMetamask()
                         return
                       }
-                      openPopup(e)
-                      // TODO, add Download button
-                      //addtoCart()
+                     
+                      downloadAsset(asset.id, subscription )
                     }}
                   >
                     {isConnected ? 'Download' : 'Connect Wallet'}
