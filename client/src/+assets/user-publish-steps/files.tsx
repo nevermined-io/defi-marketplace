@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from 'react'
+import React, { useState, useRef, useEffect, useContext, useMemo } from 'react'
 import {
   UiFormGroup,
   UiFormInput,
@@ -18,11 +18,13 @@ import { ProgressPopup } from './progress-popup'
 import { AssetService } from '@nevermined-io/catalog-core'
 import { AssetFile } from '@nevermined-io/catalog-core/dist/node/types'
 import { ConfirmPopup } from './confirm-popup'
-import { ResultPopup } from './result-popup'
 import { User } from '../../context'
 import { toast } from 'react-toastify'
 import DownloadIcon from '../../../public/assets/download_icon.svg'
 import CrossIcon from '../../../public/assets/blue-cross.svg'
+import FilecoinLogoIcon from '../../../public/assets/logos/filecoin_grey.svg'
+import NeverminedAbstractIcon from '../../../public/assets/nevermined-abstract.svg'
+import SuccessIcon from '../../../public/assets/success.svg'
 
 const b = BEM('user-publish', styles)
 const step = BEM('step-container', stepStyles)
@@ -60,16 +62,13 @@ export const FilesStep = (props: FilesProps) => {
   } = props
   const [inputError, setInputError] = useState('')
   const [newFilecoinID, setNewFilecoinID] = useState('')
-  const [popupMesssage, setPopupMessage] = useState('')
+  const [popupMesssage, setPopupMessage] = useState<string | React.ReactElement>()
   const popupRef = useRef<UiPopupHandlers>()
-  const filecoinImage = '/assets/logos/filecoin_grey.svg'
   const UploadPopupMesssage = 'Uploading local files to Filecoin...'
   const txPopupMesssage = 'Sending transactions to register the Asset in the network...'
   const txAdditionalMessage =
     'Please sign the transactions with Metamask. It could take some time to complete, but you will be notified when the Asset has been published.'
   const confirmPopupMessage = 'Publish the new Asset?'
-  const uploadImage = '/assets/logos/filecoin_grey.svg'
-  const txImage = '/assets/nevermined-color.svg'
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [showForm, setShowForm] = useState(true)
   const subscriptionErrorText =
@@ -78,7 +77,7 @@ export const FilesStep = (props: FilesProps) => {
   const { getCurrentUserSubscription } = useContext(User)
 
   useEffect(() => {
-    if (isProcessing == true) {
+    if (isProcessing) {
       setShowForm(false)
       setIsProcessComplete(true)
     }
@@ -118,7 +117,12 @@ export const FilesStep = (props: FilesProps) => {
   const addFilecoinID = async () => {
     if (!newFilecoinID) return
 
-    setPopupMessage('Getting info from Filecoin...')
+    setPopupMessage(
+      <div className={b('filecoin-container')}>
+        <FilecoinLogoIcon className={b('filecoin-icon')} />
+        <span className={b('filecoin_text')}>Getting info from Filecoin</span>
+      </div>
+    )
     popupRef.current?.open()
     await new Promise((f) => setTimeout(f, 500))
 
@@ -160,20 +164,24 @@ export const FilesStep = (props: FilesProps) => {
 
   return (
     <>
-      <ProgressPopup message={popupMesssage} image={filecoinImage} popupRef={popupRef} />
+      <ProgressPopup
+        message={popupMesssage}
+        image={<NeverminedAbstractIcon />}
+        popupRef={popupRef}
+      />
 
       <ProgressPopup
         message={UploadPopupMesssage}
         popupRef={fileUploadPopupRef}
-        image={uploadImage}
+        image={<NeverminedAbstractIcon />}
       />
       <ProgressPopup
         message={txPopupMesssage}
-        popUpHeight="780px"
+        popUpHeight="500px"
         additionalMessage={txAdditionalMessage}
-        showCloseButton={true}
+        showCloseButton
         popupRef={txPopupRef}
-        image={txImage}
+        image={<NeverminedAbstractIcon />}
       />
       <ConfirmPopup
         message={confirmPopupMessage}
@@ -193,11 +201,14 @@ export const FilesStep = (props: FilesProps) => {
           <UiDivider type="l" />
           <UiFormGroup orientation={Orientation.Vertical}>
             <div className={b('user-publish-submit-container', ['updated-message'])}>
-              <ResultPopup
+              <ProgressPopup
+                image={resultOk ? <SuccessIcon /> : <NeverminedAbstractIcon />}
+                popUpHeight="auto"
                 message={resultOk ? assetOkMessage : errorAssetMessage}
                 additionalMessage={filesUploadedMessage}
                 popupRef={resultPopupRef}
                 resultOk={resultOk}
+                showCloseButton
               />
               <UiButton onClick={reset}>Publish New Asset</UiButton>
             </div>
@@ -253,9 +264,9 @@ export const FilesStep = (props: FilesProps) => {
                           value={assetfile.label}
                           onClick={() => removeFile(assetfile.label)}
                           action={Action.Remove}
-                          actionIcon={(action) => {
-                            return action === 'remove' && <CrossIcon className={b('remove-icon')} />
-                          }}
+                          actionIcon={(action) => (
+                            <>{action === 'remove' && <CrossIcon className={b('remove-icon')} />}</>
+                          )}
                           disabled
                           readOnly
                         />

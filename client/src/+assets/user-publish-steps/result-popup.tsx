@@ -1,11 +1,12 @@
 import React from 'react'
 import { BEM, UiText, UiPopup, UiPopupHandlers, UiButton, UiDivider } from '@nevermined-io/styles'
 import styles from './popup.module.scss'
+import NeverminedIcon from '../../../public/assets/nevermined-color.svg'
 
 interface ResultPopupProps {
   message: string
   resultOk: boolean
-  additionalMessage?: string[]
+  additionalMessage?: string | string[]
   popupRef: React.MutableRefObject<UiPopupHandlers | undefined>
 }
 
@@ -21,32 +22,30 @@ export const ResultPopup: React.FC<ResultPopupProps> = ({
     <>
       <UiPopup ref={popupRef}>
         <div className={b('confirm')} style={{ height: 'auto', width: 'auto' }}>
-          <UiDivider />
-          <img src="/assets/nevermined-color.svg" width="73px" />
-          <UiDivider />
-          <UiDivider />
-          <UiText
-            block
-            type="h3"
-            variants={resultOk ? ['success'] : ['error']}
-            className={b('text')}
-          >
-            {message}
-          </UiText>
-          <UiDivider />
-          <UiDivider />
-          {additionalMessage && (
-            <div>
-              <UiText block type="h4" className={b('text')}>
-                {additionalMessage}
+          <div className={b('logo')}>
+            <NeverminedIcon />
+          </div>
+          <div className={b('content')}>
+            <div className={b('message-container')}>
+              <UiText
+                block
+                type="h3"
+                variants={resultOk ? ['success'] : ['error']}
+                className={b('text')}
+              >
+                {message}
               </UiText>
-              <UiDivider />
+              {additionalMessage && (
+                <>
+                  <UiDivider type="l" />
+                  <UiText block type="h4" className={b('text', ['additional'])}>
+                    {additionalMessage}
+                  </UiText>
+                </>
+              )}
             </div>
-          )}
-          <div>
             <UiButton onClick={() => popupRef.current?.close()}>Close</UiButton>
           </div>
-          <UiDivider type="l" />
         </div>
       </UiPopup>
     </>
