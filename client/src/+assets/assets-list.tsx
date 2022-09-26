@@ -310,6 +310,7 @@ export function AssetsList({
                         <SubscriptionBadge
                           className={b('subscription-badge')}
                           tier={subscription.tier}
+                          inactive= {!checkAssetInUserSubscription(subscription)}
                         />
                       )}
                       <img

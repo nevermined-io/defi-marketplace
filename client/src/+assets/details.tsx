@@ -522,7 +522,9 @@ export const AssetDetails: NextPage = () => {
                     <UiText className={b('attr')} type="caps">
                       Subscription
                     </UiText>{' '}
-                    <SubscriptionBadge tier={subscription.tier} />
+                    <SubscriptionBadge 
+                      tier={subscription.tier}  
+                      inactive= {!checkAssetInUserSubscription(subscription)}/>
                   </div>
                 )}
                 <div className={b('field-row')}>
