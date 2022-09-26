@@ -43,7 +43,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
     }
 
     setTiers(userSubscriptions.filter(s => s.access == true).map(s => s.tier.toString()))
-   
+
   }, [userSubscriptions])
 
   const checkValues = (): boolean => {
@@ -60,7 +60,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
     if (!assetPublish.description) {
       setDescriptionInputError('Description is required')
       return false
-    }  
+    }
 
     return true
   }
@@ -104,6 +104,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
             value={assetPublish.name}
             onChange={(e) => handleChange(e.target.value, 'name')}
             placeholder="Type a name for the Asset"
+            maxLength={40}
           />
         </UiFormGroup>
         <UiFormGroup orientation={Orientation.Vertical}>
