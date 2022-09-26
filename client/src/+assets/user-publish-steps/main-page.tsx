@@ -41,10 +41,11 @@ export const UserPublishMultiStep: NextPage = () => {
   const popupRef = useRef<UiPopupHandlers>()
   const fileUploadPopupRef = useRef<UiPopupHandlers>()
   const txPopupRef = useRef<UiPopupHandlers>()
-  const [step, setStep] = useState<number>(3)
+  const [step, setStep] = useState<number>(1)
   const [resultOk, setResultOk] = useState(false)
+  const [isProcessComplete, setIsProcessComplete] = useState(false)
   const resultPopupRef = useRef<UiPopupHandlers>()
-  const { sdk, isLoadingSDK } = Catalog.useNevermined()
+  const { sdk } = Catalog.useNevermined()
 
   useEffect(() => {
     setAssetPublish({
@@ -279,7 +280,7 @@ export const UserPublishMultiStep: NextPage = () => {
           Publish new asset
         </UiText>
         <UiDivider className={b('divider-line', ['fade'])} />
-        <ProgressBar currentStep={step} totalSteps={3} />
+        <ProgressBar currentStep={step} totalSteps={3} isProcessComplete={isProcessComplete} />
         <UiForm className={b('step-container')}>
           {step === 1 && <BasicInfoStep nextStep={nextStep} />}
           {step === 2 && <DetailsStep prevStep={prevStep} nextStep={nextStep} />}
@@ -295,6 +296,7 @@ export const UserPublishMultiStep: NextPage = () => {
               resultOk={resultOk}
               resultPopupRef={resultPopupRef}
               reset={resetValues}
+              setIsProcessComplete={setIsProcessComplete}
             />
           )}
         </UiForm>

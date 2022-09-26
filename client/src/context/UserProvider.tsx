@@ -85,6 +85,10 @@ const UserProvider = (props: UserProviderProps) => {
   const { walletAddress, isAvailable, checkIsLogged } = useContext(MetaMask.WalletContext)
   const userProviderMounted = useRef()
   const [userSubscriptions, setUserSubscriptions] = useState<UserSubscription[]>([])
+  const [userSubscriptionsStatus, setUserSubscriptionsStatus] = useState({
+    isLoading: false,
+    hasLoaded: false
+  })
   const [dropdownFilters, setDropDownFilters] = useState<DropDownFilters>({
     selectedNetworks: [],
     selectedSubscriptions: [],
@@ -248,8 +252,10 @@ const UserProvider = (props: UserProviderProps) => {
     }
 
     ;(async () => {
+      setUserSubscriptionsStatus((prev) => ({ ...prev, isLoading: true }))
       const userSubs = await getUserSubscriptions()
       setUserSubscriptions(userSubs)
+      setUserSubscriptionsStatus((prev) => ({ ...prev, isLoading: false, hasLoaded: true }))
     })()
   }, [walletAddress, isLoadingSDK])
 
@@ -363,6 +369,7 @@ const UserProvider = (props: UserProviderProps) => {
         setSelectedSubtypes,
         getCurrentUserSubscription,
         userSubscriptions,
+        userSubscriptionsStatus,
         setUserSubscriptions,
         getUserSubscriptions,
         dropdownFilters,

@@ -40,6 +40,15 @@
       flex-basis: auto;
       background: #d0f2ff;
       color: #132d43;
+      padding-bottom: 0;
+    }
+  }
+
+  &__publish-form {
+    margin-bottom: 20px;
+
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 
@@ -53,21 +62,37 @@
       justify-content: flex-start;
     }
 
-    // &--button-only {
-    //   input {
-    //     display: none;
-    //   }
+    input {
+      height: 56px;
+      flex-basis: auto;
+    }
 
-    //   label {
-    //     background-color: indigo;
-    //     color: white;
-    //     padding: 0.5rem;
-    //     font-family: sans-serif;
-    //     border-radius: 0.3rem;
-    //     cursor: pointer;
-    //     margin-top: 1rem;
-    //   }
-    // }
+    button {
+      width: 56px;
+      height: 56px;
+      flex-basis: unset;
+    }
+
+    &--button-only {
+      input {
+        display: none;
+      }
+
+      label {
+        color: white;
+        padding: 0.5rem;
+        font-family: sans-serif;
+        border-radius: 0.3rem;
+        cursor: pointer;
+        margin-top: 1rem;
+        margin-bottom: 0;
+        border: 2px solid;
+        border-image-source: linear-gradient(180deg, #7834f9 21.35%, #60ccf0 100%);
+        border-image-slice: 1;
+        width: fit-content;
+        padding: 16px;
+      }
+    }
   }
 
   &__publish-form-select {
@@ -128,6 +153,57 @@
 
     &:not(:empty)::after {
       margin-left: 23px;
+    }
+  }
+
+  &__button {
+    width: 257px;
+    height: 64px;
+    margin-right: 16px;
+
+    &--secondary {
+      border: 1px solid;
+      border-image-source: linear-gradient(91.25deg, #7834f9 0%, #67cff9 100%);
+      border-image-slice: 1 !important;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__upload-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__upload-text {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+    text-transform: uppercase;
+    margin-right: 16px;
+  }
+
+  &__upload-icon {
+    width: 24px;
+    height: 24px;
+    transform: rotate(180deg);
+
+    path {
+      fill: #fff;
+    }
+  }
+
+  &__remove-icon {
+    width: 16px;
+    height: 16px;
+
+    path {
+      fill: #132d43;
     }
   }
 }

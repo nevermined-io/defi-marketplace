@@ -62,13 +62,13 @@ export const DetailsStep = (props: DetailsProps) => {
     return true
   }
 
-  const Continue = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleContinueClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!checkValues()) return
     nextStep()
   }
 
-  const Previous = (e: React.FormEvent<HTMLFormElement>) => {
+  const handlePreviousClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     prevStep()
   }
@@ -191,8 +191,16 @@ export const DetailsStep = (props: DetailsProps) => {
         <UiDivider />
 
         <UiFormGroup orientation={Orientation.Vertical}>
-          <UiButton onClick={Previous}>&lt;</UiButton>
-          <UiButton onClick={Continue}>&gt;</UiButton>
+          <UiButton
+            type="secondary"
+            onClick={handlePreviousClick}
+            className={b('button', ['secondary'])}
+          >
+            Back
+          </UiButton>
+          <UiButton onClick={handleContinueClick} className={b('button')}>
+            Continue
+          </UiButton>
         </UiFormGroup>
       </div>
     </>
