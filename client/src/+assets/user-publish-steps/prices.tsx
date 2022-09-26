@@ -18,6 +18,8 @@ import { ResultPopup } from './result-popup'
 import { AssetService } from '@nevermined-io/catalog-core'
 import { User } from '../../context'
 import { toast } from '../../components'
+import FilecoinLogoIcon from '../../../public/assets/logos/filecoin_grey.svg'
+import NeverminedAbstractIcon from '../../../public/assets/nevermined-abstract.svg'
 
 const b = BEM('user-publish', styles)
 
@@ -51,8 +53,6 @@ export const PricesStep = (props: PricesProps) => {
   const txAdditionalMessage =
     'The transaction has been sent correctly. It could take some time to complete. You can close this window and visit your profile later to check the status of the new Asset.'
   const confirmPopupMessage = 'Press Confirm to Publish the new Asset'
-  const uploadImage = '/assets/logos/filecoin_grey.svg'
-  const txImage = '/assets/nevermined-color.svg'
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [showForm, setShowForm] = useState(true)
   const { userSubscriptions, getCurrentUserSubscription } = useContext(User)
@@ -103,7 +103,7 @@ export const PricesStep = (props: PricesProps) => {
       <ProgressPopup
         message={UploadPopupMesssage}
         popupRef={fileUploadPopupRef}
-        image={uploadImage}
+        image={<FilecoinLogoIcon />}
       />
       <ProgressPopup
         message={txPopupMesssage}
@@ -111,7 +111,7 @@ export const PricesStep = (props: PricesProps) => {
         additionalMessage={txAdditionalMessage}
         showCloseButton={true}
         popupRef={txPopupRef}
-        image={txImage}
+        image={<NeverminedAbstractIcon />}
       />
       <ConfirmPopup
         message={confirmPopupMessage}
