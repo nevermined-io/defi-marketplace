@@ -227,17 +227,9 @@ export const AssetDetails: NextPage = () => {
         <UiLayout align="start" type="sides">
           <div className={b('content')}>
             <UiText type="h2" wrapper="h2">
-              Report
+              {metadata.main.name || '-'}
             </UiText>
             <UiDivider className={b('divider-line', ['fade'])} />
-            {metadata.main.name && (
-              <>
-                <UiText type="h4" wrapper="h4">
-                  {metadata.main.name}
-                </UiText>
-                <UiDivider />
-              </>
-            )}
             {metadata.additionalInformation!.description && (
               <>
                 <UiText type="caps" variants={['detail']}>
