@@ -1,47 +1,68 @@
 @import '~@nevermined-io/styles/lib/cjs/styles/index.scss';
 
-
-@mixin animate($animation,$duration,$method,$times){
+@mixin animate($animation, $duration, $method, $times) {
   animation: $animation $duration $method $times;
 }
 
-@mixin keyframes($name){
-  @keyframes #{$name}{
-      @content;
+@mixin keyframes($name) {
+  @keyframes #{$name} {
+    @content;
   }
 }
 
 .details {
   &__content {
-    flex: 1;
+    flex: 1 1 60%;
   }
+
+  &__side-panel {
+    flex: 1 1;
+  }
+
   &__side-box {
     background: gc(gM);
     padding: 24px;
-    width: 290px;
     margin-top: 63px;
   }
-  &__attr {
-    width: 72px;
-    display: inline-block;
+
+  &__side-box-icon {
+    width: unset !important;
+    height: unset !important;
+    margin-right: 15px;
+    align-items: flex-start;
   }
 
+  &__attr {
+    display: flex;
+    align-self: flex-start;
+    margin-right: 10px;
 
-  &__loadspinner{
+    &--value {
+      justify-content: flex-end;
+      flex: 1 1 auto;
+      margin-right: 0;
+    }
+  }
+
+  &__loadspinner {
     display: flex;
     align-items: center;
 
-    &--text{
-      position:relative;
+    &--text {
+      position: relative;
       // right:-30px;
-      z-index:2
+      z-index: 2;
     }
 
-    &--spinner{
-      z-index:1;
-      @include keyframes(rotate){
-        0% { -webkit-transform: rotate(0deg); }
-        100% { -webkit-transform: rotate(360deg); }
+    &--spinner {
+      z-index: 1;
+      @include keyframes(rotate) {
+        0% {
+          -webkit-transform: rotate(0deg);
+        }
+        100% {
+          -webkit-transform: rotate(360deg);
+        }
       }
       @include animate(rotate, 1.5s, linear, infinite);
     }
@@ -52,15 +73,14 @@
   }
 
   &__provenance-entry {
-    margin-bottom: 16px;
-    border: 2px solid gc(gM);
+    border: 1px solid gc(gM);
     flex-flow: row;
     padding: 10px;
 
     &-userAddress {
       margin-bottom: 16px;
       border: 4px solid gc(gM);
-      border-color: #67CFF9;
+      border-color: #67cff9;
       flex-flow: row;
       padding: 10px;
     }
@@ -81,13 +101,12 @@
       &--right {
         justify-content: flex-end;
       }
-
     }
   }
-  
-  &__spinner-container{
+
+  &__spinner-container {
     display: flex;
-    justify-content: space-around
+    justify-content: space-around;
   }
 
   &__basket-popup {
@@ -100,7 +119,7 @@
   }
 
   &__popup-text {
-    color: #132D43;
+    color: #132d43;
     font-size: 18px;
     line-height: 32px;
   }
@@ -113,18 +132,80 @@
   }
 
   &__already-purchased {
-    color: #67CFF9;
+    color: #67cff9;
 
     &-link {
       a {
-          color: #fff;
+        color: #fff;
 
-          &:hover {
-              text-decoration: underline;
-              color: #67CFF9;
-          }
+        &:hover {
+          text-decoration: underline;
+          color: #67cff9;
+        }
       }
     }
   }
 
+  &__divider-line {
+    border-bottom: 1px solid #2b465c;
+
+    &--s {
+      margin: 12px 0 24px 0;
+    }
+
+    &--l {
+      margin: 0 0 24px 0;
+    }
+
+    &--fade {
+      border-bottom: none;
+      background: linear-gradient(90deg, #67cff9 10.16%, rgba(0, 0, 0, 0) 74.1%);
+      height: 1px;
+      min-height: 0;
+      margin: 24px 0;
+    }
+  }
+
+  &__asset-attributes {
+    padding: 0 15px;
+  }
+
+  &__fields {
+    flex: 1 1 auto;
+  }
+
+  &__field-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__field-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__field-icon {
+    vertical-align: middle;
+    margin-right: 5px;
+
+    &--dataset {
+      width: 17px;
+    }
+
+    &--network {
+      width: 25px;
+    }
+  }
+
+  &__field-text {
+    vertical-align: middle;
+  }
+
+  &__dash {
+    &::before {
+      content: '\2013';
+      margin: 0 5px;
+    }
+  }
 }
