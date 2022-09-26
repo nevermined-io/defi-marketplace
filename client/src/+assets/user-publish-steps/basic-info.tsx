@@ -11,6 +11,7 @@ import {
   UiFormSelect,
   BEM
 } from '@nevermined-io/styles'
+import { Catalog } from '@nevermined-io/catalog-core'
 import styles from './user-publish.module.scss'
 import stepStyles from './step-content.module.scss'
 import { AssetService } from '@nevermined-io/catalog-core'
@@ -32,20 +33,26 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
   const [descriptionInputError, setDescriptionInputError] = useState('')
   const [subscriptionInputError, setSubscriptionInputError] = useState('')
 
-  const { userSubscriptions, getCurrentUserSubscription } = useContext(User)
+  const { userSubscriptionsStatus, userSubscriptions, getCurrentUserSubscription } =
+    useContext(User)
   const [tiers, setTiers] = useState<string[]>([])
   const subscriptionErrorText =
     "You don't have any current subscription. Only users with a subscription are allowed to publish"
+  const { isLoadingSDK } = Catalog.useNevermined()
 
   useEffect(() => {
-    if (!getCurrentUserSubscription()) {
+    if (
+      !userSubscriptionsStatus.isLoading &&
+      userSubscriptionsStatus.hasLoaded &&
+      !getCurrentUserSubscription()
+    ) {
       setSubscriptionInputError(subscriptionErrorText)
       setTiers([])
       return
     }
 
     setTiers(userSubscriptions.filter((s) => s.access == true).map((s) => s.tier.toString()))
-  }, [userSubscriptions])
+  }, [isLoadingSDK, userSubscriptions])
 
   const checkValues = (): boolean => {
     if (!assetPublish.author) {
@@ -89,7 +96,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
       </div>
       <UiDivider type="l" />
       <div className={b('form-input')}>
-        <UiFormGroup orientation={Orientation.Vertical}>
+        <UiFormGroup orientation={Orientation.Vertical} className={b('publish-form')}>
           <UiFormInput
             className={b('publish-form-input')}
             label="Author *"
@@ -99,7 +106,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
             placeholder="Type the author"
           />
         </UiFormGroup>
-        <UiFormGroup orientation={Orientation.Vertical}>
+        <UiFormGroup orientation={Orientation.Vertical} className={b('publish-form')}>
           <UiFormInput
             className={b('publish-form-input')}
             label="Name *"
@@ -110,7 +117,7 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
             maxLength={40}
           />
         </UiFormGroup>
-        <UiFormGroup orientation={Orientation.Vertical}>
+        <UiFormGroup orientation={Orientation.Vertical} className={b('publish-form')}>
           <UiFormTextarea
             className={b('publish-form-input')}
             label="Description *"
@@ -137,7 +144,9 @@ export const BasicInfoStep = (props: BasicInfoProps) => {
         <UiDivider />
 
         <UiFormGroup orientation={Orientation.Vertical}>
-          <UiButton onClick={handleContinueClick}>Continue</UiButton>
+          <UiButton onClick={handleContinueClick} className={b('button')}>
+            Continue
+          </UiButton>
         </UiFormGroup>
       </div>
     </>

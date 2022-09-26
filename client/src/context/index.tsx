@@ -68,6 +68,10 @@ export const User = React.createContext({
     /* empty */
   },
   userSubscriptions: [] as UserSubscription[],
+  userSubscriptionsStatus: {
+    isLoading: false,
+    hasLoaded: false,
+  },
   setUserSubscriptions: (userSubscriptions: UserSubscription[]) => {
     /* empty */
   },

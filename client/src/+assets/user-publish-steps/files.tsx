@@ -4,7 +4,6 @@ import {
   UiFormInput,
   Orientation,
   UiButton,
-  UiLayout,
   UiText,
   UiDivider,
   BEM,
@@ -22,6 +21,8 @@ import { ConfirmPopup } from './confirm-popup'
 import { ResultPopup } from './result-popup'
 import { User } from '../../context'
 import { toast } from 'react-toastify'
+import DownloadIcon from '../../../public/assets/download_icon.svg'
+import CrossIcon from '../../../public/assets/blue-cross.svg'
 
 const b = BEM('user-publish', styles)
 const step = BEM('step-container', stepStyles)
@@ -37,6 +38,7 @@ interface FilesProps {
   txPopupRef: React.MutableRefObject<UiPopupHandlers | undefined>
   resultOk: boolean
   resultPopupRef: React.MutableRefObject<UiPopupHandlers | undefined>
+  setIsProcessComplete: (value: boolean) => void
 }
 
 export const FilesStep = (props: FilesProps) => {
@@ -53,7 +55,8 @@ export const FilesStep = (props: FilesProps) => {
     fileUploadPopupRef,
     txPopupRef,
     resultOk,
-    resultPopupRef
+    resultPopupRef,
+    setIsProcessComplete
   } = props
   const [inputError, setInputError] = useState('')
   const [newFilecoinID, setNewFilecoinID] = useState('')
@@ -77,6 +80,7 @@ export const FilesStep = (props: FilesProps) => {
   useEffect(() => {
     if (isProcessing == true) {
       setShowForm(false)
+      setIsProcessComplete(true)
     }
   }, [isProcessing])
 
@@ -155,7 +159,7 @@ export const FilesStep = (props: FilesProps) => {
   }
 
   return (
-    <UiLayout type="container">
+    <>
       <ProgressPopup message={popupMesssage} image={filecoinImage} popupRef={popupRef} />
 
       <ProgressPopup
@@ -181,12 +185,12 @@ export const FilesStep = (props: FilesProps) => {
       {!showForm ? (
         // Asset published. Show result
         <div>
-          <UiText type="h2" wrapper="h2">
-            Asset Published
-          </UiText>
-          <div className={b('publish-horizontal-line')} />
-          <div className={b('form-input')}></div>
-          <UiDivider />
+          <div className={step('step-title')}>
+            <UiText className={step('step-title-text')} type="caps" wrapper="span">
+              Asset Published
+            </UiText>
+          </div>
+          <UiDivider type="l" />
           <UiFormGroup orientation={Orientation.Vertical}>
             <div className={b('user-publish-submit-container', ['updated-message'])}>
               <ResultPopup
@@ -230,35 +234,55 @@ export const FilesStep = (props: FilesProps) => {
                 id="computer"
                 className={b('publish-form-input', ['button-only'])}
                 type="file"
-                label="Upload from your computer"
+                label={
+                  <div className={b('upload-button')}>
+                    <span className={b('upload-text')}>Upload file</span>
+                    <DownloadIcon className={b('upload-icon')} />
+                  </div>
+                }
                 onChange={handleNewFile}
                 placeholder="Select the file"
               />
               <UiDivider type="l" />
-              <div className={b('publish-current-files-container')}>
-                {assetPublish.assetFiles.map((assetfile) => (
-                  <div className={b('publish-current-files')} key={assetfile.label}>
-                    <UiFormItem
-                      value={assetfile.label}
-                      onClick={() => removeFile(assetfile.label)}
-                      action={Action.Remove}
-                      disabled
-                      readOnly
-                    />
+              {assetPublish.assetFiles.length > 0 && (
+                <>
+                  <div className={b('publish-current-files-container')}>
+                    {assetPublish.assetFiles.map((assetfile) => (
+                      <div className={b('publish-current-files')} key={assetfile.label}>
+                        <UiFormItem
+                          value={assetfile.label}
+                          onClick={() => removeFile(assetfile.label)}
+                          action={Action.Remove}
+                          actionIcon={(action) => {
+                            return action === 'remove' && <CrossIcon className={b('remove-icon')} />
+                          }}
+                          disabled
+                          readOnly
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                  <UiDivider type="l" />
+                </>
+              )}
             </UiFormGroup>
-            <UiDivider type="xl" />
             <UiFormGroup orientation={Orientation.Vertical}>
               <div className={b('user-publish-submit-container', ['submit'])}>
-                <UiButton onClick={handlePreviousClick}>Back</UiButton>
-                <UiButton onClick={showConfirm}>Publish Asset</UiButton>
+                <UiButton
+                  type="secondary"
+                  onClick={handlePreviousClick}
+                  className={b('button', ['secondary'])}
+                >
+                  Back
+                </UiButton>
+                <UiButton onClick={showConfirm} className={b('button')}>
+                  Publish Asset
+                </UiButton>
               </div>
             </UiFormGroup>
           </div>
         </>
       )}
-    </UiLayout>
+    </>
   )
 }

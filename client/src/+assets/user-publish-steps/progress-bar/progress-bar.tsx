@@ -6,11 +6,16 @@ import CheckMark from '../../../../public/assets/subscription-tick.svg'
 type ProgressBarProps = {
   currentStep: number
   totalSteps: number
+  isProcessComplete?: boolean
 }
 
 const b = BEM('progress-bar', styles)
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, totalSteps }) => {
+export const ProgressBar: React.FC<ProgressBarProps> = ({
+  currentStep,
+  totalSteps,
+  isProcessComplete
+}) => {
   return (
     <>
       <UiLayout className={b()}>
@@ -20,9 +25,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, totalStep
           const isActiveStep = currentStep === stepIndex
           const cssModifiers = []
 
-          if (isActiveStep) {
+          if (isActiveStep && !isProcessComplete) {
             cssModifiers.push('active')
-          } else if (isStepComplete) {
+          } else if (isStepComplete || isProcessComplete) {
             cssModifiers.push('complete')
           }
 
