@@ -7,7 +7,8 @@ export type SubscriptionTier = {
   name: string
   price: string
   symbol: string
-  features: string[]
+  features: string[],
+  enabled: boolean
 }
 
 export type DropDownFilters = {
