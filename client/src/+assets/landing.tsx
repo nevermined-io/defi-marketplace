@@ -30,7 +30,7 @@ export const Landing: NextPage = () => {
       <UiDivider type="l" />
       <div className={b('centered-text-wrapper')}>
         <UiText wrapper="h2" type="h2" className={b('centered-text')} style={{ width: '726px' }}>
-          Purchase data sets from your favorite networks
+          Download data sets from your favorite networks
         </UiText>
       </div>
       <UiDivider type="xxl" />
@@ -54,8 +54,7 @@ export const Landing: NextPage = () => {
               <UiDivider type="s" />
 
               <UiText type="p" variants={['detail']}>
-                Identify your desired product by using Nevermined’s filter functions to select the
-                data set you wish to purchase.
+              Identify your desired product by using Nevermined's filter functions to select the data set you want to download
               </UiText>
             </div>
           </UiLayout>
@@ -72,12 +71,11 @@ export const Landing: NextPage = () => {
             </UiText>
             <UiDivider type="s" />
             <UiText type="h4" variants={['secondary']}>
-              Shop
+              Subscribe
             </UiText>
             <UiDivider type="s" />
             <UiText type="p" variants={['detail']}>
-              Connect your wallet (Polygon or MetaMask) before adding the selected data sets to your
-              basket.
+            Connect your wallet (Polygon or Metamask) and purchase the Subscription you are interested in
             </UiText>
           </UiLayout>
           <UiLayout type="container">
@@ -91,7 +89,7 @@ export const Landing: NextPage = () => {
             </UiText>
             <UiDivider type="s" />
             <UiText type="p" variants={['detail']}>
-              Head to the check out page to make payment and simply dowload your CSV files.
+            Just click on the download button. If the data set belongs to your subscription, you don't need anything else to download it!
             </UiText>
           </UiLayout>
         </UiLayout>
@@ -156,7 +154,7 @@ export const Landing: NextPage = () => {
                 src="/assets/documents.svg"
               />
               <UiText className={b('bannerText')} variants={['secondary']} wrapper="h3" type="h3">
-                Publish & Purchase
+                Publish & Download
               </UiText>
               <UiDivider />
               <UiText
@@ -164,7 +162,7 @@ export const Landing: NextPage = () => {
                 type="p"
                 variants={['secondary', 'detail']}
               >
-                Whether you’re publishing DeFi data or purchasing it, our marketplace enables
+                Whether you’re publishing DeFi data or downloading it, our marketplace enables
                 individuals and organizations to leverage value from tokenized data assets.
               </UiText>
             </UiLayout>
@@ -233,7 +231,7 @@ export const Landing: NextPage = () => {
                 variants={['secondary', 'detail']}
               >
                 Nevermined easily integrates with Polygon and Metamask wallets in order to enable
-                efficient user experience. Simply connect your wallet to purchase your data.
+                efficient user experience. Simply connect your wallet to subscribe and download your data.
               </UiText>
             </UiLayout>
           </UiLayout>
