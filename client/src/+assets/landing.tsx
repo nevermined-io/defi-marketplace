@@ -75,7 +75,7 @@ export const Landing: NextPage = () => {
             </UiText>
             <UiDivider type="s" />
             <UiText type="p" variants={['detail']}>
-            Connect your wallet (Polygon or Metamask) and purchase the Subscription you are interested in
+            Connect your wallet (Metamask) and purchase the Subscription you are interested in
             </UiText>
           </UiLayout>
           <UiLayout type="container">
