@@ -38,36 +38,16 @@ export const Landing: NextPage = () => {
 
       <UiLayout type="container">
         <UiLayout type="sides">
-          <UiLayout type="container">
-            <div>
-              <UiIcon icon="search" color="primary" size="xl" />
-              <UiText className={b('blurriedNumbers')} type="h1" variants={['highlight']}>
-                1
-              </UiText>
-
-              <UiDivider type="s" />
-
-              <UiText type="h4" variants={['secondary']}>
-                Search
-              </UiText>
-
-              <UiDivider type="s" />
-
-              <UiText type="p" variants={['detail']}>
-              Identify your desired product by using Nevermined's filter functions to select the data set you want to download
-              </UiText>
-            </div>
-          </UiLayout>
-          <UiLayout type="container">
+        <UiLayout type="container">
             {/* <UiIcon icon="basket" color="primary" size="xl" /> */}
             <Image
-              width="40"
-              height="40"
+              width="20"
+              height="20"
               className={b('landingImage')}
               src="/assets/basket_icon.svg"
             />
             <UiText className={b('blurriedNumbers')} type="h1" variants={['highlight']}>
-              2
+              1
             </UiText>
             <UiDivider type="s" />
             <UiText type="h4" variants={['secondary']}>
@@ -78,6 +58,23 @@ export const Landing: NextPage = () => {
             Connect your wallet (Metamask) and purchase the Subscription you are interested in
             </UiText>
           </UiLayout>
+          <UiLayout type="container">
+            <div>
+              <UiIcon icon="search" color="primary" size="xl" />
+              <UiText className={b('blurriedNumbers')} type="h1" variants={['highlight']}>
+                2
+              </UiText>
+              <UiDivider type="s" />
+              <UiText type="h4" variants={['secondary']}>
+                Search
+              </UiText>
+              <UiDivider type="s" />
+              <UiText type="p" variants={['detail']}>
+              Identify your desired product by using Nevermined's filter functions to select the data set you want to download
+              </UiText>
+            </div>
+          </UiLayout>
+         
           <UiLayout type="container">
             <UiIcon icon="download" color="primary" size="xl" />
             <UiText className={b('blurriedNumbers')} type="h1" variants={['highlight']}>
