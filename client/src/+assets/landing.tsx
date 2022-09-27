@@ -2,12 +2,13 @@ import React from 'react'
 import Router from 'next/router'
 import type { NextPage } from 'next'
 import Image from 'next/image'
-
-import { UiText, UiLayout, UiButton, UiDivider, BEM, UiIcon } from '@nevermined-io/styles'
-
+import { UiText, UiLayout, UiButton, UiDivider, BEM } from '@nevermined-io/styles'
 import styles from './landing.module.scss'
 import { UiBanner } from 'ui/banner/banner'
 import { discordUrl, networkArray } from 'src/config'
+import CursorPointerIcon from '../../public/assets/cursor-pointer.svg'
+import SearchIcon from '../../public/assets/search.svg'
+import DownloadIcon from '../../public/assets/download_icon.svg'
 
 export const Landing: NextPage = () => {
   const b = BEM('landing', styles)
@@ -38,57 +39,54 @@ export const Landing: NextPage = () => {
 
       <UiLayout type="container">
         <UiLayout type="sides">
-        <UiLayout type="container">
-            {/* <UiIcon icon="basket" color="primary" size="xl" /> */}
-            <Image
-              width="20"
-              height="20"
-              className={b('landingImage')}
-              src="/assets/basket_icon.svg"
-            />
-            <UiText className={b('blurriedNumbers')} type="h1" variants={['highlight']}>
-              1
-            </UiText>
-            <UiDivider type="s" />
-            <UiText type="h4" variants={['secondary']}>
-              Select Subscription Type
-            </UiText>
-            <UiDivider type="s" />
-            <UiText type="p" variants={['detail']}>
-            Connect your wallet (Metamask) and purchase the Subscription you are interested in
-            </UiText>
-          </UiLayout>
-          <UiLayout type="container">
-            <div>
-              <UiIcon icon="search" color="primary" size="xl" />
+          <div className={b('step-container')}>
+            <div className={b('step-row', ['number'])}>
+              <UiText className={b('blurriedNumbers')} type="h1" variants={['highlight']}>
+                1
+              </UiText>
               <UiText className={b('blurriedNumbers')} type="h1" variants={['highlight']}>
                 2
               </UiText>
-              <UiDivider type="s" />
+              <UiText className={b('blurriedNumbers')} type="h1" variants={['highlight']}>
+                3
+              </UiText>
+            </div>
+            <div className={b('step-row', ['icon'])}>
+              <span className={b('icon-wrapper')}>
+                <CursorPointerIcon width="20" height="30" className={b('landingImage')} />
+              </span>
+              <span className={b('icon-wrapper')}>
+                <SearchIcon width="40" height="40" className={b('landingImage')} />
+              </span>
+              <span className={b('icon-wrapper')}>
+                <DownloadIcon width="36" height="36" className={b('landingImage')} />
+              </span>
+            </div>
+            <div className={b('step-row', ['title'])}>
+              <UiText type="h4" variants={['secondary']}>
+                Select Subscription Type
+              </UiText>
               <UiText type="h4" variants={['secondary']}>
                 Search
               </UiText>
-              <UiDivider type="s" />
-              <UiText type="p" variants={['detail']}>
-              Identify your desired product by using Nevermined's filter functions to select the data set you want to download
+              <UiText type="h4" variants={['secondary']}>
+                Download
               </UiText>
             </div>
-          </UiLayout>
-         
-          <UiLayout type="container">
-            <UiIcon icon="download" color="primary" size="xl" />
-            <UiText className={b('blurriedNumbers')} type="h1" variants={['highlight']}>
-              3
-            </UiText>
-            <UiDivider type="s" />
-            <UiText type="h4" variants={['secondary']}>
-              Download
-            </UiText>
-            <UiDivider type="s" />
-            <UiText type="p" variants={['detail']}>
-            Just click on the download button. If the data set belongs to your subscription, you don't need anything else to download it!
-            </UiText>
-          </UiLayout>
+            <div className={b('step-row', ['description'])}>
+              <UiText type="p" variants={['detail']} className={b('description-details')}>
+                Connect your wallet (Metamask) and purchase the Subscription you are interested in
+              </UiText>
+              <UiText type="p" variants={['detail']}>
+                Identify your desired product by using Nevermined's filter functions to select the
+                data set you want to download
+              </UiText>
+              <UiText type="p" variants={['detail']}>
+                Just click on the download button. If the data set belongs to your subscription, you
+                don't need anything else to download it!
+              </UiText>
+            </div>
+          </div>
         </UiLayout>
         <div className={b('bannerContainer')}>
           <UiButton className={b('buttonFeatures')} onClick={redirectToList}>
@@ -228,7 +226,8 @@ export const Landing: NextPage = () => {
                 variants={['secondary', 'detail']}
               >
                 Nevermined easily integrates with Polygon and Metamask wallets in order to enable
-                efficient user experience. Simply connect your wallet to subscribe and download your data.
+                efficient user experience. Simply connect your wallet to subscribe and download your
+                data.
               </UiText>
             </UiLayout>
           </UiLayout>

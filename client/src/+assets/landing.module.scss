@@ -1,10 +1,41 @@
 @import '~@nevermined-io/styles/lib/cjs/styles/index.scss';
 
-
 $default_margin: 22px 44px;
 
-
 .landing {
+  &__step-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    margin: unset;
+  }
+
+  &__step-row {
+    display: flex;
+    align-items: center;
+
+    > * {
+      justify-content: flex-start;
+      display: flex;
+      flex: 1 1 33.3%;
+      margin-left: 12%;
+    }
+
+    &--icon,
+    &--title,
+    &--description {
+      > * {
+        align-items: flex-start;
+        margin-left: 4%;
+        margin-top: 8px;
+      }
+    }
+  }
+
+  &__icon-wrapper {
+    justify-content: flex-start;
+  }
+
   &__bannerContainer {
     padding-top: 80px;
     text-align: center;
@@ -45,7 +76,7 @@ $default_margin: 22px 44px;
   }
 
   &__defaultMargin {
-    margin: $default_margin
+    margin: $default_margin;
   }
 
   &__featureSectionText {
@@ -77,8 +108,6 @@ $default_margin: 22px 44px;
   }
 
   &__blurriedNumbers {
-    width: 117px;
-    height: 237px;
     font-size: 206px;
     z-index: 0;
     filter: blur(11px);
