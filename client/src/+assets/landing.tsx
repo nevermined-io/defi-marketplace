@@ -71,7 +71,7 @@ export const Landing: NextPage = () => {
             </UiText>
             <UiDivider type="s" />
             <UiText type="h4" variants={['secondary']}>
-              Subscribe
+              Select Subscription Type
             </UiText>
             <UiDivider type="s" />
             <UiText type="p" variants={['detail']}>
