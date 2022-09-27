@@ -12,6 +12,7 @@ interface SummaryProps {
 }
 
 const b = BEM('account-modules', styles)
+
 export function Summary({ published, bookmarks, downloaded, currentSubscription }: SummaryProps) {
   return (
     <>
@@ -26,9 +27,9 @@ export function Summary({ published, bookmarks, downloaded, currentSubscription 
             </UiText>
             <UiText className={b('summary-subscription')}>
               {currentSubscription ? (
-                <SubscriptionBadge tier={currentSubscription} />
+                <SubscriptionBadge className={b('subscription-badge')} tier={currentSubscription} />
               ) : (
-                'No Subscription'
+                <SubscriptionBadge className={b('subscription-badge')} tier="No Subscription" />
               )}
             </UiText>
           </UiLayout>
