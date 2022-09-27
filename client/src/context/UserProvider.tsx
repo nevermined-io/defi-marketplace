@@ -35,7 +35,8 @@ const tiers = [
       'Integration of basic data with Google Data Studio',
       'Publish reports and notebooks/algorithms without monetization free for the community',
       'Access to community reports'
-    ]
+    ],
+    enabled: true
   },
   {
     name: 'Analyst',
@@ -47,7 +48,8 @@ const tiers = [
       'Integration of aggregated data with Google Data Studio',
       'Monetization of reports and notebooks/algorithms',
       'Access to tier 2 reports'
-    ]
+    ],
+    enabled: false
   },
   {
     name: 'Enterprise',
@@ -59,7 +61,8 @@ const tiers = [
       'Integration of insights reports with Google Data Studio',
       'Monetization of reports and notebooks/algorithms',
       'Access to tier 2 and tier 3 reports'
-    ]
+    ],
+    enabled: false
   }
 ]
 

@@ -14,7 +14,8 @@ interface Tier {
   name: string
   price: string
   symbol: string
-  features: string[]
+  features: string[],
+  enabled: boolean
 }
 interface PricingProps {
   tiers: Tier[]
@@ -34,7 +35,7 @@ export function Pricing({ tiers }: PricingProps) {
       return
     }
     setTierName(tier)
-    setConfirmPopupMessage (`Subscribe to ${tier}?`)
+    setConfirmPopupMessage(`Subscribe to ${tier}?`)
     confirmPopupRef.current?.open()
   }
 
@@ -98,9 +99,16 @@ export function Pricing({ tiers }: PricingProps) {
               ))}
             </ul>
             <div className={b('button')}>
-              <button className={b('add-to-cart')} onClick={() => confirm(tier.name)}>
-                Subscribe
-              </button>
+              {tier.enabled ?
+                <button className={b('add-to-cart')} onClick={() => confirm(tier.name)}>
+                  Subscribe
+                </button>
+                :
+                <button className={b('comming-soon')} >
+                  Comming soon
+                </button>
+              }
+
             </div>
           </div>
         </div>
