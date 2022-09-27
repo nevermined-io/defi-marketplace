@@ -12,7 +12,7 @@ $default_margin: 22px 44px;
 
   &__step-row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 
     > * {
       justify-content: flex-start;
@@ -27,7 +27,7 @@ $default_margin: 22px 44px;
       > * {
         align-items: flex-start;
         margin-left: 4%;
-        margin-top: 8px;
+        margin-top: 8px !important;
       }
     }
   }
@@ -109,7 +109,13 @@ $default_margin: 22px 44px;
 
   &__blurriedNumbers {
     font-size: 206px;
+    line-height: 237px;
     z-index: 0;
-    filter: blur(11px);
+    filter: blur(15px);
+    background: linear-gradient(180deg, #7834f9 21.35%, #60ccf0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: -90px;
   }
 }
