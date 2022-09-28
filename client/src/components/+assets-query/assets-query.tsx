@@ -129,19 +129,19 @@ export function XuiAssetsQuery({
     // eslint-disable-next-line @typescript-eslint/no-extra-semi
     ;(async () => {
       if (!walletAddress) return
-
-      const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
-      if (!userProfile?.userId) {
-        return
+      try{
+          const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
+          if (!userProfile?.userId) {
+            return
+          }
+          const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
+          const bookmarksDDO = await Promise.all(
+            bookmarksData.results.map((b) => sdk.assets.resolve(b.did))
+          )
+          setBookmarks([...bookmarksDDO])
+      } catch(error:unknown){
+          console.error("Error loading user info: " + error)
       }
-
-      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
-
-      const bookmarksDDO = await Promise.all(
-        bookmarksData.results.map((b) => sdk.assets.resolve(b.did))
-      )
-
-      setBookmarks([...bookmarksDDO])
     })()
   }, [sdk])
 

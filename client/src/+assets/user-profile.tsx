@@ -37,7 +37,8 @@ export const UserProfile = () => {
     addresses,
     newAddress,
     submitUserProfile,
-    addAddress
+    addAddress, 
+    isTokenGenerated
   } = AccountService.useUserProfile(walletAddress)
 
   const popupRef = useRef<UiPopupHandlers>()
@@ -52,6 +53,12 @@ export const UserProfile = () => {
       popupRef.current?.open()
     }
   }, [errorMessage])
+
+  useEffect(() => {
+    if (isTokenGenerated) {
+      popupRef.current?.close()
+    }
+  }, [isTokenGenerated])
 
   return (
     <UiLayout type="container">

@@ -28,30 +28,36 @@ export const Account: NextPage = () => {
     "You don't have any current subscription. Only users with a subscription are allowed to publish"
 
   const loadUserInfo = async () => {
-    const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
-    const bookmarks = await sdk.bookmarks.findManyByUserId(userProfile.userId)
+    try{
+        const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
+        const bookmarks = await sdk.bookmarks.findManyByUserId(userProfile.userId)
 
-    const bookmarksDDO = await Promise.all(
-      bookmarks.results?.map((bookmark) => sdk.assets.resolve(bookmark.did))
-    )
+        const bookmarksDDO = await Promise.all(
+          bookmarks.results?.map((bookmark) => sdk.assets.resolve(bookmark.did))
+        )
 
-    const published = await loadUserPublished(sdk, walletAddress)
+        const published = await loadUserPublished(sdk, walletAddress)
 
-    const publishedDDO: DDO[] = await Promise.all(
-      published.map((asset: any) => sdk.assets.resolve(asset._did))
-    )
+        const publishedDDO: DDO[] = await Promise.all(
+          published.map((asset: any) => sdk.assets.resolve(asset._did))
+        )
 
-    let downloaded = await loadUserDownloads(sdk, walletAddress)
-    downloaded = downloaded.map((asset: any) => asset._did)
-    // removing duplicates
-    downloaded = [...new Set(downloaded)]
-    const downloadedDDO: DDO[] = await Promise.all(
-      downloaded.map(async (did: any) => await sdk.assets.resolve(did))
-    )
+        let downloaded = await loadUserDownloads(sdk, walletAddress)
+        downloaded = downloaded.map((asset: any) => asset._did)
+        // removing duplicates
+        downloaded = [...new Set(downloaded)]
+        const downloadedDDO: DDO[] = await Promise.all(
+          downloaded.map(async (did: any) => await sdk.assets.resolve(did))
+        )
 
-    setBookmarks(bookmarksDDO)
-    setPublished(publishedDDO)
-    setDownloaded(downloadedDDO)
+      setBookmarks(bookmarksDDO)
+      setPublished(publishedDDO)
+      setDownloaded(downloadedDDO)
+      
+    }catch(error: unknown){
+      console.error("Error loading user info: " + error)
+    }
+
   }
 
   const loadSubscription = async () => {

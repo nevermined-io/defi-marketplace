@@ -67,6 +67,7 @@ export function AssetsList({
       )
       popupRef.current?.open()
       await account.generateToken()
+      popupRef.current?.close()
       return auth
     }
 
@@ -153,19 +154,20 @@ export function AssetsList({
       if (!walletAddress) {
         return
       }
-      const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
-      if (!userProfile?.userId) {
-        return
+      try{
+          const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
+          if (!userProfile?.userId) {
+            return
+          }
+          const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
+          const bookmarksDDO = await Promise.all(
+            bookmarksData.results?.map((bookmark) => sdk.assets.resolve(bookmark.did))
+          )   
+          setBookmarks([...bookmarksDDO])
+          setUserProfile(userProfile)
+      }catch(error: unknown){
+          console.error("Error loading user info: " + error)
       }
-
-      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
-
-      const bookmarksDDO = await Promise.all(
-        bookmarksData.results?.map((bookmark) => sdk.assets.resolve(bookmark.did))
-      )
-
-      setBookmarks([...bookmarksDDO])
-      setUserProfile(userProfile)
     })()
   }, [sdk])
 
