@@ -104,8 +104,8 @@ export function Pricing({ tiers }: PricingProps) {
                   Subscribe
                 </button>
                 :
-                <button className={b('comming-soon')} >
-                  Comming soon
+                <button className={b('coming-soon')} >
+                  Coming soon
                 </button>
               }
 
