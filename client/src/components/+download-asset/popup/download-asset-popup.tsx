@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react'
 import { Catalog } from '@nevermined-io/catalog-core'
-import { BEM, UiButton, UiPopupHandlers } from '@nevermined-io/styles'
-import styles from './download-asset-popup.module.scss'
+import { UiButton, UiPopupHandlers } from '@nevermined-io/styles'
 import { MetamaskErrorCodes, MetamaskCustomErrors } from '../../../shared/constants'
 import NeverminedColorIcon from '../../../../public/assets/nevermined-color.svg'
 import ErrorIcon from '../../../../public/assets/error.svg'
@@ -13,8 +12,6 @@ interface DownloadAssetPopupProps {
   assetDid: string
   close: () => any
 }
-
-const b = BEM('download-asset-popup', styles)
 
 export function XuiDownloadAssetPopup(props: DownloadAssetPopupProps) {
   const popupRef = useRef<UiPopupHandlers>()
@@ -51,7 +48,6 @@ export function XuiDownloadAssetPopup(props: DownloadAssetPopupProps) {
         additionalMessage={error}
         buttons={
           <UiButton
-            className={b('button')}
             type="error"
             onClick={() => {
               clearError()
@@ -71,12 +67,10 @@ export function XuiDownloadAssetPopup(props: DownloadAssetPopupProps) {
         message="Download this Asset?"
         buttons={
           <>
-            <UiButton className={b('button')} type="secondary" onClick={close}>
+            <UiButton type="secondary" onClick={close}>
               Cancel
             </UiButton>
-            <UiButton className={b('button')} onClick={start}>
-              Yes
-            </UiButton>
+            <UiButton onClick={start}>Yes</UiButton>
           </>
         }
       />
@@ -98,7 +92,6 @@ export function XuiDownloadAssetPopup(props: DownloadAssetPopupProps) {
         message="Asset Downloading OK!"
         buttons={
           <UiButton
-            className={b('button')}
             onClick={() => {
               close()
             }}
