@@ -1,0 +1,31 @@
+@import '../../styles/animations';
+
+.loading-icon {
+  position: relative;
+
+  svg {
+    width: 60%;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &__circle {
+    background-image: linear-gradient(#7834f9, #67cff9);
+    padding: 1px;
+    border: 0 solid transparent;
+    border-radius: 50%;
+    animation: loading_circle_rotation 1s linear infinite;
+    will-change: transform;
+
+    > div {
+      background: white;
+      height: 122px;
+      width: 122px;
+      border: 0 solid transparent;
+      border-radius: 50%;
+    }
+  }
+}
