@@ -1,17 +1,13 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useRef } from 'react'
 import { Catalog } from '@nevermined-io/catalog-core'
-import {
-  BEM,
-  UiText,
-  UiDivider,
-  UiLayout,
-  UiButton,
-  UiIcon,
-  CircleSpinner
-} from '@nevermined-io/styles'
-
+import { BEM, UiButton, UiPopupHandlers } from '@nevermined-io/styles'
 import styles from './download-asset-popup.module.scss'
 import { MetamaskErrorCodes, MetamaskCustomErrors } from '../../../shared/constants'
+import NeverminedColorIcon from '../../../../public/assets/nevermined-color.svg'
+import ErrorIcon from '../../../../public/assets/error.svg'
+import SuccessIcon from '../../../../public/assets/success.svg'
+import LoadingIcon from '../../loading-icon/loading-icon'
+import { PopupContent } from '../../popup/popup'
 
 interface DownloadAssetPopupProps {
   assetDid: string
@@ -21,110 +17,98 @@ interface DownloadAssetPopupProps {
 const b = BEM('download-asset-popup', styles)
 
 export function XuiDownloadAssetPopup(props: DownloadAssetPopupProps) {
+  const popupRef = useRef<UiPopupHandlers>()
   const { close, assetDid } = props
   const { sdk } = Catalog.useNevermined()
   const [view, setView] = useState<0 | 1 | 2>(0)
   const [error, setError] = useState<string | undefined>(undefined)
   const start = useCallback(async () => {
-  
     setView(1)
     const account = (await sdk.accounts.list())[0]
-    sdk.nfts.access(assetDid, account)
-    .then(() => setView(2))
-    .catch((error) =>
+    sdk.nfts
+      .access(assetDid, account)
+      .then(() => setView(2))
+      .catch((error) =>
         setError(
           error.code === MetamaskErrorCodes.CANCELED
             ? MetamaskCustomErrors.CANCELED[1]
             : error.message
         )
-    )
+      )
   }, [])
 
-  const cleanError = useCallback(() => {
+  const clearError = useCallback(() => {
     setError(undefined)
     setView(0)
   }, [])
 
   if (error) {
     return (
-      <>
-        <UiDivider type="l" />
-        <UiIcon className={b('icon', ['error'])} icon="circleError" size="xxl" />
-        <UiDivider type="l" />
-        <UiText block type="h3" className={b('text')}>
-          Asset Downloading failed!
-        </UiText>
-        <UiDivider />
-        <UiText block className={b('text', ['content'])}>
-          {error}
-        </UiText>
-        <UiDivider type="l" />
-        <UiButton className={b('button')} type="error" onClick={() => {cleanError; close()}}>
-          Return
-        </UiButton>
-      </>
+      <PopupContent
+        popupRef={popupRef}
+        image={<ErrorIcon />}
+        message="Asset Downloading failed!"
+        additionalMessage={error}
+        buttons={
+          <UiButton
+            className={b('button')}
+            type="error"
+            onClick={() => {
+              clearError()
+              close()
+            }}
+          >
+            Return
+          </UiButton>
+        }
+      />
     )
   } else if (view === 0) {
     return (
-      <>
-        <div className={b('confirm')}>
-          <UiText block type="h3" className={b('text')}>
-            Download this Asset?
-          </UiText>
-          <UiDivider type="xl" />
-          <UiLayout style={{ padding: '30px' }}>
-            <UiButton className={b('button')} onClick={start}>
-              Yes
-            </UiButton>
-            <UiDivider vertical />
+      <PopupContent
+        popupRef={popupRef}
+        image={<NeverminedColorIcon />}
+        message="Download this Asset?"
+        buttons={
+          <>
             <UiButton className={b('button')} type="secondary" onClick={close}>
               Cancel
             </UiButton>
-          </UiLayout>
-        </div>
-      </>
+            <UiButton className={b('button')} onClick={start}>
+              Yes
+            </UiButton>
+          </>
+        }
+      />
     )
   } else if (view === 1) {
     return (
-      <>
-        <div className={b('confirm')} style={{ height: '480px' }}>
-          <UiIcon className={b('icon', ['success'])} icon="circleOk" size="xxl" />
-          <UiText block type="h3" className={b('text')}>
-            Downloading in <br /> progress...
-          </UiText>
-          <CircleSpinner
-            width="150"
-            height="150"
-            circleSpimmerSrc="/assets/circle-loadspinner.svg"
-          />
-          <UiText block className={b('text', ['content'])}>
-            Please sign the message with Metamask and the datasets will be downloaded shortly.
-          </UiText>
-          <UiDivider type="l" />
-        </div>
-      </>
+      <PopupContent
+        popupRef={popupRef}
+        image={<LoadingIcon />}
+        message="Downloading in progress..."
+        additionalMessage="Please sign the message with Metamask and the datasets will be downloaded shortly."
+      />
     )
-  } else if (view === 2){
+  } else if (view === 2) {
     return (
-      <>
-        <UiDivider type="l" />
-        <UiIcon className={b('icon', ['ok'])} icon="circleOk" size="xxl" />
-        <UiDivider type="l" />
-        <UiText block type="h3" className={b('text')}>
-           Asset Downloading OK!
-        </UiText>
-        <UiDivider />
-        <UiText block className={b('text', ['content'])}>
-          {error}
-        </UiText>
-        <UiDivider type="l" />
-        <UiButton className={b('button')}  onClick={() => {close()}}>
-          Return
-        </UiButton>
-      </>
+      <PopupContent
+        popupRef={popupRef}
+        image={<SuccessIcon />}
+        message="Asset Downloading OK!"
+        buttons={
+          <UiButton
+            className={b('button')}
+            onClick={() => {
+              close()
+            }}
+          >
+            Return
+          </UiButton>
+        }
+      />
     )
-
-  }else {
+  } else {
     return <span />
   }
 }

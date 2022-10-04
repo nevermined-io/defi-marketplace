@@ -24,6 +24,7 @@ import DownloadIcon from '../../../public/assets/download_icon.svg'
 import CrossIcon from '../../../public/assets/blue-cross.svg'
 import FilecoinLogoIcon from '../../../public/assets/logos/filecoin_grey.svg'
 import NeverminedAbstractIcon from '../../../public/assets/nevermined-abstract.svg'
+import LoadingIcon from '../../components/loading-icon/loading-icon'
 import SuccessIcon from '../../../public/assets/success.svg'
 
 const b = BEM('user-publish', styles)
@@ -164,16 +165,12 @@ export const FilesStep = (props: FilesProps) => {
 
   return (
     <>
-      <ProgressPopup
-        message={popupMesssage}
-        image={<NeverminedAbstractIcon />}
-        popupRef={popupRef}
-      />
+      <ProgressPopup message={popupMesssage} image={<LoadingIcon />} popupRef={popupRef} />
 
       <ProgressPopup
         message={UploadPopupMesssage}
         popupRef={fileUploadPopupRef}
-        image={<NeverminedAbstractIcon />}
+        image={<LoadingIcon />}
       />
       <ProgressPopup
         message={txPopupMesssage}
@@ -181,7 +178,7 @@ export const FilesStep = (props: FilesProps) => {
         additionalMessage={txAdditionalMessage}
         showCloseButton
         popupRef={txPopupRef}
-        image={<NeverminedAbstractIcon />}
+        image={<LoadingIcon />}
       />
       <ConfirmPopup
         message={confirmPopupMessage}

@@ -1,0 +1,89 @@
+@import '~@nevermined-io/styles/lib/cjs/styles/index.scss';
+
+.popup {
+  &__container {
+    height: 500px;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+  }
+
+  &__content {
+    flex: 1 1 auto;
+  }
+
+  &__logo {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: flex-end;
+  }
+
+  &__message-container {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 40px;
+  }
+
+  &__popup__text {
+    font-size: 98px !important;
+  }
+
+  &__text {
+    color: #13122b;
+    font-size: 28px;
+    line-height: 43px;
+    width: 100%;
+
+    &--additional {
+      font-size: 18px;
+      line-height: 24px;
+      word-break: break-word;
+      width: 100%;
+    }
+  }
+
+  &__buttons {
+    margin-top: 40px;
+
+    button + button {
+      margin-left: 10px;
+    }
+
+    button:first-child {
+      color: #13122b;
+      background: #ffffff;
+      border: 1px solid #7834f9;
+    }
+  }
+
+  &__close-button {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__close-text {
+    color: #13122b;
+    text-transform: none;
+    font-weight: 400;
+  }
+
+  &__close-icon {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    margin-left: 10px;
+
+    path {
+      fill: #132d43;
+    }
+  }
+}
