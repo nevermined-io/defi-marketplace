@@ -49,8 +49,6 @@ export function getDdoSubscription(ddo: DDO): DDOSubscription {
   
 }
 
-export const sortBy = (list: DDO[], key: Function) => list.sort((a: any, b: any) => key(a) + key(b))
-
 export const getAttributes = (ddo: DDO): MetaData => ddo.findServiceByType('metadata')?.attributes
 
 export const getCategories = (atts: MetaData): string[] | undefined =>

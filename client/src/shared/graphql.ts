@@ -88,7 +88,7 @@ export const loadUserPublished = async (
 export const loadUserDownloads = async (
   sdk:Nevermined,
   userAddress: string
-): Promise<any | undefined> => {
+): Promise<any | undefined> => {
 
   const useds = sdk.keeper.didRegistry.events.getPastEvents({
     methodName: 'getUseds',
@@ -117,7 +117,7 @@ export const loadAssetProvenance = async (
   sdk:Nevermined,
   provider: MetaMask.MetamaskProvider,
   did: string
-): Promise<any | undefined> => {
+): Promise<any | undefined> => {
 
   let useds = sdk.keeper.didRegistry.events.getPastEvents({
     methodName: 'getUseds',
@@ -176,7 +176,7 @@ export const getUserSubscription = async (
 
   subscriptions = Promise.all( 
     (await subscriptions).map( async (event) => {
-      const [txHash, logIndex] = event.id.split('-')
+      const [txHash] = event.id.split('-')
       const tx = await provider.getTransaction(txHash)
       const blockNumber = tx.blockNumber
       if (!blockNumber)

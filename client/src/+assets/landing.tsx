@@ -78,12 +78,12 @@ export const Landing: NextPage = () => {
                 Connect your wallet (Metamask) and purchase the Subscription you are interested in
               </UiText>
               <UiText type="p" variants={['detail']}>
-                Identify your desired product by using Nevermined's filter functions to select the
+                Identify your desired product by using Nevermined&lsquo;s filter functions to select the
                 data set you want to download
               </UiText>
               <UiText type="p" variants={['detail']}>
                 Just click on the download button. If the data set belongs to your subscription, you
-                don't need anything else to download it!
+                don&lsquo;t need anything else to download it!
               </UiText>
             </div>
           </div>

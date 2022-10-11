@@ -15,7 +15,6 @@ import {
   NotificationPopup,
   BEM
 } from '@nevermined-io/styles'
-import { NextPage } from 'next'
 import styles from './user-profile.module.scss'
 
 const b = BEM('user-profile', styles)

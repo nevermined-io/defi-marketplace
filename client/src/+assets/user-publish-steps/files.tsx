@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext, useMemo } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react'
 import {
   UiFormGroup,
   UiFormInput,
@@ -45,7 +45,7 @@ interface FilesProps {
 }
 
 export const FilesStep = (props: FilesProps) => {
-  const { assetPublish, handleChange, isProcessing, errorAssetMessage } =
+  const { assetPublish, isProcessing, errorAssetMessage } =
     AssetService.useAssetPublish()
 
   const {

@@ -48,11 +48,6 @@ export function AssetsList({
   const popupRef = useRef<UiPopupHandlers>()
   const downloadPopupRef = useRef<UiPopupHandlers>()
 
-  const openPopup = (event: any) => {
-    popupRef.current?.open()
-    event.preventDefault()
-  }
-
   const closePopup = (event: any) => {
     popupRef.current?.close()
     event.preventDefault()
@@ -150,7 +145,7 @@ export function AssetsList({
       return
     }
 
-    ;(async () => {
+    (async () => {
       if (!walletAddress) {
         return
       }

@@ -1,19 +1,5 @@
-import { DDO } from "@nevermined-io/nevermined-sdk-js"
-import { AdditionalInformation } from "@nevermined-io/nevermined-sdk-js"
 import axios from 'axios';
 import { bundleServiceUri, sampleUri } from "src/config";
-
-interface AdditionalInformationExtended extends AdditionalInformation {
-  key: string;
-  source: string;
-  file_name: string;
-}
-
-interface Dataset {
-  datasetId: string;
-  fileName: string;
-  source: string
-}
 
 
 

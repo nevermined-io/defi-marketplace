@@ -231,7 +231,7 @@ export const UserPublishMultiStep: NextPage = () => {
         providers: [gatewayAddress],
         royaltyAttributes: royaltyAttributes
       })
-        .then((ddo) => {
+        .then(() => {
           setResultOk(true)
           txPopupRef.current?.close()
           resultPopupRef.current?.open()
