@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState, createRef, useCallback, useRef 
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { DDO, AdditionalInformation } from '@nevermined-io/nevermined-sdk-js'
+import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { Catalog } from '@nevermined-io/catalog-core'
 import { MetaMask } from '@nevermined-io/catalog-providers'
 import styles from './details.module.scss'
@@ -24,7 +24,6 @@ import {
   getDdoTokenAddress,
   calculateStartEndPage,
   calculatePages,
-  getSampleURL,
   getDefiInfo,
   getDdoSubscription,
   DDOSubscription
@@ -32,7 +31,7 @@ import {
 import { Markdown } from 'ui/markdown/markdown'
 import Image from 'next/image'
 import { XuiPagination } from 'ui/+assets-query/pagination'
-import { correctNetworkId, correctNetworkName, EVENT_PREFIX, PROTOCOL_PREFIX } from 'src/config'
+import { correctNetworkId, correctNetworkName } from 'src/config'
 import { loadAssetProvenance } from 'src/shared/graphql'
 import DatasetIcon from '../../public/assets/dataset.svg'
 import { SubscriptionBadge } from '../components/subscription-badge/subscription-badge'
@@ -40,10 +39,6 @@ import { XuiDownloadAsset } from '../components/+download-asset/download-asset'
 
 const b = BEM('details', styles)
 const PROVENANCE_PER_PAGE = 4
-
-interface AdditionalInformationExtended extends AdditionalInformation {
-  sampleUrl: string
-}
 
 interface NftProvenance {
   id: string
@@ -59,7 +54,7 @@ export const AssetDetails: NextPage = () => {
   } = useRouter()
   const [asset, setAsset] = useState<DDO | false>()
   const [isConnected, setIsConnected] = useState(false)
-  const [ownAsset, setOwnAsset] = useState(false)
+  const [ownAsset] = useState(false)
   const { isLogged, userSubscriptions } = useContext(User)
   const { assets, sdk } = Catalog.useNevermined()
   const { getProvider, loginMetamask, switchChainsOrRegisterSupportedChain } = MetaMask.useWallet()
@@ -72,23 +67,6 @@ export const AssetDetails: NextPage = () => {
   const { walletAddress } = MetaMask.useWallet()
   const [errorMessage, setErrorMessage] = useState('')
   const [assetDid, setAssetDid] = useState<string>('')
-
-  const dateOptions: Intl.DateTimeFormatOptions = {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  }
-
-  const timeOptions: Intl.DateTimeFormatOptions = {
-    hour12: true,
-    hour: 'numeric',
-    minute: 'numeric'
-  }
-
-  const openPopup = (event: any) => {
-    popupRef.current?.open()
-    event.preventDefault()
-  }
 
   const closePopup = (event: any) => {
     popupRef.current?.close()
@@ -142,7 +120,7 @@ export const AssetDetails: NextPage = () => {
       return
     }
 
-    ;(async () => {
+    (async () => {
       setIsConnected(isLogged)
 
       try {
@@ -177,7 +155,7 @@ export const AssetDetails: NextPage = () => {
       return
     }
 
-    ;(async () => {
+    (async () => {
       try {
         const chainId = await window?.ethereum?.request({ method: 'eth_chainId' })
         if (chainId !== correctNetworkId) {
@@ -231,21 +209,6 @@ export const AssetDetails: NextPage = () => {
   const metadata = asset.findServiceByType('metadata').attributes
   const defi = getDefiInfo(metadata)
   const subscription = getDdoSubscription(asset)
-
-  const openSample = async () => {
-    const addtionalInfoExtended = metadata.additionalInformation as AdditionalInformationExtended
-    const categoryElement = addtionalInfoExtended.categories?.find((category) =>
-      category.includes(PROTOCOL_PREFIX)
-    )
-    const eventElement = addtionalInfoExtended.categories?.find((event) =>
-      event.includes(EVENT_PREFIX)
-    )
-    const category = categoryElement?.substring(categoryElement.indexOf(':') + 1) || ''
-    const event = eventElement?.substring(eventElement.indexOf(':') + 1) || ''
-    const url = await getSampleURL(category, event)
-    const win = window.open(url, '_blank')
-    win?.focus()
-  }
 
   return (
     <>
@@ -565,7 +528,7 @@ export const AssetDetails: NextPage = () => {
                 ) : (
                   <UiButton
                     cover
-                    onClick={(e: any) => {
+                    onClick={() => {
                       if (!isConnected) {
                         loginMetamask()
                         return

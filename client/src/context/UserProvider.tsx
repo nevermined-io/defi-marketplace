@@ -207,7 +207,7 @@ const UserProvider = (props: UserProviderProps) => {
       return
     }
 
-    ;(async () => {
+    (async () => {
       if (userProviderMounted) {
         window?.ethereum?.on('accountsChanged', async () => {
           fetchBalance()
@@ -236,7 +236,7 @@ const UserProvider = (props: UserProviderProps) => {
       return
     }
 
-    ;(async () => {
+    (async () => {
       const isLoggedState = await checkIsLogged()
       setIsLogged(isLoggedState)
       if (isLoggedState) {
@@ -254,7 +254,7 @@ const UserProvider = (props: UserProviderProps) => {
       return
     }
 
-    ;(async () => {
+    (async () => {
       setUserSubscriptionsStatus((prev) => ({ ...prev, isLoading: true }))
       const userSubs = await getUserSubscriptions()
       setUserSubscriptions(userSubs)

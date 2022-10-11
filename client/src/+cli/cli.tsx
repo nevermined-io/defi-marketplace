@@ -28,7 +28,7 @@ export const Cli: NextPage = () => {
         <>
           <UiLayout>
             <UiText type="h4" wrapper="h4" variants={['underline']}>
-              What is the Nevermined CLI?​
+              What is the Nevermined CLI?
             </UiText>
           </UiLayout>
           <UiDivider />
