@@ -29,7 +29,7 @@ export function getDdoTokenAddress(ddo: DDO) {
 }
 
 export interface DDOSubscription {
-  address:  string
+  address: string
   tier: SubscriptionTiers
 }
 
@@ -43,7 +43,7 @@ export function getDdoSubscription(ddo: DDO): DDOSubscription {
   const tier: string = NFT_TIERS.find( tier => tier.address === subscriptionAddress)?.name || ''
 
   return {
-    address: subscriptionAddress,
+    address: subscriptionAddress?.toString() || "",
     tier: tier as SubscriptionTiers
   }
 

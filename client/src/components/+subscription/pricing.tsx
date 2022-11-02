@@ -9,6 +9,8 @@ import { UiPopupHandlers } from '@nevermined-io/styles'
 import { ConfirmPopup } from '../../+assets/user-publish-steps/confirm-popup'
 import { User } from '../../context'
 import { SubscriptionTiers } from 'src/shared'
+import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
+
 
 interface Tier {
   name: string
@@ -53,7 +55,7 @@ export function Pricing({ tiers }: PricingProps) {
         did,
         accounts[0],
         NFT_TIERS_HOLDER,
-        NFT_TIERS_AMOUNT,
+        BigNumber.from(NFT_TIERS_AMOUNT),
         NFT_TIERS_TYPE
       )
       toast.dismiss(toastId)
