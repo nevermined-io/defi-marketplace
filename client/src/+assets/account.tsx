@@ -29,6 +29,7 @@ export const Account: NextPage = () => {
 
   const loadUserInfo = async () => {
     try{
+
         const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
         const bookmarks = await sdk.bookmarks.findManyByUserId(userProfile.userId)
 
@@ -53,7 +54,7 @@ export const Account: NextPage = () => {
       setBookmarks(bookmarksDDO)
       setPublished(publishedDDO)
       setDownloaded(downloadedDDO)
-      
+
     }catch(error: unknown){
       console.error("Error loading user info: " + error)
     }

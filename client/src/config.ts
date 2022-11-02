@@ -15,8 +15,8 @@ export const NFT_TIERS = [
   {
     'level': 1,
     'name': 'Community',
-    'did': process.env.NEXT_PUBLIC_DID_NFT_TIER1 || '0b6d32e8c2a7f478eef501f9ab0527511801018f37dd89f436b1a752d3bb33ef',
-    'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER1 || '0xec6ec39FD6a0099dE1Ed9Dfd312caBf7b9cc6e41'
+    'did': process.env.NEXT_PUBLIC_DID_NFT_TIER1 || '953590c10682212b84f058252331dfcc26a7613935ce8fb9d59c3028a2336c40',
+    'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER1 || '0x95Ba21f858b57beb7B19990E8B072EF52999856D'
   },
   {
     'level': 2,
@@ -31,7 +31,7 @@ export const NFT_TIERS = [
     'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER3 || '0x2dBafaa2f8362C763f49CcDcA35a882386D455c5'
   },
 ]
-export const NFT_TIERS_HOLDER = process.env.NEXT_PUBLIC_NFT_TIERS_HOLDER || '0x819dd6c82ad96e0B7B71Bf9161C90cFcd48E4dA5'
+export const NFT_TIERS_HOLDER = process.env.NEXT_PUBLIC_NFT_TIERS_HOLDER || '0xe2DD09d719Da89e5a3D0F2549c7E24566e947260'
 export const NFT_TIERS_AMOUNT: number = Number(process.env.NEXT_PUBLIC_NFT_TIERS_AMOUNT) || 1
 export const NFT_TIERS_TYPE = 721
 
