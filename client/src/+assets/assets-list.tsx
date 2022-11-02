@@ -98,8 +98,8 @@ export function AssetsList({
     try {
       const bookmarkDDO = bookmarks.find((item) => item.id === did)
 
-      if (bookmarkDDO?.userId) {
-        const bookmarksData = await sdk.bookmarks.findManyByUserId(bookmarkDDO?.userId)
+      if (bookmarkDDO?._nvm.userId) {
+        const bookmarksData = await sdk.bookmarks.findManyByUserId(bookmarkDDO?._nvm.userId)
 
         const bookmark = bookmarksData.results.find((b) => b.did === did)
 
@@ -157,7 +157,7 @@ export function AssetsList({
           const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
           const bookmarksDDO = await Promise.all(
             bookmarksData.results?.map((bookmark) => sdk.assets.resolve(bookmark.did))
-          )   
+          )
           setBookmarks([...bookmarksDDO])
           setUserProfile(userProfile)
       }catch(error: unknown){
@@ -170,7 +170,7 @@ export function AssetsList({
     <div className={b()}>
       <XuiDownloadAsset popupRef={downloadPopupRef} assetDid={assetDid} />
       <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef} />
-     
+
       <table className={b('table')}>
         <thead>
           <tr>
