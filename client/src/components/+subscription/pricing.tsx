@@ -48,8 +48,9 @@ export function Pricing({ tiers }: PricingProps) {
     const accounts = await sdk.accounts.list()
     const toastId = toast.info(`Subscribing to ${tierName}...`)
     try {
+      const did = NFT_TIERS.find((tier) => tier.name === tierName)?.did || ''
       await subscription.buySubscription(
-        NFT_TIERS.find((tier) => tier.name === tierName)?.did || '',
+        did,
         accounts[0],
         NFT_TIERS_HOLDER,
         NFT_TIERS_AMOUNT,

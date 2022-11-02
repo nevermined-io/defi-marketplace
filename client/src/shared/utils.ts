@@ -36,17 +36,17 @@ export interface DDOSubscription {
 export function getDdoSubscription(ddo: DDO): DDOSubscription {
 
   const subscriptionAddress = ddo
-  .findServiceByType('nft721-access')
+  .findServiceByType('nft-access')
   ?.attributes?.serviceAgreementTemplate?.conditions?.find(({name}:any)  => name === 'nftHolder')
   ?.parameters?.find(({name}:any)  => name === '_contractAddress')?.value
 
   const tier: string = NFT_TIERS.find( tier => tier.address === subscriptionAddress)?.name || ''
 
-  return { 
+  return {
     address: subscriptionAddress,
     tier: tier as SubscriptionTiers
   }
-  
+
 }
 
 export const getAttributes = (ddo: DDO): MetaData => ddo.findServiceByType('metadata')?.attributes
