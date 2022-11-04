@@ -205,7 +205,6 @@ export const AssetDetails: NextPage = () => {
       </UiLayout>
     )
   }
-
   const metadata = asset.findServiceByType('metadata').attributes
   const defi = getDefiInfo(metadata)
   const subscription = getDdoSubscription(asset)
@@ -485,8 +484,8 @@ export const AssetDetails: NextPage = () => {
                     <UiText className={b('attr')} type="caps">
                       Subscription
                     </UiText>{' '}
-                    <SubscriptionBadge 
-                      tier={subscription.tier}  
+                    <SubscriptionBadge
+                      tier={subscription.tier}
                       inactive= {!checkAssetInUserSubscription(subscription)}/>
                   </div>
                 )}
@@ -533,7 +532,7 @@ export const AssetDetails: NextPage = () => {
                         loginMetamask()
                         return
                       }
-                     
+
                       downloadAsset(asset.id, subscription )
                     }}
                   >
