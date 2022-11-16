@@ -5,7 +5,7 @@ import React from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { Catalog, AuthToken, AssetService, Config } from '@nevermined-io/catalog-core'
-import { WalletProvider, getClient, useWallet } from "@nevermined-io/catalog-providers";
+import { WalletProvider, getClient } from "@nevermined-io/catalog-providers";
 import { Logger } from '@nevermined-io/nevermined-sdk-js'
 import { ethers } from 'ethers'
 import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
@@ -17,13 +17,10 @@ import {
   gatewayAddress,
   faucetUri,
   nodeUri,
-  secretStoreUri,
   verbose,
   graphUrl,
   artifactsFolder,
-  correctNetworkId
 } from 'src/config'
-import chainConfig from 'src/chainConfig'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import '../src/components/toast/toast.scss'
