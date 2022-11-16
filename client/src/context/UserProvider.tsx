@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useRef, ReactNode, useCallback } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { useWallet } from '@nevermined-io/catalog-providers'
 import { Catalog, AuthToken } from '@nevermined-io/catalog-core'
 import { User, DropDownFilters } from '.'
 import { correctNetworkName } from '../config'
@@ -85,7 +85,7 @@ const UserProvider = (props: UserProviderProps) => {
   const [selectedSubtypes, setSelectedSubtypes] = useState<string[]>([])
   const [selectedPrice, setSelectedPrice] = useState<number>(0)
   const { sdk, updateSDK, isLoadingSDK } = Catalog.useNevermined()
-  const { walletAddress, isAvailable, checkIsLogged } = useContext(MetaMask.WalletContext)
+  const { walletAddress, getStatus} = useWallet()
   const userProviderMounted = useRef()
   const [userSubscriptions, setUserSubscriptions] = useState<UserSubscription[]>([])
   const [userSubscriptionsStatus, setUserSubscriptionsStatus] = useState({
@@ -231,14 +231,14 @@ const UserProvider = (props: UserProviderProps) => {
   }, [sdk])
 
   useEffect(() => {
-    if (!isAvailable()) {
+    if (getStatus() === 'disconnected' ) {
       setIsLogged(false)
       return
     }
 
     (async () => {
-      const isLoggedState = await checkIsLogged()
-      setIsLogged(isLoggedState)
+      const isLoggedState = await getStatus()
+      setIsLogged(isLoggedState === 'connected')
       if (isLoggedState) {
         await loadNevermined()
       }
@@ -246,7 +246,7 @@ const UserProvider = (props: UserProviderProps) => {
   }, [walletAddress])
 
   useEffect(() => {
-    if (!isAvailable()) {
+    if (getStatus() === 'disconnected' ) {
       setIsLogged(false)
       return
     }

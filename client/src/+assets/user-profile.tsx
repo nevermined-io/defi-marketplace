@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { AccountService } from '@nevermined-io/catalog-core'
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { useWallet } from '@nevermined-io/catalog-providers'
 import {
   UiForm,
   UiFormGroup,
@@ -24,7 +24,7 @@ interface AdditionalInformation {
 }
 
 export const UserProfile = () => {
-  const { walletAddress } = MetaMask.useWallet()
+  const { walletAddress } = useWallet()
   const {
     errorMessage,
     successMessage,
@@ -36,7 +36,7 @@ export const UserProfile = () => {
     addresses,
     newAddress,
     submitUserProfile,
-    addAddress, 
+    addAddress,
     isTokenGenerated
   } = AccountService.useUserProfile(walletAddress)
 

@@ -9,8 +9,8 @@
     "lint": "eslint ./"
   },
   "dependencies": {
-    "@nevermined-io/catalog-core": "0.3.1",
-    "@nevermined-io/catalog-providers": "0.3.1",
+    "@nevermined-io/catalog-core": "0.6.0",
+    "@nevermined-io/catalog-providers": "0.6.0",
     "@nevermined-io/styles": "0.1.9",
     "@svgr/webpack": "^6.3.1",
     "@types/bn.js": "^5.1.0",
