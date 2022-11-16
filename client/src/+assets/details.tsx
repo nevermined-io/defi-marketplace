@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { Catalog } from '@nevermined-io/catalog-core'
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { useWallet } from '@nevermined-io/catalog-providers'
 import styles from './details.module.scss'
 import {
   BEM,
@@ -57,14 +57,13 @@ export const AssetDetails: NextPage = () => {
   const [ownAsset] = useState(false)
   const { isLogged, userSubscriptions } = useContext(User)
   const { assets, sdk } = Catalog.useNevermined()
-  const { getProvider, loginMetamask, switchChainsOrRegisterSupportedChain } = MetaMask.useWallet()
+  const { getProvider, login, walletAddress, getConnectors } = useWallet()
   const popupRef = createRef<UiPopupHandlers>()
   const downloadPopupRef = useRef<UiPopupHandlers>()
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(true)
   const [provenance, setProvenance] = useState<NftProvenance[]>([])
   const [page, setPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
-  const { walletAddress } = MetaMask.useWallet()
   const [errorMessage, setErrorMessage] = useState('')
   const [assetDid, setAssetDid] = useState<string>('')
 
@@ -186,7 +185,6 @@ export const AssetDetails: NextPage = () => {
                 background: '#2E405A',
                 textTransform: 'none'
               }}
-              onClick={async () => await switchChainsOrRegisterSupportedChain()}
             >
               switch to {correctNetworkName} network
             </UiButton>
@@ -529,7 +527,7 @@ export const AssetDetails: NextPage = () => {
                     cover
                     onClick={() => {
                       if (!isConnected) {
-                        loginMetamask()
+                        login(getConnectors()[0])
                         return
                       }
 

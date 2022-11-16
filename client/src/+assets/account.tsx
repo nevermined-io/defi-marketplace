@@ -5,7 +5,7 @@ import styles from './account.module.scss'
 import { UserProfile } from './user-profile'
 import { User } from '../context'
 import { Catalog } from '@nevermined-io/catalog-core'
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { useWallet } from '@nevermined-io/catalog-providers'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { loadUserPublished, loadUserDownloads, getUserSubscription } from 'src/shared/graphql'
 import { Summary } from 'ui/+account/summary'
@@ -23,7 +23,7 @@ export const Account: NextPage = () => {
   const { bookmarks, setBookmarks, getCurrentUserSubscription, userSubscriptions } =
     useContext(User)
   const { sdk } = Catalog.useNevermined()
-  const { walletAddress, getProvider } = MetaMask.useWallet()
+  const { walletAddress, getProvider } = useWallet()
   const subscriptionErrorText =
     "You don't have any current subscription. Only users with a subscription are allowed to publish"
 

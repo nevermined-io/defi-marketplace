@@ -1,6 +1,6 @@
 import React from 'react'
 import { BEM, UiButton } from '@nevermined-io/styles'
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { useWallet } from '@nevermined-io/catalog-providers'
 import { User } from '../../context'
 import styles from './wallet.module.scss'
 import Link from 'next/link'
@@ -9,12 +9,12 @@ import { SubscriptionBadge } from 'ui/subscription-badge/subscription-badge'
 const b = BEM('wallet', styles)
 
 export function XuiWallet() {
-  const { network, isLogged, getCurrentUserSubscription } = React.useContext(User)
-  const { walletAddress, loginMetamask } = MetaMask.useWallet()
+  const { network, getCurrentUserSubscription } = React.useContext(User)
+  const { walletAddress, login, getConnectors, getStatus } = useWallet()
   const currentUserSubscription = getCurrentUserSubscription()
 
-  return !(isLogged && walletAddress) ? (
-    <UiButton onClick={loginMetamask}>Connect wallet</UiButton>
+  return !(getStatus() === 'connected' && walletAddress) ? (
+    <UiButton onClick={() => login(getConnectors()[0])}>Connect wallet</UiButton>
   ) : (
     <>
       <Link href={'/account'}>

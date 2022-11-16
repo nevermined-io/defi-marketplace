@@ -13,7 +13,7 @@ import { toDate, getDefiInfo, getDdoSubscription, DDOSubscription } from '../sha
 import styles from './assets-list.module.scss'
 import { User } from '../context'
 import { Catalog } from '@nevermined-io/catalog-core'
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { useWallet } from '@nevermined-io/catalog-providers'
 import { XuiDownloadAsset } from '../components/+download-asset/download-asset'
 import { SubscriptionBadge } from '../components/subscription-badge/subscription-badge'
 import { toast } from '../components'
@@ -40,7 +40,7 @@ export function AssetsList({
     setBookmarks,
     userSubscriptions
   } = useContext(User)
-  const { walletAddress } = MetaMask.useWallet()
+  const { walletAddress } = useWallet()
   const { sdk, account } = Catalog.useNevermined()
   const [userProfile, setUserProfile] = useState<Profile>({} as Profile)
   const [errorMessage, setErrorMessage] = useState('')
