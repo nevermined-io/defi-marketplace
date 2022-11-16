@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef, ReactNode, useCallback } from 'react'
+import React, { useEffect, useState, useRef, ReactNode, useCallback } from 'react'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import { useWallet } from '@nevermined-io/catalog-providers'
 import { Catalog, AuthToken } from '@nevermined-io/catalog-core'
