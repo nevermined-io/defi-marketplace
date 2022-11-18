@@ -24,7 +24,7 @@ interface PricingProps {
 }
 
 export function Pricing({ tiers }: PricingProps) {
-  const { sdk, subscription } = Catalog.useNevermined()
+  const { sdk, subscription  } = Catalog.useNevermined()
   const [confirmPopupMessage, setConfirmPopupMessage] = useState<string>('')
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [tierName, setTierName] = useState('')
