@@ -48,9 +48,9 @@ export const Status: NextPage = () => {
           <UiText>Gateway Status:</UiText>
           <UiLayout style={{ paddingLeft: '10px' }}>
             <UiText variants={['secondary']}>
-              status <UiText variants={['highlight']}>{versions.gateway.status} </UiText>
+              status <UiText variants={['highlight']}>{versions.node.status} </UiText>
               <br />
-              version <UiText variants={['highlight']}>{versions.gateway.version} </UiText>
+              version <UiText variants={['highlight']}>{versions.node.version} </UiText>
               <br />
             </UiText>
           </UiLayout>

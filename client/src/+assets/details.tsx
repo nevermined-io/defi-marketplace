@@ -140,11 +140,11 @@ export const AssetDetails: NextPage = () => {
       }
     }
 
-    window?.ethereum?.on('chainChanged', checkNetworkAndSetState)
+    window?.ethereum?.on?.('chainChanged', checkNetworkAndSetState)
 
     //remove the event
     return () => {
-      window?.ethereum?.removeListener('chainChanged', checkNetworkAndSetState)
+      window?.ethereum?.removeListener?.('chainChanged', checkNetworkAndSetState)
     }
   }, [])
 
@@ -210,8 +210,8 @@ export const AssetDetails: NextPage = () => {
   return (
     <>
       <UiLayout type="container">
-      <XuiDownloadAsset popupRef={downloadPopupRef} assetDid={assetDid} />
-      <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef} />
+        <XuiDownloadAsset popupRef={downloadPopupRef} assetDid={assetDid} />
+        <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef} />
         <UiLayout align="start" type="sides">
           <div className={b('content')}>
             <UiText type="h2" wrapper="h2">
@@ -266,21 +266,21 @@ export const AssetDetails: NextPage = () => {
             {Boolean(
               metadata?.main?.type || metadata?.additionalInformation?.customData?.subtype
             ) && (
-              <>
-                <div className={b('field-row')}>
-                  <UiText type="caps" variants={['detail']}>
-                    Type
-                  </UiText>
-                  <span>
-                    <DatasetIcon className={b('field-icon', ['dataset'])} />
-                    <UiText className={b('field-text')} type="caps">
-                      {metadata.additionalInformation?.customData?.subtype || metadata.main?.type}
+                <>
+                  <div className={b('field-row')}>
+                    <UiText type="caps" variants={['detail']}>
+                      Type
                     </UiText>
-                  </span>
-                </div>
-                <UiDivider type="s" className={b('divider-line', ['s'])} />
-              </>
-            )}
+                    <span>
+                      <DatasetIcon className={b('field-icon', ['dataset'])} />
+                      <UiText className={b('field-text')} type="caps">
+                        {metadata.additionalInformation?.customData?.subtype || metadata.main?.type}
+                      </UiText>
+                    </span>
+                  </div>
+                  <UiDivider type="s" className={b('divider-line', ['s'])} />
+                </>
+              )}
             {defi?.network && (
               <>
                 <div className={b('field-row')}>
@@ -484,7 +484,7 @@ export const AssetDetails: NextPage = () => {
                     </UiText>{' '}
                     <SubscriptionBadge
                       tier={subscription.tier}
-                      inactive= {!checkAssetInUserSubscription(subscription)}/>
+                      inactive={!checkAssetInUserSubscription(subscription)} />
                   </div>
                 )}
                 <div className={b('field-row')}>
@@ -531,7 +531,7 @@ export const AssetDetails: NextPage = () => {
                         return
                       }
 
-                      downloadAsset(asset.id, subscription )
+                      downloadAsset(asset.id, subscription)
                     }}
                   >
                     {isConnected ? 'Download' : 'Connect Wallet'}
