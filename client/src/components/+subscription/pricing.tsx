@@ -24,7 +24,7 @@ interface PricingProps {
 }
 
 export function Pricing({ tiers }: PricingProps) {
-  const { sdk, subscription  } = Catalog.useNevermined()
+  const { nfts  } = Catalog.useNevermined()
   const [confirmPopupMessage, setConfirmPopupMessage] = useState<string>('')
   const confirmPopupRef = useRef<UiPopupHandlers>()
   const [tierName, setTierName] = useState('')
@@ -47,13 +47,11 @@ export function Pricing({ tiers }: PricingProps) {
 
   const purchase = async () => {
     confirmPopupRef.current?.close()
-    const accounts = await sdk.accounts.list()
     const toastId = toast.info(`Subscribing to ${tierName}...`)
     try {
       const did = NFT_TIERS.find((tier) => tier.name === tierName)?.did || ''
-      await subscription.buySubscription(
+      await nfts.access(
         did,
-        accounts[0],
         NFT_TIERS_HOLDER,
         BigNumber.from(NFT_TIERS_AMOUNT),
         NFT_TIERS_TYPE
