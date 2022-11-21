@@ -1,8 +1,8 @@
 //
 // NEVERMINED REMOTE CONNECTIONS
 //
-export const marketplaceUri = process.env.NEXT_PUBLIC_MARKETPLACE_API || 'http://localhost:3100' // next redirections on next.config.js
-export const gatewayUri = process.env.NEXT_PUBLIC_GATEWAY_URI || 'http://localhost:8030' // next redirections on next.config.js
+export const marketplaceUri = process.env.NEXT_PUBLIC_MARKETPLACE_API || 'https://marketplace-api-public.nevermined.network' // next redirections on next.config.js
+export const gatewayUri = process.env.NEXT_PUBLIC_GATEWAY_URI || 'https://node.mumbai.public.nevermined.network' // next redirections on next.config.js
 export const faucetUri = '/api/faucet' // next redirections on next.config.js
 export const gatewayAddress =
   process.env.NEXT_PUBLIC_GATEWAY_ADDRESS || '0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc'

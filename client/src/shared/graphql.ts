@@ -1,6 +1,5 @@
 import { graphUrl } from 'src/config'
 import { Nevermined, subgraphs } from '@nevermined-io/nevermined-sdk-js'
-import { MetaMask } from '@nevermined-io/catalog-providers'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 
 interface FullfilledOrders {
@@ -36,7 +35,7 @@ export interface RegisteredAsset {
 
 export const loadPublishedEvent = async (
   asset: string,
-  provider: MetaMask.MetamaskProvider
+  provider: any
 ): Promise<RegisteredAsset | undefined> => {
   const registered = await subgraphs.DIDRegistry.getDIDAttributeRegistereds(
     `${graphUrl}/DIDRegistry`,
@@ -98,7 +97,7 @@ export const loadUserDownloads = async (
         _attributes: 'nft access'
       },
       orderBy: "_blockNumberUpdated" ,
-      orderDirection: "desc"     
+      orderDirection: "desc"
     },
     result: {
       id: true,
@@ -115,7 +114,7 @@ export const loadUserDownloads = async (
 
 export const loadAssetProvenance = async (
   sdk:Nevermined,
-  provider: MetaMask.MetamaskProvider,
+  provider: any,
   did: string
 ): Promise<any | undefined> => {
 
@@ -126,7 +125,7 @@ export const loadAssetProvenance = async (
         _did: didZeroX(did)
       },
       orderBy: "_blockNumberUpdated" ,
-      orderDirection: "desc"     
+      orderDirection: "desc"
     },
     result: {
       id: true,
@@ -152,7 +151,7 @@ export const loadAssetProvenance = async (
 
 export const getUserSubscription = async (
   sdk: Nevermined,
-  provider: MetaMask.MetamaskProvider,
+  provider: any,
   userAddress: string,
   subscriptionDid: string
 ): Promise<any | undefined> => {
@@ -174,7 +173,7 @@ export const getUserSubscription = async (
     }
   })
 
-  subscriptions = Promise.all( 
+  subscriptions = Promise.all(
     (await subscriptions).map( async (event) => {
       const [txHash] = event.id.split('-')
       const tx = await provider.getTransaction(txHash)

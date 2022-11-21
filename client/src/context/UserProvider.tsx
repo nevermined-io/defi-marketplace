@@ -6,6 +6,7 @@ import { User, DropDownFilters } from '.'
 import { correctNetworkName } from '../config'
 import { SubscriptionTiers, UserSubscription } from '../shared/constants'
 import { NFT_TIERS } from 'src/config'
+import { Config } from '@nevermined-io/catalog-core'
 
 import {
   gatewayUri,
@@ -209,11 +210,11 @@ const UserProvider = (props: UserProviderProps) => {
 
     (async () => {
       if (userProviderMounted) {
-        window?.ethereum?.on('accountsChanged', async () => {
+        window?.ethereum?.on?.('accountsChanged', async () => {
           fetchBalance()
         })
 
-        window?.ethereum?.on('chainChanged', async () => {
+        window?.ethereum?.on?.('chainChanged', async () => {
           await reloadSdk()
         })
       }
@@ -263,14 +264,13 @@ const UserProvider = (props: UserProviderProps) => {
   }, [walletAddress, isLoadingSDK])
 
   const reloadSdk = async () => {
-    const config = {
+    const config: Config = {
       web3Provider: window.ethereum,
-      nodeUri: network,
+      web3ProviderUri: network,
       marketplaceUri,
-      gatewayUri,
+      neverminedNodeUri: gatewayUri,
       faucetUri,
-      gatewayAddress,
-      secretStoreUri,
+      neverminedNodeAddress: gatewayAddress,
       verbose,
       marketplaceAuthToken: AuthToken.fetchMarketplaceApiTokenFromLocalStorage().token || '',
       artifactsFolder,
