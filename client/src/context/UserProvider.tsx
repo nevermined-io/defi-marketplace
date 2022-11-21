@@ -9,9 +9,9 @@ import { NFT_TIERS } from 'src/config'
 import { Config } from '@nevermined-io/catalog-core'
 
 import {
-  gatewayUri,
+  neverminedNodeUri,
   marketplaceUri,
-  gatewayAddress,
+  neverminedNodeAddress,
   faucetUri,
   verbose,
   graphUrl,
@@ -267,9 +267,9 @@ const UserProvider = (props: UserProviderProps) => {
       web3Provider: window.ethereum,
       web3ProviderUri: network,
       marketplaceUri,
-      neverminedNodeUri: gatewayUri,
+      neverminedNodeUri,
       faucetUri,
-      neverminedNodeAddress: gatewayAddress,
+      neverminedNodeAddress,
       verbose,
       marketplaceAuthToken: AuthToken.fetchMarketplaceApiTokenFromLocalStorage().token || '',
       artifactsFolder,

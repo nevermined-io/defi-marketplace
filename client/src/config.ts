@@ -2,11 +2,11 @@
 // NEVERMINED REMOTE CONNECTIONS
 //
 export const marketplaceUri = process.env.NEXT_PUBLIC_MARKETPLACE_API || 'https://marketplace-api-public.nevermined.network' // next redirections on next.config.js
-export const gatewayUri = process.env.NEXT_PUBLIC_GATEWAY_URI || 'https://node.mumbai.public.nevermined.network' // next redirections on next.config.js
+export const neverminedNodeUri = process.env.NEXT_PUBLIC_GATEWAY_URI || 'https://node.mumbai.public.nevermined.network' // next redirections on next.config.js
 export const faucetUri = '/api/faucet' // next redirections on next.config.js
-export const gatewayAddress =
+export const neverminedNodeAddress =
   process.env.NEXT_PUBLIC_GATEWAY_ADDRESS || '0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc'
-export const nodeUri = process.env.NEXT_PUBLIC_NODE_URI || 'http://localhost:8545'
+export const web3ProviderUri = process.env.NEXT_PUBLIC_NODE_URI || 'http://localhost:8545'
 export const secretStoreUri = process.env.NEXT_PUBLIC_SECRET_STORE_URI || 'http://localhost:12001'
 export const artifactsFolder =
   process.env.NEXT_PUBLIC_ARTIFACTS_FOLDER_URL || `http://localhost:3000/artifacts`
