@@ -13,7 +13,6 @@ import {
   marketplaceUri,
   gatewayAddress,
   faucetUri,
-  secretStoreUri,
   verbose,
   graphUrl,
   artifactsFolder
