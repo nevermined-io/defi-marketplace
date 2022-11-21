@@ -23,7 +23,7 @@ export const Account: NextPage = () => {
   const { bookmarks, setBookmarks, getCurrentUserSubscription, userSubscriptions } =
     useContext(User)
   const { sdk } = Catalog.useNevermined()
-  const { walletAddress, getProvider } = useWallet()
+  const { walletAddress, client } = useWallet()
   const subscriptionErrorText =
     "You don't have any current subscription. Only users with a subscription are allowed to publish"
 
@@ -62,9 +62,11 @@ export const Account: NextPage = () => {
   }
 
   const loadSubscription = async () => {
+    const provider = await client.getProvider()
+
     let subscriptionsEvents = await getUserSubscription(
       sdk,
-      getProvider(),
+      provider,
       walletAddress,
       getCurrentUserSubscription()?.did || ''
     )

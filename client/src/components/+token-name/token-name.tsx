@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { User } from '../../context'
-
+import { WagmiCore } from '@nevermined-io/catalog-providers'
 
 const ERC20SymbolAbi = ["function symbol() view returns (string)"]
 
@@ -18,7 +18,7 @@ class TokenNameGetter {
     }
   }
 
-  static async getSymbol(provider: any, address?: string) {
+  static async getSymbol(provider?: WagmiCore.Provider, address?: string) {
     if (!address) {
       return;
     }
@@ -53,7 +53,8 @@ export const XuiTokenName = React.memo(function({address}: TokenNameProps) {
     if (instantSymbol !== undefined) {
       return
     }
-    TokenNameGetter.getSymbol(window.ethereum)
+    const provider = window.ethereum as unknown as WagmiCore.Provider
+    TokenNameGetter.getSymbol(provider)
       .then((_: any) => _ ? setToken(_) : setToken(tokenSymbol))
   }, [address])
 

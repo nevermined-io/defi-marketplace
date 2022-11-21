@@ -22,7 +22,7 @@ import { DetailsStep } from './details'
 import { FilesStep } from './files'
 import { handleAssetFiles, FileType } from './files-handler'
 import { toast } from '../../components'
-import { gatewayAddress, NFT_TIERS } from 'src/config'
+import { neverminedNodeAddress, NFT_TIERS } from 'src/config'
 import { ProgressBar } from './progress-bar/progress-bar'
 import styles from './publish-asset.module.scss'
 
@@ -228,7 +228,7 @@ export const UserPublishMultiStep: NextPage = () => {
       publishNFT721({
         nftAddress: getNftTierAddress(),
         metadata: generateMetadata(),
-        providers: [gatewayAddress],
+        providers: [neverminedNodeAddress],
         royaltyAttributes: royaltyAttributes
       })
         .then(() => {

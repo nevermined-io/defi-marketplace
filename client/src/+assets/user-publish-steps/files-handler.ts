@@ -1,6 +1,6 @@
 import axios from 'axios'
 import axiosRetry from 'axios-retry'
-import { gatewayUri, filecoinUploadUri, ipfsGatewayUri } from 'src/config'
+import { neverminedNodeUri, filecoinUploadUri, ipfsGatewayUri } from 'src/config'
 import { AssetFile } from '@nevermined-io/catalog-core'
 
 export enum FileType {
@@ -39,7 +39,7 @@ const uploadFileToFilecoin = async (file: File) => {
     const form = new FormData()
     form.append('file', file)
 
-    const gatewayUploadUrl = gatewayUri + filecoinUploadUri
+    const gatewayUploadUrl = neverminedNodeUri + filecoinUploadUri
     const response = await handlePostRequest(gatewayUploadUrl, form)
     return response.url
   }

@@ -57,7 +57,7 @@ export const AssetDetails: NextPage = () => {
   const [ownAsset] = useState(false)
   const { isLogged, userSubscriptions } = useContext(User)
   const { assets, sdk } = Catalog.useNevermined()
-  const { getProvider, login, walletAddress, getConnectors } = useWallet()
+  const { client, login, walletAddress, getConnectors } = useWallet()
   const popupRef = createRef<UiPopupHandlers>()
   const downloadPopupRef = useRef<UiPopupHandlers>()
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(true)
@@ -77,7 +77,8 @@ export const AssetDetails: NextPage = () => {
   }, [page])
 
   const getProvenanceInfo = async () => {
-    const events: any = await loadAssetProvenance(sdk, getProvider(), String(did))
+    const provider = await client.getProvider()
+    const events: any = await loadAssetProvenance(sdk, provider, String(did))
     const nftProvenance: NftProvenance[] = events.map((event: any) => {
       return {
         id: event.id,

@@ -1,6 +1,7 @@
 import { graphUrl } from 'src/config'
 import { Nevermined, subgraphs } from '@nevermined-io/nevermined-sdk-js'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { WagmiCore } from '@nevermined-io/catalog-providers'
 
 interface FullfilledOrders {
   documentId: string
@@ -35,7 +36,7 @@ export interface RegisteredAsset {
 
 export const loadPublishedEvent = async (
   asset: string,
-  provider: any
+  provider: WagmiCore.Provider
 ): Promise<RegisteredAsset | undefined> => {
   const registered = await subgraphs.DIDRegistry.getDIDAttributeRegistereds(
     `${graphUrl}/DIDRegistry`,
@@ -114,7 +115,7 @@ export const loadUserDownloads = async (
 
 export const loadAssetProvenance = async (
   sdk:Nevermined,
-  provider: any,
+  provider: WagmiCore.Provider,
   did: string
 ): Promise<any | undefined> => {
 
@@ -151,7 +152,7 @@ export const loadAssetProvenance = async (
 
 export const getUserSubscription = async (
   sdk: Nevermined,
-  provider: any,
+  provider: WagmiCore.Provider,
   userAddress: string,
   subscriptionDid: string
 ): Promise<any | undefined> => {

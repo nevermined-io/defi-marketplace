@@ -13,10 +13,10 @@ import { UiDivider } from '@nevermined-io/styles'
 import UserProvider from '../src/context/UserProvider'
 import {
   marketplaceUri,
-  gatewayUri,
-  gatewayAddress,
+  neverminedNodeUri,
+  neverminedNodeAddress,
   faucetUri,
-  nodeUri,
+  web3ProviderUri,
   verbose,
   graphUrl,
   artifactsFolder,
@@ -29,13 +29,13 @@ const appConfig: Config = {
   web3Provider:
     typeof window !== 'undefined'
       ? window?.ethereum
-      : new ethers.providers.JsonRpcProvider(nodeUri),
-  web3ProviderUri: nodeUri,
+      : new ethers.providers.JsonRpcProvider(web3ProviderUri),
+  web3ProviderUri,
   marketplaceUri,
-  neverminedNodeUri: gatewayUri,
+  neverminedNodeUri,
   faucetUri,
   newGateway: true,
-  neverminedNodeAddress: gatewayAddress,
+  neverminedNodeAddress,
   verbose,
   marketplaceAuthToken:
     typeof window !== 'undefined' ? AuthToken.fetchMarketplaceApiTokenFromLocalStorage().token : '',
