@@ -4,6 +4,7 @@ FROM node:16-alpine
 COPY package.json ./
 
 # Install deps
+RUN apk add git
 RUN npm i
 
 # Copy source
