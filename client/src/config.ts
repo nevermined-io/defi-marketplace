@@ -1,6 +1,9 @@
 //
 // NEVERMINED REMOTE CONNECTIONS
 //
+
+import { chain } from "wagmi";
+
 export const marketplaceUri = process.env.NEXT_PUBLIC_MARKETPLACE_API || 'https://marketplace-api-public.nevermined.network' // next redirections on next.config.js
 export const neverminedNodeUri = process.env.NEXT_PUBLIC_GATEWAY_URI || 'https://node.mumbai.public.nevermined.network' // next redirections on next.config.js
 export const faucetUri = '/api/faucet' // next redirections on next.config.js
@@ -129,3 +132,5 @@ export const docsUrl =
   process.env.NEXT_PUBLIC_DOCS_URL || 'https://nevermined-io.github.io/defi-marketplace/'
 export const PROTOCOL_PREFIX = 'ProtocolType'
 export const EVENT_PREFIX = 'EventType'
+export const SUPPORTED_NETWORKS = [chain.polygon, chain.polygonMumbai]
+export const CORRECT_NETWORK_ID = 80001
