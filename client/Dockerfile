@@ -2,6 +2,7 @@ FROM node:16-alpine
 
 # Add package file
 COPY package.json ./
+COPY package-lock.json ./
 
 # Install deps
 RUN apk add git
