@@ -45,7 +45,7 @@ export const UserPublishMultiStep: NextPage = () => {
   const [resultOk, setResultOk] = useState(false)
   const [isProcessComplete, setIsProcessComplete] = useState(false)
   const resultPopupRef = useRef<UiPopupHandlers>()
-  const { sdk } = Catalog.useNevermined()
+  const { sdk, assets } = Catalog.useNevermined()
 
   useEffect(() => {
     setAssetPublish({
@@ -208,7 +208,7 @@ export const UserPublishMultiStep: NextPage = () => {
 
     if (findLocal) {
       fileUploadPopupRef.current?.open()
-      await handleAssetFiles(assetPublish.assetFiles)
+      await handleAssetFiles(assetPublish.assetFiles, assets)
       setFilesUploadedMessage(generateFilesUploadedMessage(assetPublish.assetFiles))
       fileUploadPopupRef.current?.close()
     }

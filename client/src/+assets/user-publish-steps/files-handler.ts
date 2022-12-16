@@ -1,7 +1,7 @@
 import axios from 'axios'
 import axiosRetry from 'axios-retry'
 import { neverminedNodeUri, filecoinUploadUri, ipfsGatewayUri } from 'src/config'
-import { AssetFile } from '@nevermined-io/catalog-core'
+import { AssetFile, AssetsModule, Catalog } from '@nevermined-io/catalog-core'
 
 export enum FileType {
   FilecoinID = 'Filecoin',
@@ -34,23 +34,20 @@ const handlePostRequest = async (url: string, formData: FormData, retries = 3) =
   return response?.data
 }
 
-const uploadFileToFilecoin = async (file: File) => {
-  if (file) {
-    const form = new FormData()
-    form.append('file', file)
+const uploadFileToFilecoin = async (file: File, assets: AssetsModule) => {
 
-    const gatewayUploadUrl = neverminedNodeUri + filecoinUploadUri
-    const response = await handlePostRequest(gatewayUploadUrl, form)
-    return response.url
+  if (file) {
+    const response = assets.uploadAssetToFilecoin(file, filecoinUploadUri)
+    return response
   }
 }
 
-export const handleAssetFiles = async (assetFiles: AssetFile[]) => {
+export const handleAssetFiles = async (assetFiles: AssetFile[], assets: AssetsModule ) => {
   for (const assetFile of assetFiles) {
     const isLocalFile: boolean = assetFile.type.match(FileType.Local) != null
 
     if (isLocalFile && assetFile.file) {
-      assetFile.filecoin_id = await uploadFileToFilecoin(assetFile.file)
+      assetFile.filecoin_id = await uploadFileToFilecoin(assetFile.file, assets)
     }
   }
 }
