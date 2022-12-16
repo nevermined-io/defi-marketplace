@@ -63,7 +63,7 @@ export const bundleServiceUri =
   process.env.NEXT_PUBLIC_BUNDLE_SERVICE_URI || 'https://defi.v2.bundler.mumbai.nevermined.rocks'
 
 export const sampleUri = '/api/v1/sample'
-export const filecoinUploadUri = '/api/v1/gateway/services/upload/filecoin'
+export const filecoinUploadUri = '/api/v1/node/services/upload/filecoin'
 export const discordUrl = 'https://discord.gg/d8B4BkV3'
 export const networkArray = [
   'bsc',
