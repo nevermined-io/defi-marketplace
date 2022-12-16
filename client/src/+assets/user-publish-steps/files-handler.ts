@@ -1,37 +1,11 @@
 import axios from 'axios'
 import axiosRetry from 'axios-retry'
-import { neverminedNodeUri, filecoinUploadUri, ipfsGatewayUri } from 'src/config'
-import { AssetFile, AssetsModule, Catalog } from '@nevermined-io/catalog-core'
+import { filecoinUploadUri, ipfsGatewayUri } from 'src/config'
+import { AssetFile, AssetsModule} from '@nevermined-io/catalog-core'
 
 export enum FileType {
   FilecoinID = 'Filecoin',
   Local = 'Local'
-}
-
-const handlePostRequest = async (url: string, formData: FormData, retries = 3) => {
-  axiosRetry(axios, {
-    retries: retries,
-    shouldResetTimeout: true,
-    retryDelay: (retryCount) => {
-      console.log(`retry attempt: ${retryCount}`)
-      return retryCount * 2000 // time interval between retries
-    },
-    retryCondition: () => true // retry no matter what
-  })
-
-  let response
-
-  try {
-    response = await axios.post(url, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-  } catch (e) {
-    console.error(e)
-    throw e
-  }
-  return response?.data
 }
 
 const uploadFileToFilecoin = async (file: File, assets: AssetsModule) => {
