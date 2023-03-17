@@ -1,90 +1,93 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react'
-import Web3 from 'web3'
-import { Account, DDO, Nevermined, Profile, Bookmark } from '@nevermined-io/nevermined-sdk-js'
+import { DDO } from '@nevermined-io/sdk'
 
-import { MarketProviderState } from './MarketProvider'
-import { Bundle } from '../shared/api';
+import { UserSubscription } from '../shared/constants'
+
+export type SubscriptionTier = {
+  name: string
+  price: string
+  symbol: string
+  features: string[],
+  enabled: boolean
+}
+
+export type DropDownFilters = {
+  selectedNetworks: string[]
+  selectedSubscriptions: string[]
+  selectedSubtypes: string[]
+  fromDate: string
+  toDate: string
+}
 
 export const User = React.createContext({
-    isLogged: false,
-    isBurner: false,
-    isWeb3Capable: false,
+  isLogged: false,
+  bookmarks: [] as DDO[],
+  balance: {
+    eth: 0,
+    nevermined: 0
+  },
+  network: '',
+  tiers: [] as SubscriptionTier[],
+  tokenSymbol: '',
+  assets: [] as DDO[],
+  setAssets: (assets: DDO[]) => {
+    /* empty */
+  },
+  searchInputText: '',
+  setSearchInputText: (searchInputText: string) => {
+    /* empty */
+  },
+  fromDate: '',
+  setFromDate: (fromDate: string) => {
+    /* empty */
+  },
+  toDate: '',
+  setToDate: (toDate: string) => {
+    /* empty */
+  },
+  selectedCategories: [] as string[],
+  setSelectedCategories: (selectedCategories: string[]) => {
+    /* empty */
+  },
+  selectedNetworks: [] as string[],
+  setSelectedNetworks: (selectedNetworks: string[]) => {
+    /* empty */
+  },
+  selectedPrice: 0,
+  setSelectedPriceRange: (selectedPrice: number) => {
+    /* empty */
+  },
+  selectedSubscriptions: [] as string[],
+  setSelectedSubscriptions: (selectedSubscriptions: string[]) => {
+    /* empty */
+  },
+  selectedSubtypes: [] as string[],
+  setSelectedSubtypes: (selectedSubtypes: string[]) => {
+    /* empty */
+  },
+  setBookmarks: (bookmarks: DDO[]) => {
+    /* empty */
+  },
+  userSubscriptions: [] as UserSubscription[],
+  userSubscriptionsStatus: {
     isLoading: false,
-    account: '',
-    bookmarks: [] as Bookmark[],
-    userBundles: [] as Bundle[],
-    userProfile: {} as Profile,
-    web3: {} as Web3,
-    sdk: {} as Nevermined,
-    balance: {
-        eth: 0,
-        nevermined: 0
-    },
-    network: '',
-    requestFromFaucet: () => {
-        /* empty */
-    },
-    loginMetamask: () => {
-        /* empty */
-    },
-    loginBurnerWallet: () => {
-        /* empty */
-    },
-    loginMarketplaceAPI: (sdk: Nevermined, account: Account) => {
-        /* empty */
-    },
-    switchToCorrectNetwork: () => {
-        /* empty */
-    },
-    message: '',
-    tokenSymbol: '',
-    tokenDecimals: 6,
-    basket: [] as string[],
-    addToBasket: (dids: string[]) => {
-        /* empty */
-    },
-    removeFromBasket: (dids: string[]) => {
-        /* empty */
-    },
-    assets: [] as DDO[],
-    setAssets: (assets: DDO[]) => {
-        /* empty */
-    },
-    searchInputText: '',
-    setSearchInputText: (searchInputText: string) => {
-        /* empty */
-    },
-    fromDate: '',
-    setFromDate: (fromDate: string) => {
-        /* empty */
-    },
-    toDate: '',
-    setToDate: (toDate: string) => {
-        /* empty */
-    },
-    selectedCategories: [] as string[],
-    setSelectedCategories: (selectedCategories: string[]) => {
-        /* empty */
-    },
-    selectedNetworks: [] as string[],
-    setSelectedNetworks: (selectedNetworks: string[]) => {
-        /* empty */
-    },
-    selectedPrice: 0,
-    setSelectedPriceRange: (selectedPrice: number) => {
-        /* empty */
-    },
-    setAllUserBundles: (account: string) => {
-        /* empty */
-    },
-    setBookmarks: (bookmarks: Bookmark[]) => {
-        /* empty */
-    }
-})
-
-export const Market = React.createContext<MarketProviderState>({
-    totalAssets: 0,
-    categories: [],
-    network: '',
-    networkMatch: false
+    hasLoaded: false,
+  },
+  setUserSubscriptions: (userSubscriptions: UserSubscription[]) => {
+    /* empty */
+  },
+  getCurrentUserSubscription: (): UserSubscription | undefined => {
+    return
+  },
+  getUserSubscriptions: (): Promise<UserSubscription[]> | undefined => {
+    return
+  },
+  dropdownFilters: {} as DropDownFilters,
+  applyDropdownFilters: () => {
+    /* empty */
+  },
+  clearDropdownFilters: () => {
+    /* empty */
+  }
 })

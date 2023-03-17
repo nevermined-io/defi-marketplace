@@ -1,44 +1,47 @@
 import React from 'react'
-import { BEM, UiButton} from 'ui'
+import { BEM, UiButton } from '@nevermined-io/styles'
+import { useWallet } from '@nevermined-io/providers'
 import { User } from '../../context'
-import { correctNetworkName } from '../../config'
 import styles from './wallet.module.scss'
 import Link from 'next/link'
-import Image from "next/image"
-
-interface WalletProps {
-}
+import { SubscriptionBadge } from 'ui/subscription-badge/subscription-badge'
 
 const b = BEM('wallet', styles)
 
-export function XuiWallet(props: WalletProps) {
-  const { isLogged, account, network, basket, loginMetamask } = React.useContext(User)
+export function XuiWallet() {
+  const { network, getCurrentUserSubscription } = React.useContext(User)
+  const { walletAddress, login, getConnectors, getStatus } = useWallet()
+  const currentUserSubscription = getCurrentUserSubscription()
 
-  return !(isLogged && account)
-    ? (
-      <UiButton onClick={loginMetamask}>
-        Connect wallet
-      </UiButton>
-    ) :
-    (
-      <>
-        <div className={b('block', ['cart'])}>
-          <Link href={'/checkout'} >
-            <span style={{ cursor: 'pointer', display:'flex' }}>
-              <Image width="17" height="16" src="/assets/basket_icon.svg" />
-             <span style={{ marginLeft: '14px' }} >{basket.length}</span>
-            </span>
-          </Link>
-        </div>
-
-        <div className={b('block')}>
+  return !(getStatus() === 'connected' && walletAddress) ? (
+    <UiButton onClick={() => login(getConnectors()[0])}>Connect wallet</UiButton>
+  ) : (
+    <>
+      <Link href={'/account'}>
+        <div className={b('block', ['address'])}>
           <span className={b('logged')} />
-          {`${account.substr(0, 6)}...${account.substr(-4)}`}
+          <span className={b('account')}>Account</span>
+          <span className={b('separator')} />
+          {`${walletAddress.substr(0, 6)}...${walletAddress.substr(-4)}`}
         </div>
-
-        <div className={b('block', ['network'])}>
-          {network}
+      </Link>
+      <Link href={'/account'}>
+        <div className={b('block', [currentUserSubscription ? 'subscription' : 'no-subscription'])}>
+          {currentUserSubscription ? (
+            <SubscriptionBadge
+              className={b('subscription-badge')}
+              tier={currentUserSubscription.tier}
+              logoOnly
+            />
+          ) : (
+            <>
+              <span className={b('separator')} />
+              {'No Subscription'}
+            </>
+          )}
         </div>
-      </>
-    )
+      </Link>
+      {network && <div className={b('block', ['network'])}>{network}</div>}
+    </>
+  )
 }

@@ -1,96 +1,178 @@
-import React, { ReactNode, useContext, useState, useEffect, useCallback } from 'react'
-import { DDO, Bookmark } from '@nevermined-io/nevermined-sdk-js'
-import { SearchQuery } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
+import React, { ReactNode, useContext, useState, useEffect } from 'react'
+import { DDO } from '@nevermined-io/sdk'
+import { Catalog } from '@nevermined-io/catalog'
+import { useWallet } from '@nevermined-io/providers'
+import { SearchQuery } from '@nevermined-io/sdk'
 
-import { BEM } from 'ui'
+import { Loader } from '@nevermined-io/styles'
 import { User } from '../../context'
-import styles from './assets-query.module.scss'
-import { Loader } from 'ui/loaders/loader'
 import { networkPrefix, subcategoryPrefix } from '../../shared'
 import { XuiPagination } from './pagination'
 import { XuiSearchBar } from './search-bar'
+import { NFT_TIERS } from 'src/config'
 
 interface AssetsQueryProps {
   search?: 'onsite' | 'search-page'
   query?: SearchQuery['query']
   onlyBookmark?: boolean
   pageSize?: number
-  content: (assets: DDO[]) => ReactNode | undefined;
+  content: (assets: DDO[]) => ReactNode | undefined
 }
 
-const b = BEM('assets-query', styles)
 // loads all the asset then filters them looking at the variables defined in the user context
-export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = false }: AssetsQueryProps) {
-  const { assets, sdk, searchInputText, fromDate, toDate, selectedCategories, selectedNetworks, selectedPrice, setSelectedPriceRange, setSelectedNetworks, setAssets, setSelectedCategories, setToDate, setFromDate, setSearchInputText, setBookmarks, bookmarks, userProfile } = useContext(User)
-
+export function XuiAssetsQuery({
+  search,
+  content,
+  pageSize = 12,
+  onlyBookmark = false
+}: AssetsQueryProps) {
+  const {
+    assets,
+    searchInputText,
+    selectedCategories,
+    setSelectedNetworks,
+    setAssets,
+    setSelectedCategories,
+    setToDate,
+    setFromDate,
+    setSearchInputText,
+    setBookmarks,
+    bookmarks,
+    dropdownFilters
+  } = useContext(User)
+  const { selectedNetworks, selectedSubscriptions, selectedSubtypes, fromDate, toDate } =
+    dropdownFilters
+  const { sdk } = Catalog.useNevermined()
+  const { walletAddress } = useWallet()
   const [totalPages, setTotalPages] = useState<number>(1)
   const [page, setPage] = useState<number>(1)
   const [loading, setLoading] = useState<boolean>(false)
 
-  const selectedCategoriesEvent = selectedCategories.map(cat => `${subcategoryPrefix}:${cat}`)
-  const selectedNetworkEvent = selectedNetworks.map(cat => `${networkPrefix}:${cat}`)
+  const selectedCategoriesEvent = selectedCategories.map((cat) => `${subcategoryPrefix}:${cat}`)
+  const selectedNetworkEvent = selectedNetworks.map((cat) => `${networkPrefix}:${cat}`)
 
-  const textFilter = { "query_string": { "query": `*${searchInputText}*`, "fields": ["service.attributes.main.name"] } }
-  const datasetCategory = { "match": { "service.attributes.additionalInformation.categories": selectedCategoriesEvent.length === 0 ? "defi-datasets" : selectedCategoriesEvent.join(', ') } }
-  const datasetNetwork = { "match": { "service.attributes.additionalInformation.blockchain": selectedNetworkEvent.length === 0 ? "" : selectedNetworks.join(', ') } }
-  const listed = { "match": { "service.attributes.curation.isListed":  "true" } }
-  const dateFilter = fromDate !== '' && toDate !== '' && {
-    "range": {
-      "service.attributes.main.dateCreated": {
-        "time_zone": "+01:00",
-        "gte": fromDate,
-        "lte": toDate
+  const textFilter = {
+    query_string: { query: `*${searchInputText}*`, fields: ['service.attributes.main.name'] }
+  }
+  const datasetCategory = {
+    match: {
+      'service.attributes.additionalInformation.categories':
+        selectedCategoriesEvent.length === 0 ? 'defi-datasets' : selectedCategoriesEvent.join(', ')
+    }
+  }
+  const datasetNetwork = {
+    match: {
+      'service.attributes.additionalInformation.blockchain':
+        selectedNetworkEvent.length === 0 ? '' : selectedNetworks.join(', ')
+    }
+  }
+  const nftAccess = { match: { 'service.type': 'nft-access' } }
+
+  const subscriptionFilter = () => {
+    if (selectedSubscriptions.length === 0) return ''
+    const tierAddresses = selectedSubscriptions.map(
+      (subscription) => NFT_TIERS.find((tier) => tier.name === subscription)?.address
+    )
+    return (
+      tierAddresses && {
+        match: {
+          'service.attributes.serviceAgreementTemplate.conditions.parameters.value':
+            tierAddresses.join(', ')
+        }
       }
+    )
+  }
+
+  const datasetAssetType = {
+    match: {
+      'service.attributes.additionalInformation.customData.subtype':
+        selectedSubtypes.length === 0 ? '' : selectedSubtypes.join(', ')
     }
   }
 
-  const priceRange =  selectedPrice > 0 && {
-    "range": {
-      "service.attributes.main.price": {
-        "gte": "0",
-        "lte": selectedPrice
+  const dateFilter = fromDate !== '' &&
+    toDate !== '' && {
+      range: {
+        'service.attributes.main.dateCreated': {
+          time_zone: '+01:00',
+          gte: fromDate,
+          lte: toDate
+        }
       }
     }
+
+  // add listed into mustArray once we have a dataset with that property in the metadata
+  //  const listed = { match: { 'service.attributes.curation.isListed': 'true' } }
+  const mustArray = [textFilter, datasetCategory, nftAccess]
+  selectedNetworkEvent.length > 0 && mustArray.push(datasetNetwork as any)
+  dateFilter && mustArray.push(dateFilter as any)
+  subscriptionFilter() && mustArray.push(subscriptionFilter() as any)
+  selectedSubtypes.length > 0 && mustArray.push(datasetAssetType as any)
+
+  const notBundleFilter = {
+    match: { 'service.attributes.additionalInformation.categories': 'EventType:bundle' }
   }
-
-  const mustArray = [textFilter, datasetCategory, listed]
-  selectedNetworkEvent.length > 0 && mustArray.push(datasetNetwork)
-  dateFilter && mustArray.push(dateFilter)
-  priceRange && mustArray.push(priceRange)
-
+  const mustNotArray = [notBundleFilter]
 
   const query = {
-    "bool": {
-      "must": mustArray,
-      "must_not": [{ "match": { "service.attributes.additionalInformation.categories": "EventType:bundle" } }]
+    bool: {
+      must: mustArray,
+      must_not: mustNotArray
     }
   }
 
   useEffect(() => {
-    if(!userProfile?.userId) {
+    if (!sdk?.services.profiles) {
       return
     }
 
-    (async() => {
-      const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
-
-      setBookmarks([...bookmarksData.results])
+    // eslint-disable-next-line @typescript-eslint/no-extra-semi
+    ;(async () => {
+      if (!walletAddress) return
+      try{
+          const userProfile = await sdk.services.profiles.findOneByAddress(walletAddress)
+          if (!userProfile?.userId) {
+            return
+          }
+          const bookmarksData = await sdk.services.bookmarks.findManyByUserId(userProfile.userId)
+          const bookmarksDDO = await Promise.all(
+            bookmarksData.results.map((b) => sdk.assets.resolve(b.did))
+          )
+          setBookmarks([...bookmarksDDO])
+      } catch(error:unknown){
+          console.error("Error loading user info: " + error)
+      }
     })()
-  }, [userProfile])
-
+  }, [sdk])
 
   //this happen when the page is loaded to get the query string
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    for (var [key, value] of queryParams.entries()) {
+    const queryParams = new URLSearchParams(window.location.search)
+    for (const [key, value] of queryParams.entries()) {
       switch (key) {
-        case 'searchInputText': queryParams.get("searchInputText") ? setSearchInputText(value) : setSearchInputText(searchInputText); break
-        case 'selectedCategories': queryParams.get("selectedCategories") ? setSelectedCategories(value.split(",")) : setSelectedCategories(selectedCategories); break
-        case 'selectedNetworks': queryParams.get("selectedNetworks") ? setSelectedNetworks(value.split(",")) : setSelectedNetworks(selectedNetworks); break
-        case 'toDate': queryParams.get("toDate") ? setToDate(value) : setToDate(toDate); break
-        case 'fromDate': queryParams.get("fromDate") ? setFromDate(value) : setFromDate(fromDate); break
-        case 'priceRange': queryParams.get("priceRange") ? setSelectedPriceRange(parseFloat(value)) : setSelectedPriceRange(selectedPrice); break
-        default: break
+        case 'searchInputText':
+          queryParams.get('searchInputText')
+            ? setSearchInputText(value)
+            : setSearchInputText(searchInputText)
+          break
+        case 'selectedCategories':
+          queryParams.get('selectedCategories')
+            ? setSelectedCategories(value.split(','))
+            : setSelectedCategories(selectedCategories)
+          break
+        case 'selectedNetworks':
+          queryParams.get('selectedNetworks')
+            ? setSelectedNetworks(value.split(','))
+            : setSelectedNetworks(selectedNetworks)
+          break
+        case 'toDate':
+          queryParams.get('toDate') ? setToDate(value) : setToDate(toDate)
+          break
+        case 'fromDate':
+          queryParams.get('fromDate') ? setFromDate(value) : setFromDate(fromDate)
+          break
+        default:
+          break
       }
     }
   }, [])
@@ -100,43 +182,43 @@ export function XuiAssetsQuery({ search, content, pageSize = 12, onlyBookmark = 
       return
     }
     setLoading(true)
-    sdk.assets
+    sdk.search
       .query({
         offset: pageSize,
         page,
-        query: query!,
+        query: query! as any,
         sort: {
           created: 'desc'
         }
       })
       .then(({ results, totalPages }) => {
-        if( onlyBookmark ) {
-          results = results.filter(item => bookmarks?.some(bookmark => bookmark.did === item.id))
+        if (onlyBookmark) {
+          results = results.filter((item) => bookmarks?.some((bookmark) => bookmark.id === item.id))
         }
 
         setLoading(false)
         setAssets(results)
         setTotalPages(totalPages)
-        history.replaceState(null, '', `/list?searchInputText=${searchInputText}&fromDate=${fromDate}&toDate=${toDate}&selectedCategories=${selectedCategories}&selectedNetworks=${selectedNetworks}&priceRange=${selectedPrice}`);
+        history.replaceState(
+          null,
+          '',
+          `/list?searchInputText=${searchInputText}&fromDate=${fromDate}&toDate=${toDate}&selectedCategories=${selectedCategories}&selectedNetworks=${selectedNetworks}`
+        )
       })
   }, [sdk, page, JSON.stringify(query), bookmarks])
-
 
   return (
     <>
       {loading && <Loader />}
       {search && (
         <div>
-          <XuiSearchBar showButton={true} />
+          <XuiSearchBar />
         </div>
       )}
 
       {content(assets)}
 
-      {totalPages > 1 && (
-        <XuiPagination setPage={setPage} page={page} totalPages={totalPages} />
-      )}
+      {totalPages > 1 && <XuiPagination setPage={setPage} page={page} totalPages={totalPages} />}
     </>
   )
 }
-

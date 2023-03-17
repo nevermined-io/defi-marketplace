@@ -1,240 +1,188 @@
-import React, { useEffect, useContext, useState, useRef } from 'react'
-import { User } from '../context'
-import { Form, FormGroup, FormInput, FormAddItem, FormTextarea, Orientation, UiButton, UiLayout, UiText, UiDivider, UiPopupHandlers, BEM } from 'ui'
-import { NextPage } from 'next'
-import { newLogin, StoreItemTypes } from '../shared'
-import { NotificationPopup } from '../components'
+import React, { useEffect, useRef } from 'react'
+import { AccountService } from '@nevermined-io/catalog'
+import { useWallet } from '@nevermined-io/providers'
+import {
+  UiForm,
+  UiFormGroup,
+  UiFormInput,
+  UiFormItem,
+  Orientation,
+  UiButton,
+  UiLayout,
+  UiText,
+  UiDivider,
+  UiPopupHandlers,
+  NotificationPopup,
+  BEM
+} from '@nevermined-io/styles'
 import styles from './user-profile.module.scss'
 
 const b = BEM('user-profile', styles)
 
 interface AdditionalInformation {
-    linkedinProfile: string
+  linkedinProfile: string
 }
 
-interface UserProfileParams {
-    nickname: string
-    name?: string
-    email?: string
-    additionalInformation?: unknown
-}
+export const UserProfile = () => {
+  const { walletAddress } = useWallet()
+  const {
+    errorMessage,
+    successMessage,
+    inputError,
+    isUpdated,
+    isAddressAdded,
+    setUserProfile,
+    userProfile,
+    addresses,
+    newAddress,
+    submitUserProfile,
+    addAddress,
+    isTokenGenerated
+  } = AccountService.useUserProfile(walletAddress)
 
-export const UserProfile: NextPage = () => {
-    const {sdk, account, loginMarketplaceAPI, web3 } = useContext(User)
-    const [inputError, setInputError] = useState('') 
-    const [errorMessage, setErrorMessage] = useState('')
-    const [successMessage, setSuccessMessage] = useState('')
-    const [isUpdated, setIsUpated] = useState(false)
-    const [isAddressAdded, setIsAddressAdded] = useState(false)
-    const popupRef = useRef<UiPopupHandlers>()
+  const popupRef = useRef<UiPopupHandlers>()
 
-    const [userId, setUserId] = useState('')
-    const [userProfile, setUserProfile] = useState<UserProfileParams>({
-        nickname: '',
-        name: '',
-        email: '',
-        additionalInformation: {
-            linkedinProfile: '',
-        },
-    })
-    const [newAddress, setNewAddress] = useState('')
+  const closePopup = (event: any) => {
+    popupRef.current?.close()
+    event.preventDefault()
+  }
 
-    const [addresses, setAddresses] = useState<string[]>([])
-    
-    const closePopup = (event: any) => {
-        popupRef.current?.close()
-        event.preventDefault()
+  useEffect(() => {
+    if (errorMessage) {
+      popupRef.current?.open()
     }
+  }, [errorMessage])
 
-    const onAddAddress = async () => {
-        try {
-            const accounts = await sdk.accounts.list()
-            const accountToAdd = accounts.find(a => a.getId().toLowerCase() === newAddress)
-            const credential = await sdk.utils.jwt.generateClientAssertion(accountToAdd)
-            const token = await sdk.marketplace.addNewAddress(credential)
-            localStorage.setItem(StoreItemTypes.MarketplaceApiToken, token)
-            setAddresses([...addresses, newAddress])
-            setNewAddress('')
-            setIsAddressAdded(true)
-            setSuccessMessage('Address is added successfully')
-        } catch (error: any) {
-            if(error.message.includes('"statusCode":401')) {
-                setErrorMessage('Your login is expired. Please change to the previous address, reload and sign again')
-                localStorage.removeItem(StoreItemTypes.MarketplaceApiToken)
-            }
-
-            setErrorMessage(error.message)
-            popupRef.current?.open()
-        }
-        
+  useEffect(() => {
+    if (isTokenGenerated) {
+      popupRef.current?.close()
     }
+  }, [isTokenGenerated])
 
-    const onSubmitUserProfile = async() => {
-        try {
-            if (!userProfile.nickname) {
-                setInputError('Nickname is required')
-                return
-            }
-            await sdk.profiles.update(userId, userProfile)
-            setIsUpated(true)
-            setSuccessMessage('Your profile is updated successfully')
-            setInputError('')
-        } catch (error: any ) {
-            if(error.message.includes('"statusCode":401')) {
-                newLogin(sdk, loginMarketplaceAPI)
-                setErrorMessage('Your login is expired. Please first sign with your wallet and after try again')
-            } else {
-                setErrorMessage(error.message)
-            }
-            
-            popupRef.current?.open()
-        }
-    }
+  return (
+    <UiLayout type="container">
+      <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef} />
+      <UiLayout type="container">
+        <UiText wrapper="h1" type="h3" variants={['heading']}>
+          User Profile account
+        </UiText>
+        <UiText type="h3" wrapper="h3" className={b('subheader')}>
+          Update your profile
+        </UiText>
+      </UiLayout>
+      <UiDivider />
+      <UiLayout type="container">
+        <div className={b('profile-horizontal-line')} />
+        <UiForm>
+          <div className={b('row')}>
+            <div className={b('columnleft')}>
+              <UiFormGroup orientation={Orientation.Vertical}>
+                <UiFormInput
+                  className={b('profile-form-input')}
+                  label="Nickname *"
+                  inputError={inputError}
+                  value={userProfile.nickname}
+                  onChange={(e) => setUserProfile({ ...userProfile, nickname: e.target.value })}
+                  placeholder="Type your nickname"
+                />
+              </UiFormGroup>
+              <UiFormGroup orientation={Orientation.Vertical}>
+                <UiFormInput
+                  className={b('profile-form-input')}
+                  label="Email"
+                  value={userProfile.email}
+                  onChange={(e) => setUserProfile({ ...userProfile, email: e.target.value })}
+                  placeholder="Type your email"
+                />
+              </UiFormGroup>
+            </div>
+            <div className={b('columnright')}>
+              <UiFormGroup orientation={Orientation.Vertical}>
+                <UiFormInput
+                  className={b('profile-form-input')}
+                  label="Name"
+                  value={userProfile.name}
+                  onChange={(e) => setUserProfile({ ...userProfile, name: e.target.value })}
+                  placeholder="Type your name"
+                />
+              </UiFormGroup>
+              <UiFormGroup orientation={Orientation.Vertical}>
+                <UiFormInput
+                  className={b('profile-form-input')}
+                  label="Link Profile"
+                  placeholder="Type your link profile"
+                  value={
+                    (userProfile.additionalInformation as AdditionalInformation)?.linkedinProfile
+                  }
+                  onChange={(e) =>
+                    setUserProfile({
+                      ...userProfile,
+                      additionalInformation: {
+                        linkedinProfile: e.target.value
+                      }
+                    })
+                  }
+                />
+              </UiFormGroup>
+            </div>
+          </div>
+          <div className={b('profile-submit-container')}>
+            <div className={b('profile-submit-container', ['updated-message'])}>
+              {isUpdated ? (
+                <UiText type="h3" wrapper="h3" variants={['success']}>
+                  {successMessage}
+                </UiText>
+              ) : null}
+            </div>
+            <div className={b('profile-submit-container', ['submit'])}>
+              <UiButton onClick={submitUserProfile}>Update Profile</UiButton>
+            </div>
+          </div>
+        </UiForm>
+      </UiLayout>
+      <UiLayout type="container" className={b('profile-addresses')}>
+        <UiForm>
+          <div>
+            <UiText type="h3" className={b('addresses-header')}>
+              Current Addresses
+            </UiText>
+          </div>
+          <div>
+            <UiText variants={['detail']} className={b('addresses-detail')}>
+              Change your wallet account to add more address to your profile
+            </UiText>
+          </div>
+          <div className={b('profile-horizontal-line')} />
+          <div className={b('profile-current-addresses-container')}>
+            {addresses.map((a) => (
+              <div key={a} className={b('profile-current-address')}>
+                {a}
+              </div>
+            ))}
+          </div>
 
-    useEffect(() => {
-        if(isUpdated || isAddressAdded) {
-            setTimeout(() => {
-                setIsUpated(false)
-                setIsAddressAdded(false)
-                setSuccessMessage('')
-            }, 3000)
-        }
-    }, [isUpdated, isAddressAdded])
+          {newAddress && (
+            <UiFormGroup orientation={Orientation.Vertical} className={b('profile-add-address')}>
+              <UiFormItem
+                label="Add new address"
+                value={newAddress}
+                onClick={addAddress}
+                disabled={true}
+              />
+            </UiFormGroup>
+          )}
 
-    useEffect(() => {
-        (async () => {
-            try {
-                if(!account) {
-                    return
-                }
-                
-                const userProfileData = await sdk.profiles.findOneByAddress(account);
-                setUserId(userProfileData.userId)
-
-                if(userProfileData.addresses.some(a => a.toLowerCase() === newAddress)) {
-                    setNewAddress('')
-                }
-
-                setAddresses([...userProfileData.addresses])
-
-                setUserProfile({
-                    nickname: userProfileData.nickname,
-                    name: userProfileData.name,
-                    email: userProfileData.email,
-                    additionalInformation: userProfileData.additionalInformation,
-                });
-
-                (window as any)?.ethereum?.on('accountsChanged', (accounts: string[]) => {
-                    if(!addresses.some(a => a.toLowerCase() === accounts[0])) {
-                        setNewAddress(accounts[0])
-                    } else {
-                        setNewAddress('')
-                    }
-                })
-
-            } catch (error) {
-                if(!newAddress) {
-                    setErrorMessage('Error getting user profile')
-                    popupRef.current?.open()
-                }
-            }
-        })()
-    }, [sdk.profiles, account])
-
-    return (
-        <UiLayout type='container'>
-            <NotificationPopup closePopup={closePopup} message={errorMessage} popupRef={popupRef}/>
-            <UiLayout type='container'>
-                <UiText wrapper="h1" type="h1" variants={['heading']}>User Profile account</UiText>
-                <UiText type="h2" wrapper="h2">Update your profile</UiText>
-            </UiLayout>
-            <UiDivider/>
-            <UiLayout type='container'>
-                <div  className={b('profile-horizontal-line')}/>
-                <Form>
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
-                            className={b('profile-form-input')}
-                            label='Nickname *'
-                            inputError={inputError}
-                            value={userProfile.nickname} onChange={(e) => setUserProfile({...userProfile, nickname: e.target.value})}
-                            placeholder='Type your nickname'
-                        />
-                    </FormGroup>
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
-                            className={b('profile-form-input')}
-                            label='Name'
-                            value={userProfile.name} onChange={(e) => setUserProfile({...userProfile, name: e.target.value})}
-                            placeholder='Type your name'
-                        />
-                    </FormGroup>
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
-                            className={b('profile-form-input')}
-                            label='Email'
-                            value={userProfile.email}
-                            onChange={(e) => setUserProfile({...userProfile, email: e.target.value})}
-                            placeholder='Type your email'
-                        />
-                    </FormGroup>
-                    <FormGroup orientation={Orientation.Vertical}>
-                        <FormInput
-                            className={b('profile-form-input')}
-                            label='Link Profile'
-                            placeholder='Type your link profile'
-                            value={(userProfile.additionalInformation as AdditionalInformation)?.linkedinProfile} onChange={(e) => setUserProfile({...userProfile, additionalInformation: {
-                            linkedinProfile: e.target.value
-                        }})}/>
-                    </FormGroup>
-                    <div className={b('profile-submit-container')}>
-                        <div className={b('profile-submit-container', ['updated-message'])}>
-                            {(isUpdated) ? <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> : null}
-                        </div>
-                        <div className={b('profile-submit-container', ['submit'])}>
-                            <UiButton onClick={onSubmitUserProfile}>Update Profile</UiButton>
-                        </div>
-                    </div>
-                </Form>
-            </UiLayout>
-            <UiLayout type='container' className={b('profile-addresses')}>
-                <UiText type="h2" wrapper="h2">Addresses</UiText>
-                <div  className={b('profile-horizontal-line')}/>
-                <Form>                  
-                    <div>
-                        <UiText type='h3'>Current Addresses</UiText>
-                    </div>
-                    <div>
-                        <UiText variants={['detail']}>Change your wallet account to add more address to your profile</UiText>
-                    </div>
-
-                    <div className={b('profile-current-addresses-container')}>
-                        {addresses.map(a => 
-                            <div key={a} className={b('profile-current-address')}>
-                                {a}
-                            </div>    
-                        )}
-                    </div>
-                    
-
-                    {newAddress && 
-                        <FormGroup orientation={Orientation.Vertical} className={b('profile-add-address')}>
-                            <FormAddItem
-                                label='Add new address'
-                                value={newAddress}
-                                onClick={onAddAddress}
-                                disabled={true}
-                            />
-                        </FormGroup>
-                    }
-
-                    <div className={b('profile-submit-container')}>
-                        <div className={b('profile-submit-container', ['updated-message'])}>
-                            {(isAddressAdded) ? <UiText type="h3" wrapper="h3" variants={['success']}>{successMessage}</UiText> : null}
-                        </div>
-                    </div>
-                </Form>
-            </UiLayout>
-        </UiLayout>
-    )
+          <div className={b('profile-submit-container')}>
+            <div className={b('profile-submit-container', ['updated-message'])}>
+              {isAddressAdded ? (
+                <UiText type="h3" wrapper="h3" variants={['success']}>
+                  {successMessage}
+                </UiText>
+              ) : null}
+            </div>
+          </div>
+        </UiForm>
+      </UiLayout>
+    </UiLayout>
+  )
 }

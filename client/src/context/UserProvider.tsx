@@ -1,448 +1,387 @@
-import React, { PureComponent, } from 'react'
-import Web3 from 'web3'
-import { Nevermined, Account, DDO, Profile, Bookmark } from '@nevermined-io/nevermined-sdk-js'
-import { User } from '.'
-import MarketProvider from './MarketProvider'
-import { MetamaskProvider } from './MetamaskProvider'
-import { BurnerWalletProvider } from './BurnerWalletProvider'
-import { correctNetworkId, correctNetworkName } from '../config';
-import { getAllUserBundlers, Bundle } from '../shared/api';
+import React, { useEffect, useState, useRef, ReactNode, useCallback } from 'react'
+import { DDO } from '@nevermined-io/sdk'
+import { useWallet } from '@nevermined-io/providers'
+import { Catalog, AuthToken } from '@nevermined-io/catalog'
+import { User, DropDownFilters } from '.'
+import { correctNetworkName } from '../config'
+import { SubscriptionTiers, UserSubscription } from '../shared/constants'
+import { NFT_TIERS } from 'src/config'
+// import { Config } from '@nevermined-io/catalog'
 
 import {
-    marketplaceUri,
-    gatewayUri,
-    gatewayAddress,
-    faucetUri,
-    nodeUri,
-    secretStoreUri,
-    verbose,
-    graphUrl,
-    artifactsFolder
+  neverminedNodeUri,
+  marketplaceUri,
+  neverminedNodeAddress,
+  faucetUri,
+  verbose,
+  graphUrl,
+  artifactsFolder
 } from '../config'
 
-export async function provideNevermined(web3Provider: Web3): Promise<{sdk: Nevermined}> {
-    const config = {
-        web3Provider,
-        nodeUri,
-        marketplaceUri,
-        gatewayUri,
-        faucetUri,
-        gatewayAddress,
-        secretStoreUri,
-        verbose,
-        marketplaceAuthToken: localStorage.getItem('marketplaceApiToken') || '',
-        artifactsFolder,
-        graphHttpUri: graphUrl
+const window = global.window || ({} as any)
 
-    }
-    const sdk: Nevermined = await Nevermined.getInstance(config)
-
-    return { sdk }
+interface UserProviderProps {
+  children: ReactNode
 }
 
-const window = global.window || {} as any
+const tiers = [
+  {
+    name: 'Community',
+    price: '0',
+    symbol: 'USDC',
+    features: [
+      'On-chain normalized data from different protocols and networks',
+      'Insights dashboards',
+      'Integration of basic data with Google Data Studio',
+      'Publish reports and notebooks/algorithms without monetization free for the community',
+      'Access to community reports'
+    ],
+    enabled: true
+  },
+  {
+    name: 'Analyst',
+    price: '50',
+    symbol: 'USDC',
+    features: [
+      'Tier 1 + Enriched and aggregated datasets',
+      'Advanced dashboards',
+      'Integration of aggregated data with Google Data Studio',
+      'Monetization of reports and notebooks/algorithms',
+      'Access to tier 2 reports'
+    ],
+    enabled: false
+  },
+  {
+    name: 'Enterprise',
+    price: '500',
+    symbol: 'USDC',
+    features: [
+      'Tier 2 + Insights and AI on top of the on-chain data',
+      'Full access to insights dashboards',
+      'Integration of insights reports with Google Data Studio',
+      'Monetization of reports and notebooks/algorithms',
+      'Access to tier 2 and tier 3 reports'
+    ],
+    enabled: false
+  }
+]
 
+const UserProvider = (props: UserProviderProps) => {
+  const [isLogged, setIsLogged] = useState(false)
+  const [bookmarks, setBookmarks] = useState<DDO[]>([])
+  const [balance, setBalance] = useState<{ eth: any; nevermined: any }>({
+    eth: 0,
+    nevermined: 0
+  })
+  const [network, setNetwork] = useState('')
+  const [tokenSymbol, setTokenSymbol] = useState('')
+  const [assets, setAssets] = useState<DDO[]>([])
+  const [searchInputText, setSearchInputText] = useState('')
+  const [fromDate, setFromDate] = useState('')
+  const [toDate, setToDate] = useState('')
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [selectedNetworks, setSelectedNetworks] = useState<string[]>([])
+  const [selectedSubscriptions, setSelectedSubscriptions] = useState<string[]>([])
+  const [selectedSubtypes, setSelectedSubtypes] = useState<string[]>([])
+  const [selectedPrice, setSelectedPrice] = useState<number>(0)
+  const { sdk, updateSDK, isLoadingSDK } = Catalog.useNevermined()
+  const { walletAddress, getStatus} = useWallet()
+  const userProviderMounted = useRef()
+  const [userSubscriptions, setUserSubscriptions] = useState<UserSubscription[]>([])
+  const [userSubscriptionsStatus, setUserSubscriptionsStatus] = useState({
+    isLoading: false,
+    hasLoaded: false
+  })
+  const [dropdownFilters, setDropDownFilters] = useState<DropDownFilters>({
+    selectedNetworks: [],
+    selectedSubscriptions: [],
+    selectedSubtypes: [],
+    fromDate: '',
+    toDate: ''
+  })
 
-const POLL_ACCOUNTS = 1000 // every 1s
-const POLL_NETWORK = POLL_ACCOUNTS * 60 // every 1 min
-const DEFAULT_WEB3 = new Web3(new Web3.providers.HttpProvider(nodeUri)) // default web3
+  const getCurrentUserSubscription = (): UserSubscription | undefined => {
+    return userSubscriptions.find((subs) => subs.current)
+  }
 
-interface UserProviderState {
-    isLogged: boolean
-    isBurner: boolean
-    isWeb3Capable: boolean
-    isLoading: boolean
-    account: string
-    userProfile: Profile
-    bookmarks: Bookmark[]
-    balance: {
-        eth: number
-        nevermined: number
-    }
-    network: string
-    web3: Web3
-    sdk: Nevermined
-    userBundles: Bundle[]
-    requestFromFaucet(account: string): Promise<any>
-    loginMetamask(): Promise<any>
-    loginBurnerWallet(): Promise<any>
-    logoutBurnerWallet(): Promise<any>
-    loginMarketPlaceApi(sdk: Nevermined, account: Account): Promise<void>
-    switchToCorrectNetwork(): Promise<any>
-    // addToBasket(dids: string[]): string[],
-    message: string
-    tokenSymbol: string
-    basket: string[]
-    assets: DDO[],
-    searchInputText: string,
-    fromDate: string,
-    toDate: string,
-    selectedCategories: string[]
-    selectedNetworks: string[]
-    selectedPrice: number
-    setAllUserBundles(): Promise<void>
-    setBookmark(userId: string): Promise<void> 
-}
+  const checkSubscription = async (nftTierAddress: string): Promise<boolean> => {
+    const accounts = await sdk.accounts.list()
+    if (!accounts[0]) return false
 
-export default class UserProvider extends PureComponent<{}, UserProviderState> {
-    public componentDidUpdate() {
-        window?.ethereum?.on('accountsChanged', async (accounts) => {
-            this.fetchAccounts()
-        })
+    const nft721 = await sdk.contracts.loadNft721(nftTierAddress)
+    const balance = await nft721.balanceOf(accounts[0])
+    return balance.gt(0)
+  }
 
-        window?.ethereum?.on('chainChanged', async (accounts) => {
-            //not sure if fetchNetwork makes sense.
-            //chainChanged event has chainId as a parameter.
-            await this.fetchNetwork()
-        })
+  const getUserSubscriptions = async (): Promise<UserSubscription[]> => {
+    const tier3 = NFT_TIERS.find((tier) => tier.level === 3)
+    const tier2 = NFT_TIERS.find((tier) => tier.level === 2)
+    const tier1 = NFT_TIERS.find((tier) => tier.level === 1)
 
-    }
-
-    private loginMetamask = async () => {
-        if (!window.ethereum) {
-            alert('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
-        }
-
-        const metamaskProvider = new MetamaskProvider()
-        await metamaskProvider.startLogin()
-        this.getProviderAndLoadNevermined(metamaskProvider)
-    }
-
-    private getProviderAndLoadNevermined = (metamaskProvider: any) => {
-        const web3 = metamaskProvider.getProvider()
-        this.setState(
-            {
-                isLogged: true,
-                isBurner: false,
-                web3
-            },
-            () => {
-                this.loadNevermined()
-            }
-        )
-    }
-
-    private switchToCorrectNetwork = async () => {
-        const metamaskProvider = new MetamaskProvider()
-        await metamaskProvider.switchChain()
-        this.getProviderAndLoadNevermined(metamaskProvider)
-    }
-
-    private loginBurnerWallet = async () => {
-        const burnerwalletProvider = new BurnerWalletProvider()
-        await burnerwalletProvider.startLogin()
-        const web3 = burnerwalletProvider.getProvider()
-        this.setState(
-            {
-                isLogged: true,
-                isBurner: true,
-                web3
-            },
-            () => {
-                this.loadNevermined()
-            }
-        )
-    }
-
-    private logoutBurnerWallet = async () => {
-        const burnerwalletProvider = new BurnerWalletProvider()
-        await burnerwalletProvider.logout()
-    }
-
-    public state = {
-        isLogged: false,
-        isBurner: false,
-        isWeb3Capable: Boolean(window.web3 || window.ethereum),
-        isLoading: true,
-        bookmarks: [],
-        balance: {
-            eth: 0,
-            nevermined: 0
+    // Check Tier3
+    const isTier3 = await checkSubscription(tier3?.address || '')
+    if (isTier3) {
+      return [
+        {
+          tier: tier3!.name as SubscriptionTiers,
+          address: tier3!.address,
+          did: tier3!.did,
+          access: true,
+          current: true
         },
-        userBundles: [],
-        userProfile: {},
-        network: '',
-        web3: DEFAULT_WEB3,
-        account: '',
-        sdk: {} as Nevermined,
-        requestFromFaucet: (): Promise<FaucetResponse> => requestFromFaucet(''),
-        loginMetamask: (): Promise<any> => this.loginMetamask(),
-        loginBurnerWallet: (): Promise<any> => this.loginBurnerWallet(),
-        logoutBurnerWallet: (): Promise<any> => this.logoutBurnerWallet(),
-        loginMarketplaceAPI: (sdk: Nevermined, account: Account): Promise<void> => this.marketplaceLogin(sdk, account),
-        switchToCorrectNetwork: (): Promise<any> => this.switchToCorrectNetwork(),
-        message: 'Connecting to Autonomies...',
-        tokenSymbol: '',
-        tokenDecimals: 6,
-        basket: [] as string[],
-        addToBasket: (dids: string[]) => this.addToBasket(dids),
-        removeFromBasket: (dids: string[]) => this.removeFromBasket(dids),
-        assets: [],
-        setAssets: (assets: DDO[]) => this.setAssets(assets),
-        searchInputText: '',
-        setSearchInputText: (searchInputText: string) => this.setSearchInputText(searchInputText),
-        fromDate: '',
-        setFromDate: (fromDate: string) => this.setFromDate(fromDate),
-        toDate: '',
-        setToDate: (toDate: string) => this.setToDate(toDate),
-        selectedCategories: [] as string[],
-        setSelectedCategories: (selectedCategories: string[]) => this.setSelectedCategories(selectedCategories),
-        selectedNetworks: [] as string[],
-        setSelectedNetworks: (selectedNetworks: string[]) => this.setSelectedNetworks(selectedNetworks),
-        setSelectedPriceRange: (selectedPrice: number) => this.setSelectedPriceRange(selectedPrice),
-        setAllUserBundles: (account: string): Promise<void> => this.fetchAllUserBundlers(account),
-        setBookmarks: (bookmarks: Bookmark[]): void => this.setBookmarks(bookmarks) 
-    }
-
-    private accountsInterval: any = null
-
-    private networkInterval: any = null
-
-    public async componentDidMount() {
-        await this.bootstrap()
-
-        //needed to automatically load the asset details when the network is changed to the correct one
-        window?.ethereum?.on('chainChanged', async (chainId: any) => {
-            if (chainId === correctNetworkId) {
-                const metamaskProvider = new MetamaskProvider()
-                await metamaskProvider.switchChain()
-                this.getProviderAndLoadNevermined(metamaskProvider)
-            } else {
-                this.loadNevermined()
-            }
-
-        })
-    }
-
-    private initAccountsPoll(): void {
-        if (!this.accountsInterval) {
-            this.accountsInterval = setInterval(
-                this.fetchAccounts,
-                POLL_ACCOUNTS
-            )
+        {
+          tier: tier2!.name as SubscriptionTiers,
+          address: tier2!.address,
+          did: tier2!.did,
+          access: true,
+          current: false
+        },
+        {
+          tier: tier1!.name as SubscriptionTiers,
+          address: tier1!.address,
+          did: tier1!.did,
+          access: true,
+          current: false
         }
+      ]
     }
-
-    private initNetworkPoll(): void {
-        if (!this.networkInterval) {
-            this.networkInterval = setInterval(this.fetchNetwork, POLL_NETWORK)
+    // Check Tier2
+    const isTier2 = await checkSubscription(tier2?.address || '')
+    if (isTier2) {
+      return [
+        {
+          tier: tier3!.name as SubscriptionTiers,
+          address: tier3!.address,
+          did: tier3!.did,
+          access: false,
+          current: false
+        },
+        {
+          tier: tier2!.name as SubscriptionTiers,
+          address: tier2!.address,
+          did: tier2!.did,
+          access: true,
+          current: true
+        },
+        {
+          tier: tier1!.name as SubscriptionTiers,
+          address: tier1!.address,
+          did: tier1!.did,
+          access: true,
+          current: false
         }
+      ]
     }
-
-    private loadDefaultWeb3 = async (): Promise<void> => {
-        this.setState(
-            {
-                isLogged: false,
-                isBurner: false,
-                web3: DEFAULT_WEB3
-            },
-            () => {
-                this.loadNevermined()
-            }
-        )
-    }
-
-    private fetchTokenSymbol = async (): Promise<void> => {
-        const { sdk } = this.state
-        let tokenSymbol = 'Unknown'
-        if (sdk.keeper && sdk.keeper.token) {
-            tokenSymbol = await sdk.token.getSymbol()
+    // Check Tier1
+    const isTier1 = await checkSubscription(tier1?.address || '')
+    if (isTier1) {
+      return [
+        {
+          tier: tier3!.name as SubscriptionTiers,
+          address: tier3!.address,
+          did: tier3!.did,
+          access: false,
+          current: false
+        },
+        {
+          tier: tier2!.name as SubscriptionTiers,
+          address: tier2!.address,
+          did: tier2!.did,
+          access: false,
+          current: false
+        },
+        {
+          tier: tier1!.name as SubscriptionTiers,
+          address: tier1!.address,
+          did: tier1!.did,
+          access: true,
+          current: true
         }
-        tokenSymbol !== this.state.tokenSymbol && this.setState({ tokenSymbol })
+      ]
+    }
+    return []
+  }
+
+  useEffect(() => {
+    if (isLoadingSDK || !network) {
+      return
     }
 
-    private marketplaceLogin = async(sdk: Nevermined, account: Account): Promise<void> => {
-        let credential = await sdk.utils.jwt.generateClientAssertion(account)
-
-        const token = await sdk.marketplace.login(credential)
-
-        localStorage.setItem('marketplaceApiToken', token)
-    }
-
-    private loadNevermined = async (): Promise<void> => {
-        const { sdk } = await provideNevermined(this.state.web3);
-
-        (window as any)?.ethereum?.on('accountsChanged', async (accounts: string[]) => {
-            await this.fetchUserProfile(accounts[0])      
+    (async () => {
+      if (userProviderMounted) {
+        window?.ethereum?.on?.('accountsChanged', async () => {
+          fetchBalance()
         })
 
-        this.setState({ sdk, isLoading: false }, async () => {
-            const network = await sdk.keeper?.getNetworkName();
-            this.initNetworkPoll()
-            this.initAccountsPoll()
-            this.fetchNetwork()
-            await this.fetchAccounts()
-            await this.fetchAllUserBundlers(this.state.account)
-            await this.fetchUserProfile(this.state.account)
-            if (network === correctNetworkName) {
-                this.fetchTokenSymbol()
-            }
+        window?.ethereum?.on?.('chainChanged', async () => {
+          await reloadSdk()
         })
+      }
+    })()
+  }, [isLoadingSDK, network])
+
+  useEffect(() => {
+    const sdkHandler = async () => {
+      const networkState = await sdk?.keeper?.getNetworkName()
+      if (networkState) setNetwork(networkState)
+      await loadNevermined()
     }
 
-    private bootstrap = async (): Promise<void> => {
-        const logType = localStorage.getItem('logType')
-        const metamaskProvider = new MetamaskProvider()
+    sdkHandler()
+  }, [sdk])
 
-        switch (logType) {
-            case 'Metamask':
-                if (
-                    (await metamaskProvider.isAvailable()) &&
-                    (await metamaskProvider.isLogged())
-                ) {
-                    const web3 = metamaskProvider.getProvider()
-                    this.setState(
-                        {
-                            isLogged: true,
-                            web3
-                        },
-                        () => {
-                            this.loadNevermined()
-                        }
-                    )
-                } else {
-                    this.loadDefaultWeb3()
-                }
-                break
-            case 'BurnerWallet':
-                this.loginBurnerWallet()
-                break
-            default:
-                this.loginBurnerWallet()
-                break
+  useEffect(() => {
+    if (getStatus() === 'disconnected' ) {
+      setIsLogged(false)
+      return
+    }
+
+    (async () => {
+      const isLoggedState = await getStatus()
+      setIsLogged(isLoggedState === 'connected')
+      if (isLoggedState) {
+        await loadNevermined()
+      }
+    })()
+  }, [walletAddress])
+
+  useEffect(() => {
+    if (getStatus() === 'disconnected' ) {
+      setIsLogged(false)
+      return
+    }
+    if (isLoadingSDK) {
+      return
+    }
+
+    (async () => {
+      setUserSubscriptionsStatus((prev) => ({ ...prev, isLoading: true }))
+      const userSubs = await getUserSubscriptions()
+      setUserSubscriptions(userSubs)
+      setUserSubscriptionsStatus((prev) => ({ ...prev, isLoading: false, hasLoaded: true }))
+    })()
+  }, [walletAddress, isLoadingSDK])
+
+  const reloadSdk = async () => {
+    const config = {
+      web3Provider: window.ethereum,
+      web3ProviderUri: network,
+      marketplaceUri,
+      neverminedNodeUri,
+      faucetUri,
+      neverminedNodeAddress,
+      verbose,
+      marketplaceAuthToken: AuthToken.fetchMarketplaceApiTokenFromLocalStorage().token || '',
+      artifactsFolder,
+      graphHttpUri: graphUrl
+    }
+
+    updateSDK(config)
+  }
+
+  const fetchTokenSymbol = async (): Promise<void> => {
+    let tokenSymbolState = 'Unknown'
+    if (sdk?.keeper && sdk.keeper.token) {
+      tokenSymbolState = await sdk.keeper.token.symbol()
+    }
+    tokenSymbol !== tokenSymbol && setTokenSymbol(tokenSymbolState)
+  }
+
+  const loadNevermined = async (): Promise<void> => {
+    const network = await sdk?.keeper?.getNetworkName()
+    await fetchBalance()
+    if (network === correctNetworkName) {
+      fetchTokenSymbol()
+    }
+  }
+
+  const fetchBalance = async () => {
+    try {
+      const account = (await sdk.accounts?.list())?.find((a) => a.getId() === walletAddress)
+
+      if (account) {
+        const balance = await account.getBalance()
+        const { eth, nevermined } = balance
+        if (eth !== balance.eth || nevermined !== balance.nevermined) {
+          setBalance({ eth, nevermined })
         }
+      }
+    } catch (error) {
+      console.error(error)
     }
+  }
 
-    private fetchAccounts = async () => {
-        const { sdk, isLogged } = this.state
+  const setSelectedPriceRange = (selectedPrice: number) => {
+    setSelectedPrice(selectedPrice)
+  }
 
-        if (isLogged) {
-            let accounts
+  const applyDropdownFilters = useCallback(() => {
+    setDropDownFilters({
+      selectedNetworks,
+      selectedSubscriptions,
+      selectedSubtypes,
+      fromDate,
+      toDate
+    })
+  }, [selectedNetworks, selectedSubscriptions, selectedSubtypes, fromDate, toDate])
 
-            // Modern dapp browsers
-            if (window.ethereum && !isLogged) {
-                // simply set to empty, and have user click a button somewhere
-                // to initiate account unlocking
-                accounts = []
-
-                // alternatively, automatically prompt for account unlocking
-                // await this.unlockAccounts()
-            }
-
-            accounts = await sdk.accounts.list()
-
-            if (accounts.length) {
-                const account = await accounts[0].getId()
-
-                if (account !== this.state.account) {
-                    if(!localStorage.getItem('marketplaceApiToken'))
-                    this.marketplaceLogin(sdk, accounts[0])
-
-                    this.setState({
-                        account,
-                        isLogged: true,
-                        requestFromFaucet: async () => { }
-                    })
-
-                    await this.fetchBalance(accounts[0])
-                }
-            } else {
-                !isLogged && this.setState({ isLogged: false, account: '' })
-            }
-        }
+  const clearDropdownFilters = useCallback(() => {
+    const dropdownFilters = {
+      selectedNetworks: [],
+      selectedSubscriptions: [],
+      selectedSubtypes: [],
+      fromDate: '',
+      toDate: ''
     }
+    setSelectedNetworks(dropdownFilters.selectedNetworks)
+    setSelectedSubscriptions(dropdownFilters.selectedSubscriptions)
+    setSelectedSubtypes(dropdownFilters.selectedSubtypes)
+    setFromDate(dropdownFilters.fromDate)
+    setToDate(dropdownFilters.toDate)
+    setDropDownFilters(dropdownFilters)
+  }, [])
 
-    private fetchBalance = async (account: Account) => {
-        try {
-            const balance = await account.getBalance()
-            const { eth, nevermined } = balance
-            if (eth !== this.state.balance.eth || nevermined !== this.state.balance.nevermined) {
-                this.setState({ balance: { eth, nevermined } })
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    private fetchNetwork = async () => {
-        const { sdk } = this.state
-        let network = 'Unknown'
-        if (sdk.keeper) {
-            network = await sdk.keeper.getNetworkName()
-        }
-        network !== this.state.network && this.setState({ network })
-    }
-
-    private fetchUserProfile = async (address: string): Promise<void> => {
-        const { sdk } = this.state
-
-        try {
-            const userProfile = await sdk.profiles.findOneByAddress(address)
-            this.setState({ userProfile })
-        } catch (error: any) {
-            console.error(error.message)
-        }
-    }
-
-    private fetchAllUserBundlers = async (account: string) => {
-
-        if (account) {
-            const bundles = await getAllUserBundlers(account)
-            this.setState({ userBundles: bundles })
-        }
-    }
-
-    public addToBasket(dids: string[]) {
-        const basket = this.state.basket
-        this.setState({ basket: basket.concat(...dids.filter(did => !basket.includes(did))) })
-    }
-
-    public removeFromBasket(dids: string[]): string[] {
-        const didsSet = new Set(dids)
-        this.setState(prevState => ({
-            basket: prevState.basket.filter(did => !didsSet.has(did))
-        }))
-        return this.state.basket
-    }
-
-    public setAssets(assets: DDO[]) {
-        this.setState({ assets })
-    }
-
-    public setSearchInputText(searchInputText: string) {
-        this.setState({ searchInputText })
-    }
-
-    public setFromDate(fromDate: string) {
-        this.setState({ fromDate })
-    }
-
-    public setToDate(toDate: string) {
-        this.setState({ toDate })
-    }
-
-    public setSelectedCategories(selectedCategories: string[]) {
-        this.setState({ selectedCategories })
-    }
-
-    public setSelectedNetworks(selectedNetworks: string[]) {
-        this.setState({ selectedNetworks })
-    }
-    public setSelectedPriceRange(selectedPrice: number) {
-        this.setState({ selectedPrice })
-    }
-
-    public setBookmarks(bookmarks: Bookmark[]) {
-        this.setState({ bookmarks: [...bookmarks]})
-    }
-
-    public render() {
-        return (
-            <User.Provider value={this.state}>
-                <MarketProvider nevermined={this.state.sdk}>
-                    {this.props.children}
-                </MarketProvider>
-            </User.Provider>
-        )
-    }
+  return (
+    <User.Provider
+      value={{
+        isLogged,
+        bookmarks,
+        setBookmarks,
+        balance,
+        network,
+        tiers,
+        tokenSymbol,
+        assets,
+        setAssets,
+        searchInputText,
+        setSearchInputText,
+        fromDate,
+        setFromDate,
+        toDate,
+        setToDate,
+        selectedCategories,
+        setSelectedCategories,
+        selectedNetworks,
+        setSelectedNetworks,
+        selectedPrice,
+        setSelectedPriceRange: (selectedPrice: number) => setSelectedPriceRange(selectedPrice),
+        selectedSubscriptions,
+        setSelectedSubscriptions,
+        selectedSubtypes,
+        setSelectedSubtypes,
+        getCurrentUserSubscription,
+        userSubscriptions,
+        userSubscriptionsStatus,
+        setUserSubscriptions,
+        getUserSubscriptions,
+        dropdownFilters,
+        applyDropdownFilters,
+        clearDropdownFilters
+      }}
+    >
+      {props.children}
+    </User.Provider>
+  )
 }
+
+export default UserProvider

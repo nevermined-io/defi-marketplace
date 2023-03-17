@@ -1,37 +1,107 @@
-import React from 'react'
-import { BEM, UiText, UiPopup, UiPopupHandlers, UiButton } from 'ui'
-import styles from './download-asset-popup.module.scss'
+import React, { useState, useCallback, useRef } from 'react'
+import { Catalog } from '@nevermined-io/catalog'
+import { UiButton, UiPopupHandlers } from '@nevermined-io/styles'
+import { MetamaskErrorCodes, MetamaskCustomErrors } from '../../../shared/constants'
+import NeverminedColorIcon from '../../../../public/assets/nevermined-color.svg'
+import ErrorIcon from '../../../../public/assets/error.svg'
+import SuccessIcon from '../../../../public/assets/success.svg'
+import LoadingIcon from '../../loading-icon/loading-icon'
+import { PopupContent } from '../../popup/popup'
 
-
-
-interface DownloadPopupProps {
-  closePopup : (event:any)=> void,
-  popupRef :React.RefObject<UiPopupHandlers>
+interface DownloadAssetPopupProps {
+  assetDid: string
+  close: () => any
 }
 
+export function XuiDownloadAssetPopup(props: DownloadAssetPopupProps) {
+  const popupRef = useRef<UiPopupHandlers>()
+  const { close, assetDid } = props
+  const { sdk } = Catalog.useNevermined()
+  const [view, setView] = useState<0 | 1 | 2>(0)
+  const [error, setError] = useState<string | undefined>(undefined)
+  const start = useCallback(async () => {
+    setView(1)
+    const account = (await sdk.accounts.list())[0]
+    sdk.nfts721
+      .access(assetDid, account)
+      .then(() => setView(2))
+      .catch((error) =>
+        setError(
+          error.code === MetamaskErrorCodes.CANCELED
+            ? MetamaskCustomErrors.CANCELED[1]
+            : error.message
+        )
+      )
+  }, [])
 
-const b = BEM('download-popup', styles)
+  const clearError = useCallback(() => {
+    setError(undefined)
+    setView(0)
+  }, [])
 
-export function DownloadPopup({closePopup, popupRef}: DownloadPopupProps) {
-
-
-  return (
-    <>
-      <UiPopup ref={popupRef}>
-        <div className={b('basket-popup')}>
-          <img src="/assets/download_icon.svg" width="73px" />
-
-          <UiText style={{ color: '#2E405A', margin: '72px 0 25px' }} type="h3">Download In Progress</UiText>
-          <div className={b('popup-text')}>
-           Please, Sign the transaction on MetaMask to download the Asset.
-          </div>
-          <div className={b('popup-buttons')}>
-            <UiButton cover style={{ padding: '0', width: '170px' }} onClick={closePopup}>Back To Profile</UiButton>
-          </div>
-        </div>
-      </UiPopup>
-    </>
-  )
-
-
+  if (error) {
+    return (
+      <PopupContent
+        popupRef={popupRef}
+        image={<ErrorIcon />}
+        message="Asset Downloading failed!"
+        additionalMessage={error}
+        buttons={
+          <UiButton
+            type="error"
+            onClick={() => {
+              clearError()
+              close()
+            }}
+          >
+            Return
+          </UiButton>
+        }
+      />
+    )
+  } else if (view === 0) {
+    return (
+      <PopupContent
+        popupRef={popupRef}
+        image={<NeverminedColorIcon />}
+        message="Download this Asset?"
+        buttons={
+          <>
+            <UiButton type="secondary" onClick={close}>
+              Cancel
+            </UiButton>
+            <UiButton onClick={start}>Yes</UiButton>
+          </>
+        }
+      />
+    )
+  } else if (view === 1) {
+    return (
+      <PopupContent
+        popupRef={popupRef}
+        image={<LoadingIcon />}
+        message="Downloading in progress..."
+        additionalMessage="Please sign the message with Metamask and the datasets will be downloaded shortly."
+      />
+    )
+  } else if (view === 2) {
+    return (
+      <PopupContent
+        popupRef={popupRef}
+        image={<SuccessIcon />}
+        message="Asset Downloading OK!"
+        buttons={
+          <UiButton
+            onClick={() => {
+              close()
+            }}
+          >
+            Return
+          </UiButton>
+        }
+      />
+    )
+  } else {
+    return <span />
+  }
 }

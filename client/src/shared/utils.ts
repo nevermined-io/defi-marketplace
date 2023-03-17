@@ -1,6 +1,6 @@
-import { Account, DDO, MetaData, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-
-import { categoryPrefix, subcategoryPrefix, networkPrefix, StoreItemTypes } from './constants'
+import { DDO, MetaData } from '@nevermined-io/sdk'
+import { categoryPrefix, subcategoryPrefix, networkPrefix, SubscriptionTiers } from './constants'
+import {NFT_TIERS} from '../config'
 
 export function toDate(date: string) {
   return new Date(date).toLocaleDateString('en-uk')
@@ -23,12 +23,31 @@ export function getDefiInfo({ additionalInformation }: MetaData) {
 
 export function getDdoTokenAddress(ddo: DDO) {
   return ddo
-    .findServiceByType('access')
+    .findServiceByType('nft-access')
     ?.attributes?.serviceAgreementTemplate?.conditions?.find(({ name }) => name === 'lockPayment')
     ?.parameters?.find(({ name }) => name === '_tokenAddress')?.value
 }
 
-export const sortBy = (list: DDO[], key: Function) => list.sort((a: any, b: any) => key(a) + key(b))
+export interface DDOSubscription {
+  address: string
+  tier: SubscriptionTiers
+}
+
+export function getDdoSubscription(ddo: DDO): DDOSubscription {
+
+  const subscriptionAddress = ddo
+  .findServiceByType('nft-access')
+  ?.attributes?.serviceAgreementTemplate?.conditions?.find(({name}:any)  => name === 'nftHolder')
+  ?.parameters?.find(({name}:any)  => name === '_contractAddress')?.value
+
+  const tier: string = NFT_TIERS.find( tier => tier.address === subscriptionAddress)?.name || ''
+
+  return {
+    address: subscriptionAddress?.toString() || "",
+    tier: tier as SubscriptionTiers
+  }
+
+}
 
 export const getAttributes = (ddo: DDO): MetaData => ddo.findServiceByType('metadata')?.attributes
 
@@ -45,15 +64,6 @@ export const calculateStartEndPage = (page: number, itemsPerPage: number) => {
   const start = (page - 1) * itemsPerPage
   const end = page * itemsPerPage
   return { start, end }
-}
-
-export const newLogin = async (
-  sdk: Nevermined,
-  loginMarketplaceAPI: (sdk: Nevermined, account: Account) => void
-) => {
-  localStorage.removeItem('marketplaceApiToken')
-  const accounts = await sdk.accounts.list()
-  loginMarketplaceAPI(sdk, accounts[0])
 }
 
 export const calculatePages = (totalItems: number, itemsPerPage: number) => {

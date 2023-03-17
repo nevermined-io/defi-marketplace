@@ -1,51 +1,118 @@
-import '../src/styles/globals.scss'
+import '@nevermined-io/styles/lib/esm/styles/globals.scss'
+import '@nevermined-io/styles/lib/esm/index.css'
+import '../src/styles/styles.scss'
 import React from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
-import { UiHeader, UiHeaderLink, UiFooter, UiDivider } from 'ui'
-
+import { Catalog, AuthToken, AssetService } from '@nevermined-io/catalog'
+import { WalletProvider, getClient } from "@nevermined-io/providers";
+import { Logger } from '@nevermined-io/sdk'
+import { ethers } from 'ethers'
+import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
+import { UiDivider } from '@nevermined-io/styles'
 import UserProvider from '../src/context/UserProvider'
-import { docsUrl } from 'src/config'
+
+import {
+  marketplaceUri,
+  neverminedNodeUri,
+  neverminedNodeAddress,
+  faucetUri,
+  web3ProviderUri,
+  verbose,
+  graphUrl,
+  artifactsFolder,
+  CORRECT_NETWORK_ID,
+  SUPPORTED_NETWORKS,
+} from 'src/config'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import '../src/components/toast/toast.scss'
+// import { NeverminedOptions } from '@nevermined-io/sdk/dist/node/models/NeverminedOptions'
+
+const appConfig = {
+  web3Provider:
+    typeof window !== 'undefined'
+      ? window?.ethereum
+      : new ethers.providers.JsonRpcProvider(web3ProviderUri),
+  web3ProviderUri,
+  marketplaceUri,
+  neverminedNodeUri,
+  faucetUri,
+  newGateway: true,
+  neverminedNodeAddress,
+  verbose,
+  marketplaceAuthToken:
+    typeof window !== 'undefined' ? AuthToken.fetchMarketplaceApiTokenFromLocalStorage().token : '',
+  artifactsFolder,
+  graphHttpUri: graphUrl
+}
+
 
 function App({ Component, pageProps }: AppProps) {
-  // const context = React.useContext(User)
+  Logger.setLevel(3)
+  const MainComponent = Component as any
+
   return (
-    <UserProvider>
-      <>
-        <Head>
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-11ZZZNJ4Q5"></script>
-          <script dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments)}
-              gtag('js', new Date());
+    <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={false}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <Catalog.NeverminedProvider config={appConfig}>
+        <WalletProvider
+          client={getClient(
+            'defi-marketplace',
+            true,
+            SUPPORTED_NETWORKS.filter(network => network.id === CORRECT_NETWORK_ID) as any
+          )}
+          correctNetworkId={CORRECT_NETWORK_ID}
+        >
 
-              gtag('config', 'G-11ZZZNJ4Q5');
-            `
-          }}>
-          </script>
-          <title>Nevermined DeFi Marketplace</title>
-          <meta name="description" content="Nevermined DeFi Marketplace" />
-          <link rel="icon" href="/favicon.ico" />
+          <AssetService.AssetPublishProvider>
+            <UserProvider>
+              <Head>
+                <script
+                  async
+                  src="https://www.googletagmanager.com/gtag/js?id=G-11ZZZNJ4Q5"
+                ></script>
+                <script
+                  dangerouslySetInnerHTML={{
+                    __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments)}
+                  gtag('js', new Date());
 
-        </Head>
+                  gtag('config', 'G-11ZZZNJ4Q5');
+                `
+                  }}
+                ></script>
+                <title>Nevermined DeFi Marketplace</title>
+                <meta name="description" content="Nevermined DeFi Marketplace" />
+                <link rel="icon" href="/favicon.ico" />
+              </Head>
+              <div>
+                <UiHeader>
+                  <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
+                  <UiHeaderLink href="/subscription">Subscriptions</UiHeaderLink>
+                </UiHeader>
 
-        <div>
-          <UiHeader>
-            <UiHeaderLink href="/list">Marketplace</UiHeaderLink>
-            <UiHeaderLink href="/profile">Profile</UiHeaderLink>
-            <UiHeaderLink href="/user-profile">Account</UiHeaderLink>
-            <UiHeaderLink href="/about">About</UiHeaderLink>
-            <UiHeaderLink href={docsUrl} target='_blank'>Docs</UiHeaderLink>
-          </UiHeader>
+                <MainComponent {...pageProps} />
+              </div>
 
-          <Component {...pageProps} />
-        </div>
-
-        <UiDivider flex />
-        <UiFooter />
-      </>
-    </UserProvider>
+              <UiDivider flex />
+              <UiFooter />
+            </UserProvider>
+          </AssetService.AssetPublishProvider>
+        </WalletProvider>
+      </Catalog.NeverminedProvider>
+    </div>
   )
 }
 export default App
