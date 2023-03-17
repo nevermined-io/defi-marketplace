@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react'
-import { Catalog } from '@nevermined-io/catalog-core'
+import { Catalog } from '@nevermined-io/catalog'
 import { UiButton, UiPopupHandlers } from '@nevermined-io/styles'
 import { MetamaskErrorCodes, MetamaskCustomErrors } from '../../../shared/constants'
 import NeverminedColorIcon from '../../../../public/assets/nevermined-color.svg'
@@ -22,7 +22,7 @@ export function XuiDownloadAssetPopup(props: DownloadAssetPopupProps) {
   const start = useCallback(async () => {
     setView(1)
     const account = (await sdk.accounts.list())[0]
-    sdk.nfts
+    sdk.nfts721
       .access(assetDid, account)
       .then(() => setView(2))
       .catch((error) =>

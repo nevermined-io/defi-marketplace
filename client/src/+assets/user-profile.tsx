@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import { AccountService } from '@nevermined-io/catalog-core'
-import { useWallet } from '@nevermined-io/catalog-providers'
+import { AccountService } from '@nevermined-io/catalog'
+import { useWallet } from '@nevermined-io/providers'
 import {
   UiForm,
   UiFormGroup,

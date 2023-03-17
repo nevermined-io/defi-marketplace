@@ -1,5 +1,5 @@
-import React, { useRef, Fragment, useContext, useEffect, useState } from 'react'
-import { DDO, Profile } from '@nevermined-io/nevermined-sdk-js'
+import React, { useRef, useContext, useEffect, useState } from 'react'
+import { DDO, Profile } from '@nevermined-io/sdk'
 import Link from 'next/link'
 import {
   BEM,
@@ -12,8 +12,8 @@ import {
 import { toDate, getDefiInfo, getDdoSubscription, DDOSubscription } from '../shared'
 import styles from './assets-list.module.scss'
 import { User } from '../context'
-import { Catalog } from '@nevermined-io/catalog-core'
-import { useWallet } from '@nevermined-io/catalog-providers'
+import { Catalog } from '@nevermined-io/catalog'
+import { useWallet } from '@nevermined-io/providers'
 import { XuiDownloadAsset } from '../components/+download-asset/download-asset'
 import { SubscriptionBadge } from '../components/subscription-badge/subscription-badge'
 import { toast } from '../components'
@@ -78,7 +78,7 @@ export function AssetsList({
     try {
       const wasAuth = await checkAuth()
       if (!wasAuth) return
-      const bookmark = await sdk.bookmarks.create({
+      const bookmark = await sdk.services.bookmarks.create({
         did,
         userId: userProfile.userId,
         description
@@ -99,14 +99,14 @@ export function AssetsList({
       const bookmarkDDO = bookmarks.find((item) => item.id === did)
 
       if (bookmarkDDO?._nvm.userId) {
-        const bookmarksData = await sdk.bookmarks.findManyByUserId(bookmarkDDO?._nvm.userId)
+        const bookmarksData = await sdk.services.bookmarks.findManyByUserId(bookmarkDDO?._nvm.userId)
 
         const bookmark = bookmarksData.results.find((b) => b.did === did)
 
         if (bookmark?.id) {
           const wasAuth = await checkAuth()
           if (!wasAuth) return wasAuth
-          await sdk.bookmarks.deleteOneById(bookmark.id)
+          await sdk.services.bookmarks.deleteOneById(bookmark.id)
           setBookmarks(bookmarks.filter((item) => item.id !== bookmarkDDO.id))
         }
       }
@@ -141,7 +141,7 @@ export function AssetsList({
   }
 
   useEffect(() => {
-    if (!sdk?.profiles) {
+    if (!sdk?.services.profiles) {
       return
     }
 
@@ -150,11 +150,11 @@ export function AssetsList({
         return
       }
       try{
-          const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
+          const userProfile = await sdk.services.profiles.findOneByAddress(walletAddress)
           if (!userProfile?.userId) {
             return
           }
-          const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
+          const bookmarksData = await sdk.services.bookmarks.findManyByUserId(userProfile.userId)
           const bookmarksDDO = await Promise.all(
             bookmarksData.results?.map((bookmark) => sdk.assets.resolve(bookmark.did))
           )

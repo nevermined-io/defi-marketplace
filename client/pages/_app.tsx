@@ -4,9 +4,9 @@ import '../src/styles/styles.scss'
 import React from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
-import { Catalog, AuthToken, AssetService, Config } from '@nevermined-io/catalog-core'
-import { WalletProvider, getClient } from "@nevermined-io/catalog-providers";
-import { Logger } from '@nevermined-io/nevermined-sdk-js'
+import { Catalog, AuthToken, AssetService } from '@nevermined-io/catalog'
+import { WalletProvider, getClient } from "@nevermined-io/providers";
+import { Logger } from '@nevermined-io/sdk'
 import { ethers } from 'ethers'
 import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
 import { UiDivider } from '@nevermined-io/styles'
@@ -27,8 +27,9 @@ import {
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import '../src/components/toast/toast.scss'
+// import { NeverminedOptions } from '@nevermined-io/sdk/dist/node/models/NeverminedOptions'
 
-const appConfig: Config = {
+const appConfig = {
   web3Provider:
     typeof window !== 'undefined'
       ? window?.ethereum
@@ -69,7 +70,7 @@ function App({ Component, pageProps }: AppProps) {
           client={getClient(
             'defi-marketplace',
             true,
-            SUPPORTED_NETWORKS.filter(network => network.id === CORRECT_NETWORK_ID)
+            SUPPORTED_NETWORKS.filter(network => network.id === CORRECT_NETWORK_ID) as any
           )}
           correctNetworkId={CORRECT_NETWORK_ID}
         >

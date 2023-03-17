@@ -1,4 +1,4 @@
-import { MetaMask } from '@nevermined-io/catalog-providers'
+import { MetaMask } from '@nevermined-io/providers'
 
 declare global {
   interface Window {

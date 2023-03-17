@@ -1,7 +1,7 @@
 import styles from './account.module.scss'
 import React from 'react'
 import { BEM, UiText, UiLayout } from '@nevermined-io/styles'
-import { DDO } from '@nevermined-io/nevermined-sdk-js'
+import { DDO } from '@nevermined-io/sdk'
 import { SubscriptionBadge } from '../subscription-badge/subscription-badge'
 
 interface SummaryProps {

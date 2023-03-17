@@ -10,10 +10,10 @@ import {
   UiFormSelect,
   BEM
 } from '@nevermined-io/styles'
-import { Catalog } from '@nevermined-io/catalog-core'
+import { Catalog } from '@nevermined-io/catalog'
 import styles from './user-publish.module.scss'
 import stepStyles from './step-content.module.scss'
-import { AssetService } from '@nevermined-io/catalog-core'
+import { AssetService } from '@nevermined-io/catalog'
 import { User } from '../../context'
 import { toast } from 'react-toastify'
 
