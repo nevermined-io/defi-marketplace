@@ -141,7 +141,7 @@ export function AssetsList({
   }
 
   useEffect(() => {
-    if (!sdk?.services.profiles) {
+    if (!sdk?.services?.profiles) {
       return
     }
 
