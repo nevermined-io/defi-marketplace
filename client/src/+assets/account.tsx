@@ -80,14 +80,14 @@ export const Account: NextPage = () => {
   }
 
   useEffect(() => {
-    if (!sdk?.services.profiles) {
+    if (!sdk?.services?.profiles) {
       return
     }
     loadUserInfo()
   }, [sdk, walletAddress])
 
   useEffect(() => {
-    if (!sdk?.services.profiles) {
+    if (!sdk?.services?.profiles) {
       return
     }
     loadSubscription()

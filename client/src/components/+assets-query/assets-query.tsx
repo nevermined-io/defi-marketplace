@@ -122,7 +122,7 @@ export function XuiAssetsQuery({
   }
 
   useEffect(() => {
-    if (!sdk?.services.profiles) {
+    if (!sdk?.services?.profiles) {
       return
     }
 
