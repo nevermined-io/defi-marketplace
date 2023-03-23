@@ -40,7 +40,7 @@ And for the server:
 npm run start-watch
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the client in the browser.
+Open [http://localhost:3000](http://localhost:3000) to view the client in the browser. 
 
 ### Starting the environment
 
