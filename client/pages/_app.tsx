@@ -5,11 +5,11 @@ import React from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { Catalog, AuthToken, AssetService } from '@nevermined-io/catalog'
-import { WalletProvider, getClient } from "@nevermined-io/providers";
-import { WagmiConfig } from 'wagmi'
+import { WalletProvider, Wagmi, ConnectKit, Chains } from "@nevermined-io/providers";
 import { Logger } from '@nevermined-io/sdk'
 import { ethers } from 'ethers'
-import { UiHeader, UiHeaderLink, UiFooter } from 'ui'
+import { UiHeader, UiHeaderLink } from '../src/components/header/header'
+import { UiFooter } from '../src/components/footer/footer'
 import { UiDivider } from '@nevermined-io/styles'
 import UserProvider from '../src/context/UserProvider'
 
@@ -23,13 +23,34 @@ import {
   graphUrl,
   artifactsFolder,
   CORRECT_NETWORK_ID,
-  SUPPORTED_NETWORKS,
 } from 'src/config'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import '../src/components/toast/toast.scss'
-import { createClient, configureChains, mainnet } from 'wagmi'
-import { publicProvider } from 'wagmi/providers/public'
+
+export const chainConfig: Wagmi.Chain[] = [
+  Chains.polygonMumbai,
+  Chains.polygon,
+  {
+    id: 1337,
+    name: 'Localhost development',
+    network: 'spree',
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+    rpcUrls: {
+      default: {
+        http: ['http://localhost:8545'],
+      },
+      public: {
+        http: ['http://localhost:8545'],
+      },
+    },
+    testnet: true,
+  },
+]
 
 
 // import { NeverminedOptions } from '@nevermined-io/sdk/dist/node/models/NeverminedOptions'
@@ -52,21 +73,17 @@ const appConfig = {
   graphHttpUri: graphUrl
 }
 
-
+const client = Wagmi.createClient(
+  ConnectKit.getDefaultClient({
+    appName: 'Nevermined One',
+    chains: chainConfig,
+  }) as any,
+)
 function App({ Component, pageProps }: AppProps) {
   Logger.setLevel(3)
   const MainComponent = Component as any
-  const { provider, webSocketProvider } = configureChains(
-    [mainnet],
-    [publicProvider()],
-  )
 
-  const client = createClient({
-    provider,
-    webSocketProvider,
-  })
   return (
-    < WagmiConfig client={client}>
       <div>
         <ToastContainer
           position="top-right"
@@ -81,11 +98,7 @@ function App({ Component, pageProps }: AppProps) {
         />
         <Catalog.NeverminedProvider config={appConfig}>
           <WalletProvider
-            client={getClient(
-              'defi-marketplace',
-              true,
-              SUPPORTED_NETWORKS.filter(network => network.id === CORRECT_NETWORK_ID) as any
-            )}
+            client={client}
             correctNetworkId={CORRECT_NETWORK_ID}
           >
 
@@ -127,7 +140,6 @@ function App({ Component, pageProps }: AppProps) {
           </WalletProvider>
         </Catalog.NeverminedProvider>
       </div>
-    </WagmiConfig>
   )
 }
 

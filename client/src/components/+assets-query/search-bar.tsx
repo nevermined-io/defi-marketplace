@@ -4,8 +4,8 @@ import Image from "next/image"
 import { BEM, UiDropdown, UiIcon, UiLayout, UiDivider, UiText, UiButton } from 'ui'
 import { User } from '../../context'
 import styles from './assets-query.module.scss'
-import { XuiCategoryDropdown } from 'ui/+assets-query/category-dropdown/category-dropdown'
-import { XuiFilterDropdown } from 'ui/+assets-query/filter-dropdown/filter-dropdown'
+import { XuiCategoryDropdown } from './category-dropdown/category-dropdown'
+import { XuiFilterDropdown } from './filter-dropdown/filter-dropdown'
 
 interface SearchBarProps {
   search?: 'onsite' | 'search-page'
