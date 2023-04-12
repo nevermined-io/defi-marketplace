@@ -4,8 +4,8 @@
 
 import { polygon, polygonMumbai } from "wagmi/chains";
 
-export const marketplaceUri = process.env.NEXT_PUBLIC_MARKETPLACE_API || 'https://marketplace-api-public.nevermined.network' // next redirections on next.config.js
-export const neverminedNodeUri = process.env.NEXT_PUBLIC_GATEWAY_URI || 'https://node.mumbai.public.nevermined.network' // next redirections on next.config.js
+export const marketplaceUri = process.env.NEXT_PUBLIC_MARKETPLACE_API || 'https://defi.v2.marketplace-api.mumbai.nevermined.rocks' // next redirections on next.config.js
+export const neverminedNodeUri = process.env.NEXT_PUBLIC_GATEWAY_URI || 'https://defi.v2.node.mumbai.nevermined.rocks' // next redirections on next.config.js
 export const faucetUri = '/api/faucet' // next redirections on next.config.js
 export const neverminedNodeAddress =
   process.env.NEXT_PUBLIC_GATEWAY_ADDRESS || '0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc'
@@ -18,8 +18,8 @@ export const NFT_TIERS = [
   {
     'level': 1,
     'name': 'Community',
-    'did': process.env.NEXT_PUBLIC_DID_NFT_TIER1 || 'a35e762bd857bf3f488dc1d2b7e3879fa3f92b6492fa22c03be470bf28c1b2e1',
-    'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER1 || '0x95Ba21f858b57beb7B19990E8B072EF52999856D'
+    'did': process.env.NEXT_PUBLIC_DID_NFT_TIER1 || 'cf2cb9aee611cff0c7442f193cb57f7883a4ca8c32f695f134ea15402784fd30',
+    'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER1 || '0xf1112D302C40C45C80E554375E722B52Bd94CA51'
   },
   {
     'level': 2,
@@ -34,7 +34,7 @@ export const NFT_TIERS = [
     'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER3 || '0x2dBafaa2f8362C763f49CcDcA35a882386D455c5'
   },
 ]
-export const NFT_TIERS_HOLDER = process.env.NEXT_PUBLIC_NFT_TIERS_HOLDER || '0xe2DD09d719Da89e5a3D0F2549c7E24566e947260'
+export const NFT_TIERS_HOLDER = process.env.NEXT_PUBLIC_NFT_TIERS_HOLDER || '0xf3330eAD7Ed91c83571df637d9819dCA2DE7C0Ec'
 export const NFT_TIERS_AMOUNT: number = Number(process.env.NEXT_PUBLIC_NFT_TIERS_AMOUNT) || 1
 export const NFT_TIERS_TYPE = 721
 
