@@ -52,12 +52,25 @@ export function XuiAssetsQuery({
   const selectedNetworkEvent = selectedNetworks.map((cat) => `${networkPrefix}:${cat}`)
 
   const textFilter = {
-    query_string: { query: `*${searchInputText}*`, fields: ['service.attributes.main.name'] }
+    nested: {
+      path: 'service',
+      query: {
+        query_string: {
+          query: `*${searchInputText}*`, fields: ['service.attributes.main.name']
+        }
+      }
+    }
   }
+
   const datasetCategory = {
-    match: {
-      'service.attributes.additionalInformation.categories':
-        selectedCategoriesEvent.length === 0 ? 'defi-datasets' : selectedCategoriesEvent.join(', ')
+    nested: {
+      path: 'service',
+      query: {
+        match: {
+          'service.attributes.additionalInformation.categories':
+            selectedCategoriesEvent.length === 0 ? 'UseCase:defi-datasets' : selectedCategoriesEvent.join(', ')
+        }
+      }
     }
   }
   const datasetNetwork = {
@@ -66,7 +79,7 @@ export function XuiAssetsQuery({
         selectedNetworkEvent.length === 0 ? '' : selectedNetworks.join(', ')
     }
   }
-  const nftAccess = { match: { 'service.type': 'nft-access' } }
+  const nftAccess = { nested: { path: 'service', query: { match: { 'service.type': 'nft-sales' } } } }
 
   const subscriptionFilter = () => {
     if (selectedSubscriptions.length === 0) return ''
