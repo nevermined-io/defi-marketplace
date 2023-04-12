@@ -55,8 +55,7 @@ export function Pricing({ tiers }: PricingProps) {
           nftHolder: NFT_TIERS_HOLDER,
           nftAmount: BigNumber.from(NFT_TIERS_AMOUNT),
           ercType: NFT_TIERS_TYPE
-      }
-      )
+      })
       toast.dismiss(toastId)
       toast.success(`Subscribed correctly to ${tierName}`)
       const userSubs = await getUserSubscriptions()
