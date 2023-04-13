@@ -79,7 +79,7 @@ export function XuiAssetsQuery({
         selectedNetworkEvent.length === 0 ? '' : selectedNetworks.join(', ')
     }
   }
-  const nftAccess = { nested: { path: 'service', query: { match: { 'service.type': 'nft-sales' } } } }
+  const nftAccess = { nested: { path: 'service', query: { match: { 'service.type': 'nft-access' } } } }
 
   const subscriptionFilter = () => {
     if (selectedSubscriptions.length === 0) return ''

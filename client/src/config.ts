@@ -117,7 +117,7 @@ export const reportFormats = ['CSV', 'Excel', 'PDF', 'Other']
 
 export const graphUrl =
   process.env.NEXT_PUBLIC_ACCESS_CONDITION_URI ||
-  'https://api.thegraph.com/subgraphs/name/nevermined-io/common'
+  'https://api.thegraph.com/subgraphs/name/nevermined-io/public'
 export const entitesNames = {
   DEXLIQUI: 'Liquidity',
   DEXTRAD: 'Trades',
