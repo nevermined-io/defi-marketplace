@@ -4,9 +4,9 @@ import { UiText, UiDivider, UiLayout, BEM, UiButton } from '@nevermined-io/style
 import styles from './account.module.scss'
 import { UserProfile } from './user-profile'
 import { User } from '../context'
-import { Catalog } from '@nevermined-io/catalog-core'
-import { useWallet } from '@nevermined-io/catalog-providers'
-import { DDO } from '@nevermined-io/nevermined-sdk-js'
+import { Catalog } from '@nevermined-io/catalog'
+import { useWallet } from '@nevermined-io/providers'
+import { DDO } from '@nevermined-io/sdk'
 import { loadUserPublished, loadUserDownloads, getUserSubscription } from 'src/shared/graphql'
 import { Summary } from 'ui/+account/summary'
 import { AssetsList } from './assets-list'
@@ -30,8 +30,8 @@ export const Account: NextPage = () => {
   const loadUserInfo = async () => {
     try{
 
-        const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
-        const bookmarks = await sdk.bookmarks.findManyByUserId(userProfile.userId)
+        const userProfile = await sdk.services.profiles.findOneByAddress(walletAddress)
+        const bookmarks = await sdk.services.bookmarks.findManyByUserId(userProfile.userId)
 
         const bookmarksDDO = await Promise.all(
           bookmarks.results?.map((bookmark) => sdk.assets.resolve(bookmark.did))
@@ -80,14 +80,14 @@ export const Account: NextPage = () => {
   }
 
   useEffect(() => {
-    if (!sdk?.profiles) {
+    if (!sdk?.services?.profiles) {
       return
     }
     loadUserInfo()
   }, [sdk, walletAddress])
 
   useEffect(() => {
-    if (!sdk?.profiles) {
+    if (!sdk?.services?.profiles) {
       return
     }
     loadSubscription()

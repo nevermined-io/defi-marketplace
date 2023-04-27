@@ -1,7 +1,7 @@
 import { graphUrl } from 'src/config'
-import { Nevermined, subgraphs } from '@nevermined-io/nevermined-sdk-js'
-import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
-import { WagmiCore } from '@nevermined-io/catalog-providers'
+import { Nevermined, subgraphs } from '@nevermined-io/sdk'
+import { didZeroX } from '@nevermined-io/sdk/dist/node/utils'
+import { WagmiCore } from '@nevermined-io/providers'
 
 interface FullfilledOrders {
   documentId: string

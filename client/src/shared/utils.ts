@@ -1,4 +1,4 @@
-import { DDO, MetaData } from '@nevermined-io/nevermined-sdk-js'
+import { DDO, MetaData } from '@nevermined-io/sdk'
 import { categoryPrefix, subcategoryPrefix, networkPrefix, SubscriptionTiers } from './constants'
 import {NFT_TIERS} from '../config'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { BEM, UiButton } from '@nevermined-io/styles'
-import { useWallet } from '@nevermined-io/catalog-providers'
+import { useWallet } from '@nevermined-io/providers'
 import { User } from '../../context'
 import styles from './wallet.module.scss'
 import Link from 'next/link'

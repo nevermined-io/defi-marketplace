@@ -2,9 +2,9 @@ import React, { useEffect, useContext, useState, createRef, useCallback, useRef 
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { DDO } from '@nevermined-io/nevermined-sdk-js'
-import { Catalog } from '@nevermined-io/catalog-core'
-import { useWallet } from '@nevermined-io/catalog-providers'
+import { DDO } from '@nevermined-io/sdk'
+import { Catalog } from '@nevermined-io/catalog'
+import { useWallet } from '@nevermined-io/providers'
 import styles from './details.module.scss'
 import {
   BEM,

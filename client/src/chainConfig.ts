@@ -1,4 +1,4 @@
-import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { zeroX } from '@nevermined-io/sdk/dist/node/utils'
 
 const spreeChainId = zeroX((1337).toString(16))
 const polygonLocalnetChainId = zeroX((8997).toString(16))

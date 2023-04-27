@@ -14,17 +14,21 @@ import {
   AssetService,
   RoyaltyKind,
   getRoyaltyScheme
-} from '@nevermined-io/catalog-core'
+} from '@nevermined-io/catalog'
 import { NextPage } from 'next'
-import { MetaData } from '@nevermined-io/nevermined-sdk-js'
+import { MetaData } from '@nevermined-io/sdk'
 import { BasicInfoStep } from './basic-info'
 import { DetailsStep } from './details'
 import { FilesStep } from './files'
 import { handleAssetFiles, FileType } from './files-handler'
 import { toast } from '../../components'
-import { neverminedNodeAddress, NFT_TIERS } from 'src/config'
+import {
+  // neverminedNodeAddress,
+  NFT_TIERS
+} from 'src/config'
 import { ProgressBar } from './progress-bar/progress-bar'
 import styles from './publish-asset.module.scss'
+import { ERCType, NeverminedNFT721Type } from '@nevermined-io/sdk/dist/node/models/types'
 
 const b = BEM('publish-asset', styles)
 
@@ -227,9 +231,16 @@ export const UserPublishMultiStep: NextPage = () => {
 
       publishNFT721({
         nftAddress: getNftTierAddress(),
-        metadata: generateMetadata(),
-        providers: [neverminedNodeAddress],
-        royaltyAttributes: royaltyAttributes
+        nftAttributes: {
+          ercType: ERCType.nft721,
+          metadata: generateMetadata(),
+          nftType: NeverminedNFT721Type.nft721,
+          royaltyAttributes,
+          nftContractAddress: ''
+        }
+        // metadata: generateMetadata(),
+        // providers: [neverminedNodeAddress],
+        // royaltyAttributes: royaltyAttributes
       })
         .then(() => {
           setResultOk(true)

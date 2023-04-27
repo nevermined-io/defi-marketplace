@@ -2,14 +2,14 @@ import { BEM } from '@nevermined-io/styles'
 import styles from './pricing.module.scss'
 const b = BEM('pricing', styles)
 import React, { useState, useRef, useContext } from 'react'
-import { Catalog } from '@nevermined-io/catalog-core'
+import { Catalog } from '@nevermined-io/catalog'
 import { NFT_TIERS, NFT_TIERS_AMOUNT, NFT_TIERS_HOLDER, NFT_TIERS_TYPE } from 'src/config'
 import { toast } from '../'
 import { UiPopupHandlers } from '@nevermined-io/styles'
 import { ConfirmPopup } from '../../+assets/user-publish-steps/confirm-popup'
 import { User } from '../../context'
 import { SubscriptionTiers } from 'src/shared'
-import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
+import BigNumber from '@nevermined-io/sdk/dist/node/utils/BigNumber'
 
 
 interface Tier {
@@ -50,12 +50,12 @@ export function Pricing({ tiers }: PricingProps) {
     const toastId = toast.info(`Subscribing to ${tierName}...`)
     try {
       const did = NFT_TIERS.find((tier) => tier.name === tierName)?.did || ''
-      await nfts.access(
-        did,
-        NFT_TIERS_HOLDER,
-        BigNumber.from(NFT_TIERS_AMOUNT),
-        NFT_TIERS_TYPE
-      )
+      await nfts.access({
+          did,
+          nftHolder: NFT_TIERS_HOLDER,
+          nftAmount: BigNumber.from(NFT_TIERS_AMOUNT),
+          ercType: NFT_TIERS_TYPE
+      })
       toast.dismiss(toastId)
       toast.success(`Subscribed correctly to ${tierName}`)
       const userSubs = await getUserSubscriptions()

@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef, ReactNode, useCallback } from 'react'
-import { DDO } from '@nevermined-io/nevermined-sdk-js'
-import { useWallet } from '@nevermined-io/catalog-providers'
-import { Catalog, AuthToken } from '@nevermined-io/catalog-core'
+import { DDO } from '@nevermined-io/sdk'
+import { useWallet } from '@nevermined-io/providers'
+import { Catalog, AuthToken } from '@nevermined-io/catalog'
 import { User, DropDownFilters } from '.'
 import { correctNetworkName } from '../config'
 import { SubscriptionTiers, UserSubscription } from '../shared/constants'
 import { NFT_TIERS } from 'src/config'
-import { Config } from '@nevermined-io/catalog-core'
+// import { Config } from '@nevermined-io/catalog'
 
 import {
   neverminedNodeUri,
@@ -105,8 +105,8 @@ const UserProvider = (props: UserProviderProps) => {
   }
 
   const checkSubscription = async (nftTierAddress: string): Promise<boolean> => {
-    const accounts = await sdk.accounts.list()
-    if (!accounts[0]) return false
+    const accounts = await sdk.accounts?.list()
+    if (!accounts || !accounts[0]) return false
 
     const nft721 = await sdk.contracts.loadNft721(nftTierAddress)
     const balance = await nft721.balanceOf(accounts[0])
@@ -263,7 +263,7 @@ const UserProvider = (props: UserProviderProps) => {
   }, [walletAddress, isLoadingSDK])
 
   const reloadSdk = async () => {
-    const config: Config = {
+    const config = {
       web3Provider: window.ethereum,
       web3ProviderUri: network,
       marketplaceUri,
@@ -282,7 +282,7 @@ const UserProvider = (props: UserProviderProps) => {
   const fetchTokenSymbol = async (): Promise<void> => {
     let tokenSymbolState = 'Unknown'
     if (sdk?.keeper && sdk.keeper.token) {
-      tokenSymbolState = await sdk.token.getSymbol()
+      tokenSymbolState = await sdk.keeper.token.symbol()
     }
     tokenSymbol !== tokenSymbol && setTokenSymbol(tokenSymbolState)
   }

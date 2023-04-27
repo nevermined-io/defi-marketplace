@@ -1,8 +1,8 @@
 import React, { ReactNode, useContext, useState, useEffect } from 'react'
-import { DDO } from '@nevermined-io/nevermined-sdk-js'
-import { Catalog } from '@nevermined-io/catalog-core'
-import { useWallet } from '@nevermined-io/catalog-providers'
-import { SearchQuery } from '@nevermined-io/nevermined-sdk-js'
+import { DDO } from '@nevermined-io/sdk'
+import { Catalog } from '@nevermined-io/catalog'
+import { useWallet } from '@nevermined-io/providers'
+import { SearchQuery } from '@nevermined-io/sdk'
 
 import { Loader } from '@nevermined-io/styles'
 import { User } from '../../context'
@@ -52,12 +52,25 @@ export function XuiAssetsQuery({
   const selectedNetworkEvent = selectedNetworks.map((cat) => `${networkPrefix}:${cat}`)
 
   const textFilter = {
-    query_string: { query: `*${searchInputText}*`, fields: ['service.attributes.main.name'] }
+    nested: {
+      path: 'service',
+      query: {
+        query_string: {
+          query: `*${searchInputText}*`, fields: ['service.attributes.main.name']
+        }
+      }
+    }
   }
+
   const datasetCategory = {
-    match: {
-      'service.attributes.additionalInformation.categories':
-        selectedCategoriesEvent.length === 0 ? 'defi-datasets' : selectedCategoriesEvent.join(', ')
+    nested: {
+      path: 'service',
+      query: {
+        match: {
+          'service.attributes.additionalInformation.categories':
+            selectedCategoriesEvent.length === 0 ? 'UseCase:defi-datasets' : selectedCategoriesEvent.join(', ')
+        }
+      }
     }
   }
   const datasetNetwork = {
@@ -66,7 +79,7 @@ export function XuiAssetsQuery({
         selectedNetworkEvent.length === 0 ? '' : selectedNetworks.join(', ')
     }
   }
-  const nftAccess = { match: { 'service.type': 'nft-access' } }
+  const nftAccess = { nested: { path: 'service', query: { match: { 'service.type': 'nft-access' } } } }
 
   const subscriptionFilter = () => {
     if (selectedSubscriptions.length === 0) return ''
@@ -122,7 +135,7 @@ export function XuiAssetsQuery({
   }
 
   useEffect(() => {
-    if (!sdk?.profiles) {
+    if (!sdk?.services?.profiles) {
       return
     }
 
@@ -130,11 +143,11 @@ export function XuiAssetsQuery({
     ;(async () => {
       if (!walletAddress) return
       try{
-          const userProfile = await sdk.profiles.findOneByAddress(walletAddress)
+          const userProfile = await sdk.services.profiles.findOneByAddress(walletAddress)
           if (!userProfile?.userId) {
             return
           }
-          const bookmarksData = await sdk.bookmarks.findManyByUserId(userProfile.userId)
+          const bookmarksData = await sdk.services.bookmarks.findManyByUserId(userProfile.userId)
           const bookmarksDDO = await Promise.all(
             bookmarksData.results.map((b) => sdk.assets.resolve(b.did))
           )
@@ -182,7 +195,7 @@ export function XuiAssetsQuery({
       return
     }
     setLoading(true)
-    sdk.assets
+    sdk.search
       .query({
         offset: pageSize,
         page,

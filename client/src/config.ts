@@ -2,10 +2,10 @@
 // NEVERMINED REMOTE CONNECTIONS
 //
 
-import { chain } from "wagmi";
+import { polygon, polygonMumbai } from "wagmi/chains";
 
-export const marketplaceUri = process.env.NEXT_PUBLIC_MARKETPLACE_API || 'https://marketplace-api-public.nevermined.network' // next redirections on next.config.js
-export const neverminedNodeUri = process.env.NEXT_PUBLIC_GATEWAY_URI || 'https://node.mumbai.public.nevermined.network' // next redirections on next.config.js
+export const marketplaceUri = process.env.NEXT_PUBLIC_MARKETPLACE_API || 'https://defi.v2.marketplace-api.mumbai.nevermined.rocks' // next redirections on next.config.js
+export const neverminedNodeUri = process.env.NEXT_PUBLIC_GATEWAY_URI || 'https://defi.v2.node.mumbai.nevermined.rocks' // next redirections on next.config.js
 export const faucetUri = '/api/faucet' // next redirections on next.config.js
 export const neverminedNodeAddress =
   process.env.NEXT_PUBLIC_GATEWAY_ADDRESS || '0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc'
@@ -18,8 +18,8 @@ export const NFT_TIERS = [
   {
     'level': 1,
     'name': 'Community',
-    'did': process.env.NEXT_PUBLIC_DID_NFT_TIER1 || 'a35e762bd857bf3f488dc1d2b7e3879fa3f92b6492fa22c03be470bf28c1b2e1',
-    'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER1 || '0x95Ba21f858b57beb7B19990E8B072EF52999856D'
+    'did': process.env.NEXT_PUBLIC_DID_NFT_TIER1 || '0a5d6344111e9ba5733d584d5e8c702eed2dbe8d9d3b4b88162abecd9a1b1cd9',
+    'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER1 || '0xD3494577b48E101a8Fa32c8FDFD2C68d1e7eB3B7'
   },
   {
     'level': 2,
@@ -34,7 +34,7 @@ export const NFT_TIERS = [
     'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER3 || '0x2dBafaa2f8362C763f49CcDcA35a882386D455c5'
   },
 ]
-export const NFT_TIERS_HOLDER = process.env.NEXT_PUBLIC_NFT_TIERS_HOLDER || '0xe2DD09d719Da89e5a3D0F2549c7E24566e947260'
+export const NFT_TIERS_HOLDER = process.env.NEXT_PUBLIC_NFT_TIERS_HOLDER || '0xf3330eAD7Ed91c83571df637d9819dCA2DE7C0Ec'
 export const NFT_TIERS_AMOUNT: number = Number(process.env.NEXT_PUBLIC_NFT_TIERS_AMOUNT) || 1
 export const NFT_TIERS_TYPE = 721
 
@@ -117,7 +117,7 @@ export const reportFormats = ['CSV', 'Excel', 'PDF', 'Other']
 
 export const graphUrl =
   process.env.NEXT_PUBLIC_ACCESS_CONDITION_URI ||
-  'https://api.thegraph.com/subgraphs/name/nevermined-io/common'
+  'https://api.thegraph.com/subgraphs/name/nevermined-io/public'
 export const entitesNames = {
   DEXLIQUI: 'Liquidity',
   DEXTRAD: 'Trades',
@@ -132,5 +132,5 @@ export const docsUrl =
   process.env.NEXT_PUBLIC_DOCS_URL || 'https://nevermined-io.github.io/defi-marketplace/'
 export const PROTOCOL_PREFIX = 'ProtocolType'
 export const EVENT_PREFIX = 'EventType'
-export const SUPPORTED_NETWORKS = [chain.polygon, chain.polygonMumbai]
+export const SUPPORTED_NETWORKS = [polygon, polygonMumbai]
 export const CORRECT_NETWORK_ID = 80001

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { User } from '../../context'
-import { WagmiCore } from '@nevermined-io/catalog-providers'
+import { WagmiCore } from '@nevermined-io/providers'
 
 const ERC20SymbolAbi = ["function symbol() view returns (string)"]
 

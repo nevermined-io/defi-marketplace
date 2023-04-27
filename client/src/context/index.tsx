@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */ 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react'
-import { DDO } from '@nevermined-io/nevermined-sdk-js'
+import { DDO } from '@nevermined-io/sdk'
 
 import { UserSubscription } from '../shared/constants'
 

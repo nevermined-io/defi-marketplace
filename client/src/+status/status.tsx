@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import type { NextPage } from 'next'
-import { Catalog } from '@nevermined-io/catalog-core'
+import { Catalog } from '@nevermined-io/catalog'
 
 import { UiText, UiLayout, UiDivider, CircleSpinner } from '@nevermined-io/styles'
-import { PlatformVersions } from '@nevermined-io/nevermined-sdk-js'
+import { PlatformVersions } from '@nevermined-io/sdk'
 
 export const Status: NextPage = () => {
   const { sdk } = Catalog.useNevermined()
   const [versions, setVersions] = useState<PlatformVersions>()
 
   useEffect(() => {
-    if (!sdk.versions) {
+    if (!sdk.utils.versions) {
       return
     }
-    sdk.versions.get().then((v) => {
+    sdk.utils.versions.get().then((v) => {
       console.log(v)
       setVersions(v)
     })

@@ -21,7 +21,7 @@ import {
   reportTypes,
   reportFormats
 } from 'src/config'
-import { AssetService } from '@nevermined-io/catalog-core'
+import { AssetService } from '@nevermined-io/catalog'
 
 const b = BEM('user-publish', styles)
 const step = BEM('step-container', stepStyles)
