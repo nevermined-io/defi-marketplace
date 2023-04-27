@@ -18,8 +18,8 @@ export const NFT_TIERS = [
   {
     'level': 1,
     'name': 'Community',
-    'did': process.env.NEXT_PUBLIC_DID_NFT_TIER1 || 'cf2cb9aee611cff0c7442f193cb57f7883a4ca8c32f695f134ea15402784fd30',
-    'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER1 || '0xf1112D302C40C45C80E554375E722B52Bd94CA51'
+    'did': process.env.NEXT_PUBLIC_DID_NFT_TIER1 || '0a5d6344111e9ba5733d584d5e8c702eed2dbe8d9d3b4b88162abecd9a1b1cd9',
+    'address': process.env.NEXT_PUBLIC_NFT_ADDRESS_TIER1 || '0xD3494577b48E101a8Fa32c8FDFD2C68d1e7eB3B7'
   },
   {
     'level': 2,
